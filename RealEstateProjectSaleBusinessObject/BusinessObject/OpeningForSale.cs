@@ -12,13 +12,9 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public string DescriptionName { get; set; }
         public DateTime DateStart { get; set; }
         public DateTime DateEnd { get; set; }
-        public DateTime ReservationTime { get; set; }
-        public DateTime Deposittime { get; set; }
-        public string Explain {  get; set; }
-        public string MoneyType { get; set; }
-        public double DepositMoney { get; set; }
-        public double RevervationMoney { get; set;}
-        public bool Status {  get; set; }
+        public string? ReservationTime { get; set; }
+        public string? Description { get; set; }
+        public bool Status { get; set; }
         public List<Booking>? Bookings { get; set; }
         public List<OpenForSaleDetail>? openForSaleDetails { get; set; }
         public Guid ProjectID { get; set; }
