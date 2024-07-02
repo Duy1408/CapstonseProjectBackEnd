@@ -8,15 +8,23 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
 {
     public class ContractPaymentDetail
     {
-      
+
         public Guid ContractPaymentDetailID { get; set; }
-        public string Paymentprogress { get; set; }
-        public DateTime Paymentduedate { get; set; }
-        public int Customervaluepaid { get; set; }
-        public string? Note { get; set; }
+        public string DetailName { get; set; }
+        public DateTime CreatedTime { get; set; }
+        public int PaymentRate { get; set; }
+        public double? Amountpaid { get; set; }
+        public int? TaxRate { get; set; }
+        public double? MoneyTax { get; set; }
+        public double? MoneyReceived { get; set; }
+        public int? NumberDayLate { get; set; }
+        public int? InterestRate { get; set; }
+        public double? MoneyInterestRate { get; set; }
+        public double? MoneyExist { get; set; }
+        public string? Description { get; set; }
         public List<Payment>? Payments { get; set; }
         public Guid ContractID { get; set; }
-        public Contract? Contract {  get; set; }
+        public Contract? Contract { get; set; }
 
 
 

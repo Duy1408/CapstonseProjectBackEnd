@@ -9,9 +9,9 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
     public class PaymentProcess
     {
         public Guid PaymentProcessID { get; set; }
-        public string Paymentperiod { get; set; }
-        public string Duration { get; set; }
-        public int PaymentRate { get; set; }
+        public string PaymentProcessName { get; set; }
+        public double? Discount { get; set; }
+        public double TotalPrice { get; set; }
         public Guid SalesPolicyID { get; set; }
         public Salespolicy? Salespolicy { get; set; }
         public List<Contract>? Contracts { get; set; }
