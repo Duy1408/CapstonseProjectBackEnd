@@ -16,6 +16,8 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
         {
             builder.ToTable("Property");
             builder.HasKey(x => x.PropertyID);
+            builder.Property(x => x.PropertyName).IsRequired();
+            builder.Property(x => x.Block).IsRequired();
             builder.Property(x => x.Floor).IsRequired();
             builder.Property(x => x.SizeArea).IsRequired();
             builder.Property(x => x.BedRoom).IsRequired();

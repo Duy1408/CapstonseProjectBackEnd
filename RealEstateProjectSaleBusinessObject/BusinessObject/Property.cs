@@ -9,6 +9,8 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
     public class Property
     {
         public Guid PropertyID { get; set; }
+        public string PropertyName { get; set; }
+        public string Block { get; set; }
         public int Floor { get; set; }
         public double SizeArea { get; set; }
         public int BedRoom { get; set; }
