@@ -9,10 +9,14 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
     public class Booking
     {
         public Guid BookingID { get; set; }
-        public string Address { get; set; }
-        public DateTime Dateofsignature { get; set; }
-        public byte[] BookingFile { get; set; }
-        public bool Status { get; set; }
+        public DateTime ReservationDate { get; set; }
+        public DateTime? DepositedTimed { get; set; }
+        public double? DepositedPrice { get; set; }
+        public DateTime CreatedTime { get; set; }
+        public DateTime? UpdatedTime { get; set; }
+        public byte[]? BookingFile { get; set; }
+        public string? Note { get; set; }
+        public string Status { get; set; }
         public List<Payment>? Payments { get; set; }
         public Guid PropertyID { get; set; }
         public Property? Property { get; set; }
@@ -25,6 +29,6 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public Guid StaffID { get; set; }
         public Staff? Staff { get; set; }
 
-   
+
     }
 }

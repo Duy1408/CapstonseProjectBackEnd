@@ -15,12 +15,16 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
         {
             builder.ToTable("Booking");
             builder.HasKey(x => x.BookingID);
-            builder.Property(x => x.Address).IsRequired();
-            builder.Property(x => x.Dateofsignature).IsRequired();
-            builder.Property(x => x.BookingFile).IsRequired();
+            builder.Property(x => x.ReservationDate).IsRequired();
+            builder.Property(x => x.DepositedTimed);
+            builder.Property(x => x.DepositedPrice);
+            builder.Property(x => x.CreatedTime).IsRequired();
+            builder.Property(x => x.UpdatedTime);
+            builder.Property(x => x.BookingFile);
+            builder.Property(x => x.Note);
             builder.Property(x => x.Status).IsRequired();
             builder.HasMany(x => x.Payments).WithOne(x => x.Booking).OnDelete(DeleteBehavior.NoAction);
-           
+
         }
     }
 }

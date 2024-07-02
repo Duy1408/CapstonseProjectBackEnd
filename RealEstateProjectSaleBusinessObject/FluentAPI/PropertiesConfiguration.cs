@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
 using System;
@@ -20,9 +21,14 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
             builder.Property(x => x.BedRoom).IsRequired();
             builder.Property(x => x.BathRoom).IsRequired();
             builder.Property(x => x.LivingRoom).IsRequired();
-            builder.Property(x => x.Price).IsRequired();
             builder.Property(x => x.View);
+            builder.Property(x => x.InitialPrice).IsRequired();
+            builder.Property(x => x.Discount);
+            builder.Property(x => x.MoneyTax);
+            builder.Property(x => x.MaintenanceCost);
+            builder.Property(x => x.TotalPrice).IsRequired();
             builder.Property(x => x.Image);
+            builder.Property(x => x.Status);
             builder.Property(x => x.ProjectID).IsRequired();
             builder.Property(x => x.PropertyTypeID).IsRequired();
             builder.HasMany(x => x.Comments).WithOne(x => x.Property).OnDelete(DeleteBehavior.NoAction);

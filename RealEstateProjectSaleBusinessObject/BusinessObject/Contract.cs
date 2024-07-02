@@ -9,11 +9,16 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
     public class Contract
     {
         public Guid ContractID { get; set; }
-        public DateTime? DateSigned { get; set; }
-        public DateTime? UpdateUsAt { get; set; }
-        public DateTime CreatedStAt { get; set; }
+        public string ContractName { get; set; }
         public string ContractType { get; set; }
-        public bool Status { get; set; }
+        public DateTime CreatedTime { get; set; }
+        public DateTime? UpdatedTime { get; set; }
+        public DateTime? DateSigned { get; set; }
+        public DateTime? ExpiredTime { get; set; }
+        public double TotalPrice { get; set; }
+        public string? Description { get; set; }
+        public byte[]? ContractFile { get; set; }
+        public string Status { get; set; }
         public Guid BookingID { get; set; }
         public Booking? Booking { get; set; }
         public List<ContractPaymentDetail>? ContractPaymentDetails { get; set; }

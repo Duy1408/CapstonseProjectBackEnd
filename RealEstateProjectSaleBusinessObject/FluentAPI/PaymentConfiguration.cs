@@ -14,11 +14,11 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
         public void Configure(EntityTypeBuilder<Payment> builder)
         {
             builder.ToTable("Payment");
-            builder.HasKey(x => x.PaymentID); 
-            builder.Property(x => x.CustomerID).IsRequired();
-            builder.Property(x => x.PaymentTypeID).IsRequired();
-            builder.Property(x => x.ProjectID).IsRequired();
-            builder.Property(x => x.Deposittoholdproject).IsRequired();
+            builder.HasKey(x => x.PaymentID);
+            builder.Property(x => x.Amount).IsRequired();
+            builder.Property(x => x.Content);
+            builder.Property(x => x.CreatedTime).IsRequired();
+            builder.Property(x => x.PaymentTime);
             builder.Property(x => x.Status).IsRequired();
 
         }

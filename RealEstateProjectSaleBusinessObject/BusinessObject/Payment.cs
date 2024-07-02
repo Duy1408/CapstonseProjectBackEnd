@@ -9,9 +9,10 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
     public class Payment
     {
         public Guid PaymentID { get; set; }
-        public Guid CustomerID { get; set; }     
-        public Guid ProjectID { get; set; }
-        public int Deposittoholdproject { get; set; }
+        public double Amount { get; set; }
+        public string? Content { get; set; }
+        public DateTime CreatedTime { get; set; }
+        public DateTime? PaymentTime { get; set; }
         public bool Status { get; set; }
         public Guid PaymentTypeID { get; set; }
         public PaymentType? PaymentType { get; set; }

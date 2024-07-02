@@ -83,7 +83,7 @@ namespace RealEstateProjectSaleDAO.DAOs
             }
             else
             {
-                _contract.Status = false;
+                //_contract.Status = false;
                 _context.Entry(_contract).State = EntityState.Modified;
                 _context.SaveChanges();
                 return true;

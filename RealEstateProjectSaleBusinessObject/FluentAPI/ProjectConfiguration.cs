@@ -22,6 +22,7 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
             builder.Property(x => x.Address).IsRequired();
             builder.Property(x => x.Commune).IsRequired();
             builder.Property(x => x.District).IsRequired();
+            builder.Property(x => x.DepositPrice).IsRequired();
             builder.Property(x => x.Summary);
             builder.Property(x => x.LicenseNo);
             builder.Property(x => x.DateOfIssue);
