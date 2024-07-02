@@ -10,10 +10,9 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
     public class OpenForSaleDetail
     {
         public Guid OpenForSaleDetailID { get; set; }
-        public string Block { get; set; }
-        public int Floor { get; set; }
-        public string TypeRoom { get; set; }
+    
         public double Price { get; set; }
+        public string Status { get; set; }
         public Guid OpeningForSaleID { get; set; }
         public OpeningForSale? OpeningForSale { get; set; }
         public Guid PropertiesID { get; set; }
