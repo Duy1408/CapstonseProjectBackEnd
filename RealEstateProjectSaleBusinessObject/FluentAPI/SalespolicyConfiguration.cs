@@ -15,9 +15,9 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
         {
             builder.ToTable("Salespolicy");
             builder.HasKey(x => x.SalesPolicyID);
-            builder.Property(x => x.ExpressTime).IsRequired();
-            builder.Property(x => x.PeopleApplied).IsRequired();
             builder.Property(x => x.SalesPolicyType).IsRequired();
+            builder.Property(x => x.ExpressTime).IsRequired();
+            builder.Property(x => x.PeopleApplied);
             builder.Property(x => x.Status).IsRequired();
             builder.HasMany(x => x.Promotions).WithOne(x => x.Salespolicy).OnDelete(DeleteBehavior.NoAction);
             builder.HasMany(x => x.PaymentProcesses).WithOne(x => x.Salespolicy).OnDelete(DeleteBehavior.NoAction);

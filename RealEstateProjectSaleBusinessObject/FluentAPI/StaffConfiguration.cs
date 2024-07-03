@@ -25,7 +25,6 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
             builder.Property(x => x.Nationality).IsRequired();
             builder.Property(x => x.Placeoforigin).IsRequired();
             builder.Property(x => x.PlaceOfresidence).IsRequired();
-            builder.Property(x => x.DateRange).IsRequired();
             builder.Property(x => x.Taxcode);
             builder.Property(x => x.BankName);
             builder.Property(x => x.BankNumber);

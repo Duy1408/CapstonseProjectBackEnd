@@ -9,9 +9,9 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
     public class Salespolicy
     {
         public Guid SalesPolicyID { get; set; }
-        public DateTime ExpressTime { get; set; }
-        public string PeopleApplied { get; set; }
         public string SalesPolicyType { get; set; }
+        public DateTime ExpressTime { get; set; }
+        public string? PeopleApplied { get; set; }
         public bool Status { get; set; }
         public Guid ProjectID { get; set; }
         public Project? Project { get; set; }
