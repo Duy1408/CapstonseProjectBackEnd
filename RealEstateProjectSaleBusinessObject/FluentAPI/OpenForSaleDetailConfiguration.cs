@@ -16,7 +16,8 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
             builder.ToTable("OpenForSaleDetail");
             builder.HasKey(x => x.OpenForSaleDetailID);
             builder.Property(x => x.Price).IsRequired();
-            builder.Property(x => x.Status).IsRequired();
+            builder.Property(x => x.Discount);
+            builder.Property(x => x.Note);
 
 
         }

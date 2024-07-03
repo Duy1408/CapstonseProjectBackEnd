@@ -16,7 +16,7 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
             builder.ToTable("Promotion");
             builder.HasKey(x => x.PromotionID);
             builder.Property(x => x.PromotionName).IsRequired();
-            builder.Property(x => x.Description).IsRequired();
+            builder.Property(x => x.Description);
             builder.Property(x => x.StartDate).IsRequired();
             builder.Property(x => x.EndDate).IsRequired();
             builder.Property(x => x.Status).IsRequired();
