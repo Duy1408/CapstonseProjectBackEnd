@@ -26,6 +26,11 @@ namespace RealEstateProjectSaleServices.Services
             return _book.ChangeStatus(p);
         }
 
+        public List<Booking> GetBookingByNumber(int numberBooking)
+        {
+            return _book.GetBookingByNumber(numberBooking);
+        }
+
         public Booking GetBookingById(Guid id)
         {
             return _book.GetBookingById(id);

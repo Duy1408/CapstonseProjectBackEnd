@@ -50,6 +50,25 @@ namespace RealEstateProjectSale.Controllers.BookingController
             return booking;
         }
 
+        // GET: api/Bookings/5
+        [HttpGet("{numberOfBookings}")]
+        public ActionResult<Booking> GetBooking(int numberOfBookings)
+        {
+            if (_book.GetBookings() == null)
+            {
+                return NotFound();
+            }
+            var booking = _book.GetBookingByNumber(numberOfBookings);
+
+            if (booking == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(booking);
+        }
+
+
         // PUT: api/Bookings/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -60,8 +79,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
                 return BadRequest();
             }
 
-        
-
+       
             try
             {
                 _book.UpdateBooking(booking);

@@ -9,15 +9,17 @@ namespace RealEstateProjectSaleServices.IServices
 {
     public interface IBookingServices
     {
-        public bool ChangeStatus(Booking p);
+        bool ChangeStatus(Booking p);
 
 
-        public List<Booking> GetBookings();
-        public void AddNew(Booking p);
+        List<Booking> GetBookings();
+        void AddNew(Booking p);
 
 
-        public Booking GetBookingById(Guid id);
+        Booking GetBookingById(Guid id);
 
-        public void UpdateBooking(Booking p);
+        void UpdateBooking(Booking p);
+
+        List<Booking> GetBookingByNumber(int numberBooking);
     }
 }

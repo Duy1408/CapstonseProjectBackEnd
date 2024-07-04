@@ -20,7 +20,9 @@ namespace RealEstateProjectSaleRepository.IRepository
 
         public void UpdateBooking(Booking p);
 
-     
-     
+        public List<Booking> GetBookingByNumber(int numberBooking);
+
+
+
     }
 }

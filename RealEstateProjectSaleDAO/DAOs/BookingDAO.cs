@@ -32,6 +32,12 @@ namespace RealEstateProjectSaleDAO.DAOs
             return _context.Bookings.ToList();
         }
 
+        public List<Booking> GetBookingByNumber(int numberBooking)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            return _context.Bookings.OrderBy(b=>b.BookingID).Take(numberBooking).ToList();
+        }
+
         public bool AddNew(Booking p)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
