@@ -22,6 +22,7 @@ namespace RealEstateProjectSaleServices.Services
 
         public string CreateJWTToken(Account account)
         {
+
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
@@ -29,12 +30,16 @@ namespace RealEstateProjectSaleServices.Services
             {
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Sub, account.Email ?? ""),
-                new Claim(ClaimTypes.Role, account.RoleID.ToString()!),
+                new Claim(ClaimTypes.Role, account.Role?.RoleName ?? ""),
             };
 
             var token = new JwtSecurityToken(claims: claims, expires: DateTime.UtcNow.AddMinutes(120), signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+
+
+
     }
 }
