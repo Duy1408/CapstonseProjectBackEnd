@@ -28,21 +28,24 @@ namespace RealEstateProjectSale.Controllers.AccountController
                 {
                     var token = _jWTTokenService.CreateJWTToken(checkLogin);
 
-                    var accountVM = new AccountVM
-                    {
-                        AccountID = checkLogin.AccountID,
-                        Email = checkLogin.Email,
-                        Password = checkLogin.Password,
-                        Status = checkLogin.Status,
-                        RoleName = checkLogin.Role.RoleName
-                    };
+                    //var accountVM = new AccountVM
+                    //{
+                    //    AccountID = checkLogin.AccountID,
+                    //    Email = checkLogin.Email,
+                    //    Password = checkLogin.Password,
+                    //    Status = checkLogin.Status,
+                    //    RoleName = checkLogin.Role.RoleName
+                    //};
 
-                    return Ok(new
-                    {
-                        message = " Login Successfully",
-                        data = accountVM,
-                        token = token
-                    });
+                    //return Ok(new
+                    //{
+                    //    message = " Login Successfully",
+                    //    data = accountVM,
+                    //    token = token
+                    //});
+
+                    return Ok(token);
+
                 }
                 return NotFound(new
                 {
@@ -55,7 +58,21 @@ namespace RealEstateProjectSale.Controllers.AccountController
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> ParseJwtToken([FromQuery] string token)
+        {
+            try
+            {
 
+                var account = _jWTTokenService.ParseJwtToken(token);
+                return Ok(account);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Failed to parse JWT token", error = ex.Message });
+            }
+        }
 
     }
 }
