@@ -1,3 +1,4 @@
+using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -56,6 +57,8 @@ builder.Services.AddScoped<IPaymentTypeServices, PaymentTypeServices>();
 builder.Services.AddScoped<IPromotionDetailRepo, PromotionDetailRepo>();
 builder.Services.AddScoped<IPromotionDetailServices, PromotionDetailServices>();
 
+//Azure Blob Storage
+builder.Services.AddScoped(_ => new BlobServiceClient(builder.Configuration.GetConnectionString("AzureBlobStorage")));
 
 
 
