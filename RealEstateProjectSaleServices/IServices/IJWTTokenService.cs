@@ -1,4 +1,5 @@
 ﻿using RealEstateProjectSaleBusinessObject.BusinessObject;
+using RealEstateProjectSaleBusinessObject.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace RealEstateProjectSaleServices.IServices
     public interface IJWTTokenService
     {
         string CreateJWTToken(Account account);
+        AuthVM ParseJwtToken(string token);
 
     }
 }
