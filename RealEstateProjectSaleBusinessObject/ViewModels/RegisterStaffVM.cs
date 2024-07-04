@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -25,8 +26,8 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public string Name { get; set; }
         public string PersonalEmail { get; set; }
         public DateTime DateOfBirth { get; set; }
-        public string Image { get; set; }
-        public string Imagesignature { get; set; }
+        public IFormFile Image { get; set; }
+        public IFormFile Imagesignature { get; set; }
         public string IdentityCardNumber { get; set; }
         public string Sex { get; set; }
         public string Nationality { get; set; }

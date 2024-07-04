@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
@@ -16,12 +17,14 @@ namespace RealEstateProjectSale.Controllers.StaffController
         private readonly IStaffServices _staffServices;
         private readonly IAccountServices _accountServices;
         private readonly IMapper _mapper;
+        private readonly BlobServiceClient _blobServiceClient;
 
-        public StaffController(IStaffServices staffServices, IAccountServices accountServices, IMapper mapper)
+        public StaffController(IStaffServices staffServices, IAccountServices accountServices, IMapper mapper, BlobServiceClient blobServiceClient)
         {
             _staffServices = staffServices;
             _accountServices = accountServices;
             _mapper = mapper;
+            _blobServiceClient = blobServiceClient;
         }
 
         [HttpGet]
@@ -61,10 +64,25 @@ namespace RealEstateProjectSale.Controllers.StaffController
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddNewStaff(RegisterStaffVM accountStaff)
+        public async Task<IActionResult> AddNewStaff([FromForm] RegisterStaffVM accountStaff)
         {
             try
             {
+                var containerInstance = _blobServiceClient.GetBlobContainerClient("realestateprojectpictures");
+                //get file name from request and upload to azure blod storage
+                var blobName1 = $"{Guid.NewGuid()} {accountStaff.Image?.FileName}";
+                var blobName2 = $"{Guid.NewGuid()} {accountStaff.Imagesignature?.FileName}";
+                //local file path
+                var blobInstance1 = containerInstance.GetBlobClient(blobName1);
+                var blobInstance2 = containerInstance.GetBlobClient(blobName2);
+                blobInstance1.Upload(accountStaff.Image?.OpenReadStream());
+                blobInstance2.Upload(accountStaff.Imagesignature?.OpenReadStream());
+
+                //storageAccountUrl
+                var storageAccountUrl = "https://realestateprojectimage.blob.core.windows.net/realestateprojectpictures";
+                //get blod url
+                var blobUrl1 = $"{storageAccountUrl}/{blobName1}";
+                var blobUrl2 = $"{storageAccountUrl}/{blobName2}";
 
                 var checkEmail = _accountServices.GetAllAccount().Where(u =>
                 u.Email.Equals(accountStaff.Email)).FirstOrDefault();
@@ -80,7 +98,7 @@ namespace RealEstateProjectSale.Controllers.StaffController
                     Email = accountStaff.Email,
                     Password = accountStaff.Password,
                     Status = true,
-                    RoleID = new Guid("59f5cb3c-efd7-45b9-aeec-4223aee3d253")
+                    RoleID = new Guid("0df79550-07f0-41c8-b0e8-95e265255bc9")
                 };
 
                 var _account = _mapper.Map<Account>(account);
@@ -108,6 +126,8 @@ namespace RealEstateProjectSale.Controllers.StaffController
                 };
 
                 var _staff = _mapper.Map<Staff>(staff);
+                _staff.Image = blobUrl1;
+                _staff.Imagesignature = blobUrl2;
                 _staffServices.AddNewStaff(_staff);
 
                 return Ok("Create Staff Successfully");
@@ -118,6 +138,36 @@ namespace RealEstateProjectSale.Controllers.StaffController
                 return BadRequest(ex.Message);
             }
         }
+
+        //[HttpPost]
+        //public ActionResult<Staff> AddNewStaff([FromForm] StaffCreateDTO staff)
+        //{
+        //    try
+        //    {
+        //        var containerInstance = _blobServiceClient.GetBlobContainerClient("realestateprojectpictures");
+        //        //get file name from request and upload to azure blod storage
+        //        var blobName = $"{Guid.NewGuid()} {staff.Image?.FileName}";
+        //        //local file path
+        //        var blobInstance = containerInstance.GetBlobClient(blobName);
+        //        blobInstance.Upload(staff.Image?.OpenReadStream());
+
+        //        //storageAccountUrl
+        //        var storageAccountUrl = "https://realestateprojectimage.blob.core.windows.net/realestateprojectpictures";
+        //        //get blod url
+        //        var blobUrl = $"{storageAccountUrl}/{blobName}";
+
+        //        var _staff = _mapper.Map<Staff>(staff);
+        //        _staff.Image = blobUrl;
+        //        _staffServices.AddNewStaff(_staff);
+
+        //        return Ok("Create Staff Successfully");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+
+        //}
 
         [HttpPut("{id}")]
         public IActionResult UpdateStaff(StaffUpdateDTO staff, Guid id)
