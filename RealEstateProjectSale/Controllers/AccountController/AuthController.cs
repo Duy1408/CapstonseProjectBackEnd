@@ -27,10 +27,20 @@ namespace RealEstateProjectSale.Controllers.AccountController
                 if (checkLogin != null)
                 {
                     var token = _jWTTokenService.CreateJWTToken(checkLogin);
+
+                    var accountVM = new AccountVM
+                    {
+                        AccountID = checkLogin.AccountID,
+                        Email = checkLogin.Email,
+                        Password = checkLogin.Password,
+                        Status = checkLogin.Status,
+                        RoleName = checkLogin.Role.RoleName
+                    };
+
                     return Ok(new
                     {
                         message = " Login Successfully",
-                        data = checkLogin,
+                        data = accountVM,
                         token = token
                     });
                 }
