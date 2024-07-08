@@ -29,7 +29,9 @@ namespace RealEstateProjectSaleDAO.DAOs
         public List<Comment> GetAllComment()
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.Comments.ToList();
+            return _context.Comments.Include(c => c.Customer)
+                                    .Include(c => c.Property)
+                                    .ToList();
         }
 
         public bool AddNew(Comment co)
@@ -53,7 +55,7 @@ namespace RealEstateProjectSaleDAO.DAOs
         public bool UpdateComment(Comment c)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            var a = _context.Comments.SingleOrDefault(c => c.CommentId == c.CommentId);
+            var a = _context.Comments.SingleOrDefault(a => a.CommentId == c.CommentId);
 
             if (a == null)
             {
@@ -79,6 +81,7 @@ namespace RealEstateProjectSaleDAO.DAOs
             }
             else
             {
+                a.Status = false;
                 _context.Entry(a).State = EntityState.Modified;
                 _context.SaveChanges();
                 return true;
@@ -88,12 +91,26 @@ namespace RealEstateProjectSaleDAO.DAOs
         public Comment GetCommentByID(Guid id)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.Comments.SingleOrDefault(a => a.CommentId == id);
+            return _context.Comments.Include(c => c.Customer)
+                                    .Include(c => c.Property)
+                                    .SingleOrDefault(a => a.CommentId == id);
         }
+
+        public IQueryable<Comment> GetCommentByPropertyID(Guid id)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            var a = _context.Comments!.Include(c => c.Customer)
+                                    .Include(c => c.Property)
+                                    .Where(c => c.Status == true && c.PropertyID == id);
+            return a;
+        }
+
         public IQueryable<Comment> SearchCommentByContent(string searchvalue)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            var a = _context.Comments.Where(a => a.Content.ToUpper().Contains(searchvalue.Trim().ToUpper()));
+            var a = _context.Comments.Include(c => c.Customer)
+                                    .Include(c => c.Property)
+                                    .Where(a => a.Content.ToUpper().Contains(searchvalue.Trim().ToUpper()));
             return a;
         }
 

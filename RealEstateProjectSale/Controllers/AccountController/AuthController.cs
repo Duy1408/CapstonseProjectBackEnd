@@ -19,6 +19,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
         }
 
         [HttpPost]
+        [Route("Login")]
         public async Task<IActionResult> Login(LoginVM account)
         {
             try
@@ -43,6 +44,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
         }
 
         [HttpGet]
+        [Route("ParseJwtToken")]
         public async Task<IActionResult> ParseJwtToken([FromQuery] string token)
         {
             try
