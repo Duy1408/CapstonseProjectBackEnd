@@ -10,11 +10,10 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Update
     public class AccountUpdateDTO
     {
         [JsonIgnore]
-        public Guid AccountID { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public bool Status { get; set; }
-        [JsonIgnore]
-        public Guid RoleID { get; set; }
+        public Guid? AccountID { get; set; }
+        public string? Email { get; set; }
+        public string? Password { get; set; }
+        public bool? Status { get; set; }
+        public Guid? RoleID { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
 using RealEstateProjectSaleBusinessObject.DTO.Create;
 using RealEstateProjectSaleBusinessObject.DTO.Update;
@@ -65,7 +66,22 @@ namespace RealEstateProjectSale.Controllers.AccountController
         {
             try
             {
-                var _account = _mapper.Map<Account>(account);
+                var checkEmail = _accountServices.GetAllAccount().Where(u =>
+                u.Email.Equals(account.Email)).FirstOrDefault();
+                if (checkEmail != null)
+                {
+                    return BadRequest("Email Existed");
+                }
+                var newAccount = new AccountCreateDTO
+                {
+                    AccountID = Guid.NewGuid(),
+                    Email = account.Email,
+                    Password = account.Password,
+                    Status = true,
+                    RoleID = account.RoleID
+                };
+
+                var _account = _mapper.Map<Account>(newAccount);
                 _accountServices.AddNewAccount(_account);
 
                 return Ok("Create Account Successfully");
@@ -77,7 +93,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateAccount(AccountUpdateDTO account, Guid id)
+        public IActionResult UpdateAccount([FromForm] AccountUpdateDTO account, Guid id)
         {
             try
             {
@@ -85,16 +101,31 @@ namespace RealEstateProjectSale.Controllers.AccountController
                 if (existingAccount != null)
                 {
                     account.AccountID = existingAccount.AccountID;
-                    account.RoleID = existingAccount.RoleID;
 
-                    var _account = _mapper.Map<Account>(account);
-                    _accountServices.UpdateAccount(_account);
+                    if (!string.IsNullOrEmpty(account.Email))
+                    {
+                        existingAccount.Email = account.Email;
+                    }
+                    if (!string.IsNullOrEmpty(account.Password))
+                    {
+                        existingAccount.Password = account.Password;
+                    }
+                    if (account.Status.HasValue)
+                    {
+                        existingAccount.Status = account.Status.Value;
+                    }
+                    if (account.RoleID != null)
+                    {
+                        existingAccount.RoleID = (Guid)account.RoleID;
+                    }
+
+                    _accountServices.UpdateAccount(existingAccount);
 
                     return Ok("Update Successfully");
 
                 }
 
-                return NotFound("Staff not found.");
+                return NotFound("Account not found.");
 
             }
             catch (Exception ex)
