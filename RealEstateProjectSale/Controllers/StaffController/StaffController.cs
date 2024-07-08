@@ -17,13 +17,16 @@ namespace RealEstateProjectSale.Controllers.StaffController
     {
         private readonly IStaffServices _staffServices;
         private readonly IAccountServices _accountServices;
+        private readonly IRoleServices _roleServices;
         private readonly IMapper _mapper;
         private readonly BlobServiceClient _blobServiceClient;
 
-        public StaffController(IStaffServices staffServices, IAccountServices accountServices, IMapper mapper, BlobServiceClient blobServiceClient)
+        public StaffController(IStaffServices staffServices, IAccountServices accountServices,
+                               IRoleServices roleServices, IMapper mapper, BlobServiceClient blobServiceClient)
         {
             _staffServices = staffServices;
             _accountServices = accountServices;
+            _roleServices = roleServices;
             _mapper = mapper;
             _blobServiceClient = blobServiceClient;
         }
@@ -99,13 +102,15 @@ namespace RealEstateProjectSale.Controllers.StaffController
                     return BadRequest("Email Existed");
                 }
 
+                var roleStaff = _roleServices.GetRoleByRoleName("Staff");
+
                 var account = new AccountCreateDTO
                 {
                     AccountID = Guid.NewGuid(),
                     Email = accountStaff.Email,
                     Password = accountStaff.Password,
                     Status = true,
-                    RoleID = new Guid("f4402e46-a36e-4404-9602-9ef0ae4d5636")
+                    RoleID = roleStaff.RoleID
                 };
 
                 var _account = _mapper.Map<Account>(account);
