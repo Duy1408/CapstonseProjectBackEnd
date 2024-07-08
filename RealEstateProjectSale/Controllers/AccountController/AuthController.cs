@@ -28,22 +28,6 @@ namespace RealEstateProjectSale.Controllers.AccountController
                 {
                     var token = _jWTTokenService.CreateJWTToken(checkLogin);
 
-                    //var accountVM = new AccountVM
-                    //{
-                    //    AccountID = checkLogin.AccountID,
-                    //    Email = checkLogin.Email,
-                    //    Password = checkLogin.Password,
-                    //    Status = checkLogin.Status,
-                    //    RoleName = checkLogin.Role.RoleName
-                    //};
-
-                    //return Ok(new
-                    //{
-                    //    message = " Login Successfully",
-                    //    data = accountVM,
-                    //    token = token
-                    //});
-
                     return Ok(token);
 
                 }

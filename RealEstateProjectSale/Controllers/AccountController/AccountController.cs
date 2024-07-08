@@ -26,6 +26,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
         }
 
         [HttpGet]
+        [Route("GetAllAccount")]
         public IActionResult GetAllAccount()
         {
             try
@@ -45,7 +46,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("GetAccountByID/{id}")]
         public IActionResult GetAccountByID(Guid id)
         {
             var account = _accountServices.GetAccountByID(id);
@@ -62,6 +63,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
         }
 
         [HttpPost]
+        [Route("AddNewAccount")]
         public IActionResult AddNewAccount(AccountCreateDTO account)
         {
             try
@@ -92,7 +94,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
             }
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("UpdateAccount/{id}")]
         public IActionResult UpdateAccount([FromForm] AccountUpdateDTO account, Guid id)
         {
             try
@@ -134,7 +136,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
             }
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("DeleteAccount/{id}")]
         public IActionResult DeleteAccount(Guid id)
         {
 

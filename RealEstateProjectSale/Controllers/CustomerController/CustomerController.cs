@@ -31,6 +31,7 @@ namespace RealEstateProjectSale.Controllers.CustomerController
         }
 
         [HttpGet]
+        [Route("GetAllCustomer")]
         public IActionResult GetAllCustomer()
         {
             try
@@ -50,7 +51,7 @@ namespace RealEstateProjectSale.Controllers.CustomerController
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("GetCustomerByID/{id}")]
         public IActionResult GetCustomerByID(Guid id)
         {
             var customer = _customerServices.GetCustomerByID(id);
@@ -67,6 +68,7 @@ namespace RealEstateProjectSale.Controllers.CustomerController
         }
 
         [HttpPost]
+        [Route("RegisterAccountCustomer")]
         public async Task<IActionResult> AddNewCustomer(RegisterCustomerVM accountCustomer)
         {
             try
@@ -124,7 +126,7 @@ namespace RealEstateProjectSale.Controllers.CustomerController
 
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("UpdateCustomer/{id}")]
         public IActionResult UpdateCustomer([FromForm] CustomerUpdateDTO customer, Guid id)
         {
             try
@@ -199,7 +201,7 @@ namespace RealEstateProjectSale.Controllers.CustomerController
         }
 
 
-        [HttpDelete("{id}")]
+        [HttpDelete("DeleteCustomer/{id}")]
         public IActionResult DeleteCustomer(Guid id)
         {
             if (_customerServices.GetCustomerByID(id) == null)
