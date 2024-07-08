@@ -10,8 +10,6 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Update
 {
     public class StaffUpdateDTO
     {
-        [JsonIgnore]
-        public Guid? StaffID { get; set; }
         public string? Name { get; set; }
         public string? PersonalEmail { get; set; }
         public DateTime? DateOfBirth { get; set; }
@@ -26,8 +24,6 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Update
         public string? BankName { get; set; }
         public int? BankNumber { get; set; }
         public bool? Status { get; set; }
-        [JsonIgnore]
-        public Guid? AccountID { get; set; }
 
     }
 }

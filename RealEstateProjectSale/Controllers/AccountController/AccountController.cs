@@ -121,7 +121,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
 
                     _accountServices.UpdateAccount(existingAccount);
 
-                    return Ok("Update Successfully");
+                    return Ok("Update Account Successfully");
 
                 }
 

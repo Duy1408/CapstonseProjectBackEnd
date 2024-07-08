@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
 using RealEstateProjectSaleBusinessObject.DTO.Create;
 using RealEstateProjectSaleBusinessObject.DTO.Update;
@@ -81,7 +82,7 @@ namespace RealEstateProjectSale.Controllers.CustomerController
                     Email = accountCustomer.Email,
                     Password = accountCustomer.Password,
                     Status = true,
-                    RoleID = new Guid("4a09e2f3-8862-46e5-bef0-cce529a1a178")
+                    RoleID = new Guid("dd2e45ad-b12d-4d49-ad12-418a79ea5a19")
                 };
 
                 var _account = _mapper.Map<Account>(account);
@@ -119,20 +120,67 @@ namespace RealEstateProjectSale.Controllers.CustomerController
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateCustomer(CustomerUpdateDTO customer, Guid id)
+        public IActionResult UpdateCustomer([FromForm] CustomerUpdateDTO customer, Guid id)
         {
             try
             {
                 var existingCustomer = _customerServices.GetCustomerByID(id);
                 if (existingCustomer != null)
                 {
-                    customer.CustomerID = existingCustomer.CustomerID;
-                    customer.AccountID = existingCustomer.AccountID;
 
-                    var _customer = _mapper.Map<Customer>(customer);
-                    _customerServices.UpdateCustomer(_customer);
+                    if (!string.IsNullOrEmpty(customer.FirstName))
+                    {
+                        existingCustomer.FirstName = customer.FirstName;
+                    }
+                    if (!string.IsNullOrEmpty(customer.LastName))
+                    {
+                        existingCustomer.LastName = customer.LastName;
+                    }
+                    if (customer.DateOfBirth.HasValue)
+                    {
+                        existingCustomer.DateOfBirth = customer.DateOfBirth.Value;
+                    }
+                    if (!string.IsNullOrEmpty(customer.PersonalEmail))
+                    {
+                        existingCustomer.PersonalEmail = customer.PersonalEmail;
+                    }
+                    if (!string.IsNullOrEmpty(customer.PhoneNumber))
+                    {
+                        existingCustomer.PhoneNumber = customer.PhoneNumber;
+                    }
+                    if (!string.IsNullOrEmpty(customer.IdentityCardNumber))
+                    {
+                        existingCustomer.IdentityCardNumber = customer.IdentityCardNumber;
+                    }
+                    if (!string.IsNullOrEmpty(customer.Nationality))
+                    {
+                        existingCustomer.Nationality = customer.Nationality;
+                    }
+                    if (!string.IsNullOrEmpty(customer.Taxcode))
+                    {
+                        existingCustomer.Taxcode = customer.Taxcode;
+                    }
+                    if (!string.IsNullOrEmpty(customer.BankName))
+                    {
+                        existingCustomer.BankName = customer.BankName;
+                    }
+                    if (customer.BankNumber.HasValue)
+                    {
+                        existingCustomer.BankNumber = customer.BankNumber.Value;
+                    }
+                    if (!string.IsNullOrEmpty(customer.Address))
+                    {
+                        existingCustomer.Address = customer.Address;
+                    }
+                    if (customer.Status.HasValue)
+                    {
+                        existingCustomer.Status = customer.Status.Value;
+                    }
 
-                    return Ok("Update Successfully");
+                    //var _customer = _mapper.Map<Customer>(customer);
+                    _customerServices.UpdateCustomer(existingCustomer);
+
+                    return Ok("Update Customer Successfully");
 
                 }
 

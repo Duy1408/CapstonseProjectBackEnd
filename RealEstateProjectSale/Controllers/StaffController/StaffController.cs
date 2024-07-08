@@ -207,8 +207,6 @@ namespace RealEstateProjectSale.Controllers.StaffController
                 var _staff = _staffServices.GetStaffByID(id);
                 if (_staff != null)
                 {
-                    staff.StaffID = _staff.StaffID;
-                    staff.AccountID = _staff.AccountID;
 
                     if (!string.IsNullOrEmpty(staff.Name))
                     {
@@ -271,7 +269,7 @@ namespace RealEstateProjectSale.Controllers.StaffController
                     //var staffUpdate = _mapper.Map<Staff>(staff);
                     _staffServices.UpdateStaff(_staff);
 
-                    return Ok("Update Successfully");
+                    return Ok("Update Staff Successfully");
 
                 }
 

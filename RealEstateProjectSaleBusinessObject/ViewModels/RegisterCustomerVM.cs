@@ -29,9 +29,9 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public string PhoneNumber { get; set; }
         public string IdentityCardNumber { get; set; }
         public string Nationality { get; set; }
-        public string Taxcode { get; set; }
-        public string BankName { get; set; }
-        public int BankNumber { get; set; }
+        public string? Taxcode { get; set; }
+        public string? BankName { get; set; }
+        public int? BankNumber { get; set; }
         public string Address { get; set; }
 
     }
