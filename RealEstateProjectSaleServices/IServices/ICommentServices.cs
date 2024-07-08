@@ -21,5 +21,6 @@ namespace RealEstateProjectSaleServices.IServices
         void UpdateComment(Comment c);
 
         IQueryable<Comment> SearchComment(string name);
+        IQueryable<Comment> GetCommentByPropertyID(Guid id);
     }
 }

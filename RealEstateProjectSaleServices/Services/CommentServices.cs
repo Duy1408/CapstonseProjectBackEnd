@@ -15,7 +15,7 @@ namespace RealEstateProjectSaleServices.Services
         public CommentServices(ICommentRepo cmt)
         {
             _cmt = cmt;
-            
+
         }
 
         public void AddNew(Comment c)
@@ -33,6 +33,11 @@ namespace RealEstateProjectSaleServices.Services
             return _cmt.GetCommentById(id);
         }
 
+        public IQueryable<Comment> GetCommentByPropertyID(Guid id)
+        {
+            return _cmt.GetCommentByPropertyID(id);
+        }
+
         public List<Comment> GetComments()
         {
             return _cmt.GetComments();
@@ -43,7 +48,7 @@ namespace RealEstateProjectSaleServices.Services
             return _cmt.SearchComment(name);
         }
 
-      
+
 
         public void UpdateComment(Comment c)
         {

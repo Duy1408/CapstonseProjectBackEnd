@@ -21,5 +21,6 @@ namespace RealEstateProjectSaleRepository.IRepository
         public void UpdateComment(Comment c);
 
         public IQueryable<Comment> SearchComment(string name);
+        IQueryable<Comment> GetCommentByPropertyID(Guid id);
     }
 }

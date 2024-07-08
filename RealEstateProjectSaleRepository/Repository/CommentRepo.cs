@@ -31,6 +31,11 @@ namespace RealEstateProjectSaleRepository.Repository
             return _cmt.GetCommentByID(id);
         }
 
+        public IQueryable<Comment> GetCommentByPropertyID(Guid id)
+        {
+            return _cmt.GetCommentByPropertyID(id);
+        }
+
         public List<Comment> GetComments()
         {
             return _cmt.GetAllComment();
@@ -46,6 +51,6 @@ namespace RealEstateProjectSaleRepository.Repository
             _cmt.UpdateComment(c);
         }
 
-       
+
     }
 }
