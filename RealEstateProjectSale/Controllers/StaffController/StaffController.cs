@@ -2,6 +2,7 @@
 using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
 using RealEstateProjectSaleBusinessObject.DTO.Create;
 using RealEstateProjectSaleBusinessObject.DTO.Update;
@@ -69,20 +70,26 @@ namespace RealEstateProjectSale.Controllers.StaffController
             try
             {
                 var containerInstance = _blobServiceClient.GetBlobContainerClient("realestateprojectpictures");
-                //get file name from request and upload to azure blod storage
-                var blobName1 = $"{Guid.NewGuid()} {accountStaff.Image?.FileName}";
-                var blobName2 = $"{Guid.NewGuid()} {accountStaff.Imagesignature?.FileName}";
-                //local file path
-                var blobInstance1 = containerInstance.GetBlobClient(blobName1);
-                var blobInstance2 = containerInstance.GetBlobClient(blobName2);
-                blobInstance1.Upload(accountStaff.Image?.OpenReadStream());
-                blobInstance2.Upload(accountStaff.Imagesignature?.OpenReadStream());
 
-                //storageAccountUrl
-                var storageAccountUrl = "https://realestateprojectimage.blob.core.windows.net/realestateprojectpictures";
-                //get blod url
-                var blobUrl1 = $"{storageAccountUrl}/{blobName1}";
-                var blobUrl2 = $"{storageAccountUrl}/{blobName2}";
+                // Upload image and image signature to Azure Blob Storage if they are provided
+                string? blobUrl1 = null, blobUrl2 = null;
+                if (accountStaff.Image != null)
+                {
+                    var blobName1 = $"{Guid.NewGuid()}_{accountStaff.Image.FileName}";
+                    var blobInstance1 = containerInstance.GetBlobClient(blobName1);
+                    blobInstance1.Upload(accountStaff.Image.OpenReadStream());
+                    var storageAccountUrl = "https://realestateprojectimage.blob.core.windows.net/realestateprojectpictures";
+                    blobUrl1 = $"{storageAccountUrl}/{blobName1}";
+                }
+
+                if (accountStaff.Imagesignature != null)
+                {
+                    var blobName2 = $"{Guid.NewGuid()}_{accountStaff.Imagesignature.FileName}";
+                    var blobInstance2 = containerInstance.GetBlobClient(blobName2);
+                    blobInstance2.Upload(accountStaff.Imagesignature.OpenReadStream());
+                    var storageAccountUrl = "https://realestateprojectimage.blob.core.windows.net/realestateprojectpictures";
+                    blobUrl2 = $"{storageAccountUrl}/{blobName2}";
+                }
 
                 var checkEmail = _accountServices.GetAllAccount().Where(u =>
                 u.Email.Equals(accountStaff.Email)).FirstOrDefault();
@@ -98,7 +105,7 @@ namespace RealEstateProjectSale.Controllers.StaffController
                     Email = accountStaff.Email,
                     Password = accountStaff.Password,
                     Status = true,
-                    RoleID = new Guid("0df79550-07f0-41c8-b0e8-95e265255bc9")
+                    RoleID = new Guid("f4402e46-a36e-4404-9602-9ef0ae4d5636")
                 };
 
                 var _account = _mapper.Map<Account>(account);
@@ -117,7 +124,6 @@ namespace RealEstateProjectSale.Controllers.StaffController
                     Nationality = accountStaff.Nationality,
                     Placeoforigin = accountStaff.Placeoforigin,
                     PlaceOfresidence = accountStaff.PlaceOfresidence,
-                    DateRange = accountStaff.DateRange,
                     Taxcode = accountStaff.Taxcode,
                     BankName = accountStaff.BankName,
                     BankNumber = accountStaff.BankNumber,
@@ -170,17 +176,99 @@ namespace RealEstateProjectSale.Controllers.StaffController
         //}
 
         [HttpPut("{id}")]
-        public IActionResult UpdateStaff(StaffUpdateDTO staff, Guid id)
+        public IActionResult UpdateStaff([FromForm] StaffUpdateDTO staff, Guid id)
         {
             try
             {
-                var existingStaff = _staffServices.GetStaffByID(id);
-                if (existingStaff != null)
-                {
-                    staff.StaffID = existingStaff.StaffID;
-                    staff.AccountID = existingStaff.AccountID;
+                var containerInstance = _blobServiceClient.GetBlobContainerClient("realestateprojectpictures");
 
-                    var _staff = _mapper.Map<Staff>(staff);
+                // Upload image and image signature to Azure Blob Storage if they are provided
+                string? blobUrl1 = null, blobUrl2 = null;
+                if (staff.Image != null)
+                {
+                    var blobName1 = $"{Guid.NewGuid()}_{staff.Image.FileName}";
+                    var blobInstance1 = containerInstance.GetBlobClient(blobName1);
+                    blobInstance1.Upload(staff.Image.OpenReadStream());
+                    var storageAccountUrl = "https://realestateprojectimage.blob.core.windows.net/realestateprojectpictures";
+                    blobUrl1 = $"{storageAccountUrl}/{blobName1}";
+                }
+
+                if (staff.Imagesignature != null)
+                {
+                    var blobName2 = $"{Guid.NewGuid()}_{staff.Imagesignature.FileName}";
+                    var blobInstance2 = containerInstance.GetBlobClient(blobName2);
+                    blobInstance2.Upload(staff.Imagesignature.OpenReadStream());
+                    var storageAccountUrl = "https://realestateprojectimage.blob.core.windows.net/realestateprojectpictures";
+                    blobUrl2 = $"{storageAccountUrl}/{blobName2}";
+                }
+
+
+
+                var _staff = _staffServices.GetStaffByID(id);
+                if (_staff != null)
+                {
+                    staff.StaffID = _staff.StaffID;
+                    staff.AccountID = _staff.AccountID;
+
+                    if (!string.IsNullOrEmpty(staff.Name))
+                    {
+                        _staff.Name = staff.Name;
+                    }
+                    if (!string.IsNullOrEmpty(staff.PersonalEmail))
+                    {
+                        _staff.PersonalEmail = staff.PersonalEmail;
+                    }
+                    if (staff.DateOfBirth.HasValue)
+                    {
+                        _staff.DateOfBirth = staff.DateOfBirth.Value;
+                    }
+                    if (blobUrl1 != null)
+                    {
+                        _staff.Image = blobUrl1;
+                    }
+                    if (blobUrl2 != null)
+                    {
+                        _staff.Imagesignature = blobUrl2;
+                    }
+                    if (!string.IsNullOrEmpty(staff.IdentityCardNumber))
+                    {
+                        _staff.IdentityCardNumber = staff.IdentityCardNumber;
+                    }
+                    if (!string.IsNullOrEmpty(staff.Sex))
+                    {
+                        _staff.Sex = staff.Sex;
+                    }
+                    if (!string.IsNullOrEmpty(staff.Nationality))
+                    {
+                        _staff.Nationality = staff.Nationality;
+                    }
+                    if (!string.IsNullOrEmpty(staff.Placeoforigin))
+                    {
+                        _staff.Placeoforigin = staff.Placeoforigin;
+                    }
+                    if (!string.IsNullOrEmpty(staff.PlaceOfresidence))
+                    {
+                        _staff.PlaceOfresidence = staff.PlaceOfresidence;
+                    }
+                    if (!string.IsNullOrEmpty(staff.Taxcode))
+                    {
+                        _staff.Taxcode = staff.Taxcode;
+                    }
+                    if (!string.IsNullOrEmpty(staff.BankName))
+                    {
+                        _staff.BankName = staff.BankName;
+                    }
+                    if (staff.BankNumber.HasValue)
+                    {
+                        _staff.BankNumber = staff.BankNumber.Value;
+                    }
+                    if (staff.Status.HasValue)
+                    {
+                        _staff.Status = staff.Status.Value;
+                    }
+
+
+                    //var staffUpdate = _mapper.Map<Staff>(staff);
                     _staffServices.UpdateStaff(_staff);
 
                     return Ok("Update Successfully");
