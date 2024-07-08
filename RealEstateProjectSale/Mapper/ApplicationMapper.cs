@@ -19,6 +19,8 @@ namespace RealEstateProjectSale.Mapper
             CreateMap<AccountCreateDTO, Account>().ReverseMap();
             CreateMap<AccountUpdateDTO, Account>().ReverseMap();
 
+            CreateMap<RoleVM, Role>().ReverseMap();
+
             CreateMap<CustomerVM, Customer>().ReverseMap();
             CreateMap<CustomerCreateDTO, Customer>().ReverseMap();
             CreateMap<CustomerUpdateDTO, Customer>().ReverseMap();

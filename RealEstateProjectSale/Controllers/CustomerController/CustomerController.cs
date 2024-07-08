@@ -18,12 +18,15 @@ namespace RealEstateProjectSale.Controllers.CustomerController
 
         private readonly ICustomerServices _customerServices;
         private readonly IAccountServices _accountServices;
+        private readonly IRoleServices _roleServices;
         private readonly IMapper _mapper;
 
-        public CustomerController(ICustomerServices customerServices, IAccountServices accountServices, IMapper mapper)
+        public CustomerController(ICustomerServices customerServices, IAccountServices accountServices,
+                                  IMapper mapper, IRoleServices roleServices)
         {
             _customerServices = customerServices;
             _accountServices = accountServices;
+            _roleServices = roleServices;
             _mapper = mapper;
         }
 
@@ -76,13 +79,15 @@ namespace RealEstateProjectSale.Controllers.CustomerController
                     return BadRequest("Email Existed");
                 }
 
+                var roleCustomer = _roleServices.GetRoleByRoleName("Customer");
+
                 var account = new AccountCreateDTO
                 {
                     AccountID = Guid.NewGuid(),
                     Email = accountCustomer.Email,
                     Password = accountCustomer.Password,
                     Status = true,
-                    RoleID = new Guid("dd2e45ad-b12d-4d49-ad12-418a79ea5a19")
+                    RoleID = roleCustomer.RoleID
                 };
 
                 var _account = _mapper.Map<Account>(account);
