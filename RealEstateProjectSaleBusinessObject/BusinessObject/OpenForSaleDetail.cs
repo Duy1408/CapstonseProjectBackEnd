@@ -16,7 +16,7 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public string? Note { get; set; }
         public Guid OpeningForSaleID { get; set; }
         public OpeningForSale? OpeningForSale { get; set; }
-        public Guid PropertiesID { get; set; }
+        public Guid PropertyID { get; set; }
         public Property? Property { get; set; }
 
     }

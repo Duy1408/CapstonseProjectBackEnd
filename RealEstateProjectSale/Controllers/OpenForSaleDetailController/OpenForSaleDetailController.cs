@@ -85,7 +85,7 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
                 {
                     detail.OpenForSaleDetailID = existingDetail.OpenForSaleDetailID;
                     detail.OpeningForSaleID = existingDetail.OpeningForSaleID;
-                    detail.PropertiesID = existingDetail.PropertiesID;
+                    detail.PropertiesID = existingDetail.PropertyID;
 
                     var _detail = _mapper.Map<OpenForSaleDetail>(detail);
                     _detailServices.UpdateOpenForSaleDetail(_detail);
