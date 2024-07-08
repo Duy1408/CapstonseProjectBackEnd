@@ -32,6 +32,7 @@ namespace RealEstateProjectSale.Controllers.StaffController
         }
 
         [HttpGet]
+        [Route("GetAllStaff")]
         public IActionResult GetAllStaff()
         {
             try
@@ -51,7 +52,7 @@ namespace RealEstateProjectSale.Controllers.StaffController
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("GetStaffByID/{id}")]
         public IActionResult GetStaffByID(Guid id)
         {
             var staff = _staffServices.GetStaffByID(id);
@@ -68,6 +69,7 @@ namespace RealEstateProjectSale.Controllers.StaffController
         }
 
         [HttpPost]
+        [Route("RegisterAccountStaff")]
         public async Task<IActionResult> AddNewStaff([FromForm] RegisterStaffVM accountStaff)
         {
             try
@@ -180,7 +182,7 @@ namespace RealEstateProjectSale.Controllers.StaffController
 
         //}
 
-        [HttpPut("{id}")]
+        [HttpPut("UpdateStaff/{id}")]
         public IActionResult UpdateStaff([FromForm] StaffUpdateDTO staff, Guid id)
         {
             try
@@ -287,7 +289,7 @@ namespace RealEstateProjectSale.Controllers.StaffController
             }
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("DeleteStaff/{id}")]
         public IActionResult DeleteStaff(Guid id)
         {
             if (_staffServices.GetStaffByID(id) == null)
