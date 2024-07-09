@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
 using RealEstateProjectSaleBusinessObject.DTO.Create;
+using RealEstateProjectSaleBusinessObject.DTO.Update;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 using RealEstateProjectSaleServices.Services;
@@ -78,35 +79,91 @@ namespace RealEstateProjectSale.Controllers
 
         // PUT: api/Projects/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public IActionResult PutProject(Guid id, Project project)
+        [HttpPut("UpdateProject/{id}")]
+        public IActionResult UpdateProject([FromForm] ProjectUpdateDTO project, Guid id)
         {
-            if (_project.GetProjects()==null)
-            {
-                return BadRequest();
-            }
-
-          
-
             try
             {
-                 
-                _project.UpdateProject(project);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (_project.GetProjectById(id)==null)
+                var existingProject = _project.GetProjectById(id);
+                if (existingProject != null)
                 {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
 
-            return NoContent();
+                    if (!string.IsNullOrEmpty(project.ProjectName))
+                    {
+                        existingProject.ProjectName = project.ProjectName;
+                    }
+                    if (!string.IsNullOrEmpty(project.CommericalName))
+                    {
+                        existingProject.CommericalName = project.CommericalName;
+                    }
+                    if (!string.IsNullOrEmpty(project.ShortName))
+                    {
+                        existingProject.ShortName = project.ShortName;
+                    }
+                    if (!string.IsNullOrEmpty(project.Address))
+                    {
+                        existingProject.Address = project.Address;
+                    }
+                    if (!string.IsNullOrEmpty(project.Commune))
+                    {
+                        existingProject.Commune = project.Commune;
+                    }
+                    if (!string.IsNullOrEmpty(project.District))
+                    {
+                        existingProject.District = project.District;
+                    }
+                    if (project.DepositPrice.HasValue)
+                    {
+                        existingProject.DepositPrice = project.DepositPrice.Value;
+                    }
+                    if (!string.IsNullOrEmpty(project.Summary))
+                    {
+                        existingProject.Summary = project.Summary;
+                    }
+                    if (project.LicenseNo.HasValue)
+                    {
+                        existingProject.LicenseNo = project.LicenseNo.Value;
+                    }
+                    if (project.DateOfIssue.HasValue)
+                    {
+                        existingProject.DateOfIssue = project.DateOfIssue.Value;
+                    }
+                    if (!string.IsNullOrEmpty(project.CampusArea))
+                    {
+                        existingProject.CampusArea = project.CampusArea;
+                    }
+                    if (!string.IsNullOrEmpty(project.PlaceofIssue))
+                    {
+                        existingProject.PlaceofIssue = project.PlaceofIssue;
+                    }
+                    if (!string.IsNullOrEmpty(project.Code))
+                    {
+                        existingProject.Code = project.Code;
+                    }
+                    //thiếu img
+
+                    if (!string.IsNullOrEmpty(project.Status))
+                    {
+                        existingProject.Status = project.Status;
+                    }
+
+
+                   
+                    _project.UpdateProject(existingProject);
+
+                    return Ok("Update Project Successfully");
+
+                }
+
+                return NotFound("Customer not found.");
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
+
 
         // POST: api/Projects
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -135,6 +192,7 @@ namespace RealEstateProjectSale.Controllers
                     PlaceofIssue = pro.PlaceofIssue,
                     Code = pro.Code,
                     Status = pro.Status,
+                    //thiếu img
                   
 
 
