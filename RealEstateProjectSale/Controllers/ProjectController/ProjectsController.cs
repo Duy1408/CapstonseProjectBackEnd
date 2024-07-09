@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,10 +16,13 @@ namespace RealEstateProjectSale.Controllers
     public class ProjectsController : ControllerBase
     {
         private readonly IProjectServices _project;
+        private readonly BlobServiceClient _blobServiceClient;
 
-        public ProjectsController(IProjectServices project)
+
+        public ProjectsController(IProjectServices project, BlobServiceClient blobServiceClient)
         {
             _project = project;
+            _blobServiceClient = blobServiceClient;
             
         }
         // GET: api/Projects

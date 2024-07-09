@@ -11,7 +11,7 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public Guid PaymentProcessDetailID { get; set; }
         public string DetailName { get; set; }
         public string PeriodType { get; set; }
-        public double? Period { get; set; }
+        public string? Period { get; set; }
         public int? PaymentRate { get; set; }
         public string PaymentType { get; set; }
         public double Amount { get; set; }
