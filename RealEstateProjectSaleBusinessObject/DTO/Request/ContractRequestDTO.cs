@@ -6,24 +6,16 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace RealEstateProjectSaleBusinessObject.DTO.Create
+namespace RealEstateProjectSaleBusinessObject.DTO.Request
 {
-    public class ContractCreateDTO
+    public class ContractRequestDTO
     {
-        [JsonIgnore]
-        public Guid ContractID { get; set; }
         public string ContractName { get; set; }
         public string ContractType { get; set; }
-        [JsonIgnore]
-        public DateTime CreatedTime { get; set; }
-        [JsonIgnore]
-        public DateTime? UpdatedTime { get; set; }
-        [JsonIgnore]
-        public DateTime? DateSigned { get; set; }
         public DateTime? ExpiredTime { get; set; }
         public double TotalPrice { get; set; }
         public string? Description { get; set; }
-        public byte[]? ContractFile { get; set; }
+        public IFormFile? ContractFile { get; set; }
         public string Status { get; set; }
         public Guid BookingID { get; set; }
         public Guid PaymentProcessID { get; set; }
