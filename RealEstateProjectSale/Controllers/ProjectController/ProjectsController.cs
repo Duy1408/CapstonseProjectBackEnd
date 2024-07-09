@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
+using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
+using RealEstateProjectSaleServices.Services;
 
 namespace RealEstateProjectSale.Controllers
 {
@@ -16,42 +19,57 @@ namespace RealEstateProjectSale.Controllers
     public class ProjectsController : ControllerBase
     {
         private readonly IProjectServices _project;
+    
+        private readonly IMapper _mapper;
         private readonly BlobServiceClient _blobServiceClient;
 
 
-        public ProjectsController(IProjectServices project, BlobServiceClient blobServiceClient)
+
+
+        public ProjectsController(IProjectServices project, BlobServiceClient blobServiceClient, IMapper mapper)
         {
             _project = project;
+            _mapper = mapper;
             _blobServiceClient = blobServiceClient;
-            
         }
         // GET: api/Projects
         [HttpGet]
-        public ActionResult<IEnumerable<Project>> GetProjects()
+        [Route("GetAllProjects")]
+
+        public IActionResult GetProjects()
         {
-          if (_project.GetProjects() == null)
-          {
-              return NotFound();
-          }
-            return _project.GetProjects().ToList();
+            try
+            {
+                if (_project.GetProjects() == null)
+                {
+                    return NotFound();
+                }
+                var projects = _project.GetProjects();
+                var response = _mapper.Map<List<ProjectVM>>(projects);
+                return Ok(response);
+            }catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+
+            }
+
         }
 
         // GET: api/Projects/5
-        [HttpGet("{id}")]
-        public ActionResult<Project> GetProject(Guid id)
+        [HttpGet("GetProjectByID/{id}")]
+        public IActionResult GetProjectByID(Guid id)
         {
-          if (_project.GetProjects() == null)
-          {
-              return NotFound();
-          }
             var project = _project.GetProjectById(id);
 
-            if (project == null)
+            if (project != null)
             {
-                return NotFound();
+                var responese = _mapper.Map<ProjectVM>(project);
+
+                return Ok(responese);
             }
 
-            return project;
+            return NotFound();
+
         }
 
         // PUT: api/Projects/5
@@ -116,14 +134,14 @@ namespace RealEstateProjectSale.Controllers
         }
 
         // DELETE: api/Projects/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProject(Guid id)
+        [HttpDelete("DeleteProject/{id}")]
+        public IActionResult DeleteProject(Guid id)
         {
-            if (_project.GetProjects() == null)
+            if (_project.GetProjectById(id) == null)
             {
                 return NotFound();
             }
-            var project =  _project.GetProjectById(id);
+            var project = _project.GetProjectById(id);
             if (project == null)
             {
                 return NotFound();
@@ -131,9 +149,10 @@ namespace RealEstateProjectSale.Controllers
 
             _project.ChangeStatus(project);
 
-            return NoContent();
+
+            return Ok("Delete Successfully");
         }
 
-   
+
     }
 }
