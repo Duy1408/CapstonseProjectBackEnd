@@ -8,13 +8,13 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Update
 {
     public class ProjectUpdateDTO
     {
-        public string ProjectName { get; set; }
-        public string CommericalName { get; set; }
-        public string ShortName { get; set; }
-        public string Address { get; set; }
-        public string Commune { get; set; }
-        public string District { get; set; }
-        public double DepositPrice { get; set; }
+        public string? ProjectName { get; set; }
+        public string? CommericalName { get; set; }
+        public string? ShortName { get; set; }
+        public string? Address { get; set; }
+        public string? Commune { get; set; }
+        public string? District { get; set; }
+        public double? DepositPrice { get; set; }
         public string? Summary { get; set; }
         public int? LicenseNo { get; set; }
         public DateTime? DateOfIssue { get; set; }
@@ -22,6 +22,6 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Update
         public string? PlaceofIssue { get; set; }
         public string? Code { get; set; }
         public string? Image { get; set; }
-        public string Status { get; set; }
+        public string? Status { get; set; }
     }
 }

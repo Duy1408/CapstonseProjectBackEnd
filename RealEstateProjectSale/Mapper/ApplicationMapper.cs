@@ -37,6 +37,10 @@ namespace RealEstateProjectSale.Mapper
             CreateMap<PromotionDetailCreateDTO, PromotionDetail>().ReverseMap();
             CreateMap<PromotionDetailUpdateDTO, PromotionDetail>().ReverseMap();
 
+            CreateMap<ProjectVM, Project>().ReverseMap();
+            CreateMap<ProjectCreateDTO, Project>().ReverseMap();
+            CreateMap<ProjectUpdateDTO, Project>().ReverseMap();
+
             CreateMap<CommentVM, Comment>().ReverseMap().ForMember(dest => dest.PropertyName,
                                        opt => opt.MapFrom(src => src.Property!.PropertyName))
                                                         .ForMember(dest => dest.PersonalEmail,
