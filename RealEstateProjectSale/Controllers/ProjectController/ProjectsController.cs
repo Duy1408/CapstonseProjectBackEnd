@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -12,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
 using RealEstateProjectSaleBusinessObject.DTO.Create;
+using RealEstateProjectSaleBusinessObject.DTO.Request;
 using RealEstateProjectSaleBusinessObject.DTO.Update;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
@@ -24,7 +26,7 @@ namespace RealEstateProjectSale.Controllers
     public class ProjectsController : ControllerBase
     {
         private readonly IProjectServices _project;
-    
+
         private readonly IMapper _mapper;
         private readonly BlobServiceClient _blobServiceClient;
 
@@ -52,7 +54,8 @@ namespace RealEstateProjectSale.Controllers
                 var projects = _project.GetProjects();
                 var response = _mapper.Map<List<ProjectVM>>(projects);
                 return Ok(response);
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
 
@@ -84,6 +87,17 @@ namespace RealEstateProjectSale.Controllers
         {
             try
             {
+                var containerInstance = _blobServiceClient.GetBlobContainerClient("realestateprojectpictures");
+                string? blobUrl = null;
+                if (project.Image != null)
+                {
+                    var blobName1 = $"{Guid.NewGuid()}_{project.Image.FileName}";
+                    var blobInstance1 = containerInstance.GetBlobClient(blobName1);
+                    blobInstance1.Upload(project.Image.OpenReadStream());
+                    var storageAccountUrl = "https://realestateprojectimage.blob.core.windows.net/realestateprojectpictures";
+                    blobUrl = $"{storageAccountUrl}/{blobName1}";
+                }
+
                 var existingProject = _project.GetProjectById(id);
                 if (existingProject != null)
                 {
@@ -140,15 +154,17 @@ namespace RealEstateProjectSale.Controllers
                     {
                         existingProject.Code = project.Code;
                     }
-                    //thiếu img
-
+                    if (blobUrl != null)
+                    {
+                        existingProject.Image = blobUrl;
+                    }
                     if (!string.IsNullOrEmpty(project.Status))
                     {
                         existingProject.Status = project.Status;
                     }
 
 
-                   
+
                     _project.UpdateProject(existingProject);
 
                     return Ok("Update Project Successfully");
@@ -169,10 +185,20 @@ namespace RealEstateProjectSale.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [Route("AddNewProject")]
-        public IActionResult AddNew([FromForm] ProjectCreateDTO pro)
+        public IActionResult AddNew([FromForm] ProjectRequestDTO pro)
         {
             try
             {
+                var containerInstance = _blobServiceClient.GetBlobContainerClient("realestateprojectpictures");
+                string? blobUrl = null;
+                if (pro.Image != null)
+                {
+                    var blobName1 = $"{Guid.NewGuid()}_{pro.Image.FileName}";
+                    var blobInstance1 = containerInstance.GetBlobClient(blobName1);
+                    blobInstance1.Upload(pro.Image.OpenReadStream());
+                    var storageAccountUrl = "https://realestateprojectimage.blob.core.windows.net/realestateprojectpictures";
+                    blobUrl = $"{storageAccountUrl}/{blobName1}";
+                }
 
                 var newPro = new ProjectCreateDTO
                 {
@@ -191,15 +217,14 @@ namespace RealEstateProjectSale.Controllers
                     CampusArea = pro.CampusArea,
                     PlaceofIssue = pro.PlaceofIssue,
                     Code = pro.Code,
-                    Status = pro.Status,
-                    //thiếu img
-                  
-
+                    Status = "Sắp mở bán",
+                    Image = pro.Image
 
                 };
 
+
                 var project = _mapper.Map<Project>(newPro);
-               
+                project.Image = blobUrl;
                 _project.AddNew(project);
 
                 return Ok("Create Project Successfully");
