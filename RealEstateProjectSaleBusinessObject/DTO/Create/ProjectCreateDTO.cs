@@ -9,6 +9,7 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
 {
     public class ProjectCreateDTO
     {
+        public Guid ProjectID { get; set; }
         public string ProjectName { get; set; }
         public string CommericalName { get; set; }
         public string ShortName { get; set; }
@@ -24,6 +25,7 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
         public string? PlaceofIssue { get; set; }
         public string? Code { get; set; }
         public IFormFile? Image { get; set; }
-       
+        public string Status { get; set; }
+
     }
 }

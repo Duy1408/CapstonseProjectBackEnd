@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Net;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using AutoMapper;
 using Azure.Storage.Blobs;
@@ -8,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
+using RealEstateProjectSaleBusinessObject.DTO.Create;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 using RealEstateProjectSaleServices.Services;
@@ -107,30 +111,44 @@ namespace RealEstateProjectSale.Controllers
         // POST: api/Projects
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Project>> PostProject(Project project)
+        [Route("AddNewProject")]
+        public IActionResult AddNew([FromForm] ProjectCreateDTO pro)
         {
-          if (_project.GetProjects() == null)
-          {
-              return Problem("Entity set 'RealEstateProjectSaleSystemDBContext.Projects'  is null.");
-          }
-
             try
             {
-                _project.AddNew(project);
-            }
-            catch (DbUpdateException)
-            {
-                if (_project.GetProjects() == null)
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
 
-            return CreatedAtAction("GetProjetcs", new { id = project.ProjectID }, project);
+                var newPro = new ProjectCreateDTO
+                {
+                   ProjectID = Guid.NewGuid(),
+                   ProjectName = pro.ProjectName,
+                   CommericalName = pro.CommericalName,
+                   ShortName = pro.ShortName,
+                   TypeOfProject = pro.TypeOfProject,
+                    Address = pro.Address,
+                    Commune = pro.Commune,
+                    District = pro.District,
+                    DepositPrice = pro.DepositPrice,
+                    Summary = pro.Summary,
+                    LicenseNo = pro.LicenseNo,
+                    DateOfIssue = pro.DateOfIssue,
+                    CampusArea = pro.CampusArea,
+                    PlaceofIssue = pro.PlaceofIssue,
+                    Code = pro.Code,
+                  
+
+
+                };
+
+                var project = _mapper.Map<Project>(newPro);
+               
+                _project.AddNew(project);
+
+                return Ok("Create Project Successfully");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // DELETE: api/Projects/5
