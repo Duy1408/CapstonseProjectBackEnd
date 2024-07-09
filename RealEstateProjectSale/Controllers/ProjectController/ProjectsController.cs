@@ -119,11 +119,11 @@ namespace RealEstateProjectSale.Controllers
 
                 var newPro = new ProjectCreateDTO
                 {
-                   ProjectID = Guid.NewGuid(),
-                   ProjectName = pro.ProjectName,
-                   CommericalName = pro.CommericalName,
-                   ShortName = pro.ShortName,
-                   TypeOfProject = pro.TypeOfProject,
+                    ProjectID = Guid.NewGuid(),
+                    ProjectName = pro.ProjectName,
+                    CommericalName = pro.CommericalName,
+                    ShortName = pro.ShortName,
+                    TypeOfProject = pro.TypeOfProject,
                     Address = pro.Address,
                     Commune = pro.Commune,
                     District = pro.District,
@@ -134,6 +134,7 @@ namespace RealEstateProjectSale.Controllers
                     CampusArea = pro.CampusArea,
                     PlaceofIssue = pro.PlaceofIssue,
                     Code = pro.Code,
+                    Status = pro.Status,
                   
 
 
