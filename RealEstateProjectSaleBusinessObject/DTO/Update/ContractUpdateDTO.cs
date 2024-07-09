@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,14 +10,13 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Update
 {
     public class ContractUpdateDTO
     {
-        [JsonIgnore]
-        public Guid ContractID { get; set; }
-        public DateTime? DateSigned { get; set; }
-        public DateTime? UpdateUsAt { get; set; }
-        public DateTime CreatedStAt { get; set; }
-        public string ContractType { get; set; }
-        public bool Status { get; set; }
-        [JsonIgnore]
-        public Guid BookingID { get; set; }
+        public string? ContractName { get; set; }
+        public string? ContractType { get; set; }
+        public DateTime? ExpiredTime { get; set; }
+        public double? TotalPrice { get; set; }
+        public string? Description { get; set; }
+        public IFormFile? ContractFile { get; set; }
+        public string? Status { get; set; }
+
     }
 }

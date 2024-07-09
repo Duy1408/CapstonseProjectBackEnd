@@ -21,7 +21,8 @@ namespace RealEstateProjectSaleDAO.DAOs
             try
             {
                 return _context.Contracts!.Include(c => c.Booking)
-                                       .ToList();
+                                          .Include(c => c.PaymentProcess)
+                                          .ToList();
             }
             catch (Exception ex)
             {
@@ -47,7 +48,8 @@ namespace RealEstateProjectSaleDAO.DAOs
             try
             {
                 var contract = _context.Contracts!.Include(a => a.Booking)
-                                           .SingleOrDefault(c => c.ContractID == id);
+                                                  .Include(a => a.PaymentProcess)
+                                                  .SingleOrDefault(c => c.ContractID == id);
                 return contract;
             }
             catch (Exception ex)

@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
 using RealEstateProjectSaleBusinessObject.DTO.Create;
+using RealEstateProjectSaleBusinessObject.DTO.Request;
 using RealEstateProjectSaleBusinessObject.DTO.Update;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
@@ -24,6 +26,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
         }
 
         [HttpGet]
+        [Route("GetAllContract")]
         public IActionResult GetAllContract()
         {
             try
@@ -43,7 +46,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("GetContractByID/{id}")]
         public IActionResult GetContractByID(Guid id)
         {
             var contract = _contractServices.GetContractByID(id);
@@ -60,11 +63,41 @@ namespace RealEstateProjectSale.Controllers.ContractController
         }
 
         [HttpPost]
-        public IActionResult AddNewContract(ContractCreateDTO contract)
+        [Route("AddNewComment")]
+        public IActionResult AddNewContract([FromForm] ContractRequestDTO contract)
         {
             try
             {
-                var _contract = _mapper.Map<Contract>(contract);
+                // Chuyển đổi IFormFile sang byte[]
+                byte[]? contractFileBytes = null;
+                if (contract.ContractFile != null)
+                {
+                    using (var ms = new MemoryStream())
+                    {
+                        contract.ContractFile.CopyTo(ms);
+                        contractFileBytes = ms.ToArray();
+                    }
+                }
+
+                var newContract = new ContractCreateDTO
+                {
+                    ContractID = Guid.NewGuid(),
+                    ContractName = contract.ContractName,
+                    ContractType = contract.ContractType,
+                    CreatedTime = DateTime.Now,
+                    UpdatedTime = null,
+                    DateSigned = null,
+                    ExpiredTime = contract.ExpiredTime,
+                    TotalPrice = contract.TotalPrice,
+                    Description = contract.Description,
+                    ContractFile = contractFileBytes,
+                    Status = contract.Status,
+                    BookingID = contract.BookingID,
+                    PaymentProcessID = contract.PaymentProcessID,
+
+                };
+
+                var _contract = _mapper.Map<Contract>(newContract);
                 _contractServices.AddNewContract(_contract);
 
                 return Ok("Create Contract Successfully");
@@ -75,21 +108,83 @@ namespace RealEstateProjectSale.Controllers.ContractController
             }
         }
 
-        [HttpPut("{id}")]
-        public IActionResult UpdateContract(ContractUpdateDTO contract, Guid id)
+        [HttpPut("UpdateContract/{id}")]
+        public IActionResult UpdateContract([FromForm] ContractUpdateDTO contract, Guid id)
         {
             try
             {
+                // Chuyển đổi IFormFile sang byte[]
+                byte[]? contractFileBytes = null;
+                if (contract.ContractFile != null)
+                {
+                    using (var ms = new MemoryStream())
+                    {
+                        contract.ContractFile.CopyTo(ms);
+                        contractFileBytes = ms.ToArray();
+                    }
+                }
+
                 var existingContract = _contractServices.GetContractByID(id);
                 if (existingContract != null)
                 {
-                    contract.ContractID = existingContract.ContractID;
-                    contract.BookingID = existingContract.BookingID;
+                    if (!string.IsNullOrEmpty(contract.ContractName))
+                    {
+                        existingContract.ContractName = contract.ContractName;
+                    }
+                    if (!string.IsNullOrEmpty(contract.ContractType))
+                    {
+                        existingContract.ContractType = contract.ContractType;
+                    }
+                    if (contract.ExpiredTime.HasValue)
+                    {
+                        existingContract.ExpiredTime = contract.ExpiredTime.Value;
+                    }
+                    if (contract.TotalPrice.HasValue)
+                    {
+                        existingContract.TotalPrice = contract.TotalPrice.Value;
+                    }
+                    if (!string.IsNullOrEmpty(contract.Description))
+                    {
+                        existingContract.Description = contract.Description;
+                    }
+                    if (!string.IsNullOrEmpty(contract.Status))
+                    {
+                        existingContract.Status = contract.Status;
+                    }
+                    if (contractFileBytes != null)
+                    {
+                        existingContract.ContractFile = contractFileBytes;
+                    }
 
-                    var _contract = _mapper.Map<Contract>(contract);
-                    _contractServices.UpdateContract(_contract);
+                    existingContract.UpdatedTime = DateTime.Now;
+                    _contractServices.UpdateContract(existingContract);
 
-                    return Ok("Update Successfully");
+                    return Ok("Update Contract Successfully");
+
+                }
+
+                return NotFound("Contract not found.");
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("UpdateContract/SignedContract/{id}")]
+        public IActionResult CustomerSignedContract(Guid id)
+        {
+            try
+            {
+                var contract = _contractServices.GetContractByID(id);
+                if (contract != null)
+                {
+                    contract.DateSigned = DateTime.Now;
+                    contract.Status = "Khách hàng đã ký hợp đồng mua bán";
+
+                    _contractServices.UpdateContract(contract);
+                    return Ok("Signed Contract Successfully");
 
                 }
 
