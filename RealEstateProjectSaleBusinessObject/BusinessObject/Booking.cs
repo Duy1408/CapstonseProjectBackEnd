@@ -22,7 +22,7 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public Property? Property { get; set; }
         public Guid OpeningForSaleID { get; set; }
         public OpeningForSale? OpeningForSale { get; set; }
-        public Guid ProjectID { get; set; }
+        public Guid? ProjectID { get; set; }
         public Project? Project { get; set; }
         public Guid CustomerID { get; set; }
         public Customer? Customer { get; set; }
