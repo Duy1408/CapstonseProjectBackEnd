@@ -3,14 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace RealEstateProjectSaleBusinessObject.DTO.Create
+namespace RealEstateProjectSaleBusinessObject.DTO.Request
 {
-    public class ProjectCreateDTO
+    public class ProjectRequestDTO
     {
-        public Guid ProjectID { get; set; }
         public string ProjectName { get; set; }
         public string CommericalName { get; set; }
         public string ShortName { get; set; }
@@ -26,7 +24,5 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
         public string? PlaceofIssue { get; set; }
         public string? Code { get; set; }
         public IFormFile? Image { get; set; }
-        public string Status { get; set; }
-
     }
 }
