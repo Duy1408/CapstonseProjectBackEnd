@@ -29,7 +29,9 @@ namespace RealEstateProjectSaleDAO.DAOs
         public List<Property> GetAllProperty()
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.Properties.ToList();
+            return _context.Properties.Include(p => p.PropertyType)
+                                      .Include(p => p.Project)
+                                      .ToList();
         }
 
         public bool AddNew(Property p)
@@ -68,29 +70,13 @@ namespace RealEstateProjectSaleDAO.DAOs
             }
         }
 
-        public bool ChangeStatus(Property p)
-        {
-            var _context = new RealEstateProjectSaleSystemDBContext();
-            var a = _context.Properties.FirstOrDefault(c => c.PropertyID.Equals(p.PropertyID));
-
-
-            if (a == null)
-            {
-                return false;
-            }
-            else
-            {
-                _context.Entry(a).State = EntityState.Modified;
-                _context.SaveChanges();
-                return true;
-            }
-        }
-
         public Property GetPropertyByID(Guid id)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.Properties.SingleOrDefault(a => a.PropertyID == id);
+            return _context.Properties.Include(p => p.PropertyType)
+                                      .Include(p => p.Project)
+                                      .SingleOrDefault(a => a.PropertyID == id);
         }
-       
+
     }
 }

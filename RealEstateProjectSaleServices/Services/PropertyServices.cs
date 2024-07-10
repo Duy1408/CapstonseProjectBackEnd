@@ -13,7 +13,7 @@ namespace RealEstateProjectSaleServices.Services
     {
 
         private IPropertyRepo _pro;
-      
+
         public PropertyServices(IPropertyRepo pro)
         {
             _pro = pro;
@@ -22,12 +22,6 @@ namespace RealEstateProjectSaleServices.Services
         {
             _pro.AddNew(p);
         }
-
-        public bool ChangeStatus(Property p)
-        {
-            return _pro.ChangeStatus(p);
-        }
-
         public List<Property> GetProperty()
         {
             return _pro.GetProperty();

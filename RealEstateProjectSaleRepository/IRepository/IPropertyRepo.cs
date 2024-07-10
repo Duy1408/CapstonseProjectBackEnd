@@ -9,8 +9,6 @@ namespace RealEstateProjectSaleRepository.IRepository
 {
     public interface IPropertyRepo
     {
-        public bool ChangeStatus(Property p);
-
 
         public List<Property> GetProperty();
         public void AddNew(Property p);
