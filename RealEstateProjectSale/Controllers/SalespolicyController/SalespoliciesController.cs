@@ -2,10 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
+using RealEstateProjectSaleBusinessObject.DTO.Create;
+using RealEstateProjectSaleBusinessObject.DTO.Update;
+using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 
 namespace RealEstateProjectSale.Controllers.SalespolicyController
@@ -15,105 +19,154 @@ namespace RealEstateProjectSale.Controllers.SalespolicyController
     public class SalespoliciesController : ControllerBase
     {
         private readonly ISalespolicyServices _sale;
+        private readonly IMapper _mapper;
 
-        public SalespoliciesController(ISalespolicyServices sale)
+        public SalespoliciesController(ISalespolicyServices sale, IMapper mapper)
         {
             _sale = sale;
+            _mapper = mapper;
         }
 
         // GET: api/Salespolicies
         [HttpGet]
-        public ActionResult<IEnumerable<Salespolicy>> GetSalespolicies()
+        [Route("GetAllSalePolicy")]
+        public IActionResult GetAllComment()
         {
-          if (_sale.GetSalespolicys() == null)
-          {
-              return NotFound();
-          }
-            return _sale.GetSalespolicys().ToList();
+            try
+            {
+                if (_sale.GetSalespolicys()==null)
+                {
+                    return NotFound();
+                }
+                var sales = _sale.GetSalespolicys();
+                var response = _mapper.Map<List<SalepolicyVM>>(sales);
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // GET: api/Salespolicies/5
-        [HttpGet("{id}")]
-        public ActionResult<Salespolicy> GetSalespolicy(Guid id)
-        {
-          if (_sale.GetSalespolicys() == null)
-          {
-              return NotFound();
-          }
-            var salespolicy = _sale.GetSalespolicyById(id);
 
-            if (salespolicy == null)
+        [HttpGet("GetSalePolicyByID/{id}")]
+        public IActionResult GetSalePolicyByID(Guid id)
+        {
+            var sale = _sale.GetSalespolicyById(id);
+
+            if (sale != null)
             {
-                return NotFound();
+                var responese = _mapper.Map<SalepolicyVM>(sale);
+
+                return Ok(responese);
             }
 
-            return salespolicy;
+            return NotFound();
+
         }
 
         // PUT: api/Salespolicies/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public IActionResult PutSalespolicy(Guid id, Salespolicy salespolicy)
+
+        [HttpPut("UpdateSalePolicy/{id}")]
+        public IActionResult UpdateSalePolicy([FromForm] SalePolicyUpdateDTO sale, Guid id)
         {
-            if (_sale.GetSalespolicys() == null)
-            {
-                return BadRequest();
-            }
-
-           
-
             try
             {
-                _sale.UpdateSalespolicy(salespolicy);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (_sale.GetSalespolicys() == null)
+                var existingSale = _sale.GetSalespolicyById(id);
+                if (existingSale != null)
                 {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
 
-            return NoContent();
+                    if (!string.IsNullOrEmpty(sale.SalesPolicyType))
+                    {
+                        existingSale.SalesPolicyType = sale.SalesPolicyType;
+                    }
+                    if (!string.IsNullOrEmpty(sale.PeopleApplied))
+                    {
+                        existingSale.PeopleApplied = sale.PeopleApplied;
+                    }
+                    if (sale.Status.HasValue)
+                    {
+                        existingSale.Status = sale.Status.Value;
+                    }
+                    if (sale.ExpressTime.HasValue)
+                    {
+                        existingSale.ExpressTime = sale.ExpressTime.Value;
+                    }
+
+
+                    _sale.UpdateSalespolicy(existingSale);
+
+                    return Ok("Update SalePolicy Successfully");
+
+                }
+
+                return NotFound("SalePolicy not found.");
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
+
 
         // POST: api/Salespolicies
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public ActionResult<Salespolicy> PostSalespolicy(Salespolicy salespolicy)
+        [Route("AddNewSalePolicy")]
+        public IActionResult AddNew(SalepolicyCreateDTO sale)
         {
-          if (_sale.GetSalespolicys() == null)
-          {
-              return Problem("Entity set 'RealEstateProjectSaleSystemDBContext.Salespolicies'  is null.");
-          }
-            _sale.AddNew(salespolicy);
+            try
+            {
 
-            return CreatedAtAction("GetSalespolicy", new { id = salespolicy.SalesPolicyID }, salespolicy);
+                var newSale = new SalepolicyCreateDTO
+                {
+
+                    SalesPolicyID = Guid.NewGuid(),
+                    SalesPolicyType = sale.SalesPolicyType,
+                    ExpressTime = DateTime.Now,
+                    PeopleApplied = null,
+                    Status = true,
+                    ProjectID = sale.ProjectID,
+                 
+                };
+
+                var salepolicy = _mapper.Map<Salespolicy>(newSale);
+               
+                _sale.AddNew(salepolicy);
+
+                return Ok("Create SalePolicy Successfully");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // DELETE: api/Salespolicies/5
-        [HttpDelete("{id}")]
-        public IActionResult DeleteSalespolicy(Guid id)
+        [HttpDelete("DeleteSalePolicy/{id}")]
+        public IActionResult DeleteSalePolicy(Guid id)
         {
-            if (_sale.GetSalespolicys() == null)
+            if (_sale.GetSalespolicys()==null)
             {
                 return NotFound();
             }
-            var salespolicy = _sale.GetSalespolicyById(id);
-            if (salespolicy == null)
+            var sale = _sale.GetSalespolicyById(id);
+            if (sale == null)
             {
                 return NotFound();
             }
 
-            _sale.ChangeStatus(salespolicy);
+            _sale.ChangeStatus(sale);
 
-            return NoContent();
+
+            return Ok("Delete Successfully");
         }
 
-       
+
+
     }
 }
