@@ -30,7 +30,7 @@ namespace RealEstateProjectSale.Controllers.SalespolicyController
         // GET: api/Salespolicies
         [HttpGet]
         [Route("GetAllSalePolicy")]
-        public IActionResult GetAllComment()
+        public IActionResult GetAllSalePolicy()
         {
             try
             {
