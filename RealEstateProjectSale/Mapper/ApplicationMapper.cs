@@ -48,6 +48,11 @@ namespace RealEstateProjectSale.Mapper
                                        opt => opt.MapFrom(src => src.Customer!.PersonalEmail));
             CreateMap<CommentCreateDTO, Comment>().ReverseMap();
 
+            CreateMap<SalepolicyVM, Salespolicy>().ReverseMap().ForMember(dest => dest.ProjectName,
+                                     opt => opt.MapFrom(src => src.Project!.ProjectName));
+            CreateMap<SalepolicyCreateDTO, Salespolicy>().ReverseMap();
+            CreateMap<SalePolicyUpdateDTO, Salespolicy>().ReverseMap();
+
 
         }
     }

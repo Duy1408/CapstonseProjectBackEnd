@@ -29,7 +29,7 @@ namespace RealEstateProjectSaleDAO.DAOs
         public List<Salespolicy> GetAllSalespolicy()
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.Salespolicies.ToList();
+            return _context.Salespolicies.Include(c=>c.Project).ToList();
         }
 
         public bool AddNew(Salespolicy p)
@@ -90,7 +90,7 @@ namespace RealEstateProjectSaleDAO.DAOs
         public Salespolicy GetSalespolicyByID(Guid id)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.Salespolicies.SingleOrDefault(a => a.SalesPolicyID == id);
+            return _context.Salespolicies.Include(c=>c.Project).SingleOrDefault(a => a.SalesPolicyID == id);
         }
      
     }
