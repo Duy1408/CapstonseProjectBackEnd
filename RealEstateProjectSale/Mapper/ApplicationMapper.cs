@@ -53,6 +53,18 @@ namespace RealEstateProjectSale.Mapper
             CreateMap<SalepolicyCreateDTO, Salespolicy>().ReverseMap();
             CreateMap<SalePolicyUpdateDTO, Salespolicy>().ReverseMap();
 
+            CreateMap<BookingVM, Booking>().ReverseMap().ForMember(dest => dest.PropertyName,
+                                       opt => opt.MapFrom(src => src.Property!.PropertyName))
+                                                        .ForMember(dest => dest.DescriptionName,
+                                       opt => opt.MapFrom(src => src.OpeningForSale!.DescriptionName))
+                                                        .ForMember(dest => dest.ProjectName,
+                                       opt => opt.MapFrom(src => src.Project!.ProjectName))
+                                                        .ForMember(dest => dest.PersonalEmailCs,
+                                       opt => opt.MapFrom(src => src.Customer!.PersonalEmail))
+                                                        .ForMember(dest => dest.PersonalEmailSt,
+                                       opt => opt.MapFrom(src => src.Staff!.PersonalEmail));
+            CreateMap<BookingCreateDTO, Booking>().ReverseMap();
+
 
         }
     }

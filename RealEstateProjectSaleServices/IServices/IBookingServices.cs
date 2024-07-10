@@ -9,8 +9,6 @@ namespace RealEstateProjectSaleServices.IServices
 {
     public interface IBookingServices
     {
-        bool ChangeStatus(Booking p);
-
 
         List<Booking> GetBookings();
         void AddNew(Booking p);
@@ -20,6 +18,6 @@ namespace RealEstateProjectSaleServices.IServices
 
         void UpdateBooking(Booking p);
 
-        List<Booking> GetBookingByNumber(int numberBooking);
+        List<Booking> GetBookingByDepositedTimed(int numberBooking);
     }
 }

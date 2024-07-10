@@ -29,13 +29,27 @@ namespace RealEstateProjectSaleDAO.DAOs
         public List<Booking> GetAllBooking()
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.Bookings.ToList();
+            return _context.Bookings.Include(c => c.Property)
+                                    .Include(c => c.OpeningForSale)
+                                    .Include(c => c.Project)
+                                    .Include(c => c.Customer)
+                                    .Include(c => c.Staff)
+                                    .ToList();
         }
 
-        public List<Booking> GetBookingByNumber(int numberBooking)
+        public List<Booking> GetBookingByDepositedTimed(int numberBooking)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.Bookings.OrderBy(b=>b.BookingID).Take(numberBooking).ToList();
+            return _context.Bookings!.Include(c => c.Property)
+                                     .Include(c => c.OpeningForSale)
+                                     .Include(c => c.Project)
+                                     .Include(c => c.Customer)
+                                     .Include(c => c.Staff)
+                                     .Where(b => b.DepositedTimed != null)
+                                     .OrderBy(b => b.DepositedTimed)
+                                     .ThenBy(b => b.BookingID)
+                                     .Take(numberBooking)
+                                     .ToList();
         }
 
         public bool AddNew(Booking p)
@@ -73,28 +87,15 @@ namespace RealEstateProjectSaleDAO.DAOs
             }
         }
 
-        public bool ChangeStatus(Booking p)
-        {
-            var _context = new RealEstateProjectSaleSystemDBContext();
-            var a = _context.Bookings.FirstOrDefault(c => c.BookingID.Equals(p.BookingID));
-
-
-            if (a == null)
-            {
-                return false;
-            }
-            else
-            {
-                _context.Entry(a).State = EntityState.Modified;
-                _context.SaveChanges();
-                return true;
-            }
-        }
-
         public Booking GetBookingByID(Guid id)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.Bookings.SingleOrDefault(a => a.BookingID == id);
+            return _context.Bookings.Include(c => c.Property)
+                                    .Include(c => c.OpeningForSale)
+                                    .Include(c => c.Project)
+                                    .Include(c => c.Customer)
+                                    .Include(c => c.Staff)
+                                    .SingleOrDefault(a => a.BookingID == id);
         }
 
     }

@@ -9,8 +9,6 @@ namespace RealEstateProjectSaleRepository.IRepository
 {
     public interface IBookingRepo
     {
-        public bool ChangeStatus(Booking p);
-
 
         public List<Booking> GetBookings();
         public void AddNew(Booking p);
@@ -20,7 +18,7 @@ namespace RealEstateProjectSaleRepository.IRepository
 
         public void UpdateBooking(Booking p);
 
-        public List<Booking> GetBookingByNumber(int numberBooking);
+        public List<Booking> GetBookingByDepositedTimed(int numberBooking);
 
 
 
