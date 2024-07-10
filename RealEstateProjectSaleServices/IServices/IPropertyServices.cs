@@ -17,5 +17,9 @@ namespace RealEstateProjectSaleServices.IServices
         Property GetPropertyById(Guid id);
 
         void UpdateProperty(Property p);
+
+        IQueryable<Property> GetPropertyByProjectID(Guid id);
+
+        IQueryable<Property> GetPropertyByPropertyTypeID(Guid id);
     }
 }

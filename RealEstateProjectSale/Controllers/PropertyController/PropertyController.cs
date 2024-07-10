@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Azure;
 using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -61,6 +62,50 @@ namespace RealEstateProjectSale.Controllers.PropertyController
             if (property != null)
             {
                 var responese = _mapper.Map<PropertyVM>(property);
+
+                return Ok(responese);
+            }
+
+            return NotFound();
+
+        }
+
+        [HttpGet("GetPropertyByProjectID/{id}")]
+        public IActionResult GetPropertyByProjectID(Guid id)
+        {
+            var property = _pro.GetPropertyByProjectID(id);
+
+            if (property != null)
+            {
+                var responese = property.Select(property => _mapper.Map<PropertyVM>(property)).ToList();
+
+                if (responese.Count == 0)
+                {
+                    return NotFound();
+                }
+
+                return Ok(responese);
+            }
+
+            return NotFound();
+
+        }
+
+        [HttpGet("GetPropertyByPropertyTypeID/{projectID}/{propertyTypeID}")]
+        public IActionResult GetPropertyByPropertyTypeID(Guid projectID, Guid propertyTypeID)
+        {
+
+            var property = _pro.GetPropertyByPropertyTypeID(propertyTypeID)
+                         .Where(p => p.ProjectID == projectID);
+
+            if (property != null)
+            {
+                var responese = property.Select(property => _mapper.Map<PropertyVM>(property)).ToList();
+
+                if (responese.Count == 0)
+                {
+                    return NotFound();
+                }
 
                 return Ok(responese);
             }

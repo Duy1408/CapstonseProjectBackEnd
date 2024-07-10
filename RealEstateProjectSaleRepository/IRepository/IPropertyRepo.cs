@@ -17,6 +17,8 @@ namespace RealEstateProjectSaleRepository.IRepository
         public Property GetPropertyById(Guid id);
 
         public void UpdateProperty(Property p);
+        IQueryable<Property> GetPropertyByProjectID(Guid id);
+        IQueryable<Property> GetPropertyByPropertyTypeID(Guid id);
 
     }
 }

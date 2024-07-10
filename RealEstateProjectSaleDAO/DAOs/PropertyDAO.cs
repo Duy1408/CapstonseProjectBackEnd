@@ -78,5 +78,23 @@ namespace RealEstateProjectSaleDAO.DAOs
                                       .SingleOrDefault(a => a.PropertyID == id);
         }
 
+        public IQueryable<Property> GetPropertyByProjectID(Guid id)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            var a = _context.Properties!.Include(c => c.PropertyType)
+                                    .Include(c => c.Project)
+                                    .Where(c => c.ProjectID == id);
+            return a;
+        }
+
+        public IQueryable<Property> GetPropertyByPropertyTypeID(Guid id)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            var a = _context.Properties!.Include(c => c.PropertyType)
+                                    .Include(c => c.Project)
+                                    .Where(c => c.PropertyTypeID == id);
+            return a;
+        }
+
     }
 }
