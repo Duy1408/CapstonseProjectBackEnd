@@ -21,14 +21,9 @@ namespace RealEstateProjectSaleServices.Services
             _book.AddNew(p);
         }
 
-        public bool ChangeStatus(Booking p)
+        public List<Booking> GetBookingByDepositedTimed(int numberBooking)
         {
-            return _book.ChangeStatus(p);
-        }
-
-        public List<Booking> GetBookingByNumber(int numberBooking)
-        {
-            return _book.GetBookingByNumber(numberBooking);
+            return _book.GetBookingByDepositedTimed(numberBooking);
         }
 
         public Booking GetBookingById(Guid id)

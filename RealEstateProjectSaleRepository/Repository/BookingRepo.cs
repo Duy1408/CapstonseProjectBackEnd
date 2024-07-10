@@ -21,14 +21,9 @@ namespace RealEstateProjectSaleRepository.Repository
             dao.AddNew(p);
         }
 
-        public bool ChangeStatus(Booking p)
+        public List<Booking> GetBookingByDepositedTimed(int numberBooking)
         {
-            return dao.ChangeStatus(p);
-        }
-
-        public List<Booking> GetBookingByNumber(int numberBooking)
-        {
-            return dao.GetBookingByNumber(numberBooking);
+            return dao.GetBookingByDepositedTimed(numberBooking);
         }
 
         public Booking GetBookingById(Guid id)
