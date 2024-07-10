@@ -29,7 +29,7 @@ namespace RealEstateProjectSaleDAO.DAOs
         public List<Promotion> GetAllPromotion()
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.Promotions.ToList();
+            return _context.Promotions.Include(c=>c.Salespolicy).ToList();
         }
 
         public bool AddNew(Promotion p)
@@ -89,7 +89,7 @@ namespace RealEstateProjectSaleDAO.DAOs
         public Promotion GetPromotionByID(Guid id)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.Promotions.SingleOrDefault(a => a.PromotionID == id);
+            return _context.Promotions.Include(c=>c.Salespolicy).SingleOrDefault(a => a.PromotionID == id);
         }
         public IQueryable<Promotion> SearchPromotionByName(string searchvalue)
         {

@@ -2,10 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
+using RealEstateProjectSaleBusinessObject.DTO.Create;
+using RealEstateProjectSaleBusinessObject.DTO.Update;
+using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 
 namespace RealEstateProjectSale.Controllers.PromotionController
@@ -15,87 +19,137 @@ namespace RealEstateProjectSale.Controllers.PromotionController
     public class PromotionsController : ControllerBase
     {
         private readonly IPromotionServices _pro;
+        private readonly IMapper _mapper;
 
-        public PromotionsController(IPromotionServices pro)
+
+        public PromotionsController(IPromotionServices pro, IMapper mapper)
         {
             _pro = pro;
+            _mapper = mapper;
         }
 
         // GET: api/Promotions
         [HttpGet]
-        public ActionResult<IEnumerable<Promotion>> GetPromotions()
+        [Route("GetAllPromotion")]
+        public IActionResult GetAllPromotion()
         {
-          if (_pro.GetPromotions() == null)
-          {
-              return NotFound();
-          }
-            return _pro.GetPromotions().ToList();
-        }
-
-        // GET: api/Promotions/5
-        [HttpGet("{id}")]
-        public ActionResult<Promotion> GetPromotion(Guid id)
-        {
-          if (_pro.GetPromotions() == null)
-          {
-              return NotFound();
-          }
-            var promotion = _pro.GetPromotionById(id);
-
-            if (promotion == null)
-            {
-                return NotFound();
-            }
-
-            return promotion;
-        }
-
-        // PUT: api/Promotions/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutPromotion(Guid id, Promotion promotion)
-        {
-            if (_pro.GetPromotions() == null)
-            {
-                return BadRequest();
-            }
-           
-
             try
-            {
-                _pro.UpdatePromotion(promotion);
-            }
-            catch (DbUpdateConcurrencyException)
             {
                 if (_pro.GetPromotions() == null)
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+                var pros = _pro.GetPromotions();
+                var response = _mapper.Map<List<PromotionVM>>(pros);
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        // GET: api/Promotions/5
+
+        [HttpGet("GetPromotionByID/{id}")]
+        public IActionResult GetPromotionByID(Guid id)
+        {
+            var pro = _pro.GetPromotionById(id);
+
+            if (pro != null)
+            {
+                var responese = _mapper.Map<PromotionVM>(pro);
+
+                return Ok(responese);
             }
 
-            return NoContent();
+            return NotFound();
+
+        }
+
+        // PUT: api/Promotions/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("UpdatePromotion/{id}")]
+        public IActionResult UpdatePromotiont([FromForm] PromotionUpdateDTO pro, Guid id)
+        {
+            try
+            {
+                var existingPro = _pro.GetPromotionById(id);
+                if (existingPro != null)
+                {
+
+                    if (!string.IsNullOrEmpty(pro.PromotionName))
+                    {
+                        existingPro.PromotionName = pro.PromotionName;
+                    }
+                    if (!string.IsNullOrEmpty(pro.Description))
+                    {
+                        existingPro.Description = pro.Description;
+                    }
+                    if (pro.StartDate.HasValue)
+                    {
+                        existingPro.StartDate = pro.StartDate.Value;
+                    }
+                    if (pro.EndDate.HasValue)
+                    {
+                        existingPro.EndDate = pro.EndDate.Value;
+                    }
+                    if (pro.Status.HasValue)
+                    {
+                        existingPro.Status = pro.Status.Value;
+                    }
+                    _pro.UpdatePromotion(existingPro);
+
+
+                    return Ok("Update Promotion Successfully");
+
+                }
+
+                return NotFound("Promotion not found.");
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // POST: api/Promotions
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public ActionResult<Promotion> PostPromotion(Promotion promotion)
+        [Route("AddNewPromotion")]
+        public IActionResult AddNew(PromotionCreateDTO pro)
         {
-          if (_pro.GetPromotions() == null)
-          {
-              return Problem("Entity set 'RealEstateProjectSaleSystemDBContext.Promotions'  is null.");
-          }
-            _pro.AddNew(promotion);
+            try
+            {
 
-            return CreatedAtAction("GetPromotion", new { id = promotion.PromotionID }, promotion);
+                var newPro = new PromotionCreateDTO
+                {
+                    PromotionID = Guid.NewGuid(),
+                    PromotionName = pro.PromotionName,
+                    Description = pro.Description,
+                    StartDate = pro.StartDate,
+                    EndDate = pro.EndDate,
+                    Status = true,
+                    SalesPolicyID = pro.SalesPolicyID
+
+                };
+
+                var promotion = _mapper.Map<Promotion>(newPro);
+
+                _pro.AddNew(promotion);
+
+                return Ok("Create Promotion Successfully");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // DELETE: api/Promotions/5
-        [HttpDelete("{id}")]
+        [HttpDelete("DeletePromotion/{id}")]
         public async Task<IActionResult> DeletePromotion(Guid id)
         {
             if (_pro.GetPromotions() == null)
@@ -110,9 +164,9 @@ namespace RealEstateProjectSale.Controllers.PromotionController
 
             _pro.ChangeStatus(promotion);
 
-            return NoContent();
+            return Ok("Delete Successfully");
         }
 
-      
+
     }
 }
