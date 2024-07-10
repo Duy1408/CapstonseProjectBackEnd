@@ -31,6 +31,11 @@ namespace RealEstateProjectSaleServices.Services
             return _book.GetBookingById(id);
         }
 
+        public List<Booking> GetBookingByRandom(int numberBooking)
+        {
+            return _book.GetBookingByRandom(numberBooking);
+        }
+
         public List<Booking> GetBookings()
         {
             return _book.GetBookings();
