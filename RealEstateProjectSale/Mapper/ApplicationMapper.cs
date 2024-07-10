@@ -72,6 +72,7 @@ namespace RealEstateProjectSale.Mapper
             CreateMap<PropertyCreateDTO, Property>().ReverseMap();
             CreateMap<PropertyUpdateDTO, Property>().ReverseMap();
 
+            CreateMap<PropertyTypeVM, PropertyType>().ReverseMap();
 
         }
     }

@@ -16,29 +16,15 @@ namespace RealEstateProjectSaleServices.Services
         {
             _type = type;
         }
-        public void AddNew(PropertyType p)
+
+        public List<PropertyType> GetAllPropertyType()
         {
-            _type.AddNew(p);
+            return _type.GetAllPropertyType();
         }
 
-        public bool ChangeStatus(PropertyType p)
+        public PropertyType GetPropertyTypeByID(Guid id)
         {
-           return _type.ChangeStatus(p);
-        }
-
-        public List<PropertyType> GetPropertyType()
-        {
-          return _type.GetPropertyType();
-        }
-
-        public PropertyType GetPropertyTypeById(Guid id)
-        {
-            return _type.GetPropertyTypeById(id);
-        }
-
-        public void UpdatePropertyType(PropertyType p)
-        {
-            _type.UpdatePropertyType(p);
+            return _type.GetPropertyTypeByID(id);
         }
     }
 }
