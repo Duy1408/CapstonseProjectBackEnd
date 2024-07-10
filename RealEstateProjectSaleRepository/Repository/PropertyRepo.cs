@@ -31,6 +31,16 @@ namespace RealEstateProjectSaleRepository.Repository
             return _pro.GetPropertyByID(id);
         }
 
+        public IQueryable<Property> GetPropertyByProjectID(Guid id)
+        {
+            return _pro.GetPropertyByProjectID(id);
+        }
+
+        public IQueryable<Property> GetPropertyByPropertyTypeID(Guid id)
+        {
+            return _pro.GetPropertyByPropertyTypeID(id);
+        }
+
         public void UpdateProperty(Property p)
         {
             _pro.UpdateProperty(p);
