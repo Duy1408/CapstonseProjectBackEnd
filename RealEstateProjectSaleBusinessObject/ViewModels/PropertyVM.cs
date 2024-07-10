@@ -1,13 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RealEstateProjectSaleBusinessObject.DTO.Create
+namespace RealEstateProjectSaleBusinessObject.ViewModels
 {
-    public class PropertyCreateDTO
+    public class PropertyVM
     {
         public Guid PropertyID { get; set; }
         public string PropertyName { get; set; }
@@ -23,9 +22,10 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
         public double? MoneyTax { get; set; }
         public double? MaintenanceCost { get; set; }
         public double TotalPrice { get; set; }
-        public IFormFile? Image { get; set; }
+        public string? Image { get; set; }
         public string Status { get; set; }
-        public Guid PropertyTypeID { get; set; }
-        public Guid ProjectID { get; set; }
+
+        public string TypeName { get; set; }
+        public string ProjectName { get; set; }
     }
 }

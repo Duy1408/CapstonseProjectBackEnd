@@ -171,7 +171,7 @@ namespace RealEstateProjectSale.Controllers
 
                 }
 
-                return NotFound("Customer not found.");
+                return NotFound("Project not found.");
 
             }
             catch (Exception ex)
@@ -193,11 +193,11 @@ namespace RealEstateProjectSale.Controllers
                 string? blobUrl = null;
                 if (pro.Image != null)
                 {
-                    var blobName1 = $"{Guid.NewGuid()}_{pro.Image.FileName}";
-                    var blobInstance1 = containerInstance.GetBlobClient(blobName1);
-                    blobInstance1.Upload(pro.Image.OpenReadStream());
+                    var blobName = $"{Guid.NewGuid()}_{pro.Image.FileName}";
+                    var blobInstance = containerInstance.GetBlobClient(blobName);
+                    blobInstance.Upload(pro.Image.OpenReadStream());
                     var storageAccountUrl = "https://realestateprojectimage.blob.core.windows.net/realestateprojectpictures";
-                    blobUrl = $"{storageAccountUrl}/{blobName1}";
+                    blobUrl = $"{storageAccountUrl}/{blobName}";
                 }
 
                 var newPro = new ProjectCreateDTO

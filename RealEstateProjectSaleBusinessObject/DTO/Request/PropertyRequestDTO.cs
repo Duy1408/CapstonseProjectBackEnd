@@ -5,11 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RealEstateProjectSaleBusinessObject.DTO.Create
+namespace RealEstateProjectSaleBusinessObject.DTO.Request
 {
-    public class PropertyCreateDTO
+    public class PropertyRequestDTO
     {
-        public Guid PropertyID { get; set; }
         public string PropertyName { get; set; }
         public string Block { get; set; }
         public int Floor { get; set; }

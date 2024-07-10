@@ -12,7 +12,7 @@ namespace RealEstateProjectSaleRepository.Repository
     public class PropertyRepo : IPropertyRepo
     {
         private PropertyDAO _pro;
-      
+
         public PropertyRepo()
         {
             _pro = new PropertyDAO();
@@ -21,12 +21,6 @@ namespace RealEstateProjectSaleRepository.Repository
         {
             _pro.AddNew(p);
         }
-
-        public bool ChangeStatus(Property p)
-        {
-            return _pro.ChangeStatus(p);
-        }
-
         public List<Property> GetProperty()
         {
             return _pro.GetAllProperty();
@@ -42,6 +36,6 @@ namespace RealEstateProjectSaleRepository.Repository
             _pro.UpdateProperty(p);
         }
 
-   
+
     }
 }
