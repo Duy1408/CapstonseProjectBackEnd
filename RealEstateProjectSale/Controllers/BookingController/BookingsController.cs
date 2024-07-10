@@ -68,7 +68,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
         }
 
         // GET: api/Bookings/5
-        [HttpGet("{numberOfBookings}")]
+        [HttpGet("GetBookingByDepositedTimed/{numberOfBookings}")]
         public ActionResult<Booking> GetBookingByDepositedTimed(int numberOfBookings)
         {
             if (_book.GetBookings() == null)
@@ -76,6 +76,26 @@ namespace RealEstateProjectSale.Controllers.BookingController
                 return NotFound();
             }
             var booking = _book.GetBookingByDepositedTimed(numberOfBookings);
+
+            if (booking == null)
+            {
+                return NotFound();
+            }
+
+            var response = _mapper.Map<List<BookingVM>>(booking);
+
+            return Ok(response);
+
+        }
+
+        [HttpGet("GetBookingByRandom/{numberBooking}")]
+        public ActionResult<Booking> GetBookingByRandom(int numberBooking)
+        {
+            if (_book.GetBookings() == null)
+            {
+                return NotFound();
+            }
+            var booking = _book.GetBookingByRandom(numberBooking);
 
             if (booking == null)
             {

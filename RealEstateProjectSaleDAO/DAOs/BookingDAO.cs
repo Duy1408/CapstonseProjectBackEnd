@@ -52,6 +52,20 @@ namespace RealEstateProjectSaleDAO.DAOs
                                      .ToList();
         }
 
+        public List<Booking> GetBookingByRandom(int numberBooking)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            return _context.Bookings!.Include(c => c.Property)
+                                     .Include(c => c.OpeningForSale)
+                                     .Include(c => c.Project)
+                                     .Include(c => c.Customer)
+                                     .Include(c => c.Staff)
+                                     .Where(b => b.DepositedTimed != null)
+                                     .OrderBy(b => Guid.NewGuid())
+                                     .Take(numberBooking)
+                                     .ToList();
+        }
+
         public bool AddNew(Booking p)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();

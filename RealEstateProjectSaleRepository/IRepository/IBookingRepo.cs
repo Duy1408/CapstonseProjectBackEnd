@@ -20,6 +20,7 @@ namespace RealEstateProjectSaleRepository.IRepository
 
         public List<Booking> GetBookingByDepositedTimed(int numberBooking);
 
+        List<Booking> GetBookingByRandom(int numberBooking);
 
 
     }

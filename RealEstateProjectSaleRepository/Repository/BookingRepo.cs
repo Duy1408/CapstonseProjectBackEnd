@@ -31,6 +31,11 @@ namespace RealEstateProjectSaleRepository.Repository
             return dao.GetBookingByID(id);
         }
 
+        public List<Booking> GetBookingByRandom(int numberBooking)
+        {
+            return dao.GetBookingByRandom(numberBooking);
+        }
+
         public List<Booking> GetBookings()
         {
             return dao.GetAllBooking();

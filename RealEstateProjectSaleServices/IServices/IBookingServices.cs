@@ -19,5 +19,7 @@ namespace RealEstateProjectSaleServices.IServices
         void UpdateBooking(Booking p);
 
         List<Booking> GetBookingByDepositedTimed(int numberBooking);
+
+        List<Booking> GetBookingByRandom(int numberBooking);
     }
 }
