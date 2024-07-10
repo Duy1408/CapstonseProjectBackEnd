@@ -37,6 +37,11 @@ namespace RealEstateProjectSaleRepository.Repository
             return _open.GetAllOppeningForSale();
         }
 
+        public IQueryable<OpeningForSale> GetPropertyByProjectID(Guid id)
+        {
+            return _open.GetPropertyByProjectID(id);
+        }
+
         public IQueryable<OpeningForSale> SearchOpeningForSale(string name)
         {
             return _open.SearchOpeningForSaleByName(name);
@@ -44,7 +49,7 @@ namespace RealEstateProjectSaleRepository.Repository
 
         public void UpdateOpeningForSale(OpeningForSale o)
         {
-             _open.UpdateOpeningForSale(o);
+            _open.UpdateOpeningForSale(o);
         }
     }
 }

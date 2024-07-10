@@ -41,6 +41,11 @@ namespace RealEstateProjectSaleRepository.Repository
             return _pro.GetPropertyByPropertyTypeID(id);
         }
 
+        public IQueryable<Property> SearchPropertyByName(string searchvalue)
+        {
+            return _pro.SearchPropertyByName(searchvalue);
+        }
+
         public void UpdateProperty(Property p)
         {
             _pro.UpdateProperty(p);

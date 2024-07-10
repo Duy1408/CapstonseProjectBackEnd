@@ -9,17 +9,19 @@ namespace RealEstateProjectSaleServices.IServices
 {
     public interface IOpeningForSaleServices
     {
-         bool ChangeStatus(OpeningForSale o);
+        bool ChangeStatus(OpeningForSale o);
 
 
-         List<OpeningForSale> GetOpeningForSales();
-         void AddNew(OpeningForSale o);
+        List<OpeningForSale> GetOpeningForSales();
+        void AddNew(OpeningForSale o);
 
 
-         OpeningForSale GetOpeningForSaleById(Guid id);
+        OpeningForSale GetOpeningForSaleById(Guid id);
 
-         void UpdateOpeningForSale(OpeningForSale o);
+        void UpdateOpeningForSale(OpeningForSale o);
 
-         IQueryable<OpeningForSale> SearchOpeningForSale(string name);
+        IQueryable<OpeningForSale> SearchOpeningForSale(string name);
+
+        IQueryable<OpeningForSale> GetPropertyByProjectID(Guid id);
     }
 }
