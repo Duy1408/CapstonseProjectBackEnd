@@ -21,6 +21,7 @@ namespace RealEstateProjectSale.Controllers.RoleController
         }
 
         [HttpGet]
+        [Route("GetAllRole")]
         public IActionResult GetAllRole()
         {
             try
@@ -40,7 +41,7 @@ namespace RealEstateProjectSale.Controllers.RoleController
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("GetRoleByID/{id}")]
         public IActionResult GetRoleByID(Guid id)
         {
             var role = _roleServices.GetRoleByID(id);

@@ -9,35 +9,13 @@ using System.Threading.Tasks;
 
 namespace RealEstateProjectSaleRepository.Repository
 {
-     public class PropertyTypeRepo : IPropertyTypeRepo
+    public class PropertyTypeRepo : IPropertyTypeRepo
     {
-        private PropertyTypeDAO dao;
-        public PropertyTypeRepo()
-        {
-            dao = new PropertyTypeDAO();
-        }
-        public void AddNew(PropertyType p)
-        {
-          dao.AddNew(p);
-        }
+        PropertyTypeDAO dao = new PropertyTypeDAO();
 
-        public bool ChangeStatus(PropertyType p)
-        {
-           return dao.ChangeStatus(p);
-        }
+        public List<PropertyType> GetAllPropertyType() => dao.GetAllPropertyType();
 
-        public List<PropertyType> GetPropertyType()
-        {
-          return dao.GetAllPropertyType();
-        }
+        public PropertyType GetPropertyTypeByID(Guid id) => dao.GetPropertyTypeByID(id);
 
-        public PropertyType GetPropertyTypeById(Guid id)
-        {
-          return dao.GetPropertyTypeByID(id);
-        }
-
-        public void UpdatePropertyType(PropertyType p)
-        {dao.UpdatePropertyType(p);
-        }
     }
 }

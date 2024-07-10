@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
+using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
+using RealEstateProjectSaleServices.Services;
 
 namespace RealEstateProjectSale.Controllers.PropertyTypeController
 {
@@ -15,104 +18,50 @@ namespace RealEstateProjectSale.Controllers.PropertyTypeController
     public class PropertyTypesController : ControllerBase
     {
         private readonly IPropertyTypeServices _type;
+        private readonly IMapper _mapper;
 
-        public PropertyTypesController(IPropertyTypeServices type)
+        public PropertyTypesController(IPropertyTypeServices type, IMapper mapper)
         {
-           _type = type;
+            _type = type;
+            _mapper = mapper;
         }
 
-        // GET: api/PropertyTypes
         [HttpGet]
-        public ActionResult<IEnumerable<PropertyType>> GetPropertiesTypes()
+        [Route("GetAllPropertyType")]
+        public IActionResult GetAllPropertyType()
         {
-          if (_type.GetPropertyType() == null)
-          {
-              return NotFound();
-          }
-            return _type.GetPropertyType().ToList();
-        }
-
-        // GET: api/PropertyTypes/5
-        [HttpGet("{id}")]
-        public ActionResult<PropertyType> GetPropertyType(Guid id)
-        {
-          if (_type.GetPropertyType() == null)
-          {
-              return NotFound();
-          }
-            var propertyType = _type.GetPropertyTypeById(id);
-
-            if (propertyType == null)
-            {
-                return NotFound();
-            }
-
-            return propertyType;
-        }
-
-        // PUT: api/PropertyTypes/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public IActionResult PutPropertyType(Guid id, PropertyType propertyType)
-        {
-            if (_type.GetPropertyType() == null)
-            {
-                return BadRequest();
-            }
-
-
             try
             {
-                _type.UpdatePropertyType(propertyType);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (_type.GetPropertyType() == null)
+                if (_type.GetAllPropertyType() == null)
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+                var types = _type.GetAllPropertyType();
+                var response = _mapper.Map<List<PropertyTypeVM>>(types);
+
+                return Ok(response);
             }
-
-            return NoContent();
-        }
-
-        // POST: api/PropertyTypes
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<PropertyType>> PostPropertyType(PropertyType propertyType)
-        {
-          if (_type.GetPropertyType() == null)
-          {
-              return Problem("Entity set 'RealEstateProjectSaleSystemDBContext.PropertiesTypes'  is null.");
-          }
-           _type.AddNew(propertyType);
-
-            return CreatedAtAction("GetPropertyType", new { id = propertyType.PropertyTypeID }, propertyType);
-        }
-
-        // DELETE: api/PropertyTypes/5
-        [HttpDelete("{id}")]
-        public IActionResult DeletePropertyType(Guid id)
-        {
-            if (_type.GetPropertyType() == null)
+            catch (Exception ex)
             {
-                return NotFound();
+                return BadRequest(ex.Message);
             }
-            var propertyType = _type.GetPropertyTypeById(id);
-            if (propertyType == null)
-            {
-                return NotFound();
-            }
-
-           _type.ChangeStatus(propertyType);    
-
-            return NoContent();
         }
 
-      
+        [HttpGet("GetPropertyTypeByID/{id}")]
+        public IActionResult GetPropertyTypeByID(Guid id)
+        {
+            var type = _type.GetPropertyTypeByID(id);
+
+            if (type != null)
+            {
+                var responese = _mapper.Map<PropertyTypeVM>(type);
+
+                return Ok(responese);
+            }
+
+            return NotFound();
+
+        }
+
     }
 }

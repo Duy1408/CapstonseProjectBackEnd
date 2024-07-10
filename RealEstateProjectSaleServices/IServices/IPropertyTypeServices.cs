@@ -9,15 +9,9 @@ namespace RealEstateProjectSaleServices.IServices
 {
     public interface IPropertyTypeServices
     {
-         bool ChangeStatus(PropertyType p);
+        List<PropertyType> GetAllPropertyType();
 
+        PropertyType GetPropertyTypeByID(Guid id);
 
-         List<PropertyType> GetPropertyType();
-        void AddNew(PropertyType p);
-
-
-         PropertyType GetPropertyTypeById(Guid id);
-
-        void UpdatePropertyType(PropertyType p);
     }
 }

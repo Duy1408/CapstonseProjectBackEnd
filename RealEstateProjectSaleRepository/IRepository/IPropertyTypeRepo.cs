@@ -9,15 +9,9 @@ namespace RealEstateProjectSaleRepository.IRepository
 {
     public interface IPropertyTypeRepo
     {
-        public bool ChangeStatus(PropertyType p);
+        List<PropertyType> GetAllPropertyType();
 
+        PropertyType GetPropertyTypeByID(Guid id);
 
-        public List<PropertyType> GetPropertyType();
-        public void AddNew(PropertyType p);
-
-
-        public PropertyType GetPropertyTypeById(Guid id);
-
-        public void UpdatePropertyType(PropertyType p);
     }
 }
