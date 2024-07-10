@@ -91,6 +91,23 @@ namespace RealEstateProjectSale.Controllers.PropertyController
 
         }
 
+        [HttpGet("SearchPropertyByName/{searchValue}")]
+        public ActionResult<Property> SearchPropertyByName(string searchValue)
+        {
+            if (_pro.GetProperty() == null)
+            {
+                return NotFound();
+            }
+            var property = _pro.SearchPropertyByName(searchValue);
+
+            if (property == null)
+            {
+                return NotFound("Don't have this Property ");
+            }
+
+            return Ok(property);
+        }
+
         [HttpGet("GetPropertyByPropertyTypeID/{projectID}/{propertyTypeID}")]
         public IActionResult GetPropertyByPropertyTypeID(Guid projectID, Guid propertyTypeID)
         {

@@ -30,7 +30,7 @@ namespace RealEstateProjectSaleDAO.DAOs
         public List<OpeningForSale> GetAllOppeningForSale()
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.OpeningForSales.ToList();
+            return _context.OpeningForSales.Include(o => o.Project).ToList();
         }
 
         public bool AddNew(OpeningForSale o)
@@ -80,6 +80,7 @@ namespace RealEstateProjectSaleDAO.DAOs
             }
             else
             {
+                a.Status = false;
                 _context.Entry(a).State = EntityState.Modified;
                 _context.SaveChanges();
                 return true;
@@ -91,8 +92,17 @@ namespace RealEstateProjectSaleDAO.DAOs
         public OpeningForSale GetOpeningForSaleByID(Guid id)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.OpeningForSales.SingleOrDefault(a => a.OpeningForSaleID == id);
+            return _context.OpeningForSales.Include(o => o.Project).SingleOrDefault(a => a.OpeningForSaleID == id);
         }
+
+        public IQueryable<OpeningForSale> GetPropertyByProjectID(Guid id)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            var a = _context.OpeningForSales!.Include(c => c.Project)
+                                    .Where(c => c.ProjectID == id);
+            return a;
+        }
+
         public IQueryable<OpeningForSale> SearchOpeningForSaleByName(string searchvalue)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();

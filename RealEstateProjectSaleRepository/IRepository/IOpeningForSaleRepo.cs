@@ -21,5 +21,7 @@ namespace RealEstateProjectSaleRepository.IRepository
         public void UpdateOpeningForSale(OpeningForSale o);
 
         public IQueryable<OpeningForSale> SearchOpeningForSale(string name);
+
+        IQueryable<OpeningForSale> GetPropertyByProjectID(Guid id);
     }
 }

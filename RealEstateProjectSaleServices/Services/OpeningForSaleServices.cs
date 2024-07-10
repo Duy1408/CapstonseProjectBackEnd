@@ -23,7 +23,7 @@ namespace RealEstateProjectSaleServices.Services
 
         public bool ChangeStatus(OpeningForSale o)
         {
-          return  _open.ChangeStatus(o);
+            return _open.ChangeStatus(o);
         }
 
         public OpeningForSale GetOpeningForSaleById(Guid id)
@@ -34,6 +34,11 @@ namespace RealEstateProjectSaleServices.Services
         public List<OpeningForSale> GetOpeningForSales()
         {
             return _open.GetOpeningForSales();
+        }
+
+        public IQueryable<OpeningForSale> GetPropertyByProjectID(Guid id)
+        {
+            return _open.GetPropertyByProjectID(id);
         }
 
         public IQueryable<OpeningForSale> SearchOpeningForSale(string name)
