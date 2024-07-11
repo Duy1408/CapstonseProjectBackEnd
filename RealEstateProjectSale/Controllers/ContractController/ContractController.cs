@@ -17,11 +17,13 @@ namespace RealEstateProjectSale.Controllers.ContractController
     public class ContractController : ControllerBase
     {
         private readonly IContractServices _contractServices;
+        private readonly IBookingServices _bookServices;
         private readonly IMapper _mapper;
 
-        public ContractController(IContractServices contractServices, IMapper mapper)
+        public ContractController(IContractServices contractServices, IBookingServices bookServices, IMapper mapper)
         {
             _contractServices = contractServices;
+            _bookServices = bookServices;
             _mapper = mapper;
         }
 
@@ -178,12 +180,16 @@ namespace RealEstateProjectSale.Controllers.ContractController
             try
             {
                 var contract = _contractServices.GetContractByID(id);
-                if (contract != null)
+                var book = _bookServices.GetBookingById(contract.BookingID);
+                if (contract != null && book != null)
                 {
                     contract.DateSigned = DateTime.Now;
                     contract.Status = "Khách hàng đã ký hợp đồng mua bán";
 
+                    book.Status = "Khách hàng đã ký hợp đồng mua bán";
+
                     _contractServices.UpdateContract(contract);
+                    _bookServices.UpdateBooking(book);
                     return Ok("Signed Contract Successfully");
 
                 }
