@@ -58,6 +58,8 @@ builder.Services.AddScoped<IPromotionDetailRepo, PromotionDetailRepo>();
 builder.Services.AddScoped<IPromotionDetailServices, PromotionDetailServices>();
 builder.Services.AddScoped<IRoleRepo, RoleRepo>();
 builder.Services.AddScoped<IRoleServices, RoleServices>();
+builder.Services.AddScoped<IContractPaymentDetailRepo, ContractPaymentDetailRepo>();
+builder.Services.AddScoped<IContractPaymentDetailServices, ContractPaymentDetailServices>();
 
 
 //Azure Blob Storage

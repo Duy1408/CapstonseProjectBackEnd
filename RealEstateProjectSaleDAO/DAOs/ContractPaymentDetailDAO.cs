@@ -10,84 +10,77 @@ namespace RealEstateProjectSaleDAO.DAOs
 {
     public class ContractPaymentDetailDAO
     {
-        private static ContractPaymentDetailDAO instance;
-
-        public static ContractPaymentDetailDAO Instance
+        private readonly RealEstateProjectSaleSystemDBContext _context;
+        public ContractPaymentDetailDAO()
         {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new ContractPaymentDetailDAO();
-                }
-                return instance;
-            }
-
-
+            _context = new RealEstateProjectSaleSystemDBContext();
         }
 
-        public List<ContractPaymentDetail> GetAllBookingPaymentProcessDetail()
+        public List<ContractPaymentDetail> GetAllContractPaymentDetail()
         {
-            var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.ContractPaymentDetails.ToList();
+            try
+            {
+                return _context.ContractPaymentDetails!.Include(c => c.Contract)
+                                                       .ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
-        public bool AddNew(ContractPaymentDetail p)
+        public void AddNewContractPaymentDetail(ContractPaymentDetail detail)
         {
-            var _context = new RealEstateProjectSaleSystemDBContext();
-            var a = _context.ContractPaymentDetails.SingleOrDefault(c => c.ContractPaymentDetailID == p.ContractPaymentDetailID);
-
-            if (a != null)
+            try
             {
-                return false;
-            }
-            else
-            {
-                _context.ContractPaymentDetails.Add(p);
+                _context.Add(detail);
                 _context.SaveChanges();
-                return true;
-
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
 
-        public bool Update(ContractPaymentDetail p)
+        public ContractPaymentDetail GetContractPaymentDetailByID(Guid id)
         {
-            var _context = new RealEstateProjectSaleSystemDBContext();
-            var a = _context.ContractPaymentDetails.SingleOrDefault(c => c.ContractPaymentDetailID == p.ContractPaymentDetailID);
-
-            if (a == null)
+            try
             {
-                return false;
+                var detail = _context.ContractPaymentDetails!.Include(a => a.Contract)
+                                                               .SingleOrDefault(c => c.ContractPaymentDetailID == id);
+                return detail;
             }
-            else
+            catch (Exception ex)
             {
-                _context.Entry(a).CurrentValues.SetValues(p);
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public void UpdateContractPaymentDetail(ContractPaymentDetail detail)
+        {
+            try
+            {
+                var a = _context.ContractPaymentDetails!.SingleOrDefault(c => c.ContractPaymentDetailID == detail.ContractPaymentDetailID);
+
+                _context.Entry(a).CurrentValues.SetValues(detail);
                 _context.SaveChanges();
-                return true;
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
 
-        public bool ChangeStatus(ContractPaymentDetail p)
+        public void DeleteContractPaymentDetailByID(Guid id)
         {
-            var _context = new RealEstateProjectSaleSystemDBContext();
-            var a = _context.ContractPaymentDetails.FirstOrDefault(c => c.ContractPaymentDetailID.Equals(p.ContractPaymentDetailID));
-
-
-            if (a == null)
+            var detail = _context.ContractPaymentDetails!.SingleOrDefault(lo => lo.ContractPaymentDetailID == id);
+            if (detail != null)
             {
-                return false;
-            }
-            else
-            {
-                _context.Entry(a).State = EntityState.Modified;
+                _context.Remove(detail);
                 _context.SaveChanges();
-                return true;
             }
         }
-        public ContractPaymentDetail GetBookingPaymentProcessDetailByID(Guid id)
-        {
-            var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.ContractPaymentDetails.SingleOrDefault(a => a.ContractPaymentDetailID == id);
-        }
+
     }
 }
