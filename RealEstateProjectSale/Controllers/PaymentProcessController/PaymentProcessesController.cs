@@ -2,10 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
+using RealEstateProjectSaleBusinessObject.DTO.Create;
+using RealEstateProjectSaleBusinessObject.DTO.Update;
+using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 
 namespace RealEstateProjectSale.Controllers.PaymentProcessController
@@ -14,106 +18,135 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessController
     [ApiController]
     public class PaymentProcessesController : ControllerBase
     {
-        private readonly IPaymentProcessServices _pmt;
+        private readonly IPaymentProcessServices _pmtService;
+        private readonly IMapper _mapper;
 
-        public PaymentProcessesController(IPaymentProcessServices pmt)
+        public PaymentProcessesController(IPaymentProcessServices pmtService, IMapper mapper)
         {
-            _pmt = pmt;
+            _pmtService = pmtService;
+            _mapper = mapper;
         }
 
-        // GET: api/PaymentProcesses
         [HttpGet]
-        public ActionResult<IEnumerable<PaymentProcess>> GetPaymentProcesses()
+        [Route("GetAllPaymentProcess")]
+        public IActionResult GetAllPaymentProcess()
         {
-          if (_pmt.GetPaymentProcess()==null)
-          {
-              return NotFound();
-          }
-            return _pmt.GetPaymentProcess().ToList();
-        }
-
-        // GET: api/PaymentProcesses/5
-        [HttpGet("{id}")]
-        public ActionResult<PaymentProcess> GetPaymentProcess(Guid id)
-        {
-          if (_pmt.GetPaymentProcess() == null)
-          {
-              return NotFound();
-          }
-            var paymentProcess = _pmt.GetPaymentProcessById(id);
-
-            if (paymentProcess == null)
-            {
-                return NotFound();
-            }
-
-            return paymentProcess;
-        }
-
-        // PUT: api/PaymentProcesses/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public IActionResult PutPaymentProcess(Guid id, PaymentProcess paymentProcess)
-        {
-            if (_pmt.GetPaymentProcess() == null)
-            {
-                return BadRequest();
-            }
-
-           
-
             try
             {
-                _pmt.UpdatePaymentProcess(paymentProcess);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (_pmt.GetPaymentProcess() == null)
+                if (_pmtService.GetPaymentProcess() == null)
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
-            }
+                var process = _pmtService.GetPaymentProcess();
+                var response = _mapper.Map<List<PaymentProcessVM>>(process);
 
-            return NoContent();
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        // POST: api/PaymentProcesses
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpGet("GetPaymentProcessByID/{id}")]
+        public IActionResult GetPaymentProcessByID(Guid id)
+        {
+            var process = _pmtService.GetPaymentProcessById(id);
+
+            if (process != null)
+            {
+                var responese = _mapper.Map<PaymentProcessVM>(process);
+
+                return Ok(responese);
+            }
+
+            return NotFound();
+
+        }
+
         [HttpPost]
-        public ActionResult<PaymentProcess> PostPaymentProcess(PaymentProcess paymentProcess)
+        [Route("AddNewPaymentProcess")]
+        public IActionResult AddNew(PaymentProcessCreateDTO process)
         {
-          if (_pmt.GetPaymentProcess() == null)
-          {
-              return Problem("Entity set 'RealEstateProjectSaleSystemDBContext.PaymentProcesses'  is null.");
-          }
-            _pmt.AddNew(paymentProcess);
+            try
+            {
+                var newProcess = new PaymentProcessCreateDTO
+                {
+                    PaymentProcessID = Guid.NewGuid(),
+                    PaymentProcessName = process.PaymentProcessName,
+                    Discount = process.Discount,
+                    TotalPrice = process.TotalPrice,
+                    SalesPolicyID = process.SalesPolicyID
+                };
 
-            return CreatedAtAction("GetPaymentProcess", new { id = paymentProcess.PaymentProcessID }, paymentProcess);
+                var _process = _mapper.Map<PaymentProcess>(newProcess);
+                _pmtService.AddNew(_process);
+
+                return Ok("Create PaymentProcess Successfully");
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        // DELETE: api/PaymentProcesses/5
-        [HttpDelete("{id}")]
-        public IActionResult DeletePaymentProcess(Guid id)
+        [HttpPut("UpdatePaymentProcess/{id}")]
+        public IActionResult UpdatePaymentProcess([FromForm] PaymentProcessUpdateDTO process, Guid id)
         {
-            if (_pmt.GetPaymentProcess() == null)
+            try
             {
-                return NotFound();
+                var existingProcess = _pmtService.GetPaymentProcessById(id);
+                if (existingProcess != null)
+                {
+
+                    if (!string.IsNullOrEmpty(process.PaymentProcessName))
+                    {
+                        existingProcess.PaymentProcessName = process.PaymentProcessName;
+                    }
+                    if (process.Discount.HasValue)
+                    {
+                        existingProcess.Discount = process.Discount.Value;
+                    }
+                    if (process.TotalPrice.HasValue)
+                    {
+                        existingProcess.TotalPrice = process.TotalPrice.Value;
+                    }
+
+                    _pmtService.UpdatePaymentProcess(existingProcess);
+
+                    return Ok("Update PaymentProcess Successfully");
+
+                }
+
+                return NotFound("PaymentProcess not found.");
+
             }
-            var paymentProcess = _pmt.GetPaymentProcessById(id);
-            if (paymentProcess == null)
+            catch (Exception ex)
             {
-                return NotFound();
+                return BadRequest(ex.Message);
             }
-
-            _pmt.ChangeStatus(paymentProcess);
-
-            return NoContent();
         }
 
-       
+        [HttpDelete("DeletePaymentProcessByID/{id}")]
+        public IActionResult DeletePaymentProcessByID(Guid id)
+        {
+            try
+            {
+                var process = _pmtService.GetPaymentProcessById(id);
+                if (process != null)
+                {
+                    _pmtService.DeletePaymentProcessByID(id);
+                    return Ok("Deleted PaymentProcess Successfully");
+                }
+
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }
