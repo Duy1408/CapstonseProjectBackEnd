@@ -7,11 +7,9 @@ using System.Threading.Tasks;
 
 namespace RealEstateProjectSaleServices.IServices
 {
-    public interface IPaymentProcessDetailServices 
+    public interface IPaymentProcessDetailServices
     {
-        public bool ChangeStatus(PaymentProcessDetail p);
-
-
+        void DeletePaymentProcessDetailByID(Guid id);
         public List<PaymentProcessDetail> GetPaymentProcessDetail();
         public void AddNew(PaymentProcessDetail p);
 

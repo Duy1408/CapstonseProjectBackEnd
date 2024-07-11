@@ -29,7 +29,7 @@ namespace RealEstateProjectSaleDAO.DAOs
         public List<PaymentProcessDetail> GetAllPaymentProcessDetail()
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.PaymentProcessDetails.ToList();
+            return _context.PaymentProcessDetails.Include(p => p.PaymentProcess).ToList();
         }
 
         public bool AddNew(PaymentProcessDetail p)
@@ -67,21 +67,14 @@ namespace RealEstateProjectSaleDAO.DAOs
             }
         }
 
-        public bool ChangeStatus(PaymentProcessDetail p)
+        public void DeletePaymentProcessDetailByID(Guid id)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            var a = _context.PaymentProcessDetails.FirstOrDefault(c => c.PaymentProcessDetailID.Equals(p.PaymentProcessDetailID));
-
-
-            if (a == null)
+            var detail = _context.PaymentProcessDetails!.SingleOrDefault(lo => lo.PaymentProcessDetailID == id);
+            if (detail != null)
             {
-                return false;
-            }
-            else
-            {
-                _context.Entry(a).State = EntityState.Modified;
+                _context.Remove(detail);
                 _context.SaveChanges();
-                return true;
             }
         }
 
@@ -90,7 +83,7 @@ namespace RealEstateProjectSaleDAO.DAOs
         public PaymentProcessDetail GetPaymentProcessDetailByID(Guid id)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.PaymentProcessDetails.SingleOrDefault(a => a.PaymentProcessDetailID == id);
+            return _context.PaymentProcessDetails.Include(p => p.PaymentProcess).SingleOrDefault(a => a.PaymentProcessDetailID == id);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace RealEstateProjectSaleRepository.IRepository
 {
     public interface IPaymentProcessDetailRepo
     {
-        public bool ChangeStatus(PaymentProcessDetail p);
+        void DeletePaymentProcessDetailByID(Guid id);
 
 
         public List<PaymentProcessDetail> GetPaymentProcessDetail();
