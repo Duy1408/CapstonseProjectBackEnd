@@ -21,9 +21,9 @@ namespace RealEstateProjectSaleRepository.Repository
             _dao.AddNew(p);
         }
 
-        public bool ChangeStatus(PaymentProcessDetail p)
+        public void DeletePaymentProcessDetailByID(Guid id)
         {
-            return _dao.ChangeStatus(p);
+            _dao.DeletePaymentProcessDetailByID(id);
         }
 
         public List<PaymentProcessDetail> GetPaymentProcessDetail()
