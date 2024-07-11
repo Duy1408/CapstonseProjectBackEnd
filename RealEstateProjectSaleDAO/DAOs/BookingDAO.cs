@@ -45,7 +45,7 @@ namespace RealEstateProjectSaleDAO.DAOs
                                      .Include(c => c.Project)
                                      .Include(c => c.Customer)
                                      .Include(c => c.Staff)
-                                     .Where(b => b.DepositedTimed != null)
+                                     .Where(b => b.DepositedTimed != null && b.Status != "Khách hàng đã ký hợp đồng mua bán")
                                      .OrderBy(b => b.DepositedTimed)
                                      .ThenBy(b => b.BookingID)
                                      .Take(numberBooking)
@@ -60,7 +60,7 @@ namespace RealEstateProjectSaleDAO.DAOs
                                      .Include(c => c.Project)
                                      .Include(c => c.Customer)
                                      .Include(c => c.Staff)
-                                     .Where(b => b.DepositedTimed != null)
+                                     .Where(b => b.DepositedTimed != null && b.Status != "Khách hàng đã ký hợp đồng mua bán")
                                      .OrderBy(b => Guid.NewGuid())
                                      .Take(numberBooking)
                                      .ToList();

@@ -75,14 +75,16 @@ namespace RealEstateProjectSale.Controllers.BookingController
             {
                 return NotFound();
             }
-            var booking = _book.GetBookingByDepositedTimed(numberOfBookings);
+            var bookingList = _book.GetBookingByDepositedTimed(numberOfBookings);
 
-            if (booking == null)
+            if (bookingList == null)
             {
                 return NotFound();
             }
 
-            var response = _mapper.Map<List<BookingVM>>(booking);
+            var booking = bookingList.FirstOrDefault();
+
+            var response = _mapper.Map<BookingVM>(booking);
 
             return Ok(response);
 
@@ -95,14 +97,16 @@ namespace RealEstateProjectSale.Controllers.BookingController
             {
                 return NotFound();
             }
-            var booking = _book.GetBookingByRandom(numberBooking);
+            var bookingList = _book.GetBookingByRandom(numberBooking);
 
-            if (booking == null)
+            if (bookingList == null)
             {
                 return NotFound();
             }
 
-            var response = _mapper.Map<List<BookingVM>>(booking);
+            var booking = bookingList.FirstOrDefault();
+
+            var response = _mapper.Map<BookingVM>(booking);
 
             return Ok(response);
 
