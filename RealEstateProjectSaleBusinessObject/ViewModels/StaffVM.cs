@@ -25,5 +25,6 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public int BankNumber { get; set; }
         public bool Status { get; set; }
         public Guid AccountID { get; set; }
+        public string Email { get; set; }
     }
 }

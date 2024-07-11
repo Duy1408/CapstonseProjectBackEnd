@@ -10,7 +10,8 @@ namespace RealEstateProjectSale.Mapper
     {
         public ApplicationMapper()
         {
-            CreateMap<StaffVM, Staff>().ReverseMap();
+            CreateMap<StaffVM, Staff>().ReverseMap().ForMember(dest => dest.Email,
+                                       opt => opt.MapFrom(src => src.Account!.Email));
             CreateMap<StaffCreateDTO, Staff>().ReverseMap();
             CreateMap<StaffUpdateDTO, Staff>().ReverseMap();
 
@@ -21,7 +22,8 @@ namespace RealEstateProjectSale.Mapper
 
             CreateMap<RoleVM, Role>().ReverseMap();
 
-            CreateMap<CustomerVM, Customer>().ReverseMap();
+            CreateMap<CustomerVM, Customer>().ReverseMap().ForMember(dest => dest.Email,
+                                       opt => opt.MapFrom(src => src.Account!.Email));
             CreateMap<CustomerCreateDTO, Customer>().ReverseMap();
             CreateMap<CustomerUpdateDTO, Customer>().ReverseMap();
 
@@ -34,7 +36,7 @@ namespace RealEstateProjectSale.Mapper
             CreateMap<PaymentTypeCreateDTO, PaymentType>().ReverseMap();
             CreateMap<PaymentTypeUpdateDTO, PaymentType>().ReverseMap();
 
-          
+
             CreateMap<PromotionDetailVM, PromotionDetail>().ReverseMap().ForMember(dest => dest.TypeName,
                                       opt => opt.MapFrom(src => src.PropertiesType!.TypeName))
                                                        .ForMember(dest => dest.PromotionName,

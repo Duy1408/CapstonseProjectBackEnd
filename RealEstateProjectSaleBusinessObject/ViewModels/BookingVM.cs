@@ -17,10 +17,15 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public byte[]? BookingFile { get; set; }
         public string? Note { get; set; }
         public string Status { get; set; }
+        public Guid PropertyID { get; set; }
         public string PropertyName { get; set; }
+        public Guid OpeningForSaleID { get; set; }
         public string DescriptionName { get; set; }
+        public Guid? ProjectID { get; set; }
         public string ProjectName { get; set; }
+        public Guid CustomerID { get; set; }
         public string PersonalEmailCs { get; set; }
+        public Guid StaffID { get; set; }
         public string PersonalEmailSt { get; set; }
     }
 }

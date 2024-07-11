@@ -19,6 +19,8 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public string? Description { get; set; }
         public byte[]? ContractFile { get; set; }
         public string Status { get; set; }
+        public Guid BookingID { get; set; }
+        public Guid PaymentProcessID { get; set; }
         public string PaymentProcessName { get; set; }
     }
 }

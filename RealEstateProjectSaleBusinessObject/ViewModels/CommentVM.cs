@@ -13,7 +13,9 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public DateTime CreateTime { get; set; }
         public DateTime? UpdateTime { get; set; }
         public bool Status { get; set; }
+        public Guid PropertyID { get; set; }
         public string PropertyName { get; set; }
+        public Guid CustomerID { get; set; }
         public string PersonalEmail { get; set; }
     }
 }

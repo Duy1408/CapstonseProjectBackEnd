@@ -15,6 +15,7 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public string? ReservationTime { get; set; }
         public string? Description { get; set; }
         public bool Status { get; set; }
+        public Guid ProjectID { get; set; }
         public string ProjectName { get; set; }
     }
 }

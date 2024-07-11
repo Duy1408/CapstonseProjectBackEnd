@@ -13,6 +13,7 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public DateTime ExpressTime { get; set; }
         public string? PeopleApplied { get; set; }
         public bool Status { get; set; }
+        public Guid ProjectID { get; set; }
         public string ProjectName { get; set; }
 
     }
