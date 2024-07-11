@@ -34,7 +34,11 @@ namespace RealEstateProjectSale.Mapper
             CreateMap<PaymentTypeCreateDTO, PaymentType>().ReverseMap();
             CreateMap<PaymentTypeUpdateDTO, PaymentType>().ReverseMap();
 
-            CreateMap<PromotionDetailVM, PromotionDetail>().ReverseMap();
+          
+            CreateMap<PromotionDetailVM, PromotionDetail>().ReverseMap().ForMember(dest => dest.TypeName,
+                                      opt => opt.MapFrom(src => src.PropertiesType!.TypeName))
+                                                       .ForMember(dest => dest.PromotionName,
+                                      opt => opt.MapFrom(src => src.Promotion!.PromotionName));
             CreateMap<PromotionDetailCreateDTO, PromotionDetail>().ReverseMap();
             CreateMap<PromotionDetailUpdateDTO, PromotionDetail>().ReverseMap();
 

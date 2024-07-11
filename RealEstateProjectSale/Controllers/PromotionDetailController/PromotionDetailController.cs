@@ -59,36 +59,72 @@ namespace RealEstateProjectSale.Controllers.PromotionDetailController
             return NotFound();
 
         }
-
         [HttpPost]
-        public IActionResult AddNewPromotionDetail(PromotionDetailCreateDTO detail)
+        [Route("AddNewPromotionDetail")]
+        public IActionResult AddNew(PromotionDetailCreateDTO pro)
         {
             try
             {
-                var _detail = _mapper.Map<PromotionDetail>(detail);
-                _detailServices.AddNewPromotionDetail(_detail);
 
-                return Ok("Create PromotionDetail Successfully");
+                var newPro = new PromotionDetailCreateDTO
+                {
+                   
+
+                    PromotionDetaiID = Guid.NewGuid(),
+                    Description = pro.Description,
+                    PromotionType = pro.PromotionType,
+                    DiscountPercent = pro.DiscountPercent,
+                    DiscountAmount = pro.DiscountAmount,
+                    Amount = pro.Amount,
+                    PromotionID = pro.PromotionID,
+                    PropertiesTypeID = pro.PropertiesTypeID,
+
+
+                };
+
+                var promotiondetail = _mapper.Map<PromotionDetail>(newPro);
+
+                _detailServices.AddNewPromotionDetail(promotiondetail);
+
+                return Ok("Create Promotiondetail Successfully");
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
-
-
             }
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdatePromotionDetail(PromotionDetailUpdateDTO detail, Guid id)
+        public IActionResult UpdatePromotionDetail([FromForm] PromotionDetailUpdateDTO detail, Guid id)
         {
             try
             {
                 var existingDetail = _detailServices.GetPromotionDetailByID(id);
                 if (existingDetail != null)
                 {
-                    detail.PromotionDetaiID = existingDetail.PromotionDetaiID;
-                    detail.PromotionID = existingDetail.PromotionID;
-                    detail.PropertiesTypeID = existingDetail.PropertiesTypeID;
+                    if (!string.IsNullOrEmpty(detail.Description))
+                    {
+                        existingDetail.Description = detail.Description;
+                    }
+                    if (!string.IsNullOrEmpty(detail.PromotionType))
+                    {
+                        existingDetail.PromotionType = detail.PromotionType;
+                    }
+                    if (detail.DiscountPercent.HasValue)
+                    {
+                        existingDetail.DiscountPercent = detail.DiscountPercent.Value;
+                    }
+                    if (detail.DiscountAmount.HasValue)
+                    {
+                        existingDetail.DiscountAmount = detail.DiscountAmount.Value;
+                    }
+                    if (detail.Amount.HasValue)
+                    {
+                        existingDetail.Amount = detail.Amount.Value;
+                    }
+
+
+              
 
                     var _detail = _mapper.Map<PromotionDetail>(detail);
                     _detailServices.UpdatePromotionDetail(_detail);
