@@ -14,7 +14,7 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public double? DiscountPercent { get; set; }
         public double? DiscountAmount { get; set; }
         public double Amount { get; set; }
-        public Guid PromotionID { get; set; }
-        public Guid PropertiesTypeID { get; set; }
+        public string PromotionName { get; set; }
+        public string TypeName { get; set; }
     }
 }
