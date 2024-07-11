@@ -24,6 +24,7 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
         }
 
         [HttpGet]
+        [Route("GetAllOpenForSaleDetail")]
         public IActionResult GetAllOpenForSaleDetail()
         {
             try
@@ -43,7 +44,7 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("GetOpenForSaleDetailByID/{id}")]
         public IActionResult GetOpenForSaleDetailByID(Guid id)
         {
             var detail = _detailServices.GetOpenForSaleDetailByID(id);
@@ -60,14 +61,25 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
         }
 
         [HttpPost]
+        [Route("AddNewOpenForSaleDetail")]
         public IActionResult AddNewOpenForSaleDetail(OpenForSaleDetailCreateDTO detail)
         {
             try
             {
-                var _detail = _mapper.Map<OpenForSaleDetail>(detail);
+                var newDetail = new OpenForSaleDetailCreateDTO
+                {
+                    OpenForSaleDetailID = Guid.NewGuid(),
+                    Price = detail.Price,
+                    Discount = detail.Discount,
+                    Note = detail.Note,
+                    OpeningForSaleID = detail.OpeningForSaleID,
+                    PropertyID = detail.PropertyID
+                };
+
+                var _detail = _mapper.Map<OpenForSaleDetail>(newDetail);
                 _detailServices.AddNewOpenForSaleDetail(_detail);
 
-                return Ok("Create Account Successfully");
+                return Ok("Create OpenForSaleDetail Successfully");
             }
             catch (Exception ex)
             {
@@ -75,22 +87,30 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
             }
         }
 
-        [HttpPut("{id}")]
-        public IActionResult UpdateOpenForSaleDetail(OpenForSaleDetailUpdateDTO detail, Guid id)
+        [HttpPut("UpdateOpenForSaleDetail/{id}")]
+        public IActionResult UpdateOpenForSaleDetail([FromForm] OpenForSaleDetailUpdateDTO detail, Guid id)
         {
             try
             {
                 var existingDetail = _detailServices.GetOpenForSaleDetailByID(id);
                 if (existingDetail != null)
                 {
-                    detail.OpenForSaleDetailID = existingDetail.OpenForSaleDetailID;
-                    detail.OpeningForSaleID = existingDetail.OpeningForSaleID;
-                    detail.PropertiesID = existingDetail.PropertyID;
+                    if (detail.Price.HasValue)
+                    {
+                        existingDetail.Price = detail.Price.Value;
+                    }
+                    if (detail.Discount.HasValue)
+                    {
+                        existingDetail.Discount = detail.Discount.Value;
+                    }
+                    if (!string.IsNullOrEmpty(detail.Note))
+                    {
+                        existingDetail.Note = detail.Note;
+                    }
 
-                    var _detail = _mapper.Map<OpenForSaleDetail>(detail);
-                    _detailServices.UpdateOpenForSaleDetail(_detail);
+                    _detailServices.UpdateOpenForSaleDetail(existingDetail);
 
-                    return Ok("Update Successfully");
+                    return Ok("Update OpenForSaleDetail Successfully");
 
                 }
 
@@ -103,7 +123,7 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
             }
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("DeleteOpenForSaleDetail/{id}")]
         public IActionResult DeleteOpenForSaleDetail(Guid id)
         {
             try
@@ -112,7 +132,7 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
                 if (detail != null)
                 {
                     _detailServices.DeleteOpenForSaleDetailByID(id);
-                    return Ok();
+                    return Ok("Deleted OpenForSaleDetail Successfully");
                 }
 
                 return NotFound();
