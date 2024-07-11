@@ -21,9 +21,9 @@ namespace RealEstateProjectSaleServices.Services
             _repo.AddNew(p);
         }
 
-        public bool ChangeStatus(PaymentProcess p)
+        public void DeletePaymentProcessByID(Guid id)
         {
-            return _repo.ChangeStatus(p);
+            _repo.DeletePaymentProcessByID(id);
         }
 
         public List<PaymentProcess> GetPaymentProcess()

@@ -90,6 +90,11 @@ namespace RealEstateProjectSale.Mapper
                                                                             .ForMember(dest => dest.PropertyName,
                                  opt => opt.MapFrom(src => src.Property!.PropertyName));
             CreateMap<OpenForSaleDetailCreateDTO, OpenForSaleDetail>().ReverseMap();
+
+            CreateMap<PaymentProcessVM, PaymentProcess>().ReverseMap().ForMember(dest => dest.SalesPolicyType,
+                                 opt => opt.MapFrom(src => src.Salespolicy!.SalesPolicyType));
+            CreateMap<PaymentProcessCreateDTO, PaymentProcess>().ReverseMap();
+
         }
     }
 }

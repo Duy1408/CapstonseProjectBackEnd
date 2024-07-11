@@ -9,14 +9,14 @@ namespace RealEstateProjectSaleServices.IServices
 {
     public interface IPaymentProcessServices
     {
-        bool ChangeStatus(PaymentProcess p);
+        void DeletePaymentProcessByID(Guid id);
 
 
-         List<PaymentProcess> GetPaymentProcess();
-         void AddNew(PaymentProcess p);
+        List<PaymentProcess> GetPaymentProcess();
+        void AddNew(PaymentProcess p);
 
 
-         PaymentProcess GetPaymentProcessById(Guid id);
+        PaymentProcess GetPaymentProcessById(Guid id);
 
         void UpdatePaymentProcess(PaymentProcess p);
     }
