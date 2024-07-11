@@ -9,14 +9,8 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Update
 {
     public class OpenForSaleDetailUpdateDTO
     {
-        [JsonIgnore]
-        public Guid OpenForSaleDetailID { get; set; }
-        public int Floor { get; set; }
-        public string TypeRoom { get; set; }
-        public double Price { get; set; }
-        [JsonIgnore]
-        public Guid OpeningForSaleID { get; set; }
-        [JsonIgnore]
-        public Guid PropertiesID { get; set; }
+        public double? Price { get; set; }
+        public double? Discount { get; set; }
+        public string? Note { get; set; }
     }
 }
