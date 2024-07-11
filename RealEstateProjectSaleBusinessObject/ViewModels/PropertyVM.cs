@@ -24,7 +24,7 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public double TotalPrice { get; set; }
         public string? Image { get; set; }
         public string Status { get; set; }
-
+        public Guid PropertyTypeID { get; set; }
         public string TypeName { get; set; }
         public Guid ProjectID { get; set; }
         public string ProjectName { get; set; }

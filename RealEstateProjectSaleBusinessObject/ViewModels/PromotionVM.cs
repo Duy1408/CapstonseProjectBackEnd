@@ -14,6 +14,7 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public bool Status { get; set; }
+        public Guid SalesPolicyID { get; set; }
         public string SalesPolicyType { get; set; }
 
     }
