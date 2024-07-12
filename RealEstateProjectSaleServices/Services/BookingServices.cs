@@ -21,6 +21,16 @@ namespace RealEstateProjectSaleServices.Services
             _book.AddNew(p);
         }
 
+        public List<Booking> GetBookingByBooked()
+        {
+            return _book.GetBookingByBooked();
+        }
+
+        public List<Booking> GetBookingByCheckedIn()
+        {
+            return _book.GetBookingByCheckedIn();
+        }
+
         public List<Booking> GetBookingByDepositedTimed(int numberBooking)
         {
             return _book.GetBookingByDepositedTimed(numberBooking);

@@ -21,5 +21,9 @@ namespace RealEstateProjectSaleServices.IServices
         List<Booking> GetBookingByDepositedTimed(int numberBooking);
 
         List<Booking> GetBookingByRandom(int numberBooking);
+
+        List<Booking> GetBookingByBooked();
+        List<Booking> GetBookingByCheckedIn();
+
     }
 }
