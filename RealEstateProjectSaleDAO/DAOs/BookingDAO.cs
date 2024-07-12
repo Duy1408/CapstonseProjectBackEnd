@@ -37,6 +37,30 @@ namespace RealEstateProjectSaleDAO.DAOs
                                     .ToList();
         }
 
+        public List<Booking> GetBookingByBooked()
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            return _context.Bookings!.Include(c => c.Property)
+                                    .Include(c => c.OpeningForSale)
+                                    .Include(c => c.Project)
+                                    .Include(c => c.Customer)
+                                    .Include(c => c.Staff)
+                                    .Where(b => b.Status == "Đã đặt chỗ")
+                                    .ToList();
+        }
+
+        public List<Booking> GetBookingByCheckedIn()
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            return _context.Bookings!.Include(c => c.Property)
+                                    .Include(c => c.OpeningForSale)
+                                    .Include(c => c.Project)
+                                    .Include(c => c.Customer)
+                                    .Include(c => c.Staff)
+                                    .Where(b => b.Status == "Đã check in")
+                                    .ToList();
+        }
+
         public List<Booking> GetBookingByDepositedTimed(int numberBooking)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
@@ -45,7 +69,10 @@ namespace RealEstateProjectSaleDAO.DAOs
                                      .Include(c => c.Project)
                                      .Include(c => c.Customer)
                                      .Include(c => c.Staff)
-                                     .Where(b => b.DepositedTimed != null && b.Status != "Khách hàng đã ký hợp đồng mua bán")
+                                     .Where(b => b.DepositedTimed != null
+                                     && b.DepositedPrice != null
+                                     && b.Status != "Đã ký hợp đồng"
+                                     && b.Status == "Đã check in")
                                      .OrderBy(b => b.DepositedTimed)
                                      .ThenBy(b => b.BookingID)
                                      .Take(numberBooking)
@@ -60,7 +87,10 @@ namespace RealEstateProjectSaleDAO.DAOs
                                      .Include(c => c.Project)
                                      .Include(c => c.Customer)
                                      .Include(c => c.Staff)
-                                     .Where(b => b.DepositedTimed != null && b.Status != "Khách hàng đã ký hợp đồng mua bán")
+                                     .Where(b => b.DepositedTimed != null
+                                     && b.DepositedPrice != null
+                                     && b.Status != "Đã ký hợp đồng"
+                                     && b.Status == "Đã check in")
                                      .OrderBy(b => Guid.NewGuid())
                                      .Take(numberBooking)
                                      .ToList();

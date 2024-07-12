@@ -51,6 +51,48 @@ namespace RealEstateProjectSale.Controllers.BookingController
             }
         }
 
+        [HttpGet]
+        [Route("GetBookingByBooked")]
+        public IActionResult GetBookingByBooked()
+        {
+            try
+            {
+                if (_book.GetBookingByBooked() == null)
+                {
+                    return NotFound();
+                }
+                var books = _book.GetBookingByBooked();
+                var response = _mapper.Map<List<BookingVM>>(books);
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("GetBookingByCheckedIn")]
+        public IActionResult GetBookingByCheckedIn()
+        {
+            try
+            {
+                if (_book.GetBookingByCheckedIn() == null)
+                {
+                    return NotFound();
+                }
+                var books = _book.GetBookingByCheckedIn();
+                var response = _mapper.Map<List<BookingVM>>(books);
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpGet("GetBookingByID/{id}")]
         public IActionResult GetBookingByID(Guid id)
         {
@@ -159,6 +201,31 @@ namespace RealEstateProjectSale.Controllers.BookingController
                     _book.UpdateBooking(existingBook);
 
                     return Ok("Update Booking Successfully");
+
+                }
+
+                return NotFound("Booking not found.");
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("UpdateBooking/CustomerCheckedInBooking/{id}")]
+        public IActionResult CustomerCheckedInBooking(Guid id)
+        {
+            try
+            {
+                var book = _book.GetBookingById(id);
+                if (book != null)
+                {
+
+                    book.Status = "Đã check in";
+
+                    _book.UpdateBooking(book);
+                    return Ok("Customer checked in Successfully");
 
                 }
 

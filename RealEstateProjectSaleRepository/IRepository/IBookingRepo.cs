@@ -22,6 +22,10 @@ namespace RealEstateProjectSaleRepository.IRepository
 
         List<Booking> GetBookingByRandom(int numberBooking);
 
+        List<Booking> GetBookingByBooked();
+        List<Booking> GetBookingByCheckedIn();
+
+
 
     }
 }
