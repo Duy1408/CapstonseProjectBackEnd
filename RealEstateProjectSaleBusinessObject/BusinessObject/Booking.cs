@@ -1,5 +1,7 @@
-﻿using System;
+﻿using RealEstateProjectSaleBusinessObject.Enums;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,7 +30,6 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public Customer? Customer { get; set; }
         public Guid StaffID { get; set; }
         public Staff? Staff { get; set; }
-
 
     }
 }

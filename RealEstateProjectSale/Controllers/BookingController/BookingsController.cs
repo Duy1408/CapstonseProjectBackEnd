@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
 using RealEstateProjectSaleBusinessObject.DTO.Create;
 using RealEstateProjectSaleBusinessObject.DTO.Update;
+using RealEstateProjectSaleBusinessObject.Enums;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 using RealEstateProjectSaleServices.Services;
@@ -222,7 +223,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
                 if (book != null)
                 {
 
-                    book.Status = "Đã check in";
+                    book.Status = BookingStatus.CheckedIn.ToString();
 
                     _book.UpdateBooking(book);
                     return Ok("Customer checked in Successfully");
@@ -257,7 +258,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
                     UpdatedTime = null,
                     BookingFile = null,
                     Note = null,
-                    Status = "Chưa đặt cọc tiền giữ chỗ",
+                    Status = BookingStatus.NotDeposited.ToString(),
                     PropertyID = null,
                     OpeningForSaleID = openingForSaleID,
                     ProjectID = projectID,
