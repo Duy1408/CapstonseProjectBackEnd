@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
+using RealEstateProjectSaleBusinessObject.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,7 +46,7 @@ namespace RealEstateProjectSaleDAO.DAOs
                                     .Include(c => c.Project)
                                     .Include(c => c.Customer)
                                     .Include(c => c.Staff)
-                                    .Where(b => b.Status == "Đã đặt chỗ")
+                                    .Where(b => b.Status == BookingStatus.Reserved.ToString())
                                     .ToList();
         }
 
@@ -57,7 +58,7 @@ namespace RealEstateProjectSaleDAO.DAOs
                                     .Include(c => c.Project)
                                     .Include(c => c.Customer)
                                     .Include(c => c.Staff)
-                                    .Where(b => b.Status == "Đã check in")
+                                    .Where(b => b.Status == BookingStatus.CheckedIn.ToString())
                                     .ToList();
         }
 
@@ -71,8 +72,8 @@ namespace RealEstateProjectSaleDAO.DAOs
                                      .Include(c => c.Staff)
                                      .Where(b => b.DepositedTimed != null
                                      && b.DepositedPrice != null
-                                     && b.Status != "Đã ký hợp đồng"
-                                     && b.Status == "Đã check in")
+                                     && b.Status != BookingStatus.ContractSigned.ToString()
+                                     && b.Status == BookingStatus.CheckedIn.ToString())
                                      .OrderBy(b => b.DepositedTimed)
                                      .ThenBy(b => b.BookingID)
                                      .Take(numberBooking)
@@ -89,8 +90,8 @@ namespace RealEstateProjectSaleDAO.DAOs
                                      .Include(c => c.Staff)
                                      .Where(b => b.DepositedTimed != null
                                      && b.DepositedPrice != null
-                                     && b.Status != "Đã ký hợp đồng"
-                                     && b.Status == "Đã check in")
+                                     && b.Status != BookingStatus.ContractSigned.ToString()
+                                     && b.Status == BookingStatus.CheckedIn.ToString())
                                      .OrderBy(b => Guid.NewGuid())
                                      .Take(numberBooking)
                                      .ToList();
