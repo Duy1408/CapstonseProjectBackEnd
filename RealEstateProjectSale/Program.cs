@@ -66,11 +66,6 @@ builder.Services.AddScoped<IContractPaymentDetailServices, ContractPaymentDetail
 builder.Services.AddScoped(_ => new BlobServiceClient(builder.Configuration.GetConnectionString("AzureBlobStorage")));
 
 
-
-
-
-
-
 //Jwt
 builder.Services.AddScoped<IJWTTokenService, JWTTokenService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(Options =>
@@ -87,6 +82,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     Options.SaveToken = true;
     Options.RequireHttpsMetadata = false;
 });
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Real Estate Project Sale", Version = "v1" });
@@ -114,6 +110,15 @@ builder.Services.AddSwaggerGen(c =>
                         Array.Empty<string>()
                     }
                 });
+});
+
+//Authorization
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Customer", policy => policy.RequireRole("Customer"));
+    options.AddPolicy("Staff", policy => policy.RequireRole("Staff"));
+    options.AddPolicy("Manager", policy => policy.RequireRole("Manager"));
+    options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
 });
 
 
