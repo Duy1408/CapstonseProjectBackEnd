@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RealEstateProjectSale.Mapper;
+using RealEstateProjectSaleBusinessObject.Model;
 using RealEstateProjectSaleRepository.IRepository;
 using RealEstateProjectSaleRepository.Repository;
 using RealEstateProjectSaleServices.IServices;
 using RealEstateProjectSaleServices.Services;
+using Stripe;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -65,6 +67,9 @@ builder.Services.AddScoped<IContractPaymentDetailServices, ContractPaymentDetail
 //Azure Blob Storage
 builder.Services.AddScoped(_ => new BlobServiceClient(builder.Configuration.GetConnectionString("AzureBlobStorage")));
 
+//Stripe Payment
+//builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
+StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 
 //Jwt
 builder.Services.AddScoped<IJWTTokenService, JWTTokenService>();
