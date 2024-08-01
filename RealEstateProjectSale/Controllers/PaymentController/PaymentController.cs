@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Stripe.Checkout;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
 using RealEstateProjectSaleBusinessObject.Model;
+using RealEstateProjectSaleServices.IServices;
 
 namespace RealEstateProjectSale.Controllers.PaymentController
 {
@@ -13,135 +14,52 @@ namespace RealEstateProjectSale.Controllers.PaymentController
     public class PaymentController : ControllerBase
     {
 
-        private readonly IConfiguration _configuration;
+        private readonly IPaymentServices _paymentServices;
 
-        private static string s_wasmClientURL = string.Empty;
 
-        public PaymentController(IConfiguration configuration)
+        public PaymentController(IPaymentServices paymentServices)
         {
-            _configuration = configuration;
+            _paymentServices = paymentServices;
         }
 
         [HttpPost]
-        public async Task<ActionResult> CheckoutPayment([FromBody] PaymentInformationModel payment, [FromServices] IServiceProvider sp)
+        public async Task<ActionResult> CheckoutPayment([FromBody] PaymentInformationModel payment)
         {
-            var referer = Request.Headers.Referer;
-            s_wasmClientURL = referer[0];
-
-            // Build the URL to which the customer will be redirected after paying.
-            var server = sp.GetRequiredService<IServer>();
-
-            var serverAddressesFeature = server.Features.Get<IServerAddressesFeature>();
-
-            string? thisApiUrl = null;
-
-            if (serverAddressesFeature is not null)
+            try
             {
-                thisApiUrl = serverAddressesFeature.Addresses.FirstOrDefault();
-            }
+                var paymentResponseModel = await _paymentServices.CreatePaymentUrl(payment);
 
-            if (thisApiUrl is not null)
-            {
-                //var sessionId = await CheckOut(payment, thisApiUrl);
-
-                var options = new SessionCreateOptions
+                if (paymentResponseModel != null)
                 {
-                    // Stripe calls the URLs below when certain checkout events happen such as success and failure.
-                    SuccessUrl = $"{thisApiUrl}/api/Payment/success/" + "{CHECKOUT_SESSION_ID}", // Customer paid.
-                    CancelUrl = s_wasmClientURL + "/failed",  // Checkout cancelled.
-                    PaymentMethodTypes = new List<string> { "card" },
-                    LineItems = new List<SessionLineItemOptions>
-                    {
-                    new()
-                    {
-                    PriceData = new SessionLineItemPriceDataOptions
-                    {
-                        UnitAmount = (long)payment.Amount, // Price is in USD cents.
-                        Currency = "VND",
-                        ProductData = new SessionLineItemPriceDataProductDataOptions
-                        {
-                            Name = payment.Content
-                        },
-                    },
-                    Quantity = 1,
-                },
-            },
-                    Mode = "payment" // One-time payment. Stripe supports recurring 'subscription' payments.
-                };
+                    return Ok(paymentResponseModel);
+                }
 
-                var service = new SessionService();
-                var session = await service.CreateAsync(options);
-                Response.Headers.Add("Location", session.Url);
+                return BadRequest();
 
-                var pubKey = _configuration["Stripe:PubKey"];
-
-                var paymentResponseModel = new PaymentResponseModel()
-                {
-                    SessionId = session.Id,
-                    PubKey = pubKey
-                };
-
-                return Ok(paymentResponseModel);
             }
-            else
+            catch (Exception ex)
             {
-                return StatusCode(500);
+                return BadRequest(ex.Message);
             }
+
         }
-
-        //[NonAction]
-        //public async Task<string> CheckOut(PaymentInformationModel payment, string thisApiUrl)
-        //{
-        //    // Create a payment flow from the items in the cart.
-        //    // Gets sent to Stripe API.
-        //    var options = new SessionCreateOptions
-        //    {
-        //        // Stripe calls the URLs below when certain checkout events happen such as success and failure.
-        //        SuccessUrl = $"{thisApiUrl}/api/Payment/success/" + "{CHECKOUT_SESSION_ID}", // Customer paid.
-        //        CancelUrl = s_wasmClientURL + "/failed",  // Checkout cancelled.
-        //        PaymentMethodTypes = new List<string> // Only card available in test mode?
-        //    {
-        //        "card"
-        //    },
-        //        LineItems = new List<SessionLineItemOptions>
-        //    {
-        //        new()
-        //        {
-        //            PriceData = new SessionLineItemPriceDataOptions
-        //            {
-        //                UnitAmount = (long)payment.Amount, // Price is in USD cents.
-        //                Currency = "VND",
-        //                ProductData = new SessionLineItemPriceDataProductDataOptions
-        //                {
-        //                    Name = payment.Content
-        //                },
-        //            },
-        //            Quantity = 1,
-        //        },
-        //    },
-        //        Mode = "payment" // One-time payment. Stripe supports recurring 'subscription' payments.
-        //    };
-
-        //    var service = new SessionService();
-        //    var session = await service.CreateAsync(options);
-        //    Response.Headers.Add("Location", session.Url);
-        //    return session.Id;
-        //}
 
         [HttpGet("success/{sessionId}")]
         // Automatic query parameter handling from ASP.NET.
         // Example URL: https://localhost:7051/checkout/success?sessionId=si_123123123123
         public ActionResult CheckoutSuccess(string sessionId)
         {
-            var sessionService = new SessionService();
-            var session = sessionService.Get(sessionId);
+            var session = _paymentServices.CheckoutSuccess(sessionId);
 
-            // Here you can save order and customer details to your database.
+            // Chỗ lưu xuống db
             var total = session.AmountTotal.Value;
             //var customerEmail = session.CustomerDetails.Email;
 
-            return Redirect(s_wasmClientURL + "success");
+            //return Redirect(s_wasmClientURL + "success");
+            return Redirect("https://localhost:7022/swagger/index.html/success");
         }
+
+
 
     }
 }

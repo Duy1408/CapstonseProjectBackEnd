@@ -62,13 +62,15 @@ builder.Services.AddScoped<IRoleRepo, RoleRepo>();
 builder.Services.AddScoped<IRoleServices, RoleServices>();
 builder.Services.AddScoped<IContractPaymentDetailRepo, ContractPaymentDetailRepo>();
 builder.Services.AddScoped<IContractPaymentDetailServices, ContractPaymentDetailServices>();
+builder.Services.AddScoped<IPaymentRepo, PaymentRepo>();
+builder.Services.AddScoped<IPaymentServices, PaymentServices>();
 
 
 //Azure Blob Storage
 builder.Services.AddScoped(_ => new BlobServiceClient(builder.Configuration.GetConnectionString("AzureBlobStorage")));
 
 //Stripe Payment
-//builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
+builder.Services.Configure<PaymentResponseModel>(builder.Configuration.GetSection("Stripe"));
 StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 
 //Jwt
