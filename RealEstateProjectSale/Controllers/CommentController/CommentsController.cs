@@ -9,9 +9,11 @@ using Microsoft.EntityFrameworkCore;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
 using RealEstateProjectSaleBusinessObject.DTO.Create;
 using RealEstateProjectSaleBusinessObject.DTO.Update;
+using RealEstateProjectSaleBusinessObject.Model;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 using RealEstateProjectSaleServices.Services;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace RealEstateProjectSale.Controllers.CommentController
 {
@@ -28,6 +30,9 @@ namespace RealEstateProjectSale.Controllers.CommentController
             _mapper = mapper;
         }
 
+        [SwaggerOperation(Summary = "Lấy tất cả các bình luận", Description = "API này lấy tất cả các bình luận từ cơ sở dữ liệu.")]
+        [SwaggerResponse(200, "Trả về danh sách các bình luận", typeof(List<CommentVM>))]
+        [SwaggerResponse(500, "Nếu có lỗi từ phía máy chủ")]
         [HttpGet]
         [Route("GetAllComment")]
         public IActionResult GetAllComment()

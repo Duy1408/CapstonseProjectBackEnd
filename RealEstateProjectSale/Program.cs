@@ -93,6 +93,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Real Estate Project Sale", Version = "v1" });
+    c.EnableAnnotations(); //Description trong API Swagger 
     c.AddSecurityDefinition("Bearer",
         new OpenApiSecurityScheme
         {
