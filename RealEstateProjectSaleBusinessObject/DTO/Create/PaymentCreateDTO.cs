@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RealEstateProjectSaleBusinessObject.Model
+namespace RealEstateProjectSaleBusinessObject.DTO.Create
 {
-    public class PaymentInformationModel
+    public class PaymentCreateDTO
     {
         public Guid PaymentID { get; set; }
         public double Amount { get; set; }
@@ -17,6 +17,5 @@ namespace RealEstateProjectSaleBusinessObject.Model
         public Guid PaymentTypeID { get; set; }
         public Guid BookingID { get; set; }
         public Guid ContractPaymentDetailID { get; set; }
-        public Guid UserID { get; set; }
     }
 }

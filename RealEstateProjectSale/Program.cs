@@ -73,6 +73,10 @@ builder.Services.AddScoped(_ => new BlobServiceClient(builder.Configuration.GetC
 builder.Services.Configure<PaymentResponseModel>(builder.Configuration.GetSection("Stripe"));
 StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 
+//Add Storage
+builder.Services.AddMemoryCache();
+
+
 //Jwt
 builder.Services.AddScoped<IJWTTokenService, JWTTokenService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(Options =>
@@ -147,6 +151,7 @@ builder.Services.AddCors(options =>
 
 
 var app = builder.Build();
+
 app.UseCors(options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
 // Configure the HTTP request pipeline.
