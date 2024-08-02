@@ -6,6 +6,9 @@ using Stripe.Checkout;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
 using RealEstateProjectSaleBusinessObject.Model;
 using RealEstateProjectSaleServices.IServices;
+using System.Data;
+using RealEstateProjectSaleBusinessObject.DTO.Create;
+using RealEstateProjectSaleBusinessObject.ViewModels;
 
 namespace RealEstateProjectSale.Controllers.PaymentController
 {
@@ -23,10 +26,12 @@ namespace RealEstateProjectSale.Controllers.PaymentController
         }
 
         [HttpPost]
-        public async Task<ActionResult> CheckoutPayment([FromBody] PaymentInformationModel payment)
+        [Route("CheckoutPaymentDeposited")]
+        public async Task<IActionResult> CheckoutPayment([FromBody] PaymentInformationModel payment)
         {
             try
             {
+
                 var paymentResponseModel = await _paymentServices.CreatePaymentUrl(payment);
 
                 if (paymentResponseModel != null)
@@ -46,14 +51,32 @@ namespace RealEstateProjectSale.Controllers.PaymentController
 
         [HttpGet("success/{sessionId}")]
         // Automatic query parameter handling from ASP.NET.
-        // Example URL: https://localhost:7051/checkout/success?sessionId=si_123123123123
-        public ActionResult CheckoutSuccess(string sessionId)
+        // Example URL: https://localhost:7051/checkout/success/{sessionId}
+        public IActionResult CheckoutSuccess(string sessionId)
         {
             var session = _paymentServices.CheckoutSuccess(sessionId);
 
+            var userId = Guid.Parse(HttpContext.Request.Query["UserID"]);
+            var model = _paymentServices.GetPaymentModelFromCache(userId);
+
             // Chỗ lưu xuống db
-            var total = session.AmountTotal.Value;
+            var newPayment = new PaymentCreateDTO
+            {
+                PaymentID = model.PaymentID,
+                Amount = session.AmountTotal.Value,
+                Content = model.Content,
+                CreatedTime = model.CreatedTime,
+                PaymentTime = DateTime.Now,
+                Status = true,
+                PaymentTypeID = model.PaymentTypeID,
+                BookingID = model.BookingID,
+                ContractPaymentDetailID = model.ContractPaymentDetailID
+
+            };
+            //var total = session.AmountTotal.Value;
             //var customerEmail = session.CustomerDetails.Email;
+
+
 
             //return Redirect(s_wasmClientURL + "success");
             return Redirect("https://localhost:7022/swagger/index.html/success");

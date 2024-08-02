@@ -14,5 +14,7 @@ namespace RealEstateProjectSaleServices.IServices
 
         Session CheckoutSuccess(string sessionId);
 
+        PaymentInformationModel GetPaymentModelFromCache(Guid userId);
+
     }
 }
