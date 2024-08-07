@@ -6,6 +6,7 @@ using RealEstateProjectSaleBusinessObject.BusinessObject;
 using RealEstateProjectSaleBusinessObject.DTO.Create;
 using RealEstateProjectSaleBusinessObject.DTO.Request;
 using RealEstateProjectSaleBusinessObject.DTO.Update;
+using RealEstateProjectSaleBusinessObject.Enums;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 using RealEstateProjectSaleServices.Services;
@@ -93,7 +94,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     TotalPrice = contract.TotalPrice,
                     Description = contract.Description,
                     ContractFile = contractFileBytes,
-                    Status = contract.Status,
+                    Status = ContractStatus.NotSigned.ToString(),
                     BookingID = contract.BookingID,
                     PaymentProcessID = contract.PaymentProcessID,
 
@@ -184,9 +185,9 @@ namespace RealEstateProjectSale.Controllers.ContractController
                 if (contract != null && book != null)
                 {
                     contract.DateSigned = DateTime.Now;
-                    contract.Status = "Khách hàng đã ký hợp đồng mua bán";
+                    contract.Status = ContractStatus.Signed.ToString();
 
-                    book.Status = "Khách hàng đã ký hợp đồng mua bán";
+                    book.Status = BookingStatus.ContractSigned.ToString();
 
                     _contractServices.UpdateContract(contract);
                     _bookServices.UpdateBooking(book);

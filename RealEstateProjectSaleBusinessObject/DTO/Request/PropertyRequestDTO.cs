@@ -23,7 +23,6 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Request
         public double? MaintenanceCost { get; set; }
         public double TotalPrice { get; set; }
         public IFormFile? Image { get; set; }
-        public string Status { get; set; }
         public Guid PropertyTypeID { get; set; }
         public Guid ProjectID { get; set; }
     }
