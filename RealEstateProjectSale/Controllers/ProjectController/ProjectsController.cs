@@ -15,6 +15,7 @@ using RealEstateProjectSaleBusinessObject.BusinessObject;
 using RealEstateProjectSaleBusinessObject.DTO.Create;
 using RealEstateProjectSaleBusinessObject.DTO.Request;
 using RealEstateProjectSaleBusinessObject.DTO.Update;
+using RealEstateProjectSaleBusinessObject.Enums;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 using RealEstateProjectSaleServices.Services;
@@ -217,7 +218,7 @@ namespace RealEstateProjectSale.Controllers
                     CampusArea = pro.CampusArea,
                     PlaceofIssue = pro.PlaceofIssue,
                     Code = pro.Code,
-                    Status = "Sắp mở bán",
+                    Status = ProjectStatus.NotForSale.ToString(),
                     Image = pro.Image
 
                 };

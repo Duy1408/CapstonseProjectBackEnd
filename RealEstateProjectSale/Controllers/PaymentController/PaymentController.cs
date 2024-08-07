@@ -51,7 +51,7 @@ namespace RealEstateProjectSale.Controllers.PaymentController
 
         [HttpGet("success/{sessionId}")]
         // Automatic query parameter handling from ASP.NET.
-        // Example URL: https://localhost:7051/checkout/success/{sessionId}
+        // Example URL: https://localhost:7022/api/payment/{sessionId}
         public IActionResult CheckoutSuccess(string sessionId)
         {
             var session = _paymentServices.CheckoutSuccess(sessionId);

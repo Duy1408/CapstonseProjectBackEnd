@@ -8,6 +8,7 @@ namespace RealEstateProjectSaleBusinessObject.Enums
 {
     public enum ProjectStatus
     {
+        NotForSale,
         Upcoming,
         Opening,
         Delivered

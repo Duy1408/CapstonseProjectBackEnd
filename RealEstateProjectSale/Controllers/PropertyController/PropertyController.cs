@@ -12,6 +12,7 @@ using RealEstateProjectSaleBusinessObject.BusinessObject;
 using RealEstateProjectSaleBusinessObject.DTO.Create;
 using RealEstateProjectSaleBusinessObject.DTO.Request;
 using RealEstateProjectSaleBusinessObject.DTO.Update;
+using RealEstateProjectSaleBusinessObject.Enums;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 
@@ -166,7 +167,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                     MaintenanceCost = property.MaintenanceCost,
                     TotalPrice = property.TotalPrice,
                     Image = property.Image,
-                    Status = property.Status,
+                    Status = PropertyStatus.NotForSale.ToString(),
                     PropertyTypeID = property.PropertyTypeID,
                     ProjectID = property.ProjectID,
                 };
