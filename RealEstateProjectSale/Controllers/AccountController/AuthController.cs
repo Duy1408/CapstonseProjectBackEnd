@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace RealEstateProjectSale.Controllers.AccountController
 {
@@ -18,6 +19,9 @@ namespace RealEstateProjectSale.Controllers.AccountController
             _jWTTokenService = jWTTokenService;
         }
 
+        [SwaggerOperation(Summary = "Login Account", Description = "API này request body là Email và password.")]
+        [SwaggerResponse(200, "Trả về JWT token")]
+        [SwaggerResponse(500, "Nếu có lỗi từ phía máy chủ")]
         [HttpPost]
         [Route("Login")]
         public async Task<IActionResult> Login(LoginVM account)
@@ -43,6 +47,9 @@ namespace RealEstateProjectSale.Controllers.AccountController
             }
         }
 
+        [SwaggerOperation(Summary = "Phân tích JWT token", Description = "API này request body là 1 chuỗi token lúc login nhận được.")]
+        [SwaggerResponse(200, "Trả về thông tin account đã login")]
+        [SwaggerResponse(500, "Nếu có lỗi từ phía máy chủ")]
         [HttpGet]
         [Route("ParseJwtToken")]
         public async Task<IActionResult> ParseJwtToken([FromQuery] string token)
