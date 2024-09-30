@@ -15,8 +15,14 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
         {
             builder.ToTable("DocumentTemplate");
             builder.HasKey(x => x.DocumentID);
-            builder.Property(x => x.DocumentName);
+            builder.Property(x => x.DocumentName).IsRequired();
             builder.Property(x => x.DocumentFile);
+            builder.HasMany(x => x.Contracts).WithOne(x => x.DocumentTemplate).OnDelete(DeleteBehavior.NoAction);
+            builder.HasMany(x => x.Bookings).WithOne(x => x.DocumentTemplate).OnDelete(DeleteBehavior.NoAction);
+
+
+
+
         }
     }
 }

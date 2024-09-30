@@ -10,7 +10,7 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
     {
         public Guid RoleID { get; set; }
         public string RoleName { get; set; }
-        public List<Account> Accounts { get; set; }
+        public List<Account>? Accounts { get; set; }
 
     }
 }

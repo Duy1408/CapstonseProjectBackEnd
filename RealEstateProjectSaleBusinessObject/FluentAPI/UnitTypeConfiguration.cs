@@ -15,20 +15,16 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
         {
             builder.ToTable("UnitType");
             builder.HasKey(x => x.UnitTypeID);
-            builder.Property(x => x.BathRoom);
+            builder.Property(x => x.BathRoom).IsRequired();
             builder.Property(x => x.Image);
             builder.Property(x => x.NetFloorArea);
             builder.Property(x => x.GrossFloorArea);
-            builder.Property(x => x.BedRoom);
-            builder.Property(x => x.KitchenRoom);
-            builder.Property(x => x.LivingRoom);
+            builder.Property(x => x.BedRoom).IsRequired();
+            builder.Property(x => x.KitchenRoom).IsRequired();
+            builder.Property(x => x.LivingRoom).IsRequired();
+            builder.Property(x => x.NumberFloor);
             builder.Property(x => x.Basement);
-
-
-
-
-
-
+            builder.HasMany(x => x.Properties).WithOne(x => x.UnitType).OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

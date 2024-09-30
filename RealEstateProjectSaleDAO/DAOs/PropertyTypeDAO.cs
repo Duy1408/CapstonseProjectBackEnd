@@ -20,7 +20,9 @@ namespace RealEstateProjectSaleDAO.DAOs
         {
             try
             {
-                return _context.PropertiesTypes!.Include(a => a.Properties).ToList();
+                return _context.PropertiesTypes!
+                    //.Include(a => a.Properties)
+                    .ToList();
             }
             catch (Exception ex)
             {
@@ -32,7 +34,8 @@ namespace RealEstateProjectSaleDAO.DAOs
         {
             try
             {
-                var type = _context.PropertiesTypes!.Include(a => a.Properties)
+                var type = _context.PropertiesTypes!
+                    //.Include(a => a.Properties)
                                                .SingleOrDefault(c => c.PropertyTypeID == id);
                 return type;
             }

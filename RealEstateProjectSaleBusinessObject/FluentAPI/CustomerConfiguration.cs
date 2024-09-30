@@ -18,7 +18,6 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
             builder.Property(x => x.FirstName).IsRequired();
             builder.Property(x => x.LastName).IsRequired();
             builder.Property(x => x.DateOfBirth).IsRequired();
-            builder.Property(x => x.PersonalEmail).IsRequired();
             builder.Property(x => x.PhoneNumber).IsRequired();
             builder.Property(x => x.IdentityCardNumber).IsRequired();
             builder.Property(x => x.Nationality).IsRequired();
@@ -28,11 +27,11 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
             builder.Property(x => x.Address).IsRequired();
             builder.Property(x => x.Status).IsRequired();
             builder.HasOne(x => x.Account);
-            builder.HasMany(x=>x.Comments).WithOne(x=>x.Customer).OnDelete(DeleteBehavior.NoAction);
             builder.HasMany(x => x.Bookings).WithOne(x => x.Customer).OnDelete(DeleteBehavior.NoAction);
-
-
-
+            builder.HasMany(x => x.Payments).WithOne(x => x.Customer).OnDelete(DeleteBehavior.NoAction);
+            builder.HasMany(x => x.Notifications).WithOne(x => x.Customer).OnDelete(DeleteBehavior.NoAction);
+            builder.HasMany(x=>x.Comments).WithOne(x=>x.Customer).OnDelete(DeleteBehavior.NoAction);
+          
         }
     }
 }

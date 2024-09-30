@@ -15,6 +15,7 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
         {
             builder.ToTable("Contact");
             builder.HasKey(x => x.ContractID);
+            builder.Property(x => x.ContractCode).IsRequired();
             builder.Property(x => x.ContractName).IsRequired();
             builder.Property(x => x.ContractType).IsRequired();
             builder.Property(x => x.CreatedTime).IsRequired();

@@ -106,7 +106,7 @@ namespace RealEstateProjectSaleDAO.DAOs
         public IQueryable<OpeningForSale> SearchOpeningForSaleByName(string searchvalue)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            var a = _context.OpeningForSales.Where(a => a.DescriptionName.ToUpper().Contains(searchvalue.Trim().ToUpper()));
+            var a = _context.OpeningForSales.Where(a => a.DecisionName.ToUpper().Contains(searchvalue.Trim().ToUpper()));
             return a;
         }
 

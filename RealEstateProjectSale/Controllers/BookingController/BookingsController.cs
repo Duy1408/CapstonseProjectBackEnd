@@ -190,10 +190,10 @@ namespace RealEstateProjectSale.Controllers.BookingController
                     {
                         existingBook.Status = book.Status;
                     }
-                    if (book.PropertyID.HasValue)
-                    {
-                        existingBook.PropertyID = book.PropertyID.Value;
-                    }
+                    //if (book.PropertyID.HasValue)
+                    //{
+                    //    existingBook.PropertyID = book.PropertyID.Value;
+                    //}
                     if (book.StaffID.HasValue)
                     {
                         existingBook.StaffID = book.StaffID.Value;

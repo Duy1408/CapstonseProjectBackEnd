@@ -15,10 +15,10 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
         {
             builder.ToTable("Notification");
             builder.HasKey(x => x.NotificationID);
-            builder.Property(x => x.Title);
-            builder.Property(x => x.Subtiltle);
-            builder.Property(x => x.Body);
-            builder.Property(x => x.DeepLink);
+            builder.Property(x => x.Title).IsRequired();
+            builder.Property(x => x.Subtiltle).IsRequired();
+            builder.Property(x => x.Body).IsRequired();
+            builder.Property(x => x.DeepLink).IsRequired();
 
         }
     }

@@ -10,6 +10,10 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
     {
         public Guid BlockID { get; set; }
         public string BlockName { get; set; }
-        public string ImageBlock { get; set; }
+        public string? ImageBlock { get; set; }
+        public Guid ZoneID { get; set; }
+        public Zone? Zone { get; set; }
+        public List<Property>? Properties { get; set; }
+        public List<Floor>? Floors { get; set; }
     }
 }

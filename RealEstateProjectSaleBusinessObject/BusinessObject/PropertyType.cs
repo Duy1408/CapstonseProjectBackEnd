@@ -11,6 +11,8 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public Guid PropertyTypeID { get; set; }
         public string PropertyTypeName { get; set; }
         public List<PromotionDetail>? PromotionDetails { get; set; }
-        public List<Property>? Properties { get; set; }
+        public Guid PropertyCategoryID { get; set; }
+        public PropertyCategory? PropertyCategory { get; set; }
+        public List<UnitType>? UnitTypes { get; set; }
     }
 }

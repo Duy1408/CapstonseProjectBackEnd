@@ -29,8 +29,8 @@ namespace RealEstateProjectSaleDAO.DAOs
         public List<Property> GetAllProperty()
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.Properties.Include(p => p.PropertyType)
-                                      .Include(p => p.Project)
+            return _context.Properties
+                                    
                                       .ToList();
         }
 
@@ -73,26 +73,23 @@ namespace RealEstateProjectSaleDAO.DAOs
         public Property GetPropertyByID(Guid id)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.Properties.Include(p => p.PropertyType)
-                                      .Include(p => p.Project)
+            return _context.Properties
                                       .SingleOrDefault(a => a.PropertyID == id);
         }
 
         public IQueryable<Property> GetPropertyByProjectID(Guid id)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            var a = _context.Properties!.Include(c => c.PropertyType)
-                                    .Include(c => c.Project)
-                                    .Where(c => c.ProjectID == id);
+            var a = _context.Properties!;
+                                   
             return a;
         }
 
         public IQueryable<Property> GetPropertyByPropertyTypeID(Guid id)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            var a = _context.Properties!.Include(c => c.PropertyType)
-                                    .Include(c => c.Project)
-                                    .Where(c => c.PropertyTypeID == id);
+            var a = _context.Properties!;
+                                  
             return a;
         }
 

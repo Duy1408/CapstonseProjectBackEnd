@@ -30,9 +30,9 @@ namespace RealEstateProjectSaleDAO.DAOs
         public List<Booking> GetAllBooking()
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.Bookings.Include(c => c.Property)
+            return _context.Bookings
                                     .Include(c => c.OpeningForSale)
-                                    .Include(c => c.Project)
+                                    //.Include(c => c.Project)
                                     .Include(c => c.Customer)
                                     .Include(c => c.Staff)
                                     .ToList();
@@ -41,9 +41,9 @@ namespace RealEstateProjectSaleDAO.DAOs
         public List<Booking> GetBookingByBooked()
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.Bookings!.Include(c => c.Property)
+            return _context.Bookings
                                     .Include(c => c.OpeningForSale)
-                                    .Include(c => c.Project)
+                                    //.Include(c => c.Project)
                                     .Include(c => c.Customer)
                                     .Include(c => c.Staff)
                                     .Where(b => b.Status == BookingStatus.Reserved.ToString())
@@ -53,9 +53,9 @@ namespace RealEstateProjectSaleDAO.DAOs
         public List<Booking> GetBookingByCheckedIn()
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.Bookings!.Include(c => c.Property)
+            return _context.Bookings!
                                     .Include(c => c.OpeningForSale)
-                                    .Include(c => c.Project)
+                                    //.Include(c => c.Project)
                                     .Include(c => c.Customer)
                                     .Include(c => c.Staff)
                                     .Where(b => b.Status == BookingStatus.CheckedIn.ToString())
@@ -65,9 +65,9 @@ namespace RealEstateProjectSaleDAO.DAOs
         public List<Booking> GetBookingByDepositedTimed(int numberBooking)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.Bookings!.Include(c => c.Property)
+            return _context.Bookings!
                                      .Include(c => c.OpeningForSale)
-                                     .Include(c => c.Project)
+                                     //.Include(c => c.Project)
                                      .Include(c => c.Customer)
                                      .Include(c => c.Staff)
                                      .Where(b => b.DepositedTimed != null
@@ -83,9 +83,9 @@ namespace RealEstateProjectSaleDAO.DAOs
         public List<Booking> GetBookingByRandom(int numberBooking)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.Bookings!.Include(c => c.Property)
+            return _context.Bookings!
                                      .Include(c => c.OpeningForSale)
-                                     .Include(c => c.Project)
+                                     //.Include(c => c.Project)
                                      .Include(c => c.Customer)
                                      .Include(c => c.Staff)
                                      .Where(b => b.DepositedTimed != null
@@ -135,9 +135,9 @@ namespace RealEstateProjectSaleDAO.DAOs
         public Booking GetBookingByID(Guid id)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.Bookings.Include(c => c.Property)
+            return _context.Bookings
                                     .Include(c => c.OpeningForSale)
-                                    .Include(c => c.Project)
+                                    //.Include(c => c.Project)
                                     .Include(c => c.Customer)
                                     .Include(c => c.Staff)
                                     .SingleOrDefault(a => a.BookingID == id);

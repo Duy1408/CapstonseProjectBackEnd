@@ -113,8 +113,8 @@ namespace RealEstateProjectSale.Controllers.PropertyController
         public IActionResult GetPropertyByPropertyTypeID(Guid projectID, Guid propertyTypeID)
         {
 
-            var property = _pro.GetPropertyByPropertyTypeID(propertyTypeID)
-                         .Where(p => p.ProjectID == projectID);
+            var property = _pro.GetPropertyByPropertyTypeID(propertyTypeID);
+                         //.Where(p => p.ProjectID == projectID);
 
             if (property != null)
             {

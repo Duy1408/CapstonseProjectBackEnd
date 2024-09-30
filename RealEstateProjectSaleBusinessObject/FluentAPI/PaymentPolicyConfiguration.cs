@@ -15,7 +15,7 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
         {
             builder.ToTable("PaymentPolicy");
             builder.HasKey(x => x.PaymentPolicyID);
-            builder.Property(x => x.PaymentPolicyName);
+            builder.Property(x => x.PaymentPolicyName).IsRequired();
             builder.Property(x => x.PercentEarly);
             builder.Property(x => x.EarlyDate);
             builder.Property(x => x.LateDate);
