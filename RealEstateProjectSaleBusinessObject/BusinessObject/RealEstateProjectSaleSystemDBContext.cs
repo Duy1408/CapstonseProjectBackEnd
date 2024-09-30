@@ -20,12 +20,19 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
 
         public virtual DbSet<Account>? Accounts { get; set; }
         public virtual DbSet<Booking>? Bookings { get; set; }
+        public virtual DbSet<Block>? Blocks { get; set; }
+        public virtual DbSet<Floor>? Floors { get; set; }
+        public virtual DbSet<Zone>? Zones { get; set; }
+        public virtual DbSet<PropertyCategory>? PropertyCategorys { get; set; }
+        public virtual DbSet<Notification>? Notifications { get; set; }
+        public virtual DbSet<UnitType>? UnitTypes { get; set; }
+        public virtual DbSet<PaymentPolicy>? PaymentPolicys { get; set; }
+        public virtual DbSet<DocumentTemplate>? DocumentTemplates { get; set; }
         public virtual DbSet<Payment>? Payments { get; set; }
         public virtual DbSet<ContractPaymentDetail>? ContractPaymentDetails { get; set; }
         public virtual DbSet<Comment>? Comments { get; set; }
         public virtual DbSet<Contract>? Contracts { get; set; }
         public virtual DbSet<Customer>? Customers { get; set; }
-
         public virtual DbSet<OpenForSaleDetail>? OpenForSaleDetails { get; set; }
         public virtual DbSet<OpeningForSale>? OpeningForSales { get; set; }
         public virtual DbSet<PaymentProcess>? PaymentProcesses { get; set; }

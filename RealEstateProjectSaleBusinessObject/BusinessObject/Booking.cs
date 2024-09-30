@@ -16,7 +16,7 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public double? DepositedPrice { get; set; }
         public DateTime CreatedTime { get; set; }
         public DateTime? UpdatedTime { get; set; }
-        public byte[]? BookingFile { get; set; }
+        public string? BookingFile { get; set; }
         public string? Note { get; set; }
         public string Status { get; set; }
         public List<Payment>? Payments { get; set; }

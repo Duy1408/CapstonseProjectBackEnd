@@ -154,10 +154,11 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     {
                         existingContract.Status = contract.Status;
                     }
-                    if (contractFileBytes != null)
-                    {
-                        existingContract.ContractFile = contractFileBytes;
-                    }
+                    //bug
+                    //if (contractFileBytes != null)
+                    //{
+                    //    existingContract.ContractFile = contractFileBytes;
+                    //}
 
                     existingContract.UpdatedTime = DateTime.Now;
                     _contractServices.UpdateContract(existingContract);

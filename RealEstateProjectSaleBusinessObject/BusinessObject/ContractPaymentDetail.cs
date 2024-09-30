@@ -22,6 +22,7 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public double? MoneyInterestRate { get; set; }
         public double? MoneyExist { get; set; }
         public string? Description { get; set; }
+        public string RemittanceOrder { get; set; }
         public List<Payment>? Payments { get; set; }
         public Guid ContractID { get; set; }
         public Contract? Contract { get; set; }
