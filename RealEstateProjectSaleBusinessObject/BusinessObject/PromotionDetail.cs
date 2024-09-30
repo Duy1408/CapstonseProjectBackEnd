@@ -13,11 +13,11 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public string PromotionType { get; set; }
         public double? DiscountPercent { get; set; }
         public double? DiscountAmount { get; set; }
-        public double Amount { get; set; }
+        public double? Amount { get; set; }
         public Guid PromotionID { get; set; }
         public Promotion? Promotion { get; set; }
         public Guid PropertiesTypeID { get; set; }
-        public PropertyType? PropertiesType { get; set; }
+        public PropertyType? PropertyType { get; set; }
 
     }
 }

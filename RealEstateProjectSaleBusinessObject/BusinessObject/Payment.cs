@@ -16,9 +16,9 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public bool Status { get; set; }
         public Guid PaymentTypeID { get; set; }
         public PaymentType? PaymentType { get; set; }
-        public Guid BookingID { get; set; }
+        public Guid? BookingID { get; set; }
         public Booking? Booking { get; set; }
-        public Guid ContractPaymentDetailID { get; set; }
-        public ContractPaymentDetail? ContractPaymentDetail { get; set; }
+        public Guid CustomerID { get; set; }
+        public Customer? Customer { get; set; }
     }
 }

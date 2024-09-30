@@ -15,9 +15,12 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
         {
             builder.ToTable("PropertyType");
             builder.HasKey(x => x.PropertyTypeID);
-            builder.Property(x => x.PropertyTypeName).IsRequired();
-            builder.HasMany(x => x.Properties).WithOne(x => x.PropertyType).OnDelete(DeleteBehavior.NoAction);
-            builder.HasMany(x => x.PromotionDetails).WithOne(x => x.PropertiesType).OnDelete(DeleteBehavior.NoAction);
+            builder.Property(x => x.PropertyTypeName).IsRequired();      
+            builder.HasMany(x => x.PromotionDetails).WithOne(x => x.PropertyType).OnDelete(DeleteBehavior.NoAction);
+            builder.HasMany(x => x.UnitTypes).WithOne(x => x.PropertyType).OnDelete(DeleteBehavior.NoAction);
+
+
+
         }
     }
 }

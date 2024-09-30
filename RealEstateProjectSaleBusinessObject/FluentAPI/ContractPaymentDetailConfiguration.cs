@@ -27,7 +27,7 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
             builder.Property(x => x.MoneyInterestRate);
             builder.Property(x => x.MoneyExist);
             builder.Property(x => x.Description);
-            builder.HasMany(x => x.Payments).WithOne(x => x.ContractPaymentDetail);
+         
 
         }
     }

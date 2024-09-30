@@ -21,7 +21,7 @@ namespace RealEstateProjectSaleDAO.DAOs
             try
             {
                 return _context.PromotionDetails!.Include(c => c.Promotion)
-                                                 .Include(c => c.PropertiesType)
+                                                 .Include(c => c.PropertyType)
                                                  .ToList();
             }
             catch (Exception ex)
@@ -48,7 +48,7 @@ namespace RealEstateProjectSaleDAO.DAOs
             try
             {
                 var detail = _context.PromotionDetails!.Include(c => c.Promotion)
-                                                       .Include(c => c.PropertiesType)
+                                                       .Include(c => c.PropertyType)
                                                        .SingleOrDefault(c => c.PromotionDetaiID == id);
                 return detail;
             }

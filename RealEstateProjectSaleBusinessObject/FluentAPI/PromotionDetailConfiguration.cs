@@ -19,7 +19,7 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
             builder.Property(x => x.PromotionType).IsRequired();
             builder.Property(x => x.DiscountPercent);
             builder.Property(x => x.DiscountAmount);
-            builder.Property(x => x.Amount).IsRequired();
+            builder.Property(x => x.Amount);
 
         }
     }

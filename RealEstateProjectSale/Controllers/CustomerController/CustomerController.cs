@@ -147,10 +147,10 @@ namespace RealEstateProjectSale.Controllers.CustomerController
                     {
                         existingCustomer.DateOfBirth = customer.DateOfBirth.Value;
                     }
-                    if (!string.IsNullOrEmpty(customer.PersonalEmail))
-                    {
-                        existingCustomer.PersonalEmail = customer.PersonalEmail;
-                    }
+                    //if (!string.IsNullOrEmpty(customer.PersonalEmail))
+                    //{
+                    //    existingCustomer.PersonalEmail = customer.PersonalEmail;
+                    //}
                     if (!string.IsNullOrEmpty(customer.PhoneNumber))
                     {
                         existingCustomer.PhoneNumber = customer.PhoneNumber;

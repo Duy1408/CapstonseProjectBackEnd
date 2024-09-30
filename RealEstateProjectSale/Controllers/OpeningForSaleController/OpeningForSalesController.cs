@@ -143,7 +143,7 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
                 {
                     if (!string.IsNullOrEmpty(open.DescriptionName))
                     {
-                        existingOpen.DescriptionName = open.DescriptionName;
+                        existingOpen.DecisionName = open.DescriptionName;
                     }
                     //bug
                     //if (open.DateStart.HasValue)

@@ -12,7 +12,6 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime DateOfBirth { get; set; }
-        public string PersonalEmail { get; set; }
         public string PhoneNumber { get; set; }
         public string IdentityCardNumber { get; set; }
         public string Nationality { get; set; }
@@ -24,6 +23,8 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public Guid AccountID { get; set; }
         public Account? Account { get; set; }
         public List<Booking>? Bookings { get; set; }
+        public List<Payment>? Payments { get; set; }
+        public List<Notification>? Notifications { get; set; }
         public List<Comment>? Comments { get; set; }
 
 

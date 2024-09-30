@@ -10,7 +10,10 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
     {
         public Guid FloorID { get; set; }
         public int NumFloor { get; set; }
-        public string ImageFloor { get; set; }
+        public string? ImageFloor { get; set; }
+        public List<Property>? Properties { get; set; }
+        public Guid BlockID { get; set; }
+        public Block? Block { get; set; }
 
 
     }

@@ -11,20 +11,27 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
     {
         public Guid PropertyID { get; set; }
         public string PropertyCode { get; set; }
-        public string View { get; set; }
-        public double PriceSold { get; set; }
+        public string? View { get; set; }
+        public double? PriceSold { get; set; }
 
         public string Status { get; set; }
 
         public List<Comment>? Comments { get; set; }
-        public Guid PropertyTypeID { get; set; }
-
-        public PropertyType? PropertyType { get; set; }
+        public Guid? BookingID { get; set; }
+        public Booking? Booking { get; set; }
 
         public List<OpenForSaleDetail>? OpenForSaleDetails { get; set; }
-        public Guid ProjectID { get; set; }
-        public Project? Project { get; set; }
-        public List<Booking>? Bookings { get; set; }
+        public Guid? UnitTypeID { get; set; }
+        public UnitType? UnitType { get; set; }
+        public Guid? FloorID { get; set; }
+        public Floor? Floor { get; set; }
+        public Guid? BlockID { get; set; }
+        public Block? Block { get; set; }
+        public Guid? ZoneID { get; set; }
+        public Zone? Zone { get; set; }
+
+
+      
 
     }
 }
