@@ -177,10 +177,11 @@ namespace RealEstateProjectSale.Controllers.BookingController
                 var existingBook = _book.GetBookingById(id);
                 if (existingBook != null)
                 {
-                    if (bookFileBytes != null)
-                    {
-                        existingBook.BookingFile = bookFileBytes;
-                    }
+                    //bug
+                    //if (bookFileBytes != null)
+                    //{
+                    //    existingBook.BookingFile = bookFileBytes;
+                    //}
                     if (!string.IsNullOrEmpty(book.Note))
                     {
                         existingBook.Note = book.Note;

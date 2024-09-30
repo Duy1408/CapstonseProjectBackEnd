@@ -49,7 +49,7 @@ namespace RealEstateProjectSaleDAO.DAOs
             {
                 var detail = _context.OpenForSaleDetails!.Include(c => c.OpeningForSale)
                                                          .Include(c => c.Property)
-                                                         .SingleOrDefault(c => c.OpenForSaleDetailID == id);
+                                                         .SingleOrDefault(c => c.OpeningForSaleID == id);
                 return detail;
             }
             catch (Exception ex)
@@ -62,7 +62,7 @@ namespace RealEstateProjectSaleDAO.DAOs
         {
             try
             {
-                var a = _context.OpenForSaleDetails!.SingleOrDefault(c => c.OpenForSaleDetailID == detail.OpenForSaleDetailID);
+                var a = _context.OpenForSaleDetails!.SingleOrDefault(c => c.OpeningForSaleID == detail.OpeningForSaleID);
 
                 _context.Entry(a).CurrentValues.SetValues(detail);
                 _context.SaveChanges();
@@ -76,7 +76,7 @@ namespace RealEstateProjectSaleDAO.DAOs
 
         public void DeleteOpenForSaleDetailByID(Guid id)
         {
-            var _detail = _context.OpenForSaleDetails!.SingleOrDefault(lo => lo.OpenForSaleDetailID == id);
+            var _detail = _context.OpenForSaleDetails!.SingleOrDefault(lo => lo.OpeningForSaleID == id);
             if (_detail != null)
             {
                 _context.Remove(_detail);

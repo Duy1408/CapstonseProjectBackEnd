@@ -19,6 +19,7 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public string Nationality { get; set; }
         public string Placeoforigin { get; set; }
         public string PlaceOfresidence { get; set; }
+        public string DateRange { get; set; }
         public string? Taxcode { get; set; }
         public string? BankName { get; set; }
         public int? BankNumber { get; set; }

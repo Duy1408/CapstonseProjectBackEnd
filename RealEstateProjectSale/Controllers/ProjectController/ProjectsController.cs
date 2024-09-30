@@ -107,54 +107,55 @@ namespace RealEstateProjectSale.Controllers
                     {
                         existingProject.ProjectName = project.ProjectName;
                     }
-                    if (!string.IsNullOrEmpty(project.CommericalName))
-                    {
-                        existingProject.CommericalName = project.CommericalName;
-                    }
-                    if (!string.IsNullOrEmpty(project.ShortName))
-                    {
-                        existingProject.ShortName = project.ShortName;
-                    }
-                    if (!string.IsNullOrEmpty(project.Address))
-                    {
-                        existingProject.Address = project.Address;
-                    }
-                    if (!string.IsNullOrEmpty(project.Commune))
-                    {
-                        existingProject.Commune = project.Commune;
-                    }
-                    if (!string.IsNullOrEmpty(project.District))
-                    {
-                        existingProject.District = project.District;
-                    }
-                    if (project.DepositPrice.HasValue)
-                    {
-                        existingProject.DepositPrice = project.DepositPrice.Value;
-                    }
-                    if (!string.IsNullOrEmpty(project.Summary))
-                    {
-                        existingProject.Summary = project.Summary;
-                    }
-                    if (project.LicenseNo.HasValue)
-                    {
-                        existingProject.LicenseNo = project.LicenseNo.Value;
-                    }
-                    if (project.DateOfIssue.HasValue)
-                    {
-                        existingProject.DateOfIssue = project.DateOfIssue.Value;
-                    }
-                    if (!string.IsNullOrEmpty(project.CampusArea))
-                    {
-                        existingProject.CampusArea = project.CampusArea;
-                    }
-                    if (!string.IsNullOrEmpty(project.PlaceofIssue))
-                    {
-                        existingProject.PlaceofIssue = project.PlaceofIssue;
-                    }
-                    if (!string.IsNullOrEmpty(project.Code))
-                    {
-                        existingProject.Code = project.Code;
-                    }
+                    //bug
+                    //if (!string.IsNullOrEmpty(project.CommericalName))
+                    //{
+                    //    existingProject.CommericalName = project.CommericalName;
+                    //}
+                    //if (!string.IsNullOrEmpty(project.ShortName))
+                    //{
+                    //    existingProject.ShortName = project.ShortName;
+                    //}
+                    //if (!string.IsNullOrEmpty(project.Address))
+                    //{
+                    //    existingProject.Address = project.Address;
+                    //}
+                    //if (!string.IsNullOrEmpty(project.Commune))
+                    //{
+                    //    existingProject.Commune = project.Commune;
+                    //}
+                    //if (!string.IsNullOrEmpty(project.District))
+                    //{
+                    //    existingProject.District = project.District;
+                    //}
+                    //if (project.DepositPrice.HasValue)
+                    //{
+                    //    existingProject.DepositPrice = project.DepositPrice.Value;
+                    //}
+                    //if (!string.IsNullOrEmpty(project.Summary))
+                    //{
+                    //    existingProject.Summary = project.Summary;
+                    //}
+                    //if (project.LicenseNo.HasValue)
+                    //{
+                    //    existingProject.LicenseNo = project.LicenseNo.Value;
+                    //}
+                    //if (project.DateOfIssue.HasValue)
+                    //{
+                    //    existingProject.DateOfIssue = project.DateOfIssue.Value;
+                    //}
+                    //if (!string.IsNullOrEmpty(project.CampusArea))
+                    //{
+                    //    existingProject.CampusArea = project.CampusArea;
+                    //}
+                    //if (!string.IsNullOrEmpty(project.PlaceofIssue))
+                    //{
+                    //    existingProject.PlaceofIssue = project.PlaceofIssue;
+                    //}
+                    //if (!string.IsNullOrEmpty(project.Code))
+                    //{
+                    //    existingProject.Code = project.Code;
+                    //}
                     if (blobUrl != null)
                     {
                         existingProject.Image = blobUrl;

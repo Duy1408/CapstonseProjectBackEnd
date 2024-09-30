@@ -16,10 +16,11 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
             builder.ToTable("OpeningForSale");
             builder.HasKey(x => x.OpeningForSaleID);
             builder.Property(x => x.DescriptionName).IsRequired();
-            builder.Property(x => x.DateStart).IsRequired();
-            builder.Property(x => x.DateEnd).IsRequired();
-            builder.Property(x => x.ReservationTime);
+            builder.Property(x => x.StartDate).IsRequired();
+            builder.Property(x => x.EndDate).IsRequired();
+            builder.Property(x => x.ReservationDate);
             builder.Property(x => x.Description);
+            builder.Property(x => x.CheckinDate);
             builder.Property(x => x.Status).IsRequired();
             builder.HasMany(x => x.Bookings).WithOne(x => x.OpeningForSale).OnDelete(DeleteBehavior.NoAction);
             builder.HasMany(x => x.openForSaleDetails).WithOne(x => x.OpeningForSale).OnDelete(DeleteBehavior.NoAction);

@@ -14,10 +14,10 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
         public void Configure(EntityTypeBuilder<OpenForSaleDetail> builder)
         {
             builder.ToTable("OpenForSaleDetail");
-            builder.HasKey(x => x.OpenForSaleDetailID);
+            builder.HasKey(x => x.OpeningForSaleID);
             builder.Property(x => x.Price).IsRequired();
-            builder.Property(x => x.Discount);
             builder.Property(x => x.Note);
+    
 
 
         }

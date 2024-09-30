@@ -99,7 +99,7 @@ namespace RealEstateProjectSaleDAO.DAOs
         public IQueryable<Property> SearchPropertyByName(string searchvalue)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            var a = _context.Properties.Where(a => a.PropertyName.ToUpper().Contains(searchvalue.Trim().ToUpper()));
+            var a = _context.Properties.Where(a => a.PropertyCode.ToUpper().Contains(searchvalue.Trim().ToUpper()));
             return a;
         }
 

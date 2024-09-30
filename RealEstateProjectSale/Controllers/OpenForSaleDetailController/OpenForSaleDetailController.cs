@@ -99,10 +99,11 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
                     {
                         existingDetail.Price = detail.Price.Value;
                     }
-                    if (detail.Discount.HasValue)
-                    {
-                        existingDetail.Discount = detail.Discount.Value;
-                    }
+                    //bug
+                    //if (detail.Discount.HasValue)
+                    //{
+                    //    existingDetail.Discount = detail.Discount.Value;
+                    //}
                     if (!string.IsNullOrEmpty(detail.Note))
                     {
                         existingDetail.Note = detail.Note;

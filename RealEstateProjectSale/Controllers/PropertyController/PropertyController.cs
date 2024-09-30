@@ -173,7 +173,8 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                 };
 
                 var _property = _mapper.Map<Property>(newProperty);
-                _property.Image = blobUrl;
+                //bug
+                //_property.Image = blobUrl;
                 _pro.AddNew(_property);
 
                 return Ok("Create Property Successfully");
@@ -205,62 +206,62 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                 var existingProperty = _pro.GetPropertyById(id);
                 if (existingProperty != null)
                 {
-                    if (!string.IsNullOrEmpty(property.PropertyName))
-                    {
-                        existingProperty.PropertyName = property.PropertyName;
-                    }
-                    if (!string.IsNullOrEmpty(property.Block))
-                    {
-                        existingProperty.Block = property.Block;
-                    }
-                    if (property.Floor.HasValue)
-                    {
-                        existingProperty.Floor = property.Floor.Value;
-                    }
-                    if (property.SizeArea.HasValue)
-                    {
-                        existingProperty.SizeArea = property.SizeArea.Value;
-                    }
-                    if (property.BedRoom.HasValue)
-                    {
-                        existingProperty.BedRoom = property.BedRoom.Value;
-                    }
-                    if (property.BathRoom.HasValue)
-                    {
-                        existingProperty.BathRoom = property.BathRoom.Value;
-                    }
-                    if (property.LivingRoom.HasValue)
-                    {
-                        existingProperty.LivingRoom = property.LivingRoom.Value;
-                    }
-                    if (!string.IsNullOrEmpty(property.View))
-                    {
-                        existingProperty.View = property.View;
-                    }
-                    if (property.InitialPrice.HasValue)
-                    {
-                        existingProperty.InitialPrice = property.InitialPrice.Value;
-                    }
-                    if (property.Discount.HasValue)
-                    {
-                        existingProperty.Discount = property.Discount.Value;
-                    }
-                    if (property.MoneyTax.HasValue)
-                    {
-                        existingProperty.MoneyTax = property.MoneyTax.Value;
-                    }
-                    if (property.MaintenanceCost.HasValue)
-                    {
-                        existingProperty.MaintenanceCost = property.MaintenanceCost.Value;
-                    }
-                    if (property.TotalPrice.HasValue)
-                    {
-                        existingProperty.TotalPrice = property.TotalPrice.Value;
-                    }
-                    if (blobUrl != null)
-                    {
-                        existingProperty.Image = blobUrl;
-                    }
+                    //if (!string.IsNullOrEmpty(property.PropertyName))
+                    //{
+                    //    existingProperty.PropertyName = property.PropertyName;
+                    //}
+                    //if (!string.IsNullOrEmpty(property.Block))
+                    //{
+                    //    existingProperty.Block = property.Block;
+                    //}
+                    //if (property.Floor.HasValue)
+                    //{
+                    //    existingProperty.Floor = property.Floor.Value;
+                    //}
+                    //if (property.SizeArea.HasValue)
+                    //{
+                    //    existingProperty.SizeArea = property.SizeArea.Value;
+                    //}
+                    //if (property.BedRoom.HasValue)
+                    //{
+                    //    existingProperty.BedRoom = property.BedRoom.Value;
+                    //}
+                    //if (property.BathRoom.HasValue)
+                    //{
+                    //    existingProperty.BathRoom = property.BathRoom.Value;
+                    //}
+                    //if (property.LivingRoom.HasValue)
+                    //{
+                    //    existingProperty.LivingRoom = property.LivingRoom.Value;
+                    //}
+                    //if (!string.IsNullOrEmpty(property.View))
+                    //{
+                    //    existingProperty.View = property.View;
+                    //}
+                    //if (property.InitialPrice.HasValue)
+                    //{
+                    //    existingProperty.InitialPrice = property.InitialPrice.Value;
+                    //}
+                    //if (property.Discount.HasValue)
+                    //{
+                    //    existingProperty.Discount = property.Discount.Value;
+                    //}
+                    //if (property.MoneyTax.HasValue)
+                    //{
+                    //    existingProperty.MoneyTax = property.MoneyTax.Value;
+                    //}
+                    //if (property.MaintenanceCost.HasValue)
+                    //{
+                    //    existingProperty.MaintenanceCost = property.MaintenanceCost.Value;
+                    //}
+                    //if (property.TotalPrice.HasValue)
+                    //{
+                    //    existingProperty.TotalPrice = property.TotalPrice.Value;
+                    //}
+                    //if (blobUrl != null)
+                    //{
+                    //    existingProperty.Image = blobUrl;
+                    //}
                     if (!string.IsNullOrEmpty(property.Status))
                     {
                         existingProperty.Status = property.Status;

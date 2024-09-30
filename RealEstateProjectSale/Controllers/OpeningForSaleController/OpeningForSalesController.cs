@@ -145,18 +145,19 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
                     {
                         existingOpen.DescriptionName = open.DescriptionName;
                     }
-                    if (open.DateStart.HasValue)
-                    {
-                        existingOpen.DateStart = open.DateStart.Value;
-                    }
-                    if (open.DateEnd.HasValue)
-                    {
-                        existingOpen.DateEnd = open.DateEnd.Value;
-                    }
-                    if (!string.IsNullOrEmpty(open.ReservationTime))
-                    {
-                        existingOpen.ReservationTime = open.ReservationTime;
-                    }
+                    //bug
+                    //if (open.DateStart.HasValue)
+                    //{
+                    //    existingOpen.DateStart = open.DateStart.Value;
+                    //}
+                    //if (open.DateEnd.HasValue)
+                    //{
+                    //    existingOpen.DateEnd = open.DateEnd.Value;
+                    //}
+                    //if (!string.IsNullOrEmpty(open.ReservationTime))
+                    //{
+                    //    existingOpen.ReservationTime = open.ReservationTime;
+                    //}
                     if (!string.IsNullOrEmpty(open.Description))
                     {
                         existingOpen.Description = open.Description;
