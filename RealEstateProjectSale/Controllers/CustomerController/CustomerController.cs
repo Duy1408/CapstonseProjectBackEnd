@@ -171,10 +171,10 @@ namespace RealEstateProjectSale.Controllers.CustomerController
                     {
                         existingCustomer.BankName = customer.BankName;
                     }
-                    if (customer.BankNumber.HasValue)
-                    {
-                        existingCustomer.BankNumber = customer.BankNumber.Value;
-                    }
+                    //if (customer.BankNumber.HasValue)
+                    //{
+                    //    existingCustomer.BankNumber = customer.BankNumber.Value;
+                    //}
                     if (!string.IsNullOrEmpty(customer.Address))
                     {
                         existingCustomer.Address = customer.Address;

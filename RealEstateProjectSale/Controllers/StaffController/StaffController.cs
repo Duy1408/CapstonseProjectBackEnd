@@ -263,10 +263,10 @@ namespace RealEstateProjectSale.Controllers.StaffController
                     {
                         _staff.BankName = staff.BankName;
                     }
-                    if (staff.BankNumber.HasValue)
-                    {
-                        _staff.BankNumber = staff.BankNumber.Value;
-                    }
+                    //if (staff.BankNumber.HasValue)
+                    //{
+                    //    _staff.BankNumber = staff.BankNumber.Value;
+                    //}
                     if (staff.Status.HasValue)
                     {
                         _staff.Status = staff.Status.Value;
