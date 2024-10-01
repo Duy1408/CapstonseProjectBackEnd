@@ -9,16 +9,17 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
     public class CustomerCreateDTO
     {
         public Guid CustomerID { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public string FullName { get; set; }
         public DateTime DateOfBirth { get; set; }
-        public string PersonalEmail { get; set; }
         public string PhoneNumber { get; set; }
-        public string IdentityCardNumber { get; set; }
+        public string? IdentityCardNumber { get; set; }
         public string Nationality { get; set; }
+        public string? PlaceofOrigin { get; set; }
+        public string? PlaceOfResidence { get; set; }
+        public string? DateOfIssue { get; set; }
         public string? Taxcode { get; set; }
         public string? BankName { get; set; }
-        public int? BankNumber { get; set; }
+        public string? BankNumber { get; set; }
         public string Address { get; set; }
         public bool Status { get; set; }
         public Guid AccountID { get; set; }

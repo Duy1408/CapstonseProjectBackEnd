@@ -8,6 +8,7 @@ using RealEstateProjectSaleBusinessObject.DTO.Update;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 using RealEstateProjectSaleServices.Services;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace RealEstateProjectSale.Controllers.AccountController
 {
@@ -26,6 +27,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
         }
 
         [HttpGet]
+        [SwaggerOperation(Summary = "GetAllAccount")]
         public IActionResult GetAllAccount()
         {
             try
@@ -46,6 +48,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
         }
 
         [HttpGet("{id}")]
+        [SwaggerOperation(Summary = "GetAccountByID")]
         public IActionResult GetAccountByID(Guid id)
         {
             var account = _accountServices.GetAccountByID(id);
@@ -62,6 +65,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
         }
 
         [HttpPost]
+        [SwaggerOperation(Summary = "AddNewAccount")]
         public IActionResult AddNewAccount(AccountCreateDTO account)
         {
             try
@@ -93,6 +97,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
         }
 
         [HttpPut("{id}")]
+        [SwaggerOperation(Summary = "UpdateAccount")]
         public IActionResult UpdateAccount([FromForm] AccountUpdateDTO account, Guid id)
         {
             try
@@ -135,6 +140,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
         }
 
         [HttpDelete("{id}")]
+        [SwaggerOperation(Summary = "DeleteAccount")]
         public IActionResult DeleteAccount(Guid id)
         {
 

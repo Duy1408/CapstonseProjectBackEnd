@@ -19,7 +19,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
             _jWTTokenService = jWTTokenService;
         }
 
-        [SwaggerOperation(Summary = "Login Account", Description = "API này request body là Email và password.")]
+        [SwaggerOperation(Summary = "Login Account", Description = "API này request body là Email hoặc Phone và password.")]
         [SwaggerResponse(200, "Trả về JWT token")]
         [SwaggerResponse(500, "Nếu có lỗi từ phía máy chủ")]
         [HttpPost]
