@@ -135,14 +135,14 @@ namespace RealEstateProjectSale.Controllers.CustomerController
                 if (existingCustomer != null)
                 {
 
-                    if (!string.IsNullOrEmpty(customer.FirstName))
-                    {
-                        existingCustomer.FirstName = customer.FirstName;
-                    }
-                    if (!string.IsNullOrEmpty(customer.LastName))
-                    {
-                        existingCustomer.LastName = customer.LastName;
-                    }
+                    //if (!string.IsNullOrEmpty(customer.FirstName))
+                    //{
+                    //    existingCustomer.FirstName = customer.FirstName;
+                    //}
+                    //if (!string.IsNullOrEmpty(customer.LastName))
+                    //{
+                    //    existingCustomer.LastName = customer.LastName;
+                    //}
                     if (customer.DateOfBirth.HasValue)
                     {
                         existingCustomer.DateOfBirth = customer.DateOfBirth.Value;
