@@ -6,7 +6,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace RealEstateProjectSale.Controllers.AccountController
 {
-    [Route("api/[controller]")]
+    [Route("api/auth")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -23,12 +23,12 @@ namespace RealEstateProjectSale.Controllers.AccountController
         [SwaggerResponse(200, "Trả về JWT token")]
         [SwaggerResponse(500, "Nếu có lỗi từ phía máy chủ")]
         [HttpPost]
-        [Route("Login")]
+        [Route("login")]
         public async Task<IActionResult> Login(LoginVM account)
         {
             try
             {
-                var checkLogin = _accountServices.CheckLogin(account.Email!, account.Password!);
+                var checkLogin = _accountServices.CheckLogin(account.EmailOrPhone!, account.Password!);
                 if (checkLogin != null)
                 {
                     var token = _jWTTokenService.CreateJWTToken(checkLogin);
@@ -51,7 +51,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
         [SwaggerResponse(200, "Trả về thông tin account đã login")]
         [SwaggerResponse(500, "Nếu có lỗi từ phía máy chủ")]
         [HttpGet]
-        [Route("ParseJwtToken")]
+        [Route("token/parse")]
         public async Task<IActionResult> ParseJwtToken([FromQuery] string token)
         {
             try
