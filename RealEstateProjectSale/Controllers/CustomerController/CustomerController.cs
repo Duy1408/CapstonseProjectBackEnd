@@ -8,10 +8,11 @@ using RealEstateProjectSaleBusinessObject.DTO.Update;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 using RealEstateProjectSaleServices.Services;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace RealEstateProjectSale.Controllers.CustomerController
 {
-    [Route("api/[controller]")]
+    [Route("api/customers")]
     [ApiController]
     public class CustomerController : ControllerBase
     {
@@ -31,7 +32,7 @@ namespace RealEstateProjectSale.Controllers.CustomerController
         }
 
         [HttpGet]
-        [Route("GetAllCustomer")]
+        [SwaggerOperation(Summary = "GetAllCustomer")]
         public IActionResult GetAllCustomer()
         {
             try
@@ -51,7 +52,8 @@ namespace RealEstateProjectSale.Controllers.CustomerController
             }
         }
 
-        [HttpGet("GetCustomerByID/{id}")]
+        [HttpGet("{id}")]
+        [SwaggerOperation(Summary = "GetCustomerByID")]
         public IActionResult GetCustomerByID(Guid id)
         {
             var customer = _customerServices.GetCustomerByID(id);
@@ -68,7 +70,7 @@ namespace RealEstateProjectSale.Controllers.CustomerController
         }
 
         [HttpPost]
-        [Route("RegisterAccountCustomer")]
+        [SwaggerOperation(Summary = "RegisterAccountCustomer")]
         public async Task<IActionResult> AddNewCustomer(RegisterCustomerVM accountCustomer)
         {
             try
@@ -98,13 +100,14 @@ namespace RealEstateProjectSale.Controllers.CustomerController
                 var customer = new CustomerCreateDTO
                 {
                     CustomerID = Guid.NewGuid(),
-                    FirstName = accountCustomer.FirstName,
-                    LastName = accountCustomer.LastName,
+                    FullName = accountCustomer.FullName,
                     DateOfBirth = accountCustomer.DateOfBirth,
-                    PersonalEmail = accountCustomer.PersonalEmail,
                     PhoneNumber = accountCustomer.PhoneNumber,
                     IdentityCardNumber = accountCustomer.IdentityCardNumber,
                     Nationality = accountCustomer.Nationality,
+                    PlaceofOrigin = accountCustomer.PlaceofOrigin,
+                    PlaceOfResidence = accountCustomer.PlaceOfResidence,
+                    DateOfIssue = accountCustomer.DateOfIssue,
                     Taxcode = accountCustomer.Taxcode,
                     BankName = accountCustomer.BankName,
                     BankNumber = accountCustomer.BankNumber,
@@ -126,7 +129,8 @@ namespace RealEstateProjectSale.Controllers.CustomerController
 
         }
 
-        [HttpPut("UpdateCustomer/{id}")]
+        [HttpPut("{id}")]
+        [SwaggerOperation(Summary = "UpdateCustomer")]
         public IActionResult UpdateCustomer([FromForm] CustomerUpdateDTO customer, Guid id)
         {
             try
@@ -135,22 +139,14 @@ namespace RealEstateProjectSale.Controllers.CustomerController
                 if (existingCustomer != null)
                 {
 
-                    //if (!string.IsNullOrEmpty(customer.FirstName))
-                    //{
-                    //    existingCustomer.FirstName = customer.FirstName;
-                    //}
-                    //if (!string.IsNullOrEmpty(customer.LastName))
-                    //{
-                    //    existingCustomer.LastName = customer.LastName;
-                    //}
+                    if (!string.IsNullOrEmpty(customer.FullName))
+                    {
+                        existingCustomer.FullName = customer.FullName;
+                    }
                     if (customer.DateOfBirth.HasValue)
                     {
                         existingCustomer.DateOfBirth = customer.DateOfBirth.Value;
                     }
-                    //if (!string.IsNullOrEmpty(customer.PersonalEmail))
-                    //{
-                    //    existingCustomer.PersonalEmail = customer.PersonalEmail;
-                    //}
                     if (!string.IsNullOrEmpty(customer.PhoneNumber))
                     {
                         existingCustomer.PhoneNumber = customer.PhoneNumber;
@@ -163,6 +159,18 @@ namespace RealEstateProjectSale.Controllers.CustomerController
                     {
                         existingCustomer.Nationality = customer.Nationality;
                     }
+                    if (!string.IsNullOrEmpty(customer.PlaceofOrigin))
+                    {
+                        existingCustomer.PlaceofOrigin = customer.PlaceofOrigin;
+                    }
+                    if (!string.IsNullOrEmpty(customer.PlaceOfResidence))
+                    {
+                        existingCustomer.PlaceOfResidence = customer.PlaceOfResidence;
+                    }
+                    if (!string.IsNullOrEmpty(customer.DateOfIssue))
+                    {
+                        existingCustomer.DateOfIssue = customer.DateOfIssue;
+                    }
                     if (!string.IsNullOrEmpty(customer.Taxcode))
                     {
                         existingCustomer.Taxcode = customer.Taxcode;
@@ -171,10 +179,10 @@ namespace RealEstateProjectSale.Controllers.CustomerController
                     {
                         existingCustomer.BankName = customer.BankName;
                     }
-                    //if (customer.BankNumber.HasValue)
-                    //{
-                    //    existingCustomer.BankNumber = customer.BankNumber.Value;
-                    //}
+                    if (!string.IsNullOrEmpty(customer.BankNumber))
+                    {
+                        existingCustomer.BankNumber = customer.BankNumber;
+                    }
                     if (!string.IsNullOrEmpty(customer.Address))
                     {
                         existingCustomer.Address = customer.Address;
@@ -184,7 +192,7 @@ namespace RealEstateProjectSale.Controllers.CustomerController
                         existingCustomer.Status = customer.Status.Value;
                     }
 
-                    //var _customer = _mapper.Map<Customer>(customer);
+                    var _customer = _mapper.Map<Customer>(customer);
                     _customerServices.UpdateCustomer(existingCustomer);
 
                     return Ok("Update Customer Successfully");
@@ -201,7 +209,8 @@ namespace RealEstateProjectSale.Controllers.CustomerController
         }
 
 
-        [HttpDelete("DeleteCustomer/{id}")]
+        [HttpDelete("{id}")]
+        [SwaggerOperation(Summary = "DeleteCustomer")]
         public IActionResult DeleteCustomer(Guid id)
         {
             if (_customerServices.GetCustomerByID(id) == null)
