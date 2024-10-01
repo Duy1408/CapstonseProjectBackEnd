@@ -18,7 +18,11 @@ namespace RealEstateProjectSaleDAO.DAOs
 
         public Account CheckLogin(string email, string password)
         {
-            return _context.Accounts.Include(a => a.Role).Where(u => u.Email!.Equals(email) && u.Password!.Equals(password)).FirstOrDefault();
+            return _context.Accounts.Include(a => a.Role)
+                                    .Where(u => u.Email!.Equals(email)
+                                    || _context.Customers.Any(b => b.AccountID == u.AccountID && b.PhoneNumber == email)
+                                    && u.Password!.Equals(password))
+                                    .FirstOrDefault();
 
         }
 
