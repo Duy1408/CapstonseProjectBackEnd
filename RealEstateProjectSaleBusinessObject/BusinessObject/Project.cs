@@ -19,7 +19,6 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public string? Scale { get; set; }
         public string? BuildingDensity { get; set; }
         public string? TotalNumberOfApartment { get; set; }
-        public string? ProductType { get; set; }
         public string? LegalStatus { get; set; }
         public string? HandOver { get; set; }
         public string? Convenience { get; set; }

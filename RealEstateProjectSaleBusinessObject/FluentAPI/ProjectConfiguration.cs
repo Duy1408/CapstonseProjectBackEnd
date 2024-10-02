@@ -24,7 +24,6 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
             builder.Property(x => x.Scale);
             builder.Property(x => x.BuildingDensity);
             builder.Property(x => x.TotalNumberOfApartment);
-            builder.Property(x => x.ProductType);
             builder.Property(x => x.LegalStatus);
             builder.Property(x => x.HandOver);
             builder.Property(x => x.Convenience);
@@ -34,12 +33,6 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
             builder.HasMany(x => x.Salespolicies).WithOne(x => x.Project).OnDelete(DeleteBehavior.NoAction);
             builder.HasMany(x => x.OpeningForSales).WithOne(x => x.Project).OnDelete(DeleteBehavior.NoAction);
             builder.HasMany(x => x.PropertyCategories).WithOne(x => x.Project).OnDelete(DeleteBehavior.NoAction);
-
-
-
-
-
-
         }
     }
 }
