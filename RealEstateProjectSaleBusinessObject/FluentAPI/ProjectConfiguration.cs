@@ -28,11 +28,12 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
             builder.Property(x => x.HandOver);
             builder.Property(x => x.Convenience);
             builder.Property(x => x.Image);
-            builder.Property(x => x.Status).IsRequired();     
+            builder.Property(x => x.Status).IsRequired();    
+            builder.HasMany(x => x.Zones).WithOne(x => x.Project).OnDelete(DeleteBehavior.NoAction);
+            builder.HasMany(x => x.PropertyCategories).WithOne(x => x.Project).OnDelete(DeleteBehavior.NoAction);
             builder.HasMany(x => x.PaymentPolicies).WithOne(x => x.Project).OnDelete(DeleteBehavior.NoAction);
             builder.HasMany(x => x.Salespolicies).WithOne(x => x.Project).OnDelete(DeleteBehavior.NoAction);
             builder.HasMany(x => x.OpeningForSales).WithOne(x => x.Project).OnDelete(DeleteBehavior.NoAction);
-            builder.HasMany(x => x.PropertyCategories).WithOne(x => x.Project).OnDelete(DeleteBehavior.NoAction);
         }
     }
 }
