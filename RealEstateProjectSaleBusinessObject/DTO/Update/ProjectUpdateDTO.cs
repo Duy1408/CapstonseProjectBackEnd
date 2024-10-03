@@ -9,20 +9,22 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Update
 {
     public class ProjectUpdateDTO
     {
-        public string? ProjectName { get; set; }
-        public string? CommericalName { get; set; }
-        public string? ShortName { get; set; }
-        public string? Address { get; set; }
-        public string? Commune { get; set; }
-        public string? District { get; set; }
-        public double? DepositPrice { get; set; }
-        public string? Summary { get; set; }
-        public int? LicenseNo { get; set; }
-        public DateTime? DateOfIssue { get; set; }
-        public string? CampusArea { get; set; }
-        public string? PlaceofIssue { get; set; }
-        public string? Code { get; set; }
-        public IFormFile? Image { get; set; }
-        public string? Status { get; set; }
+        public string ProjectName { get; set; }
+        public string Location { get; set; }
+        public string? Investor { get; set; }
+        public string? GeneralContractor { get; set; }
+        public string? DesignUnit { get; set; }
+        public string? TotalArea { get; set; }
+        public string? Scale { get; set; }
+        public string? BuildingDensity { get; set; }
+        public string? TotalNumberOfApartment { get; set; }
+        public string? LegalStatus { get; set; }
+        public string? HandOver { get; set; }
+        public string? Convenience { get; set; }
+        public IFormFileCollection? Images { get; set; }
+        public string Status { get; set; }
+
+
+
     }
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
@@ -46,24 +47,75 @@ namespace RealEstateProjectSale.Controllers
 
         public IActionResult GetProjects()
         {
+            //try
+            //{
+            //    if (_project.GetProjects() == null)
+            //    {
+            //        return NotFound();
+            //    }
+            //    var projects = _project.GetProjects();
+            //    var response = _mapper.Map<List<ProjectVM>>(projects);
+            //    return Ok(response);
+            //}
+            //catch (Exception ex)
+            //{
+            //    return BadRequest(ex.Message);
+
+
+            //public Guid ProjectID { get; set; }
+            //public string ProjectName { get; set; }
+            //public string Location { get; set; }
+            //public string? Investor { get; set; }
+            //public string? GeneralContractor { get; set; }
+            //public string? DesignUnit { get; set; }
+            //public string? TotalArea { get; set; }
+            //public string? Scale { get; set; }
+            //public string? BuildingDensity { get; set; }
+            //public string? TotalNumberOfApartment { get; set; }
+            //public string? LegalStatus { get; set; }
+            //public string? HandOver { get; set; }
+            //public string? Convenience { get; set; }
+            //public List<string>? Images { get; set; } 
+
+            //}
             try
             {
-                if (_project.GetProjects() == null)
+                var projects = _project.GetProjects();
+
+                if (projects == null || !projects.Any())
                 {
                     return NotFound();
                 }
-                var projects = _project.GetProjects();
-                var response = _mapper.Map<List<ProjectVM>>(projects);
+
+                var response = projects.Select(project => new ProjectVM
+                {
+                    ProjectID = project.ProjectID,
+                    ProjectName = project.ProjectName,
+                    Location = project.Location,
+                    Investor = project.Investor,
+                    GeneralContractor = project.GeneralContractor,
+                    DesignUnit = project.DesignUnit,
+                    TotalArea = project.TotalArea,
+                    Scale = project.Scale,
+                    BuildingDensity = project.BuildingDensity,
+                    TotalNumberOfApartment = project.TotalNumberOfApartment,
+                    LegalStatus = project.LegalStatus,
+                    HandOver = project.HandOver,
+                    Convenience = project.Convenience,
+                    Images = project.Image?.Split(',').ToList() ?? new List<string>(),
+                    Status = project.Status,
+                }).ToList();
+
                 return Ok(response);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
-
             }
 
-        }
 
+        }
+       
         // GET: api/Projects/5
         [HttpGet("GetProjectByID/{id}")]
         public IActionResult GetProjectByID(Guid id)
@@ -86,17 +138,22 @@ namespace RealEstateProjectSale.Controllers
         [HttpPut("UpdateProject/{id}")]
         public IActionResult UpdateProject([FromForm] ProjectUpdateDTO project, Guid id)
         {
-            try
+          try
             {
-                var containerInstance = _blobServiceClient.GetBlobContainerClient("realestateprojectpictures");
-                string? blobUrl = null;
-                if (project.Image != null)
+                var containerInstance = _blobServiceClient.GetBlobContainerClient("realestateimage");
+                var imageUrls = new List<string>(); // List to hold URLs of all images
+                if (project.Images != null && project.Images.Count > 0)
                 {
-                    var blobName1 = $"{Guid.NewGuid()}_{project.Image.FileName}";
-                    var blobInstance1 = containerInstance.GetBlobClient(blobName1);
-                    blobInstance1.Upload(project.Image.OpenReadStream());
-                    var storageAccountUrl = "https://realestateprojectimage.blob.core.windows.net/realestateprojectpictures";
-                    blobUrl = $"{storageAccountUrl}/{blobName1}";
+
+                    foreach (var image in project.Images)
+                    {
+                        var blobName = $"{Guid.NewGuid()}_{image.FileName}";
+                        var blobInstance = containerInstance.GetBlobClient(blobName);
+                        blobInstance.Upload(image.OpenReadStream());
+                        var storageAccountUrl = "https://realestatesystem.blob.core.windows.net/realestateimage";
+                        var blobUrl = $"{storageAccountUrl}/{blobName}";
+                        imageUrls.Add(blobUrl); // Add each image URL to the list
+                    }
                 }
 
                 var existingProject = _project.GetProjectById(id);
@@ -107,58 +164,54 @@ namespace RealEstateProjectSale.Controllers
                     {
                         existingProject.ProjectName = project.ProjectName;
                     }
-                    //bug
-                    //if (!string.IsNullOrEmpty(project.CommericalName))
-                    //{
-                    //    existingProject.CommericalName = project.CommericalName;
-                    //}
-                    //if (!string.IsNullOrEmpty(project.ShortName))
-                    //{
-                    //    existingProject.ShortName = project.ShortName;
-                    //}
-                    //if (!string.IsNullOrEmpty(project.Address))
-                    //{
-                    //    existingProject.Address = project.Address;
-                    //}
-                    //if (!string.IsNullOrEmpty(project.Commune))
-                    //{
-                    //    existingProject.Commune = project.Commune;
-                    //}
-                    //if (!string.IsNullOrEmpty(project.District))
-                    //{
-                    //    existingProject.District = project.District;
-                    //}
-                    //if (project.DepositPrice.HasValue)
-                    //{
-                    //    existingProject.DepositPrice = project.DepositPrice.Value;
-                    //}
-                    //if (!string.IsNullOrEmpty(project.Summary))
-                    //{
-                    //    existingProject.Summary = project.Summary;
-                    //}
-                    //if (project.LicenseNo.HasValue)
-                    //{
-                    //    existingProject.LicenseNo = project.LicenseNo.Value;
-                    //}
-                    //if (project.DateOfIssue.HasValue)
-                    //{
-                    //    existingProject.DateOfIssue = project.DateOfIssue.Value;
-                    //}
-                    //if (!string.IsNullOrEmpty(project.CampusArea))
-                    //{
-                    //    existingProject.CampusArea = project.CampusArea;
-                    //}
-                    //if (!string.IsNullOrEmpty(project.PlaceofIssue))
-                    //{
-                    //    existingProject.PlaceofIssue = project.PlaceofIssue;
-                    //}
-                    //if (!string.IsNullOrEmpty(project.Code))
-                    //{
-                    //    existingProject.Code = project.Code;
-                    //}
-                    if (blobUrl != null)
+                    if (!string.IsNullOrEmpty(project.Location))
                     {
-                        existingProject.Image = blobUrl;
+                        existingProject.Location = project.Location;
+                    }
+                    if (!string.IsNullOrEmpty(project.Investor))
+                    {
+                        existingProject.Investor = project.Investor;
+                    }
+                    if (!string.IsNullOrEmpty(project.GeneralContractor))
+                    {
+                        existingProject.GeneralContractor = project.GeneralContractor;
+                    }
+                    if (!string.IsNullOrEmpty(project.DesignUnit))
+                    {
+                        existingProject.DesignUnit = project.DesignUnit;
+                    }
+                    if (!string.IsNullOrEmpty(project.TotalArea))
+                    {
+                        existingProject.TotalArea = project.TotalArea;
+                    }
+                    if (!string.IsNullOrEmpty(project.Scale))
+                    {
+                        existingProject.Scale = project.Scale;
+                    }
+                    if (!string.IsNullOrEmpty(project.BuildingDensity))
+                    {
+                        existingProject.BuildingDensity = project.BuildingDensity;
+                    }
+                    if (!string.IsNullOrEmpty(project.TotalNumberOfApartment))
+                    {
+                        existingProject.TotalNumberOfApartment = project.TotalNumberOfApartment;
+                    }
+                    if (!string.IsNullOrEmpty(project.LegalStatus))
+                    {
+                        existingProject.LegalStatus = project.LegalStatus;
+                    }
+                    if (!string.IsNullOrEmpty(project.HandOver))
+                    {
+                        existingProject.HandOver = project.HandOver;
+                    }
+                    if (!string.IsNullOrEmpty(project.Convenience))
+                    {
+                        existingProject.Convenience = project.Convenience;
+                    }
+
+                    if (imageUrls.Count > 0)
+                    {
+                        existingProject.Image = string.Join(",", imageUrls); 
                     }
                     if (!string.IsNullOrEmpty(project.Status))
                     {
