@@ -21,7 +21,9 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public string? LegalStatus { get; set; }
         public string? HandOver { get; set; }
         public string? Convenience { get; set; }
-        public List<string>? Images { get; set; } 
+        public List<string>? Images { get; set; }
+        public string Status { get; set; }
+
 
     }
 }
