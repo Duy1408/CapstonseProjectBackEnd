@@ -191,42 +191,51 @@ namespace RealEstateProjectSale.Controllers
         {
             try
             {
-                var containerInstance = _blobServiceClient.GetBlobContainerClient("realestateprojectpictures");
-                string? blobUrl = null;
-                if (pro.Image != null)
+                var containerInstance = _blobServiceClient.GetBlobContainerClient("realestateimage");
+                var imageUrls = new List<string>(); // List to hold URLs of all images
+                if (pro.Images != null && pro.Images.Count > 0)
                 {
-                    var blobName = $"{Guid.NewGuid()}_{pro.Image.FileName}";
-                    var blobInstance = containerInstance.GetBlobClient(blobName);
-                    blobInstance.Upload(pro.Image.OpenReadStream());
-                    var storageAccountUrl = "https://realestateprojectimage.blob.core.windows.net/realestateprojectpictures";
-                    blobUrl = $"{storageAccountUrl}/{blobName}";
+
+                    foreach (var image in pro.Images)
+                    {
+                        var blobName = $"{Guid.NewGuid()}_{image.FileName}";
+                        var blobInstance = containerInstance.GetBlobClient(blobName);
+                        blobInstance.Upload(image.OpenReadStream());
+                        var storageAccountUrl = "https://realestatesystem.blob.core.windows.net/realestateimage";
+                        var blobUrl = $"{storageAccountUrl}/{blobName}";
+                        imageUrls.Add(blobUrl); // Add each image URL to the list
+                    }
+                    //var blobName = $"{Guid.NewGuid()}_{pro.Image.FileName}";
+                    //var blobInstance = containerInstance.GetBlobClient(blobName);
+                    //blobInstance.Upload(pro.Image.OpenReadStream());
+                    //var storageAccountUrl = "https://realestateprojectimage.blob.core.windows.net/realestateprojectpictures";
+                    //blobUrl = $"{storageAccountUrl}/{blobName}";
                 }
 
                 var newPro = new ProjectCreateDTO
                 {
                     ProjectID = Guid.NewGuid(),
                     ProjectName = pro.ProjectName,
-                    CommericalName = pro.CommericalName,
-                    ShortName = pro.ShortName,
-                    TypeOfProject = pro.TypeOfProject,
-                    Address = pro.Address,
-                    Commune = pro.Commune,
-                    District = pro.District,
-                    DepositPrice = pro.DepositPrice,
-                    Summary = pro.Summary,
-                    LicenseNo = pro.LicenseNo,
-                    DateOfIssue = pro.DateOfIssue,
-                    CampusArea = pro.CampusArea,
-                    PlaceofIssue = pro.PlaceofIssue,
-                    Code = pro.Code,
+                    Location = pro.Location,
+                    Investor = pro.Investor,
+                    GeneralContractor = pro.GeneralContractor,
+                    DesignUnit = pro.DesignUnit,
+                    TotalArea = pro.TotalArea,
+                    Scale = pro.Scale,
+                    BuildingDensity = pro.BuildingDensity,  
+                    TotalNumberOfApartment = pro.TotalNumberOfApartment,
+                    LegalStatus = pro.LegalStatus,
+                    HandOver =pro.HandOver,
+                    Convenience =pro.Convenience,
                     Status = ProjectStatus.NotForSale.ToString(),
-                    Image = pro.Image
-
+                    Images = pro.Images.Count > 0 ? pro.Images.First() : null, // Store first image for reference
                 };
 
 
                 var project = _mapper.Map<Project>(newPro);
-                project.Image = blobUrl;
+                //project.Image = blobUrl;
+                project.Image = string.Join(",", imageUrls); // Store all image URLs as a comma-separated string
+
                 _project.AddNew(project);
 
                 return Ok("Create Project Successfully");
