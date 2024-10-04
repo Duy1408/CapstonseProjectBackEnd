@@ -14,11 +14,12 @@ using RealEstateProjectSaleBusinessObject.Enums;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 using RealEstateProjectSaleServices.Services;
+using Swashbuckle.AspNetCore.Annotations;
 using static System.Reflection.Metadata.BlobBuilder;
 
 namespace RealEstateProjectSale.Controllers.BookingController
 {
-    [Route("api/[controller]")]
+    [Route("api/bookings")]
     [ApiController]
     public class BookingsController : ControllerBase
     {
@@ -32,7 +33,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
         }
 
         [HttpGet]
-        [Route("GetAllBooking")]
+        [SwaggerOperation(Summary = "GetAllBooking")]
         public IActionResult GetAllBooking()
         {
             try
@@ -52,8 +53,8 @@ namespace RealEstateProjectSale.Controllers.BookingController
             }
         }
 
-        [HttpGet]
-        [Route("GetBookingByBooked")]
+        [HttpGet("booked")]
+        [SwaggerOperation(Summary = "Get bookings by status 'Booked'")]
         public IActionResult GetBookingByBooked()
         {
             try
@@ -73,8 +74,8 @@ namespace RealEstateProjectSale.Controllers.BookingController
             }
         }
 
-        [HttpGet]
-        [Route("GetBookingByCheckedIn")]
+        [HttpGet("checked-in")]
+        [SwaggerOperation(Summary = "Get bookings by status 'Checked In'")]
         public IActionResult GetBookingByCheckedIn()
         {
             try
@@ -94,7 +95,8 @@ namespace RealEstateProjectSale.Controllers.BookingController
             }
         }
 
-        [HttpGet("GetBookingByID/{id}")]
+        [HttpGet("{id}")]
+        [SwaggerOperation(Summary = "Get Booking By ID")]
         public IActionResult GetBookingByID(Guid id)
         {
             var book = _book.GetBookingById(id);
@@ -111,7 +113,8 @@ namespace RealEstateProjectSale.Controllers.BookingController
         }
 
         // GET: api/Bookings/5
-        [HttpGet("GetBookingByDepositedTimed/{numberOfBookings}")]
+        [HttpGet("deposits/{numberOfBookings}")]
+        [SwaggerOperation(Summary = "Get booking by deposit times")]
         public ActionResult<Booking> GetBookingByDepositedTimed(int numberOfBookings)
         {
             if (_book.GetBookings() == null)
@@ -133,7 +136,8 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
         }
 
-        [HttpGet("GetBookingByRandom/{numberBooking}")]
+        [HttpGet("random/{numberBooking}")]
+        [SwaggerOperation(Summary = "Get random bookings")]
         public ActionResult<Booking> GetBookingByRandom(int numberBooking)
         {
             if (_book.GetBookings() == null)
@@ -156,9 +160,8 @@ namespace RealEstateProjectSale.Controllers.BookingController
         }
 
 
-        // PUT: api/Bookings/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("UpdateBooking/{id}")]
+        [HttpPut("{id}")]
+        [SwaggerOperation(Summary = "Update booking by ID")]
         public IActionResult UpdateBooking([FromForm] BookingUpdateDTO book, Guid id)
         {
             try
@@ -215,7 +218,8 @@ namespace RealEstateProjectSale.Controllers.BookingController
             }
         }
 
-        [HttpPut("UpdateBooking/CustomerCheckedInBooking/{id}")]
+        [HttpPut("{id}/check-in")]
+        [SwaggerOperation(Summary = "Mark customer as checked in")]
         public IActionResult CustomerCheckedInBooking(Guid id)
         {
             try
@@ -240,10 +244,8 @@ namespace RealEstateProjectSale.Controllers.BookingController
             }
         }
 
-        // POST: api/Bookings
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [Route("AddNewBooking")]
+        [SwaggerOperation(Summary = "Create a new booking")]
         public ActionResult<Booking> AddNew(Guid openingForSaleID,
                     Guid projectID, Guid customerID)
         {

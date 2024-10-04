@@ -24,7 +24,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace RealEstateProjectSale.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/projects")]
     [ApiController]
     public class ProjectsController : ControllerBase
     {
@@ -44,10 +44,8 @@ namespace RealEstateProjectSale.Controllers
         }
         // GET: api/Projects
         [HttpGet]
-        [SwaggerOperation(Summary = "GetAllProjects")]
-
-
-        public IActionResult GetProjects()
+        [SwaggerOperation(Summary = "Get All Project")]
+        public IActionResult GetAllProject()
         {
             try
             {
@@ -86,11 +84,10 @@ namespace RealEstateProjectSale.Controllers
 
 
         }
-       
+
         // GET: api/Projects/5
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "GetProjectByID")]
-
         public IActionResult GetProjectByID(Guid id)
         {
             try
@@ -135,10 +132,9 @@ namespace RealEstateProjectSale.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "UpdateProject")]
-
         public IActionResult UpdateProject([FromForm] ProjectUpdateDTO project, Guid id)
         {
-          try
+            try
             {
                 var containerInstance = _blobServiceClient.GetBlobContainerClient("realestateimage");
                 var imageUrls = new List<string>(); // List to hold URLs of all images
@@ -211,7 +207,7 @@ namespace RealEstateProjectSale.Controllers
 
                     if (imageUrls.Count > 0)
                     {
-                        existingProject.Image = string.Join(",", imageUrls); 
+                        existingProject.Image = string.Join(",", imageUrls);
                     }
                     if (!string.IsNullOrEmpty(project.Status))
                     {
@@ -240,7 +236,6 @@ namespace RealEstateProjectSale.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [SwaggerOperation(Summary = "AddNewProject")]
-
         public IActionResult AddNew([FromForm] ProjectRequestDTO pro)
         {
             try
@@ -276,11 +271,11 @@ namespace RealEstateProjectSale.Controllers
                     DesignUnit = pro.DesignUnit,
                     TotalArea = pro.TotalArea,
                     Scale = pro.Scale,
-                    BuildingDensity = pro.BuildingDensity,  
+                    BuildingDensity = pro.BuildingDensity,
                     TotalNumberOfApartment = pro.TotalNumberOfApartment,
                     LegalStatus = pro.LegalStatus,
-                    HandOver =pro.HandOver,
-                    Convenience =pro.Convenience,
+                    HandOver = pro.HandOver,
+                    Convenience = pro.Convenience,
                     Status = ProjectStatus.NotForSale.ToString(),
                     Images = pro.Images.Count > 0 ? pro.Images.First() : null, // Store first image for reference
                 };
@@ -303,7 +298,6 @@ namespace RealEstateProjectSale.Controllers
         // DELETE: api/Projects/5
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "DeleteProject")]
-
         public IActionResult DeleteProject(Guid id)
         {
             if (_project.GetProjectById(id) == null)
