@@ -17,7 +17,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace RealEstateProjectSale.Controllers.CommentController
 {
-    [Route("api/[controller]")]
+    [Route("api/comments")]
     [ApiController]
     public class CommentsController : ControllerBase
     {
@@ -30,11 +30,10 @@ namespace RealEstateProjectSale.Controllers.CommentController
             _mapper = mapper;
         }
 
-        [SwaggerOperation(Summary = "Lấy tất cả các bình luận", Description = "API này lấy tất cả các bình luận từ cơ sở dữ liệu.")]
+        [HttpGet]
+        [SwaggerOperation(Summary = "Get All Comment", Description = "API này lấy tất cả các bình luận từ cơ sở dữ liệu.")]
         [SwaggerResponse(200, "Trả về danh sách các bình luận", typeof(List<CommentVM>))]
         [SwaggerResponse(500, "Nếu có lỗi từ phía máy chủ")]
-        [HttpGet]
-        [Route("GetAllComment")]
         public IActionResult GetAllComment()
         {
             try
@@ -54,7 +53,8 @@ namespace RealEstateProjectSale.Controllers.CommentController
             }
         }
 
-        [HttpGet("GetCommentByID/{id}")]
+        [HttpGet("{id}")]
+        [SwaggerOperation(Summary = "Get comment by ID")]
         public IActionResult GetCommentByID(Guid id)
         {
             var cmt = _cmt.GetCommentById(id);
@@ -70,7 +70,8 @@ namespace RealEstateProjectSale.Controllers.CommentController
 
         }
 
-        [HttpGet("GetCommentByPropertyID/{id}")]
+        [HttpGet("property/{propertyId}")]
+        [SwaggerOperation(Summary = "Get comments by property ID")]
         public IActionResult GetCommentByPropertyID(Guid id)
         {
             var cmt = _cmt.GetCommentByPropertyID(id);
@@ -86,8 +87,8 @@ namespace RealEstateProjectSale.Controllers.CommentController
 
         }
 
-        [HttpGet]
-        [Route("SearchCommentByContent")]
+        [HttpGet("search")]
+        [SwaggerOperation(Summary = "Search comments by content")]
         public ActionResult<Comment> SearchCommentByContent(string searchValue)
         {
             if (_cmt.GetComments() == null)
@@ -107,7 +108,7 @@ namespace RealEstateProjectSale.Controllers.CommentController
         }
 
         [HttpPost]
-        [Route("AddNewComment")]
+        [SwaggerOperation(Summary = "Create a new comment")]
         public IActionResult AddNew(CommentCreateDTO cmt)
         {
             try
@@ -135,7 +136,8 @@ namespace RealEstateProjectSale.Controllers.CommentController
             }
         }
 
-        [HttpPut("UpdateComment/{id}")]
+        [HttpPut("{id}")]
+        [SwaggerOperation(Summary = "Update comment by ID")]
         public IActionResult UpdateComment([FromForm] CommentUpdateDTO cmt, Guid id)
         {
             try
@@ -169,7 +171,8 @@ namespace RealEstateProjectSale.Controllers.CommentController
             }
         }
 
-        [HttpDelete("DeleteComment/{id}")]
+        [HttpDelete("{id}")]
+        [SwaggerOperation(Summary = "Delete comment by ID")]
         public IActionResult DeleteComment(Guid id)
         {
             if (_cmt.GetCommentById(id) == null)

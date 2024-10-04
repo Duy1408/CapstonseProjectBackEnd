@@ -27,7 +27,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
         }
 
         [HttpGet]
-        [SwaggerOperation(Summary = "GetAllAccount")]
+        [SwaggerOperation(Summary = "Get All Account")]
         public IActionResult GetAllAccount()
         {
             try
