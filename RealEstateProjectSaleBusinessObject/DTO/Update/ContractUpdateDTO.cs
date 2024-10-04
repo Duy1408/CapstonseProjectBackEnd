@@ -10,6 +10,7 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Update
 {
     public class ContractUpdateDTO
     {
+        public string? ContractCode { get; set; }
         public string? ContractName { get; set; }
         public string? ContractType { get; set; }
         public DateTime? ExpiredTime { get; set; }
@@ -17,6 +18,9 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Update
         public string? Description { get; set; }
         public IFormFile? ContractFile { get; set; }
         public string? Status { get; set; }
+        public Guid? DocumentID { get; set; }
+        public Guid? PaymentProcessID { get; set; }
+
 
     }
 }

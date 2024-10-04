@@ -92,5 +92,12 @@ namespace RealEstateProjectSaleDAO.DAOs
             }
         }
 
+        public Contract GetLastContract()
+        {
+            return _context.Contracts
+                           .OrderByDescending(c => c.CreatedTime)
+                           .FirstOrDefault();
+        }
+
     }
 }

@@ -28,7 +28,11 @@ namespace RealEstateProjectSale.Mapper
             CreateMap<CustomerUpdateDTO, Customer>().ReverseMap();
 
             CreateMap<ContractVM, Contract>().ReverseMap().ForMember(dest => dest.PaymentProcessName,
-                                       opt => opt.MapFrom(src => src.PaymentProcess!.PaymentProcessName));
+                                       opt => opt.MapFrom(src => src.PaymentProcess!.PaymentProcessName))
+                                                          .ForMember(dest => dest.DocumentName,
+                                       opt => opt.MapFrom(src => src.DocumentTemplate!.DocumentName))
+                                                          .ForMember(dest => dest.CustomerID,
+                                       opt => opt.MapFrom(src => src.Booking!.CustomerID));
             CreateMap<ContractCreateDTO, Contract>().ReverseMap();
             CreateMap<ContractUpdateDTO, Contract>().ReverseMap();
 
@@ -58,17 +62,17 @@ namespace RealEstateProjectSale.Mapper
                                      opt => opt.MapFrom(src => src.Project!.ProjectName));
             CreateMap<SalepolicyCreateDTO, Salespolicy>().ReverseMap();
             CreateMap<SalePolicyUpdateDTO, Salespolicy>().ReverseMap();
-            //bug
-            //CreateMap<BookingVM, Booking>().ReverseMap().ForMember(dest => dest.PropertyName,
-            //                           opt => opt.MapFrom(src => src.Property!.PropertyName))
-            //                                            .ForMember(dest => dest.DescriptionName,
-            //                           opt => opt.MapFrom(src => src.OpeningForSale!.DescriptionName))
-            //                                            .ForMember(dest => dest.ProjectName,
-            //                           opt => opt.MapFrom(src => src.Project!.ProjectName))
-            //                                            .ForMember(dest => dest.PersonalEmailCs,
-            //                           opt => opt.MapFrom(src => src.Customer!.PersonalEmail))
-            //                                            .ForMember(dest => dest.PersonalEmailSt,
-            //                           opt => opt.MapFrom(src => src.Staff!.PersonalEmail));
+
+            CreateMap<BookingVM, Booking>().ReverseMap().ForMember(dest => dest.DocumentName,
+                                       opt => opt.MapFrom(src => src.DocumentTemplate!.DocumentName))
+                                                        .ForMember(dest => dest.DecisionName,
+                                       opt => opt.MapFrom(src => src.OpeningForSale!.DecisionName))
+                                                        .ForMember(dest => dest.PropertyCategoryName,
+                                       opt => opt.MapFrom(src => src.PropertyCategory!.PropertyCategoryName))
+                                                        .ForMember(dest => dest.CustomerName,
+                                       opt => opt.MapFrom(src => src.Customer!.FullName))
+                                                        .ForMember(dest => dest.StaffName,
+                                       opt => opt.MapFrom(src => src.Staff!.Name));
             CreateMap<BookingCreateDTO, Booking>().ReverseMap();
             CreateMap<BookingUpdateDTO, Booking>().ReverseMap();
             //bug
