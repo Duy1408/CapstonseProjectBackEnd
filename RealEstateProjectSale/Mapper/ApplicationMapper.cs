@@ -47,11 +47,11 @@ namespace RealEstateProjectSale.Mapper
             CreateMap<ProjectVM, Project>().ReverseMap();
             CreateMap<ProjectCreateDTO, Project>().ReverseMap();
             CreateMap<ProjectUpdateDTO, Project>().ReverseMap();
-            //bug
-            //CreateMap<CommentVM, Comment>().ReverseMap().ForMember(dest => dest.PropertyName,
-            //                           opt => opt.MapFrom(src => src.Property!.PropertyName))
-            //                                            .ForMember(dest => dest.PersonalEmail,
-            //                           opt => opt.MapFrom(src => src.Customer!.PersonalEmail));
+
+            CreateMap<CommentVM, Comment>().ReverseMap().ForMember(dest => dest.PropertyName,
+                                       opt => opt.MapFrom(src => src.Property!.PropertyCode))
+                                                        .ForMember(dest => dest.PersonalEmail,
+                                       opt => opt.MapFrom(src => src.Customer!.FullName));
             CreateMap<CommentCreateDTO, Comment>().ReverseMap();
 
             CreateMap<SalepolicyVM, Salespolicy>().ReverseMap().ForMember(dest => dest.ProjectName,
