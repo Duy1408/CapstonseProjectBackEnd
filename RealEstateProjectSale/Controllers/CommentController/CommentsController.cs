@@ -72,9 +72,9 @@ namespace RealEstateProjectSale.Controllers.CommentController
 
         [HttpGet("property/{propertyId}")]
         [SwaggerOperation(Summary = "Get comments by property ID")]
-        public IActionResult GetCommentByPropertyID(Guid id)
+        public IActionResult GetCommentByPropertyID(Guid propertyId)
         {
-            var cmt = _cmt.GetCommentByPropertyID(id);
+            var cmt = _cmt.GetCommentByPropertyID(propertyId);
 
             if (cmt != null)
             {
@@ -97,7 +97,7 @@ namespace RealEstateProjectSale.Controllers.CommentController
             }
             var cmt = _cmt.SearchComment(searchValue);
 
-            if (cmt == null)
+            if (cmt == null || !cmt.Any())
             {
                 return NotFound("Don't have this comment ");
             }
