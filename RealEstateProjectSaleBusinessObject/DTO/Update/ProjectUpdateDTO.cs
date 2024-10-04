@@ -9,8 +9,8 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Update
 {
     public class ProjectUpdateDTO
     {
-        public string ProjectName { get; set; }
-        public string Location { get; set; }
+        public string? ProjectName { get; set; }
+        public string? Location { get; set; }
         public string? Investor { get; set; }
         public string? GeneralContractor { get; set; }
         public string? DesignUnit { get; set; }
@@ -22,7 +22,7 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Update
         public string? HandOver { get; set; }
         public string? Convenience { get; set; }
         public IFormFileCollection? Images { get; set; }
-        public string Status { get; set; }
+        public string? Status { get; set; }
 
 
 

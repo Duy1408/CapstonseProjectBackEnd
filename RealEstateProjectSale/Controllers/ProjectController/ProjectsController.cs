@@ -20,6 +20,7 @@ using RealEstateProjectSaleBusinessObject.Enums;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 using RealEstateProjectSaleServices.Services;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace RealEstateProjectSale.Controllers
 {
@@ -43,41 +44,11 @@ namespace RealEstateProjectSale.Controllers
         }
         // GET: api/Projects
         [HttpGet]
-        [Route("GetAllProjects")]
+        [SwaggerOperation(Summary = "GetAllProjects")]
+
 
         public IActionResult GetProjects()
         {
-            //try
-            //{
-            //    if (_project.GetProjects() == null)
-            //    {
-            //        return NotFound();
-            //    }
-            //    var projects = _project.GetProjects();
-            //    var response = _mapper.Map<List<ProjectVM>>(projects);
-            //    return Ok(response);
-            //}
-            //catch (Exception ex)
-            //{
-            //    return BadRequest(ex.Message);
-
-
-            //public Guid ProjectID { get; set; }
-            //public string ProjectName { get; set; }
-            //public string Location { get; set; }
-            //public string? Investor { get; set; }
-            //public string? GeneralContractor { get; set; }
-            //public string? DesignUnit { get; set; }
-            //public string? TotalArea { get; set; }
-            //public string? Scale { get; set; }
-            //public string? BuildingDensity { get; set; }
-            //public string? TotalNumberOfApartment { get; set; }
-            //public string? LegalStatus { get; set; }
-            //public string? HandOver { get; set; }
-            //public string? Convenience { get; set; }
-            //public List<string>? Images { get; set; } 
-
-            //}
             try
             {
                 var projects = _project.GetProjects();
@@ -117,25 +88,54 @@ namespace RealEstateProjectSale.Controllers
         }
        
         // GET: api/Projects/5
-        [HttpGet("GetProjectByID/{id}")]
+        [HttpGet("{id}")]
+        [SwaggerOperation(Summary = "GetProjectByID")]
+
         public IActionResult GetProjectByID(Guid id)
         {
-            var project = _project.GetProjectById(id);
-
-            if (project != null)
+            try
             {
-                var responese = _mapper.Map<ProjectVM>(project);
+                var project = _project.GetProjectById(id);
 
-                return Ok(responese);
+                if (project == null)
+                {
+                    return NotFound();
+                }
+
+                var response = new ProjectVM
+                {
+                    ProjectID = project.ProjectID,
+                    ProjectName = project.ProjectName,
+                    Location = project.Location,
+                    Investor = project.Investor,
+                    GeneralContractor = project.GeneralContractor,
+                    DesignUnit = project.DesignUnit,
+                    TotalArea = project.TotalArea,
+                    Scale = project.Scale,
+                    BuildingDensity = project.BuildingDensity,
+                    TotalNumberOfApartment = project.TotalNumberOfApartment,
+                    LegalStatus = project.LegalStatus,
+                    HandOver = project.HandOver,
+                    Convenience = project.Convenience,
+                    Images = project.Image?.Split(',').ToList() ?? new List<string>(),
+                    Status = project.Status,
+                };
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
 
-            return NotFound();
 
         }
 
         // PUT: api/Projects/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("UpdateProject/{id}")]
+        [HttpPut("{id}")]
+        [SwaggerOperation(Summary = "UpdateProject")]
+
         public IActionResult UpdateProject([FromForm] ProjectUpdateDTO project, Guid id)
         {
           try
@@ -239,7 +239,8 @@ namespace RealEstateProjectSale.Controllers
         // POST: api/Projects
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [Route("AddNewProject")]
+        [SwaggerOperation(Summary = "AddNewProject")]
+
         public IActionResult AddNew([FromForm] ProjectRequestDTO pro)
         {
             try
@@ -300,7 +301,9 @@ namespace RealEstateProjectSale.Controllers
         }
 
         // DELETE: api/Projects/5
-        [HttpDelete("DeleteProject/{id}")]
+        [HttpDelete("{id}")]
+        [SwaggerOperation(Summary = "DeleteProject")]
+
         public IActionResult DeleteProject(Guid id)
         {
             if (_project.GetProjectById(id) == null)
