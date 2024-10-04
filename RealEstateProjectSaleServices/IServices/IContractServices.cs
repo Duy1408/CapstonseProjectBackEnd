@@ -14,5 +14,6 @@ namespace RealEstateProjectSaleServices.IServices
         Contract GetContractByID(Guid id);
         void UpdateContract(Contract contract);
         bool ChangeStatusContract(Contract contract);
+        Contract GetLastContract();
     }
 }

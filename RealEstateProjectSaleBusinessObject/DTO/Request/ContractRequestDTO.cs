@@ -13,11 +13,12 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Request
         public string ContractName { get; set; }
         public string ContractType { get; set; }
         public DateTime? ExpiredTime { get; set; }
-        public double TotalPrice { get; set; }
+        public double? TotalPrice { get; set; }
         public string? Description { get; set; }
         public IFormFile? ContractFile { get; set; }
-        public string Status { get; set; }
+        public Guid? DocumentID { get; set; }
         public Guid BookingID { get; set; }
-        public Guid PaymentProcessID { get; set; }
+        public Guid? PaymentProcessID { get; set; }
+
     }
 }

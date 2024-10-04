@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -10,26 +11,29 @@ using RealEstateProjectSaleBusinessObject.Enums;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 using RealEstateProjectSaleServices.Services;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace RealEstateProjectSale.Controllers.ContractController
 {
-    [Route("api/[controller]")]
+    [Route("api/contracts")]
     [ApiController]
     public class ContractController : ControllerBase
     {
         private readonly IContractServices _contractServices;
         private readonly IBookingServices _bookServices;
+        private readonly BlobServiceClient _blobServiceClient;
         private readonly IMapper _mapper;
 
-        public ContractController(IContractServices contractServices, IBookingServices bookServices, IMapper mapper)
+        public ContractController(IContractServices contractServices, IBookingServices bookServices, BlobServiceClient blobServiceClient, IMapper mapper)
         {
             _contractServices = contractServices;
             _bookServices = bookServices;
+            _blobServiceClient = blobServiceClient;
             _mapper = mapper;
         }
 
         [HttpGet]
-        [Route("GetAllContract")]
+        [SwaggerOperation(Summary = "Get All Contract")]
         public IActionResult GetAllContract()
         {
             try
@@ -49,7 +53,8 @@ namespace RealEstateProjectSale.Controllers.ContractController
             }
         }
 
-        [HttpGet("GetContractByID/{id}")]
+        [HttpGet("{id}")]
+        [SwaggerOperation(Summary = "Get Contract By ID")]
         public IActionResult GetContractByID(Guid id)
         {
             var contract = _contractServices.GetContractByID(id);
@@ -66,25 +71,28 @@ namespace RealEstateProjectSale.Controllers.ContractController
         }
 
         [HttpPost]
-        [Route("AddNewComment")]
+        [SwaggerOperation(Summary = "Create a new Contract")]
         public IActionResult AddNewContract([FromForm] ContractRequestDTO contract)
         {
             try
             {
-                // Chuyển đổi IFormFile sang byte[]
-                byte[]? contractFileBytes = null;
+                var containerInstance = _blobServiceClient.GetBlobContainerClient("realestatefile");
+                string? blobUrl = null;
                 if (contract.ContractFile != null)
                 {
-                    using (var ms = new MemoryStream())
-                    {
-                        contract.ContractFile.CopyTo(ms);
-                        contractFileBytes = ms.ToArray();
-                    }
+                    var blobName = $"{Guid.NewGuid()}_{contract.ContractFile.FileName}";
+                    var blobInstance = containerInstance.GetBlobClient(blobName);
+                    blobInstance.Upload(contract.ContractFile.OpenReadStream());
+                    var storageAccountUrl = "https://realestatesystem.blob.core.windows.net/realestatefile";
+                    blobUrl = $"{storageAccountUrl}/{blobName}";
                 }
+
+                string nextContractCode = GenerateNextContractCode();
 
                 var newContract = new ContractCreateDTO
                 {
                     ContractID = Guid.NewGuid(),
+                    ContractCode = nextContractCode,
                     ContractName = contract.ContractName,
                     ContractType = contract.ContractType,
                     CreatedTime = DateTime.Now,
@@ -93,14 +101,16 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     ExpiredTime = contract.ExpiredTime,
                     TotalPrice = contract.TotalPrice,
                     Description = contract.Description,
-                    ContractFile = contractFileBytes,
+                    ContractFile = contract.ContractFile,
                     Status = ContractStatus.NotSigned.ToString(),
+                    DocumentID = contract.DocumentID,
                     BookingID = contract.BookingID,
                     PaymentProcessID = contract.PaymentProcessID,
 
                 };
 
                 var _contract = _mapper.Map<Contract>(newContract);
+                _contract.ContractFile = blobUrl;
                 _contractServices.AddNewContract(_contract);
 
                 return Ok("Create Contract Successfully");
@@ -111,25 +121,30 @@ namespace RealEstateProjectSale.Controllers.ContractController
             }
         }
 
-        [HttpPut("UpdateContract/{id}")]
+        [HttpPut("{id}")]
+        [SwaggerOperation(Summary = "Update Contract by ID")]
         public IActionResult UpdateContract([FromForm] ContractUpdateDTO contract, Guid id)
         {
             try
             {
-                // Chuyển đổi IFormFile sang byte[]
-                byte[]? contractFileBytes = null;
+                var containerInstance = _blobServiceClient.GetBlobContainerClient("realestatefile");
+                string? blobUrl = null;
                 if (contract.ContractFile != null)
                 {
-                    using (var ms = new MemoryStream())
-                    {
-                        contract.ContractFile.CopyTo(ms);
-                        contractFileBytes = ms.ToArray();
-                    }
+                    var blobName = $"{Guid.NewGuid()}_{contract.ContractFile.FileName}";
+                    var blobInstance = containerInstance.GetBlobClient(blobName);
+                    blobInstance.Upload(contract.ContractFile.OpenReadStream());
+                    var storageAccountUrl = "https://realestatesystem.blob.core.windows.net/realestatefile";
+                    blobUrl = $"{storageAccountUrl}/{blobName}";
                 }
 
                 var existingContract = _contractServices.GetContractByID(id);
                 if (existingContract != null)
                 {
+                    if (!string.IsNullOrEmpty(contract.ContractCode))
+                    {
+                        existingContract.ContractCode = contract.ContractCode;
+                    }
                     if (!string.IsNullOrEmpty(contract.ContractName))
                     {
                         existingContract.ContractName = contract.ContractName;
@@ -154,11 +169,18 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     {
                         existingContract.Status = contract.Status;
                     }
-                    //bug
-                    //if (contractFileBytes != null)
-                    //{
-                    //    existingContract.ContractFile = contractFileBytes;
-                    //}
+                    if (contract.DocumentID.HasValue)
+                    {
+                        existingContract.DocumentID = contract.DocumentID.Value;
+                    }
+                    if (contract.PaymentProcessID.HasValue)
+                    {
+                        existingContract.PaymentProcessID = contract.PaymentProcessID.Value;
+                    }
+                    if (blobUrl != null)
+                    {
+                        existingContract.ContractFile = blobUrl;
+                    }
 
                     existingContract.UpdatedTime = DateTime.Now;
                     _contractServices.UpdateContract(existingContract);
@@ -176,7 +198,8 @@ namespace RealEstateProjectSale.Controllers.ContractController
             }
         }
 
-        [HttpPut("UpdateContract/SignedContract/{id}")]
+        [HttpPut("{id}/signed")]
+        [SwaggerOperation(Summary = "Customer Signed Contract by ID")]
         public IActionResult CustomerSignedContract(Guid id)
         {
             try
@@ -219,6 +242,27 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
 
             return Ok("Delete Successfully");
+        }
+
+        private string GenerateNextContractCode()
+        {
+            // Lấy số hợp đồng hiện tại (có thể từ DB hoặc cache)
+            var lastContract = _contractServices.GetLastContract();
+
+            int nextNumber = 1;
+
+            // Nếu có hợp đồng trước đó, lấy số lớn nhất và tăng lên
+            if (lastContract != null)
+            {
+                string lastCode = lastContract.ContractCode.Split('/')[0];  // Lấy phần số trước dấu "/"
+                int.TryParse(lastCode, out nextNumber);
+                nextNumber++;  // Tăng số lên
+            }
+
+            // Định dạng mã hợp đồng, số có 4 chữ số kèm phần định danh "/TTĐC"
+            string nextContractCode = nextNumber.ToString() + "/TTĐC";
+
+            return nextContractCode;
         }
 
 

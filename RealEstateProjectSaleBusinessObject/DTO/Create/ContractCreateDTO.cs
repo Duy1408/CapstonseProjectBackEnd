@@ -12,6 +12,8 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
     {
         [JsonIgnore]
         public Guid ContractID { get; set; }
+        [JsonIgnore]
+        public string ContractCode { get; set; }
         public string ContractName { get; set; }
         public string ContractType { get; set; }
         [JsonIgnore]
@@ -21,11 +23,13 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
         [JsonIgnore]
         public DateTime? DateSigned { get; set; }
         public DateTime? ExpiredTime { get; set; }
-        public double TotalPrice { get; set; }
+        public double? TotalPrice { get; set; }
         public string? Description { get; set; }
-        public byte[]? ContractFile { get; set; }
+        public IFormFile? ContractFile { get; set; }
         public string Status { get; set; }
+        public Guid? DocumentID { get; set; }
         public Guid BookingID { get; set; }
-        public Guid PaymentProcessID { get; set; }
+        public Guid? PaymentProcessID { get; set; }
+
     }
 }
