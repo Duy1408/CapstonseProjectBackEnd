@@ -4,6 +4,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -24,11 +25,13 @@ namespace RealEstateProjectSale.Controllers.BookingController
     public class BookingsController : ControllerBase
     {
         private readonly IBookingServices _book;
+        private readonly BlobServiceClient _blobServiceClient;
         private readonly IMapper _mapper;
 
-        public BookingsController(IBookingServices book, IMapper mapper)
+        public BookingsController(IBookingServices book, BlobServiceClient blobServiceClient, IMapper mapper)
         {
             _book = book;
+            _blobServiceClient = blobServiceClient;
             _mapper = mapper;
         }
 
@@ -166,25 +169,20 @@ namespace RealEstateProjectSale.Controllers.BookingController
         {
             try
             {
-                // Chuyển đổi IFormFile sang byte[]
-                byte[]? bookFileBytes = null;
+                var containerInstance = _blobServiceClient.GetBlobContainerClient("realestatefile");
+                string? blobUrl = null;
                 if (book.BookingFile != null)
                 {
-                    using (var ms = new MemoryStream())
-                    {
-                        book.BookingFile.CopyTo(ms);
-                        bookFileBytes = ms.ToArray();
-                    }
+                    var blobName = $"{Guid.NewGuid()}_{book.BookingFile.FileName}";
+                    var blobInstance = containerInstance.GetBlobClient(blobName);
+                    blobInstance.Upload(book.BookingFile.OpenReadStream());
+                    var storageAccountUrl = "https://realestatesystem.blob.core.windows.net/realestatefile";
+                    blobUrl = $"{storageAccountUrl}/{blobName}";
                 }
 
                 var existingBook = _book.GetBookingById(id);
                 if (existingBook != null)
                 {
-                    //bug
-                    //if (bookFileBytes != null)
-                    //{
-                    //    existingBook.BookingFile = bookFileBytes;
-                    //}
                     if (!string.IsNullOrEmpty(book.Note))
                     {
                         existingBook.Note = book.Note;
@@ -193,10 +191,10 @@ namespace RealEstateProjectSale.Controllers.BookingController
                     {
                         existingBook.Status = book.Status;
                     }
-                    //if (book.PropertyID.HasValue)
-                    //{
-                    //    existingBook.PropertyID = book.PropertyID.Value;
-                    //}
+                    if (blobUrl != null)
+                    {
+                        existingBook.BookingFile = blobUrl;
+                    }
                     if (book.StaffID.HasValue)
                     {
                         existingBook.StaffID = book.StaffID.Value;
@@ -246,15 +244,14 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new booking")]
-        public ActionResult<Booking> AddNew(Guid openingForSaleID,
-                    Guid projectID, Guid customerID)
+        public ActionResult<Booking> AddNew(Guid openForSaleID,
+                    Guid propertyCategoryID, Guid customerID)
         {
             try
             {
                 var newbook = new BookingCreateDTO
                 {
                     BookingID = Guid.NewGuid(),
-                    ReservationDate = DateTime.Now,
                     DepositedTimed = null,
                     DepositedPrice = null,
                     CreatedTime = DateTime.Now,
@@ -262,11 +259,11 @@ namespace RealEstateProjectSale.Controllers.BookingController
                     BookingFile = null,
                     Note = null,
                     Status = BookingStatus.NotDeposited.ToString(),
-                    PropertyID = null,
-                    OpeningForSaleID = openingForSaleID,
-                    ProjectID = projectID,
                     CustomerID = customerID,
-                    StaffID = null
+                    StaffID = null,
+                    OpenForSaleID = openForSaleID,
+                    PropertyCategoryID = propertyCategoryID,
+                    DocumentID = null
                 };
 
                 var books = _mapper.Map<Booking>(newbook);

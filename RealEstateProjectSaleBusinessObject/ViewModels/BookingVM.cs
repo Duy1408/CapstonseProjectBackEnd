@@ -18,7 +18,7 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public string Status { get; set; }
         public Guid CustomerID { get; set; }
         public string CustomerName { get; set; }
-        public Guid StaffID { get; set; }
+        public Guid? StaffID { get; set; }
         public string StaffName { get; set; }
         public Guid OpeningForSaleID { get; set; }
         public string DecisionName { get; set; }
