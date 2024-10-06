@@ -9,7 +9,7 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
 {
     public class DocumentTemplate
     {
-        public Guid DocumentID { get; set; }
+        public Guid DocumentTemplateID { get; set; }
         public string  DocumentName { get; set; }
         public string?  DocumentFile { get; set; }
         public List<Contract>? Contracts { get; set; }

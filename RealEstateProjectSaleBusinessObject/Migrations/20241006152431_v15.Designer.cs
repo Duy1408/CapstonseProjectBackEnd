@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
 
@@ -11,9 +12,10 @@ using RealEstateProjectSaleBusinessObject.BusinessObject;
 namespace RealEstateProjectSaleBusinessObject.Migrations
 {
     [DbContext(typeof(RealEstateProjectSaleSystemDBContext))]
-    partial class RealEstateProjectSaleSystemDBContextModelSnapshot : ModelSnapshot
+    [Migration("20241006152431_v15")]
+    partial class v15
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -238,7 +240,7 @@ namespace RealEstateProjectSaleBusinessObject.Migrations
 
                     b.HasIndex("PaymentProcessID");
 
-                    b.ToTable("Contract", (string)null);
+                    b.ToTable("Contact", (string)null);
                 });
 
             modelBuilder.Entity("RealEstateProjectSaleBusinessObject.BusinessObject.ContractPaymentDetail", b =>

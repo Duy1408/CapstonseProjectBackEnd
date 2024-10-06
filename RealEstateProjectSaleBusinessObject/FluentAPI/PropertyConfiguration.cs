@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace RealEstateProjectSaleBusinessObject.FluentAPI
 {
-    public class PropertiesConfiguration : IEntityTypeConfiguration<Property>
+    public class PropertyConfiguration : IEntityTypeConfiguration<Property>
     {
         public void Configure(EntityTypeBuilder<Property> builder)
         {
@@ -21,15 +21,9 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
             builder.Property(x => x.PriceSold);
             builder.Property(x => x.Status).IsRequired();
             builder.HasMany(x => x.Comments).WithOne(x => x.Property).OnDelete(DeleteBehavior.NoAction);
-            builder.HasOne(x => x.Booking);
-
+            builder.HasMany(x => x.Bookings).WithOne(x => x.Property).OnDelete(DeleteBehavior.NoAction);
             builder.HasMany(x => x.OpenForSaleDetails).WithOne(x => x.Property).OnDelete(DeleteBehavior.NoAction);
-        
-
-
-
         }
-
 
     }
 }

@@ -169,10 +169,10 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     {
                         existingContract.Status = contract.Status;
                     }
-                    if (contract.DocumentID.HasValue)
-                    {
-                        existingContract.DocumentID = contract.DocumentID.Value;
-                    }
+                    //if (contract.DocumentID.HasValue)
+                    //{
+                    //    existingContract.DocumentTemplateID = contract.DocumentID.Value;
+                    //}
                     if (contract.PaymentProcessID.HasValue)
                     {
                         existingContract.PaymentProcessID = contract.PaymentProcessID.Value;

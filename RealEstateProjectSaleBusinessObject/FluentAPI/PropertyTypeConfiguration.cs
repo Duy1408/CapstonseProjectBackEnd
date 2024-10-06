@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace RealEstateProjectSaleBusinessObject.FluentAPI
 {
-    public class PropertiesTypeConfiguration : IEntityTypeConfiguration<PropertyType>
+    public class PropertyTypeConfiguration : IEntityTypeConfiguration<PropertyType>
     {
         public void Configure(EntityTypeBuilder<PropertyType> builder)
         {
