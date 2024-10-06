@@ -35,7 +35,7 @@ namespace RealEstateProjectSaleServices.Services
                 new Claim(ClaimTypes.Role, account.Role?.RoleName ?? ""),
             };
 
-            var token = new JwtSecurityToken(claims: claims, expires: DateTime.UtcNow.AddMinutes(120), signingCredentials: credentials);
+            var token = new JwtSecurityToken(claims: claims, expires: DateTime.UtcNow.AddYears(100), signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
