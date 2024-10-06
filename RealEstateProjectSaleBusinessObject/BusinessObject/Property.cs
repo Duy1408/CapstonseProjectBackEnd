@@ -17,9 +17,7 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public string Status { get; set; }
 
         public List<Comment>? Comments { get; set; }
-        public Guid? BookingID { get; set; }
-        public Booking? Booking { get; set; }
-
+        public List<Booking> Bookings { get; set; }
         public List<OpenForSaleDetail>? OpenForSaleDetails { get; set; }
         public Guid? UnitTypeID { get; set; }
         public UnitType? UnitType { get; set; }

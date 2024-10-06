@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace RealEstateProjectSaleBusinessObject.FluentAPI
 {
-    public class ContactConfiguration : IEntityTypeConfiguration<Contract>
+    public class ContractConfiguration : IEntityTypeConfiguration<Contract>
     {
         public void Configure(EntityTypeBuilder<Contract> builder)
         {
-            builder.ToTable("Contact");
+            builder.ToTable("Contract");
             builder.HasKey(x => x.ContractID);
             builder.Property(x => x.ContractCode).IsRequired();
             builder.Property(x => x.ContractName).IsRequired();

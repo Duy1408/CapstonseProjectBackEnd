@@ -29,6 +29,11 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public List<PaymentPolicy>? PaymentPolicies { get; set; }
         public List<Salespolicy>? Salespolicies { get; set; }
         public List<OpeningForSale>? OpeningForSales { get; set; }
+        public List<ProjectCategoryDetail> ProjectCategoryDetails { get; set; }
+        public List<UnitType> UnitTypes { get; set; }
+        public List<Booking>  Bookings{ get; set; }
+
+
 
     }
 }

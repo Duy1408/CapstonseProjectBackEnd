@@ -14,7 +14,7 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
         public void Configure(EntityTypeBuilder<DocumentTemplate> builder)
         {
             builder.ToTable("DocumentTemplate");
-            builder.HasKey(x => x.DocumentID);
+            builder.HasKey(x => x.DocumentTemplateID);
             builder.Property(x => x.DocumentName).IsRequired();
             builder.Property(x => x.DocumentFile);
             builder.HasMany(x => x.Contracts).WithOne(x => x.DocumentTemplate).OnDelete(DeleteBehavior.NoAction);

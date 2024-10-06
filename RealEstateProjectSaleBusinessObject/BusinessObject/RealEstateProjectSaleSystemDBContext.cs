@@ -46,6 +46,8 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public virtual DbSet<Role>? Roles { get; set; }
         public virtual DbSet<Salespolicy>? Salespolicies { get; set; }
         public virtual DbSet<Staff>? Staffs { get; set; }
+        public virtual DbSet<ProjectCategoryDetail>? ProjectCategoryDetails { get; set; }
+
 
 
         protected override void OnModelCreating(ModelBuilder builder)

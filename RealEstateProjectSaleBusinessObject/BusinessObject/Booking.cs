@@ -30,9 +30,12 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public OpeningForSale OpeningForSale { get; set; }
         public Guid PropertyCategoryID { get; set; }
         public PropertyCategory? PropertyCategory { get; set; }
-        //public Guid? PropertyID { get; set; }
-        //public Property? Property { get; set; }
-        public Guid? DocumentID { get; set; }
+        public Guid ProjectID { get; set; }
+        public Project Project { get; set; }
+
+        public Guid? PropertyID { get; set; }
+        public Property? Property { get; set; }
+        public Guid? DocumentTemplateID { get; set; }
         public DocumentTemplate? DocumentTemplate { get; set; }
 
 
