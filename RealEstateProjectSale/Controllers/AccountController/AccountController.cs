@@ -88,7 +88,10 @@ namespace RealEstateProjectSale.Controllers.AccountController
                 var _account = _mapper.Map<Account>(newAccount);
                 _accountServices.AddNewAccount(_account);
 
-                return Ok("Create Account Successfully");
+                return Ok(new
+                {
+                    message = "Create Account Successfully"
+                });
             }
             catch (Exception ex)
             {
@@ -126,11 +129,17 @@ namespace RealEstateProjectSale.Controllers.AccountController
 
                     _accountServices.UpdateAccount(existingAccount);
 
-                    return Ok("Update Account Successfully");
+                    return Ok(new
+                    {
+                        message = "Update Account Successfully"
+                    });
 
                 }
 
-                return NotFound("Account not found.");
+                return NotFound(new
+                {
+                    message = "Account not found."
+                });
 
             }
             catch (Exception ex)
@@ -147,13 +156,18 @@ namespace RealEstateProjectSale.Controllers.AccountController
             var account = _accountServices.GetAccountByID(id);
             if (account == null)
             {
-                return NotFound();
+                return NotFound(new
+                {
+                    message = "Account not found."
+                });
             }
 
             _accountServices.ChangeStatusAccount(account);
 
-
-            return Ok("Delete Successfully");
+            return Ok(new
+            {
+                message = "Delete Account Successfully"
+            });
         }
 
     }

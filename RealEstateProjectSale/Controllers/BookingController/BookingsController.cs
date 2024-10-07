@@ -111,7 +111,10 @@ namespace RealEstateProjectSale.Controllers.BookingController
                 return Ok(responese);
             }
 
-            return NotFound();
+            return NotFound(new
+            {
+                message = "Booking not found."
+            });
 
         }
 
@@ -122,13 +125,19 @@ namespace RealEstateProjectSale.Controllers.BookingController
         {
             if (_book.GetBookings() == null)
             {
-                return NotFound();
+                return NotFound(new
+                {
+                    message = "Booking not found."
+                });
             }
             var bookingList = _book.GetBookingByDepositedTimed(numberOfBookings);
 
             if (bookingList == null)
             {
-                return NotFound();
+                return NotFound(new
+                {
+                    message = "Booking By DepositedTimed not found."
+                });
             }
 
             var booking = bookingList.FirstOrDefault();
@@ -145,13 +154,19 @@ namespace RealEstateProjectSale.Controllers.BookingController
         {
             if (_book.GetBookings() == null)
             {
-                return NotFound();
+                return NotFound(new
+                {
+                    message = "Booking not found."
+                });
             }
             var bookingList = _book.GetBookingByRandom(numberBooking);
 
             if (bookingList == null)
             {
-                return NotFound();
+                return NotFound(new
+                {
+                    message = "Booking By Random not found."
+                });
             }
 
             var booking = bookingList.FirstOrDefault();
@@ -203,11 +218,17 @@ namespace RealEstateProjectSale.Controllers.BookingController
                     existingBook.UpdatedTime = DateTime.Now;
                     _book.UpdateBooking(existingBook);
 
-                    return Ok("Update Booking Successfully");
+                    return Ok(new
+                    {
+                        message = "Update Booking Successfully"
+                    });
 
                 }
 
-                return NotFound("Booking not found.");
+                return NotFound(new
+                {
+                    message = "Booking not found."
+                });
 
             }
             catch (Exception ex)
@@ -229,11 +250,18 @@ namespace RealEstateProjectSale.Controllers.BookingController
                     book.Status = BookingStatus.CheckedIn.ToString();
 
                     _book.UpdateBooking(book);
-                    return Ok("Customer checked in Successfully");
+
+                    return Ok(new
+                    {
+                        message = "Customer checked in Successfully"
+                    });
 
                 }
 
-                return NotFound("Booking not found.");
+                return NotFound(new
+                {
+                    message = "Booking not found."
+                });
 
             }
             catch (Exception ex)
@@ -269,7 +297,10 @@ namespace RealEstateProjectSale.Controllers.BookingController
                 var books = _mapper.Map<Booking>(newbook);
                 _book.AddNew(books);
 
-                return Ok("Create Booking Successfully");
+                return Ok(new
+                {
+                    message = "Create Booking Successfully"
+                });
             }
             catch (Exception ex)
             {

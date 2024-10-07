@@ -40,7 +40,10 @@ namespace RealEstateProjectSale.Controllers.CommentController
             {
                 if (_cmt.GetComments() == null)
                 {
-                    return NotFound();
+                    return NotFound(new
+                    {
+                        message = "Comment not found."
+                    });
                 }
                 var cmts = _cmt.GetComments();
                 var response = _mapper.Map<List<CommentVM>>(cmts);
@@ -66,7 +69,10 @@ namespace RealEstateProjectSale.Controllers.CommentController
                 return Ok(responese);
             }
 
-            return NotFound();
+            return NotFound(new
+            {
+                message = "Comment not found."
+            });
 
         }
 
@@ -83,7 +89,10 @@ namespace RealEstateProjectSale.Controllers.CommentController
                 return Ok(responese);
             }
 
-            return NotFound();
+            return NotFound(new
+            {
+                message = "Comment not found."
+            });
 
         }
 
@@ -93,13 +102,19 @@ namespace RealEstateProjectSale.Controllers.CommentController
         {
             if (_cmt.GetComments() == null)
             {
-                return NotFound();
+                return NotFound(new
+                {
+                    message = "Comment not found."
+                });
             }
             var cmt = _cmt.SearchComment(searchValue);
 
             if (cmt == null || !cmt.Any())
             {
-                return NotFound("Don't have this comment ");
+                return NotFound(new
+                {
+                    message = "Don't have this comment"
+                });
             }
             var responese = cmt.Select(cmt => _mapper.Map<CommentVM>(cmt)).ToList();
 
@@ -158,11 +173,17 @@ namespace RealEstateProjectSale.Controllers.CommentController
                     existingCmt.UpdateTime = DateTime.Now;
                     _cmt.UpdateComment(existingCmt);
 
-                    return Ok("Update Comment Successfully");
+                    return Ok(new
+                    {
+                        message = "Update Comment Successfully"
+                    });
 
                 }
 
-                return NotFound("Comment not found.");
+                return NotFound(new
+                {
+                    message = "Comment not found."
+                });
 
             }
             catch (Exception ex)
@@ -177,18 +198,26 @@ namespace RealEstateProjectSale.Controllers.CommentController
         {
             if (_cmt.GetCommentById(id) == null)
             {
-                return NotFound();
+                return NotFound(new
+                {
+                    message = "Comment not found."
+                });
             }
             var cmt = _cmt.GetCommentById(id);
             if (cmt == null)
             {
-                return NotFound();
+                return NotFound(new
+                {
+                    message = "Comment not found."
+                });
             }
 
             _cmt.ChangeStatus(cmt);
 
-
-            return Ok("Delete Successfully");
+            return Ok(new
+            {
+                message = "Delete Comment Successfully"
+            });
         }
 
 

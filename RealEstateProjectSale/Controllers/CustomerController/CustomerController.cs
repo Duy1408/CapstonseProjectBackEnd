@@ -80,7 +80,10 @@ namespace RealEstateProjectSale.Controllers.CustomerController
 
                 if (checkEmail != null)
                 {
-                    return BadRequest("Email Existed");
+                    return BadRequest(new
+                    {
+                        message = "Email Existed"
+                    });
                 }
 
                 var roleCustomer = _roleServices.GetRoleByRoleName("Customer");
@@ -119,7 +122,10 @@ namespace RealEstateProjectSale.Controllers.CustomerController
                 var _customer = _mapper.Map<Customer>(customer);
                 _customerServices.AddNewCustomer(_customer);
 
-                return Ok("Create Customer Successfully");
+                return Ok(new
+                {
+                    message = "Create Customer Successfully"
+                });
 
             }
             catch (Exception ex)
@@ -195,11 +201,17 @@ namespace RealEstateProjectSale.Controllers.CustomerController
                     var _customer = _mapper.Map<Customer>(customer);
                     _customerServices.UpdateCustomer(existingCustomer);
 
-                    return Ok("Update Customer Successfully");
+                    return Ok(new
+                    {
+                        message = "Update Customer Successfully"
+                    });
 
                 }
 
-                return NotFound("Customer not found.");
+                return NotFound(new
+                {
+                    message = "Customer not found."
+                });
 
             }
             catch (Exception ex)
@@ -220,13 +232,19 @@ namespace RealEstateProjectSale.Controllers.CustomerController
             var customer = _customerServices.GetCustomerByID(id);
             if (customer == null)
             {
-                return NotFound();
+                return NotFound(new
+                {
+                    message = "Customer not found."
+                });
             }
 
             _customerServices.ChangeStatusCustomer(customer);
 
 
-            return Ok("Delete Successfully");
+            return Ok(new
+            {
+                message = "Delete Customer Successfully"
+            });
         }
 
     }
