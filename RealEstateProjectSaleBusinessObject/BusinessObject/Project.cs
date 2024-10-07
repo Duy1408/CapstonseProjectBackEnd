@@ -25,7 +25,6 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public string? Image { get; set; }
         public string Status { get; set; }
         public List<Zone> Zones { get; set; }
-        public List<PropertyCategory> PropertyCategories { get; set; }
         public List<PaymentPolicy>? PaymentPolicies { get; set; }
         public List<Salespolicy>? Salespolicies { get; set; }
         public List<OpeningForSale>? OpeningForSales { get; set; }
