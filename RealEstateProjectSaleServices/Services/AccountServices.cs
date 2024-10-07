@@ -21,6 +21,8 @@ namespace RealEstateProjectSaleServices.Services
 
         public bool ChangeStatusAccount(Account account) => _accountRepo.ChangeStatusAccount(account);
 
+        public Account CheckEmailOrPhone(string email) => _accountRepo.CheckEmailOrPhone(email);
+
         public Account CheckLogin(string email, string password) => _accountRepo.CheckLogin(email, password);
 
         public Account GetAccountByID(Guid id) => _accountRepo.GetAccountByID(id);

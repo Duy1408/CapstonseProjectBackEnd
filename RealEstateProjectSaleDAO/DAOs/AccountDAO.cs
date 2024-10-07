@@ -26,6 +26,12 @@ namespace RealEstateProjectSaleDAO.DAOs
 
         }
 
+        public Account CheckEmailOrPhone(string email)
+        {
+            return _context.Accounts.FirstOrDefault(a => a.Email == email
+                                    || _context.Customers.Any(b => b.AccountID == a.AccountID && b.PhoneNumber == email));
+        }
+
         public List<Account> GetAllAccount()
         {
             try
