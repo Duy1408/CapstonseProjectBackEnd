@@ -15,5 +15,6 @@ namespace RealEstateProjectSaleServices.IServices
         void UpdateAccount(Account account);
         bool ChangeStatusAccount(Account account);
         Account CheckLogin(string email, string password);
+        Account CheckEmailOrPhone(string email);
     }
 }

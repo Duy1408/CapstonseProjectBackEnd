@@ -16,6 +16,8 @@ namespace RealEstateProjectSaleRepository.Repository
 
         public bool ChangeStatusAccount(Account account) => dao.ChangeStatusAccount(account);
 
+        public Account CheckEmailOrPhone(string email) => dao.CheckEmailOrPhone(email);
+
         public Account CheckLogin(string email, string password) => dao.CheckLogin(email, password);
 
         public Account GetAccountByID(Guid id) => dao.GetAccountByID(id);

@@ -28,6 +28,16 @@ namespace RealEstateProjectSale.Controllers.AccountController
         {
             try
             {
+                var accountExists = _accountServices.CheckEmailOrPhone(account.EmailOrPhone);
+                if (accountExists == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Email or PhoneNumber doesn't exist"
+                    });
+                }
+
+
                 var checkLogin = _accountServices.CheckLogin(account.EmailOrPhone!, account.Password!);
                 if (checkLogin != null)
                 {
@@ -39,9 +49,9 @@ namespace RealEstateProjectSale.Controllers.AccountController
                     });
 
                 }
-                return NotFound(new
+                return BadRequest(new
                 {
-                    message = " Login Fail",
+                    message = "The password you entered is incorrect"
                 });
             }
             catch (Exception ex)

@@ -76,14 +76,14 @@ namespace RealEstateProjectSale.Controllers.ContractController
         {
             try
             {
-                var containerInstance = _blobServiceClient.GetBlobContainerClient("realestatefile");
+                var containerInstance = _blobServiceClient.GetBlobContainerClient("contractfile");
                 string? blobUrl = null;
                 if (contract.ContractFile != null)
                 {
                     var blobName = $"{Guid.NewGuid()}_{contract.ContractFile.FileName}";
                     var blobInstance = containerInstance.GetBlobClient(blobName);
                     blobInstance.Upload(contract.ContractFile.OpenReadStream());
-                    var storageAccountUrl = "https://realestatesystem.blob.core.windows.net/realestatefile";
+                    var storageAccountUrl = "https://realestatesystem.blob.core.windows.net/contractfile";
                     blobUrl = $"{storageAccountUrl}/{blobName}";
                 }
 
@@ -127,14 +127,14 @@ namespace RealEstateProjectSale.Controllers.ContractController
         {
             try
             {
-                var containerInstance = _blobServiceClient.GetBlobContainerClient("realestatefile");
+                var containerInstance = _blobServiceClient.GetBlobContainerClient("contractfile");
                 string? blobUrl = null;
                 if (contract.ContractFile != null)
                 {
                     var blobName = $"{Guid.NewGuid()}_{contract.ContractFile.FileName}";
                     var blobInstance = containerInstance.GetBlobClient(blobName);
                     blobInstance.Upload(contract.ContractFile.OpenReadStream());
-                    var storageAccountUrl = "https://realestatesystem.blob.core.windows.net/realestatefile";
+                    var storageAccountUrl = "https://realestatesystem.blob.core.windows.net/contractfile";
                     blobUrl = $"{storageAccountUrl}/{blobName}";
                 }
 

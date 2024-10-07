@@ -184,14 +184,14 @@ namespace RealEstateProjectSale.Controllers.BookingController
         {
             try
             {
-                var containerInstance = _blobServiceClient.GetBlobContainerClient("realestatefile");
+                var containerInstance = _blobServiceClient.GetBlobContainerClient("bookingfile");
                 string? blobUrl = null;
                 if (book.BookingFile != null)
                 {
                     var blobName = $"{Guid.NewGuid()}_{book.BookingFile.FileName}";
                     var blobInstance = containerInstance.GetBlobClient(blobName);
                     blobInstance.Upload(book.BookingFile.OpenReadStream());
-                    var storageAccountUrl = "https://realestatesystem.blob.core.windows.net/realestatefile";
+                    var storageAccountUrl = "https://realestatesystem.blob.core.windows.net/bookingfile";
                     blobUrl = $"{storageAccountUrl}/{blobName}";
                 }
 
