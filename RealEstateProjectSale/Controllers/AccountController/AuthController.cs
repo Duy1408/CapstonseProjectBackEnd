@@ -33,7 +33,10 @@ namespace RealEstateProjectSale.Controllers.AccountController
                 {
                     var token = _jWTTokenService.CreateJWTToken(checkLogin);
 
-                    return Ok(token);
+                    return Ok(new
+                    {
+                        token = token
+                    });
 
                 }
                 return NotFound(new
