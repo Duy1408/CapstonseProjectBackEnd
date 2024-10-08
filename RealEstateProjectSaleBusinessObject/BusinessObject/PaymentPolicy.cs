@@ -13,6 +13,7 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public double? PercentEarly { get; set; }
         public int? EarlyDate { get; set; }
         public int? LateDate { get; set; }
+        public bool Status { get; set; }
         public double? PercentLate{ get; set; }
         public Guid ProjectID { get; set; }
         public Project? Project { get; set; }

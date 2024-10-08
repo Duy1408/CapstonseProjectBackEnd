@@ -20,6 +20,8 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
             builder.Property(x => x.EarlyDate);
             builder.Property(x => x.LateDate);
             builder.Property(x => x.PercentLate);
+            builder.Property(x => x.Status);
+
 
         }
     }
