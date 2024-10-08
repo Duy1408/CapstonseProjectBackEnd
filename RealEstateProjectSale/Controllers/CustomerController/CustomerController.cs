@@ -110,7 +110,7 @@ namespace RealEstateProjectSale.Controllers.CustomerController
                     Nationality = accountCustomer.Nationality,
                     PlaceofOrigin = accountCustomer.PlaceofOrigin,
                     PlaceOfResidence = accountCustomer.PlaceOfResidence,
-                    //DateOfIssue = accountCustomer.DateOfIssue,
+                    DateOfIssue = accountCustomer.DateOfIssue,
                     Taxcode = accountCustomer.Taxcode,
                     BankName = accountCustomer.BankName,
                     BankNumber = accountCustomer.BankNumber,

@@ -42,7 +42,8 @@ namespace RealEstateProjectSale.Controllers
             _mapper = mapper;
             _blobServiceClient = blobServiceClient;
         }
-        // GET: api/Projects
+
+
         [HttpGet]
         [SwaggerOperation(Summary = "Get All Project")]
         public IActionResult GetAllProject()
