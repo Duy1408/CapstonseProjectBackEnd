@@ -76,6 +76,8 @@ StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 //Add Storage
 builder.Services.AddMemoryCache();
 
+//Paging
+builder.Services.AddScoped<IPagingServices, PagingServices>();
 
 //Jwt
 builder.Services.AddScoped<IJWTTokenService, JWTTokenService>();

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
@@ -29,16 +30,17 @@ namespace RealEstateProjectSale.Controllers
     public class ProjectsController : ControllerBase
     {
         private readonly IProjectServices _project;
-
+        private readonly IPagingServices _pagingServices;
         private readonly IMapper _mapper;
         private readonly BlobServiceClient _blobServiceClient;
 
+        public static int PAGE_SIZE { get; set; } = 5;
 
 
-
-        public ProjectsController(IProjectServices project, BlobServiceClient blobServiceClient, IMapper mapper)
+        public ProjectsController(IProjectServices project, IPagingServices pagingServices, BlobServiceClient blobServiceClient, IMapper mapper)
         {
             _project = project;
+            _pagingServices = pagingServices;
             _mapper = mapper;
             _blobServiceClient = blobServiceClient;
         }
@@ -46,7 +48,7 @@ namespace RealEstateProjectSale.Controllers
 
         [HttpGet]
         [SwaggerOperation(Summary = "Get All Project")]
-        public IActionResult GetAllProject()
+        public IActionResult GetAllProject([FromQuery] string? projectName, [FromQuery] int page = 1)
         {
             try
             {
@@ -57,7 +59,21 @@ namespace RealEstateProjectSale.Controllers
                     return NotFound();
                 }
 
-                var response = projects.Select(project => new ProjectVM
+                var projectsQuery = string.IsNullOrEmpty(projectName)
+                            ? _project.GetProjects().AsQueryable()
+                            : _project.SearchProject(projectName);
+
+                var pagedProjects = _pagingServices.GetPagedList(projectsQuery, page, PAGE_SIZE);
+
+                if (pagedProjects == null || !pagedProjects.Any())
+                {
+                    return NotFound(new
+                    {
+                        message = "Project not found."
+                    });
+                }
+
+                var response = pagedProjects.Select(project => new ProjectVM
                 {
                     ProjectID = project.ProjectID,
                     ProjectName = project.ProjectName,
@@ -97,7 +113,10 @@ namespace RealEstateProjectSale.Controllers
 
                 if (project == null)
                 {
-                    return NotFound();
+                    return NotFound(new
+                    {
+                        message = "Project not found."
+                    });
                 }
 
                 var response = new ProjectVM
@@ -219,11 +238,17 @@ namespace RealEstateProjectSale.Controllers
 
                     _project.UpdateProject(existingProject);
 
-                    return Ok("Update Project Successfully");
+                    return Ok(new
+                    {
+                        message = "Update Project Successfully"
+                    });
 
                 }
 
-                return NotFound("Project not found.");
+                return NotFound(new
+                {
+                    message = "Project not found."
+                });
 
             }
             catch (Exception ex)
@@ -288,7 +313,10 @@ namespace RealEstateProjectSale.Controllers
 
                 _project.AddNew(project);
 
-                return Ok("Create Project Successfully");
+                return Ok(new
+                {
+                    message = "Create Project Successfully"
+                });
             }
             catch (Exception ex)
             {
@@ -303,18 +331,27 @@ namespace RealEstateProjectSale.Controllers
         {
             if (_project.GetProjectById(id) == null)
             {
-                return NotFound();
+                return NotFound(new
+                {
+                    message = "Project not found."
+                });
             }
             var project = _project.GetProjectById(id);
             if (project == null)
             {
-                return NotFound();
+                return NotFound(new
+                {
+                    message = "Project not found."
+                });
             }
 
             _project.ChangeStatus(project);
 
 
-            return Ok("Delete Successfully");
+            return Ok(new
+            {
+                message = "Delete Project Successfully"
+            });
         }
 
 
