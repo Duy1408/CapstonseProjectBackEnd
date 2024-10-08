@@ -125,7 +125,6 @@ namespace RealEstateProjectSale.Controllers.StaffController
                     PersonalEmail = accountStaff.PersonalEmail,
                     DateOfBirth = accountStaff.DateOfBirth,
                     Image = accountStaff.Image,
-                    Imagesignature = accountStaff.Imagesignature,
                     IdentityCardNumber = accountStaff.IdentityCardNumber,
                     Sex = accountStaff.Sex,
                     Nationality = accountStaff.Nationality,
@@ -140,7 +139,6 @@ namespace RealEstateProjectSale.Controllers.StaffController
 
                 var _staff = _mapper.Map<Staff>(staff);
                 _staff.Image = blobUrl1;
-                _staff.Imagesignature = blobUrl2;
                 _staffServices.AddNewStaff(_staff);
 
                 return Ok("Create Staff Successfully");
@@ -200,14 +198,7 @@ namespace RealEstateProjectSale.Controllers.StaffController
                     blobUrl1 = $"{storageAccountUrl}/{blobName1}";
                 }
 
-                if (staff.Imagesignature != null)
-                {
-                    var blobName2 = $"{Guid.NewGuid()}_{staff.Imagesignature.FileName}";
-                    var blobInstance2 = containerInstance.GetBlobClient(blobName2);
-                    blobInstance2.Upload(staff.Imagesignature.OpenReadStream());
-                    var storageAccountUrl = "https://realestateprojectimage.blob.core.windows.net/realestateprojectpictures";
-                    blobUrl2 = $"{storageAccountUrl}/{blobName2}";
-                }
+             
 
 
 
@@ -231,10 +222,7 @@ namespace RealEstateProjectSale.Controllers.StaffController
                     {
                         _staff.Image = blobUrl1;
                     }
-                    if (blobUrl2 != null)
-                    {
-                        _staff.Imagesignature = blobUrl2;
-                    }
+                
                     if (!string.IsNullOrEmpty(staff.IdentityCardNumber))
                     {
                         _staff.IdentityCardNumber = staff.IdentityCardNumber;

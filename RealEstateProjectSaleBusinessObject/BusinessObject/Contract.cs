@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +15,9 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public string ContractType { get; set; }
         public DateTime CreatedTime { get; set; }
         public DateTime? UpdatedTime { get; set; }
+        [Column(TypeName = "date")]
         public DateTime? DateSigned { get; set; }
+        [Column(TypeName = "date")]
         public DateTime? ExpiredTime { get; set; }
         public double? TotalPrice { get; set; }
         public string? Description { get; set; }

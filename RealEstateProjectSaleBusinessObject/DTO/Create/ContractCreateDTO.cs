@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -21,7 +22,9 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
         [JsonIgnore]
         public DateTime? UpdatedTime { get; set; }
         [JsonIgnore]
+        [Column(TypeName = "date")]
         public DateTime? DateSigned { get; set; }
+        [Column(TypeName = "date")]
         public DateTime? ExpiredTime { get; set; }
         public double? TotalPrice { get; set; }
         public string? Description { get; set; }
