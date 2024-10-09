@@ -156,7 +156,7 @@ namespace RealEstateProjectSale.Controllers
         {
             try
             {
-                var containerInstance = _blobServiceClient.GetBlobContainerClient("realestateimage");
+                var containerInstance = _blobServiceClient.GetBlobContainerClient("projectimage");
                 var imageUrls = new List<string>(); // List to hold URLs of all images
                 if (project.Images != null && project.Images.Count > 0)
                 {
@@ -166,7 +166,7 @@ namespace RealEstateProjectSale.Controllers
                         var blobName = $"{Guid.NewGuid()}_{image.FileName}";
                         var blobInstance = containerInstance.GetBlobClient(blobName);
                         blobInstance.Upload(image.OpenReadStream());
-                        var storageAccountUrl = "https://realestatesystem.blob.core.windows.net/realestateimage";
+                        var storageAccountUrl = "https://realestatesystem.blob.core.windows.net/projectimage";
                         var blobUrl = $"{storageAccountUrl}/{blobName}";
                         imageUrls.Add(blobUrl); // Add each image URL to the list
                     }
@@ -266,7 +266,7 @@ namespace RealEstateProjectSale.Controllers
         {
             try
             {
-                var containerInstance = _blobServiceClient.GetBlobContainerClient("realestateimage");
+                var containerInstance = _blobServiceClient.GetBlobContainerClient("projectimage");
                 var imageUrls = new List<string>(); // List to hold URLs of all images
                 if (pro.Images != null && pro.Images.Count > 0)
                 {
@@ -276,15 +276,11 @@ namespace RealEstateProjectSale.Controllers
                         var blobName = $"{Guid.NewGuid()}_{image.FileName}";
                         var blobInstance = containerInstance.GetBlobClient(blobName);
                         blobInstance.Upload(image.OpenReadStream());
-                        var storageAccountUrl = "https://realestatesystem.blob.core.windows.net/realestateimage";
+                        var storageAccountUrl = "https://realestatesystem.blob.core.windows.net/projectimage";
+
                         var blobUrl = $"{storageAccountUrl}/{blobName}";
                         imageUrls.Add(blobUrl); // Add each image URL to the list
                     }
-                    //var blobName = $"{Guid.NewGuid()}_{pro.Image.FileName}";
-                    //var blobInstance = containerInstance.GetBlobClient(blobName);
-                    //blobInstance.Upload(pro.Image.OpenReadStream());
-                    //var storageAccountUrl = "https://realestateprojectimage.blob.core.windows.net/realestateprojectpictures";
-                    //blobUrl = $"{storageAccountUrl}/{blobName}";
                 }
 
                 var newPro = new ProjectCreateDTO
