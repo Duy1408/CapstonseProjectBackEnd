@@ -29,9 +29,7 @@ namespace RealEstateProjectSaleDAO.DAOs
         public List<Property> GetAllProperty()
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.Properties
-                                    
-                                      .ToList();
+            return _context.Properties.ToList();
         }
 
         public bool AddNew(Property p)
