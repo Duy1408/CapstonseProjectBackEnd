@@ -17,6 +17,7 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
             builder.HasKey(x => x.FloorID);
             builder.Property(x => x.NumFloor).IsRequired();
             builder.Property(x => x.ImageFloor);
+            builder.Property(x => x.Status);
             builder.HasMany(x => x.Properties).WithOne(x => x.Floor).OnDelete(DeleteBehavior.NoAction);
 
         }
