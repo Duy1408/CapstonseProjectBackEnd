@@ -11,7 +11,7 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public Guid ZoneID { get; set; }
         public string ZoneName { get; set; }
         public string? ImageZone { get; set; }
-        public bool? Status { get; set; }
+        public bool Status { get; set; }
 
         public List<Property>? Properties {get;set;}
         public List<Block>? Blocks { get; set; }
