@@ -143,7 +143,10 @@ namespace RealEstateProjectSale.Controllers.CommentController
                 var comment = _mapper.Map<Comment>(newCmt);
                 _cmt.AddNew(comment);
 
-                return Ok("Create Comment Successfully");
+                return Ok(new
+                {
+                    message = "Create Comment Successfully"
+                });
             }
             catch (Exception ex)
             {

@@ -24,6 +24,7 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
         public double? MoneyInterestRate { get; set; }
         public double? MoneyExist { get; set; }
         public string? Description { get; set; }
+        public string? RemittanceOrder { get; set; }
         public Guid ContractID { get; set; }
     }
 }
