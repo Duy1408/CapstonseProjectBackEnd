@@ -9,10 +9,11 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
     public class OpeningForSaleVM
     {
         public Guid OpeningForSaleID { get; set; }
-        public string DescriptionName { get; set; }
-        public DateTime DateStart { get; set; }
-        public DateTime DateEnd { get; set; }
-        public string? ReservationTime { get; set; }
+        public string DecisionName { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public DateTime CheckinDate { get; set; }
+        public string ReservationPrice { get; set; }
         public string? Description { get; set; }
         public bool Status { get; set; }
         public Guid ProjectID { get; set; }
