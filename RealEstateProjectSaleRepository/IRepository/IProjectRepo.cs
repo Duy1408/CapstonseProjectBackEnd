@@ -9,17 +9,11 @@ namespace RealEstateProjectSaleRepository.IRepository
 {
     public interface IProjectRepo
     {
-        public bool ChangeStatus(Project p);
-
-
-        public List<Project> GetProjects();
-        public void AddNew(Project p);
-
-
-        public Project GetProjectById(Guid id);
-
-        public void UpdateProject(Project p);
-
-        public IQueryable<Project> SearchProject(string name);
+        bool ChangeStatus(Project p);
+        List<Project> GetProjects();
+        void AddNew(Project p);
+        Project GetProjectById(Guid id);
+        void UpdateProject(Project p);
+        IQueryable<Project> SearchProject(string name);
     }
 }
