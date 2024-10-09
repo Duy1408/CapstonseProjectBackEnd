@@ -7,10 +7,11 @@ using RealEstateProjectSaleBusinessObject.DTO.Update;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 using RealEstateProjectSaleServices.Services;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
 {
-    [Route("api/[controller]")]
+    [Route("api/open-for-sale-details")]
     [ApiController]
     public class OpenForSaleDetailController : ControllerBase
     {
@@ -24,14 +25,17 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
         }
 
         [HttpGet]
-        [Route("GetAllOpenForSaleDetail")]
+        [SwaggerOperation(Summary = "Get All OpenForSaleDetail")]
         public IActionResult GetAllOpenForSaleDetail()
         {
             try
             {
                 if (_detailServices.GetAllOpenForSaleDetail() == null)
                 {
-                    return NotFound();
+                    return NotFound(new
+                    {
+                        message = "OpenForSaleDetail not found."
+                    });
                 }
                 var details = _detailServices.GetAllOpenForSaleDetail();
                 var response = _mapper.Map<List<OpenForSaleDetailVM>>(details);
@@ -44,7 +48,8 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
             }
         }
 
-        [HttpGet("GetOpenForSaleDetailByID/{id}")]
+        [HttpGet("{id}")]
+        [SwaggerOperation(Summary = "Get OpenForSaleDetail By ID")]
         public IActionResult GetOpenForSaleDetailByID(Guid id)
         {
             var detail = _detailServices.GetOpenForSaleDetailByID(id);
@@ -56,30 +61,34 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
                 return Ok(responese);
             }
 
-            return NotFound();
+            return NotFound(new
+            {
+                message = "OpenForSaleDetail not found."
+            });
 
         }
 
         [HttpPost]
-        [Route("AddNewOpenForSaleDetail")]
+        [SwaggerOperation(Summary = "Create a new OpenForSaleDetail")]
         public IActionResult AddNewOpenForSaleDetail(OpenForSaleDetailCreateDTO detail)
         {
             try
             {
                 var newDetail = new OpenForSaleDetailCreateDTO
                 {
-                    OpenForSaleDetailID = Guid.NewGuid(),
-                    Price = detail.Price,
-                    Discount = detail.Discount,
-                    Note = detail.Note,
                     OpeningForSaleID = detail.OpeningForSaleID,
-                    PropertyID = detail.PropertyID
+                    PropertyID = detail.PropertyID,
+                    Price = detail.Price,
+                    Note = detail.Note
                 };
 
                 var _detail = _mapper.Map<OpenForSaleDetail>(newDetail);
                 _detailServices.AddNewOpenForSaleDetail(_detail);
 
-                return Ok("Create OpenForSaleDetail Successfully");
+                return Ok(new
+                {
+                    message = "Create OpenForSaleDetail Successfully"
+                });
             }
             catch (Exception ex)
             {
@@ -87,7 +96,8 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
             }
         }
 
-        [HttpPut("UpdateOpenForSaleDetail/{id}")]
+        [HttpPut("{id}")]
+        [SwaggerOperation(Summary = "Update OpenForSaleDetail by ID")]
         public IActionResult UpdateOpenForSaleDetail([FromForm] OpenForSaleDetailUpdateDTO detail, Guid id)
         {
             try
@@ -99,11 +109,6 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
                     {
                         existingDetail.Price = detail.Price.Value;
                     }
-                    //bug
-                    //if (detail.Discount.HasValue)
-                    //{
-                    //    existingDetail.Discount = detail.Discount.Value;
-                    //}
                     if (!string.IsNullOrEmpty(detail.Note))
                     {
                         existingDetail.Note = detail.Note;
@@ -111,11 +116,17 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
 
                     _detailServices.UpdateOpenForSaleDetail(existingDetail);
 
-                    return Ok("Update OpenForSaleDetail Successfully");
+                    return Ok(new
+                    {
+                        message = "Create OpenForSaleDetail Successfully"
+                    });
 
                 }
 
-                return NotFound("OpenForSaleDetail not found.");
+                return NotFound(new
+                {
+                    message = "OpenForSaleDetail not found."
+                });
 
             }
             catch (Exception ex)
@@ -124,7 +135,8 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
             }
         }
 
-        [HttpDelete("DeleteOpenForSaleDetail/{id}")]
+        [HttpDelete("{id}")]
+        [SwaggerOperation(Summary = "Delete OpenForSaleDetail by ID")]
         public IActionResult DeleteOpenForSaleDetail(Guid id)
         {
             try
@@ -133,10 +145,16 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
                 if (detail != null)
                 {
                     _detailServices.DeleteOpenForSaleDetailByID(id);
-                    return Ok("Deleted OpenForSaleDetail Successfully");
+                    return Ok(new
+                    {
+                        message = "Delete OpenForSaleDetail Successfully"
+                    });
                 }
 
-                return NotFound();
+                return NotFound(new
+                {
+                    message = "OpenForSaleDetail not found."
+                });
             }
             catch (Exception ex)
             {

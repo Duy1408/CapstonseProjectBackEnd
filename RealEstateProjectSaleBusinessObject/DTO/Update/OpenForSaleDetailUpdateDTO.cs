@@ -10,7 +10,6 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Update
     public class OpenForSaleDetailUpdateDTO
     {
         public double? Price { get; set; }
-        public double? Discount { get; set; }
         public string? Note { get; set; }
     }
 }

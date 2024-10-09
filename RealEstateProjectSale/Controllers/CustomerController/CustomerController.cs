@@ -39,7 +39,10 @@ namespace RealEstateProjectSale.Controllers.CustomerController
             {
                 if (_customerServices.GetAllCustomer() == null)
                 {
-                    return NotFound();
+                    return NotFound(new
+                    {
+                        message = "Customer not found."
+                    });
                 }
                 var customers = _customerServices.GetAllCustomer();
                 var response = _mapper.Map<List<CustomerVM>>(customers);
@@ -65,7 +68,10 @@ namespace RealEstateProjectSale.Controllers.CustomerController
                 return Ok(responese);
             }
 
-            return NotFound();
+            return NotFound(new
+            {
+                message = "Customer not found."
+            });
 
         }
 
@@ -227,7 +233,10 @@ namespace RealEstateProjectSale.Controllers.CustomerController
         {
             if (_customerServices.GetCustomerByID(id) == null)
             {
-                return NotFound();
+                return NotFound(new
+                {
+                    message = "Customer not found."
+                });
             }
             var customer = _customerServices.GetCustomerByID(id);
             if (customer == null)
