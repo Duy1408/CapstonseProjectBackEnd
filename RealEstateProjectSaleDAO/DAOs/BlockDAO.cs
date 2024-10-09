@@ -76,10 +76,10 @@ namespace RealEstateProjectSaleDAO.DAOs
             }
         }
 
-        public bool ChangeStatus(Salespolicy p)
+        public bool ChangeStatus(Block p)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            var a = _context.Salespolicies.FirstOrDefault(c => c.SalesPolicyID.Equals(p.SalesPolicyID));
+            var a = _context.Blocks.FirstOrDefault(c => c.BlockID.Equals(p.BlockID));
 
 
             if (a == null)

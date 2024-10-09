@@ -62,6 +62,8 @@ builder.Services.AddScoped<IRoleRepo, RoleRepo>();
 builder.Services.AddScoped<IRoleServices, RoleServices>();
 builder.Services.AddScoped<IContractPaymentDetailRepo, ContractPaymentDetailRepo>();
 builder.Services.AddScoped<IContractPaymentDetailServices, ContractPaymentDetailServices>();
+builder.Services.AddScoped<IBlockRepo, BlockRepo>();
+builder.Services.AddScoped<IBlockService, BlockService>();
 builder.Services.AddScoped<IPaymentRepo, PaymentRepo>();
 builder.Services.AddScoped<IPaymentServices, PaymentServices>();
 
