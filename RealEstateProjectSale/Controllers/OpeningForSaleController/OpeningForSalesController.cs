@@ -9,13 +9,15 @@ using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
 using RealEstateProjectSaleBusinessObject.DTO.Create;
+using RealEstateProjectSaleBusinessObject.DTO.Request;
 using RealEstateProjectSaleBusinessObject.DTO.Update;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace RealEstateProjectSale.Controllers.OpeningForSaleController
 {
-    [Route("api/[controller]")]
+    [Route("api/open-for-sales")]
     [ApiController]
     public class OpeningForSalesController : ControllerBase
     {
@@ -29,14 +31,17 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
         }
 
         [HttpGet]
-        [Route("GetAllOpeningForSale")]
+        [SwaggerOperation(Summary = "Get All OpeningForSale")]
         public IActionResult GetAllOpeningForSale()
         {
             try
             {
                 if (_open.GetOpeningForSales() == null)
                 {
-                    return NotFound();
+                    return NotFound(new
+                    {
+                        message = "OpeningForSale not found."
+                    });
                 }
                 var opens = _open.GetOpeningForSales();
                 var response = _mapper.Map<List<OpeningForSaleVM>>(opens);
@@ -49,7 +54,8 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
             }
         }
 
-        [HttpGet("GetOpeningForSaleByID/{id}")]
+        [HttpGet("{id}")]
+        [SwaggerOperation(Summary = "Get OpeningForSale By ID")]
         public IActionResult GetOpeningForSaleByID(Guid id)
         {
             var open = _open.GetOpeningForSaleById(id);
@@ -61,11 +67,15 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
                 return Ok(responese);
             }
 
-            return NotFound();
+            return NotFound(new
+            {
+                message = "OpeningForSale not found."
+            });
 
         }
 
-        [HttpGet("GetOpeningForSaleByProjectID/{id}")]
+        [HttpGet("project/{projectId}")]
+        [SwaggerOperation(Summary = "Get OpeningForSale by ProjectID")]
         public IActionResult GetOpeningForSaleByProjectID(Guid id)
         {
             var open = _open.GetPropertyByProjectID(id);
@@ -76,46 +86,68 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
 
                 if (responese.Count == 0)
                 {
-                    return NotFound();
+                    return NotFound(new
+                    {
+                        message = "OpeningForSale not found."
+                    });
                 }
 
                 return Ok(responese);
             }
 
-            return NotFound();
+            return NotFound(new
+            {
+                message = "OpeningForSale not found."
+            });
 
         }
 
-        [HttpGet("SearchOpeningForSaleByName/{descriptionName}")]
-        public ActionResult<OpeningForSale> SearchOpeningForSaleByName(string descriptionName)
+        [HttpGet("search")]
+        [SwaggerOperation(Summary = "Search OpeningForSale by Decision Name")]
+        public ActionResult<OpeningForSale> SearchOpeningForSaleByName(string decisionName)
         {
             if (_open.GetOpeningForSales() == null)
             {
-                return NotFound();
+                return NotFound(new
+                {
+                    message = "OpeningForSale not found."
+                });
             }
-            var open = _open.SearchOpeningForSale(descriptionName);
+            var open = _open.SearchOpeningForSale(decisionName);
 
             if (open == null)
             {
-                return NotFound("Don't have this Property ");
+                return NotFound(new
+                {
+                    message = "OpeningForSale not found."
+                });
             }
 
             return Ok(open);
         }
 
         [HttpPost]
-        [Route("AddNewComment")]
-        public IActionResult AddNew(OpeningForSaleCreateDTO open)
+        [SwaggerOperation(Summary = "Create a new OpeningForSale")]
+        public IActionResult AddNew(OpeningForSaleRequestDTO open)
         {
             try
             {
+                string startDateInput = open.StartDate;
+                string endDateInput = open.EndDate;
+                string checkinDateInput = open.CheckinDate;
+
+                DateTime parsedStartDate = DateTime.ParseExact(startDateInput, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                DateTime parsedEndDate = DateTime.ParseExact(startDateInput, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                DateTime parsedCheckinDate = DateTime.ParseExact(startDateInput, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+
                 var newOpen = new OpeningForSaleCreateDTO
                 {
                     OpeningForSaleID = Guid.NewGuid(),
-                    DescriptionName = open.DescriptionName,
-                    DateStart = open.DateStart,
-                    DateEnd = open.DateEnd,
-                    ReservationTime = open.ReservationTime,
+                    DecisionName = open.DecisionName,
+                    StartDate = parsedStartDate,
+                    EndDate = parsedEndDate,
+                    CheckinDate = parsedCheckinDate,
+                    ReservationPrice = open.ReservationPrice,
                     Description = open.Description,
                     Status = true,
                     ProjectID = open.ProjectID
@@ -124,7 +156,10 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
                 var opening = _mapper.Map<OpeningForSale>(newOpen);
                 _open.AddNew(opening);
 
-                return Ok("Create OpeningForSale Successfully");
+                return Ok(new
+                {
+                    message = "Create OpeningForSale Successfully"
+                });
 
             }
             catch (Exception ex)
@@ -133,31 +168,43 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
             }
         }
 
-        [HttpPut("UpdateComment/{id}")]
+        [HttpPut("{id}")]
+        [SwaggerOperation(Summary = "Update OpeningForSale by ID")]
         public IActionResult UpdateComment([FromForm] OpeningForSaleUpdateDTO open, Guid id)
         {
             try
             {
+                string startDateInput = open.StartDate;
+                string endDateInput = open.EndDate;
+                string checkinDateInput = open.CheckinDate;
+
+                DateTime parsedStartDate = DateTime.ParseExact(startDateInput, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                DateTime parsedEndDate = DateTime.ParseExact(startDateInput, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                DateTime parsedCheckinDate = DateTime.ParseExact(startDateInput, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+
                 var existingOpen = _open.GetOpeningForSaleById(id);
                 if (existingOpen != null)
                 {
-                    if (!string.IsNullOrEmpty(open.DescriptionName))
+                    if (!string.IsNullOrEmpty(open.DecisionName))
                     {
-                        existingOpen.DecisionName = open.DescriptionName;
+                        existingOpen.DecisionName = open.DecisionName;
                     }
-                    //bug
-                    //if (open.DateStart.HasValue)
-                    //{
-                    //    existingOpen.DateStart = open.DateStart.Value;
-                    //}
-                    //if (open.DateEnd.HasValue)
-                    //{
-                    //    existingOpen.DateEnd = open.DateEnd.Value;
-                    //}
-                    //if (!string.IsNullOrEmpty(open.ReservationTime))
-                    //{
-                    //    existingOpen.ReservationTime = open.ReservationTime;
-                    //}
+                    if (!string.IsNullOrEmpty(open.StartDate))
+                    {
+                        existingOpen.StartDate = parsedStartDate;
+                    }
+                    if (!string.IsNullOrEmpty(open.EndDate))
+                    {
+                        existingOpen.EndDate = parsedEndDate;
+                    }
+                    if (!string.IsNullOrEmpty(open.CheckinDate))
+                    {
+                        existingOpen.CheckinDate = parsedCheckinDate;
+                    }
+                    if (!string.IsNullOrEmpty(open.ReservationPrice))
+                    {
+                        existingOpen.ReservationPrice = open.ReservationPrice;
+                    }
                     if (!string.IsNullOrEmpty(open.Description))
                     {
                         existingOpen.Description = open.Description;
@@ -169,11 +216,17 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
 
                     _open.UpdateOpeningForSale(existingOpen);
 
-                    return Ok("Update OpeningForSale Successfully");
+                    return Ok(new
+                    {
+                        message = "OpeningForSale Comment Successfully"
+                    });
 
                 }
 
-                return NotFound("OpeningForSale not found.");
+                return NotFound(new
+                {
+                    message = "OpeningForSale not found."
+                });
             }
             catch (Exception ex)
             {
@@ -181,23 +234,33 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
             }
         }
 
-        [HttpDelete("DeleteOpeningForSale/{id}")]
+        [HttpDelete("{id}")]
+        [SwaggerOperation(Summary = "Delete OpeningForSale by ID")]
         public IActionResult DeleteOpeningForSale(Guid id)
         {
             if (_open.GetOpeningForSaleById(id) == null)
             {
-                return NotFound();
+                return NotFound(new
+                {
+                    message = "OpeningForSale not found."
+                });
             }
             var open = _open.GetOpeningForSaleById(id);
             if (open == null)
             {
-                return NotFound();
+                return NotFound(new
+                {
+                    message = "OpeningForSale not found."
+                });
             }
 
             _open.ChangeStatus(open);
 
 
-            return Ok("Delete Successfully");
+            return Ok(new
+            {
+                message = "Delete OpeningForSale Successfully"
+            });
         }
 
     }
