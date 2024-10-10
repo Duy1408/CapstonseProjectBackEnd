@@ -229,6 +229,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
         }
 
         [HttpDelete("{id}")]
+        [SwaggerOperation(Summary = "Delete Contract by ID")]
         public IActionResult DeleteContract(Guid id)
         {
 
