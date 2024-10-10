@@ -13,7 +13,7 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
         public Guid PaymentProcessID { get; set; }
         public string PaymentProcessName { get; set; }
         public double? Discount { get; set; }
-        public double TotalPrice { get; set; }
+        public double? TotalPrice { get; set; }
         public Guid SalesPolicyID { get; set; }
     }
 }
