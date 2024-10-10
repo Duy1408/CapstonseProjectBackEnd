@@ -84,7 +84,7 @@ namespace RealEstateProjectSale.Controllers.PromotionDetailController
                     DiscountAmount = pro.DiscountAmount,
                     Amount = pro.Amount,
                     PromotionID = pro.PromotionID,
-                    PropertiesTypeID = pro.PropertiesTypeID,
+                    PropertyTypeID = pro.PropertyTypeID,
                 };
 
                 var promotiondetail = _mapper.Map<PromotionDetail>(newPro);

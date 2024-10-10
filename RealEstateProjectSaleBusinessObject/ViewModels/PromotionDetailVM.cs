@@ -16,7 +16,7 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public double? Amount { get; set; }
         public Guid PromotionID { get; set; }
         public string PromotionName { get; set; }
-        public Guid PropertiesTypeID { get; set; }
+        public Guid PropertyTypeID { get; set; }
         public string PropertyTypeName { get; set; }
     }
 }

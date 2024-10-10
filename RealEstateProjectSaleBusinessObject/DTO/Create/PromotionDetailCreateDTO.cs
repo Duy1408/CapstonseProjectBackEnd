@@ -17,6 +17,6 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
         public double? DiscountAmount { get; set; }
         public double? Amount { get; set; }
         public Guid PromotionID { get; set; }
-        public Guid PropertiesTypeID { get; set; }
+        public Guid PropertyTypeID { get; set; }
     }
 }
