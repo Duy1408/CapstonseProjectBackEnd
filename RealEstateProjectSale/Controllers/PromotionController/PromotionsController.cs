@@ -11,10 +11,11 @@ using RealEstateProjectSaleBusinessObject.DTO.Create;
 using RealEstateProjectSaleBusinessObject.DTO.Update;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace RealEstateProjectSale.Controllers.PromotionController
 {
-    [Route("api/[controller]")]
+    [Route("api/promotions")]
     [ApiController]
     public class PromotionsController : ControllerBase
     {
@@ -30,14 +31,17 @@ namespace RealEstateProjectSale.Controllers.PromotionController
 
         // GET: api/Promotions
         [HttpGet]
-        [Route("GetAllPromotion")]
+        [SwaggerOperation(Summary = "Get All Promotion")]
         public IActionResult GetAllPromotion()
         {
             try
             {
                 if (_pro.GetPromotions() == null)
                 {
-                    return NotFound();
+                    return NotFound(new
+                    {
+                        message = "Promotion not found."
+                    });
                 }
                 var pros = _pro.GetPromotions();
                 var response = _mapper.Map<List<PromotionVM>>(pros);
@@ -52,7 +56,8 @@ namespace RealEstateProjectSale.Controllers.PromotionController
 
         // GET: api/Promotions/5
 
-        [HttpGet("GetPromotionByID/{id}")]
+        [HttpGet("{id}")]
+        [SwaggerOperation(Summary = "Get Promotion by ID")]
         public IActionResult GetPromotionByID(Guid id)
         {
             var pro = _pro.GetPromotionById(id);
@@ -64,13 +69,15 @@ namespace RealEstateProjectSale.Controllers.PromotionController
                 return Ok(responese);
             }
 
-            return NotFound();
+            return NotFound(new
+            {
+                message = "Promotion not found."
+            });
 
         }
 
-        // PUT: api/Promotions/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("UpdatePromotion/{id}")]
+        [HttpPut("{id}")]
+        [SwaggerOperation(Summary = "Update Promotion by ID")]
         public IActionResult UpdatePromotiont([FromForm] PromotionUpdateDTO pro, Guid id)
         {
             try
@@ -102,11 +109,17 @@ namespace RealEstateProjectSale.Controllers.PromotionController
                     _pro.UpdatePromotion(existingPro);
 
 
-                    return Ok("Update Promotion Successfully");
+                    return Ok(new
+                    {
+                        message = "Update Promotion Successfully"
+                    });
 
                 }
 
-                return NotFound("Promotion not found.");
+                return NotFound(new
+                {
+                    message = "Promotion not found."
+                });
 
             }
             catch (Exception ex)
@@ -115,10 +128,8 @@ namespace RealEstateProjectSale.Controllers.PromotionController
             }
         }
 
-        // POST: api/Promotions
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [Route("AddNewPromotion")]
+        [SwaggerOperation(Summary = "Create a new Promotion")]
         public IActionResult AddNew(PromotionCreateDTO pro)
         {
             try
@@ -140,7 +151,10 @@ namespace RealEstateProjectSale.Controllers.PromotionController
 
                 _pro.AddNew(promotion);
 
-                return Ok("Create Promotion Successfully");
+                return Ok(new
+                {
+                    message = "Create Promotion Successfully"
+                });
             }
             catch (Exception ex)
             {
@@ -148,23 +162,32 @@ namespace RealEstateProjectSale.Controllers.PromotionController
             }
         }
 
-        // DELETE: api/Promotions/5
-        [HttpDelete("DeletePromotion/{id}")]
+        [HttpDelete("{id}")]
+        [SwaggerOperation(Summary = "Delete Promotion by ID")]
         public async Task<IActionResult> DeletePromotion(Guid id)
         {
             if (_pro.GetPromotions() == null)
             {
-                return NotFound();
+                return NotFound(new
+                {
+                    message = "Promotion not found."
+                });
             }
             var promotion = _pro.GetPromotionById(id);
             if (promotion == null)
             {
-                return NotFound();
+                return NotFound(new
+                {
+                    message = "Promotion not found."
+                });
             }
 
             _pro.ChangeStatus(promotion);
 
-            return Ok("Delete Successfully");
+            return Ok(new
+            {
+                message = "Delete Promotion Successfully"
+            });
         }
 
 

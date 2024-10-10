@@ -9,8 +9,6 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Update
 {
     public class PaymentTypeUpdateDTO
     {
-        [JsonIgnore]
-        public Guid PaymentTypeID { get; set; }
-        public string PaymentName { get; set; }
+        public string? PaymentName { get; set; }
     }
 }
