@@ -11,10 +11,11 @@ using RealEstateProjectSaleBusinessObject.DTO.Create;
 using RealEstateProjectSaleBusinessObject.DTO.Update;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace RealEstateProjectSale.Controllers.PaymentProcessController
 {
-    [Route("api/[controller]")]
+    [Route("api/payment-processes")]
     [ApiController]
     public class PaymentProcessesController : ControllerBase
     {
@@ -28,14 +29,17 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessController
         }
 
         [HttpGet]
-        [Route("GetAllPaymentProcess")]
+        [SwaggerOperation(Summary = "Get All PaymentProcess")]
         public IActionResult GetAllPaymentProcess()
         {
             try
             {
                 if (_pmtService.GetPaymentProcess() == null)
                 {
-                    return NotFound();
+                    return NotFound(new
+                    {
+                        message = "PaymentProcess not found."
+                    });
                 }
                 var process = _pmtService.GetPaymentProcess();
                 var response = _mapper.Map<List<PaymentProcessVM>>(process);
@@ -48,7 +52,8 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessController
             }
         }
 
-        [HttpGet("GetPaymentProcessByID/{id}")]
+        [HttpGet("{id}")]
+        [SwaggerOperation(Summary = "Get PaymentProcess by ID")]
         public IActionResult GetPaymentProcessByID(Guid id)
         {
             var process = _pmtService.GetPaymentProcessById(id);
@@ -60,12 +65,15 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessController
                 return Ok(responese);
             }
 
-            return NotFound();
+            return NotFound(new
+            {
+                message = "PaymentProcess not found."
+            });
 
         }
 
         [HttpPost]
-        [Route("AddNewPaymentProcess")]
+        [SwaggerOperation(Summary = "Create a new PaymentProcess")]
         public IActionResult AddNew(PaymentProcessCreateDTO process)
         {
             try
@@ -82,7 +90,10 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessController
                 var _process = _mapper.Map<PaymentProcess>(newProcess);
                 _pmtService.AddNew(_process);
 
-                return Ok("Create PaymentProcess Successfully");
+                return Ok(new
+                {
+                    message = "Create PaymentProcess Successfully"
+                });
 
             }
             catch (Exception ex)
@@ -91,7 +102,8 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessController
             }
         }
 
-        [HttpPut("UpdatePaymentProcess/{id}")]
+        [HttpPut("{id}")]
+        [SwaggerOperation(Summary = "Update PaymentProcess by ID")]
         public IActionResult UpdatePaymentProcess([FromForm] PaymentProcessUpdateDTO process, Guid id)
         {
             try
@@ -115,11 +127,16 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessController
 
                     _pmtService.UpdatePaymentProcess(existingProcess);
 
-                    return Ok("Update PaymentProcess Successfully");
-
+                    return Ok(new
+                    {
+                        message = "Update PaymentProcess Successfully"
+                    });
                 }
 
-                return NotFound("PaymentProcess not found.");
+                return NotFound(new
+                {
+                    message = "PaymentProcess not found."
+                });
 
             }
             catch (Exception ex)
@@ -128,7 +145,8 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessController
             }
         }
 
-        [HttpDelete("DeletePaymentProcessByID/{id}")]
+        [HttpDelete("{id}")]
+        [SwaggerOperation(Summary = "Delete PaymentProcess by ID")]
         public IActionResult DeletePaymentProcessByID(Guid id)
         {
             try
@@ -137,10 +155,16 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessController
                 if (process != null)
                 {
                     _pmtService.DeletePaymentProcessByID(id);
-                    return Ok("Deleted PaymentProcess Successfully");
+                    return Ok(new
+                    {
+                        message = "Delete PaymentProcess Successfully"
+                    });
                 }
 
-                return NotFound();
+                return NotFound(new
+                {
+                    message = "PaymentProcess not found."
+                });
             }
             catch (Exception ex)
             {
