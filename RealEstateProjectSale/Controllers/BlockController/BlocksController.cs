@@ -185,7 +185,7 @@ namespace RealEstateProjectSale.Controllers.BlockController
         [HttpDelete("DeleteBlock/{id}")]
         public IActionResult DeleteBlock(Guid id)
         {
-            if (_block.GetBlocks == null)
+            if (_block.GetBlocks() == null)
             {
                 return NotFound();
             }
