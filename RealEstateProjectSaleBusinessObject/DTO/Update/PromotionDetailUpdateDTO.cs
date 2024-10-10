@@ -9,14 +9,12 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Update
 {
     public class PromotionDetailUpdateDTO
     {
-        [JsonIgnore]
- 
-        public string Description { get; set; }
-        public string PromotionType { get; set; }
+        public string? Description { get; set; }
+        public string? PromotionType { get; set; }
         public double? DiscountPercent { get; set; }
         public double? DiscountAmount { get; set; }
         public double? Amount { get; set; }
-     
-  
+
+
     }
 }

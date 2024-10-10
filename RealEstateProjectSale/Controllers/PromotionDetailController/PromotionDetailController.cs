@@ -7,10 +7,11 @@ using RealEstateProjectSaleBusinessObject.DTO.Update;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 using RealEstateProjectSaleServices.Services;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace RealEstateProjectSale.Controllers.PromotionDetailController
 {
-    [Route("api/[controller]")]
+    [Route("api/promotion-details")]
     [ApiController]
     public class PromotionDetailController : ControllerBase
     {
@@ -24,13 +25,17 @@ namespace RealEstateProjectSale.Controllers.PromotionDetailController
         }
 
         [HttpGet]
+        [SwaggerOperation(Summary = "Get All PromotionDetail")]
         public IActionResult GetAllPromotionDetail()
         {
             try
             {
                 if (_detailServices.GetAllPromotionDetail() == null)
                 {
-                    return NotFound();
+                    return NotFound(new
+                    {
+                        message = "PromotionDetail not found."
+                    });
                 }
                 var details = _detailServices.GetAllPromotionDetail();
                 var response = _mapper.Map<List<PromotionDetailVM>>(details);
@@ -45,6 +50,7 @@ namespace RealEstateProjectSale.Controllers.PromotionDetailController
         }
 
         [HttpGet("{id}")]
+        [SwaggerOperation(Summary = "Get PromotionDetail by ID")]
         public IActionResult GetPromotionDetailByID(Guid id)
         {
             var detail = _detailServices.GetPromotionDetailByID(id);
@@ -56,11 +62,14 @@ namespace RealEstateProjectSale.Controllers.PromotionDetailController
                 return Ok(responese);
             }
 
-            return NotFound();
+            return NotFound(new
+            {
+                message = "PromotionDetail not found."
+            });
 
         }
         [HttpPost]
-        [Route("AddNewPromotionDetail")]
+        [SwaggerOperation(Summary = "Create a new PromotionDetail")]
         public IActionResult AddNew(PromotionDetailCreateDTO pro)
         {
             try
@@ -68,8 +77,6 @@ namespace RealEstateProjectSale.Controllers.PromotionDetailController
 
                 var newPro = new PromotionDetailCreateDTO
                 {
-                   
-
                     PromotionDetaiID = Guid.NewGuid(),
                     Description = pro.Description,
                     PromotionType = pro.PromotionType,
@@ -78,15 +85,16 @@ namespace RealEstateProjectSale.Controllers.PromotionDetailController
                     Amount = pro.Amount,
                     PromotionID = pro.PromotionID,
                     PropertiesTypeID = pro.PropertiesTypeID,
-
-
                 };
 
                 var promotiondetail = _mapper.Map<PromotionDetail>(newPro);
 
                 _detailServices.AddNewPromotionDetail(promotiondetail);
 
-                return Ok("Create Promotiondetail Successfully");
+                return Ok(new
+                {
+                    message = "Create PromotionDetail Successfully"
+                });
             }
             catch (Exception ex)
             {
@@ -95,6 +103,7 @@ namespace RealEstateProjectSale.Controllers.PromotionDetailController
         }
 
         [HttpPut("{id}")]
+        [SwaggerOperation(Summary = "Update PromotionDetail by ID")]
         public IActionResult UpdatePromotionDetail([FromForm] PromotionDetailUpdateDTO detail, Guid id)
         {
             try
@@ -123,17 +132,19 @@ namespace RealEstateProjectSale.Controllers.PromotionDetailController
                         existingDetail.Amount = detail.Amount.Value;
                     }
 
+                    _detailServices.UpdatePromotionDetail(existingDetail);
 
-              
-
-                    var _detail = _mapper.Map<PromotionDetail>(detail);
-                    _detailServices.UpdatePromotionDetail(_detail);
-
-                    return Ok("Update Successfully");
+                    return Ok(new
+                    {
+                        message = "Update PromotionDetail Successfully"
+                    });
 
                 }
 
-                return NotFound("PromotionDetail not found.");
+                return NotFound(new
+                {
+                    message = "PromotionDetail not found."
+                });
 
             }
             catch (Exception ex)
@@ -143,6 +154,7 @@ namespace RealEstateProjectSale.Controllers.PromotionDetailController
         }
 
         [HttpDelete("{id}")]
+        [SwaggerOperation(Summary = "Delete PromotionDetail by ID")]
         public IActionResult DeletePromotionDetail(Guid id)
         {
             try
@@ -151,10 +163,16 @@ namespace RealEstateProjectSale.Controllers.PromotionDetailController
                 if (detail != null)
                 {
                     _detailServices.DeletePromotionDetailByID(id);
-                    return Ok("Delete PromotionDetail Successfully");
+                    return Ok(new
+                    {
+                        message = "Delete PromotionDetail Successfully"
+                    });
                 }
 
-                return NotFound();
+                return NotFound(new
+                {
+                    message = "PromotionDetail not found."
+                });
             }
             catch (Exception ex)
             {
