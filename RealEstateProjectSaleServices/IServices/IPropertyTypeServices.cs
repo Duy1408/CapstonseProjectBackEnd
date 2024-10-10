@@ -13,5 +13,11 @@ namespace RealEstateProjectSaleServices.IServices
 
         PropertyType GetPropertyTypeByID(Guid id);
 
+        bool AddNew(PropertyType type);
+
+        bool UpdatePropertyType(PropertyType type);
+
+        void DeletePropertyTypeByID(Guid id);
+
     }
 }

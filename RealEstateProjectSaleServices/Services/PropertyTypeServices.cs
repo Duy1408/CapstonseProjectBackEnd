@@ -17,6 +17,16 @@ namespace RealEstateProjectSaleServices.Services
             _type = type;
         }
 
+        public bool AddNew(PropertyType type)
+        {
+            return _type.AddNew(type);
+        }
+
+        public void DeletePropertyTypeByID(Guid id)
+        {
+            _type.DeletePropertyTypeByID(id);
+        }
+
         public List<PropertyType> GetAllPropertyType()
         {
             return _type.GetAllPropertyType();
@@ -25,6 +35,11 @@ namespace RealEstateProjectSaleServices.Services
         public PropertyType GetPropertyTypeByID(Guid id)
         {
             return _type.GetPropertyTypeByID(id);
+        }
+
+        public bool UpdatePropertyType(PropertyType type)
+        {
+            return _type.UpdatePropertyType(type);
         }
     }
 }

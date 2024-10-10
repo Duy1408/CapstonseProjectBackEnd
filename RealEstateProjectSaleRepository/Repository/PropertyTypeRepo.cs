@@ -13,9 +13,15 @@ namespace RealEstateProjectSaleRepository.Repository
     {
         PropertyTypeDAO dao = new PropertyTypeDAO();
 
+        public bool AddNew(PropertyType type) => dao.AddNew(type);
+
+        public void DeletePropertyTypeByID(Guid id) => dao.DeletePropertyTypeByID(id);
+
         public List<PropertyType> GetAllPropertyType() => dao.GetAllPropertyType();
 
         public PropertyType GetPropertyTypeByID(Guid id) => dao.GetPropertyTypeByID(id);
+
+        public bool UpdatePropertyType(PropertyType type) => dao.UpdatePropertyType(type);
 
     }
 }
