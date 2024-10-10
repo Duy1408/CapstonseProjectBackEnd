@@ -9,7 +9,7 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Update
 {
     public class PromotionUpdateDTO
     {
-        public string PromotionName { get; set; }
+        public string? PromotionName { get; set; }
         public string? Description { get; set; }
         [Column(TypeName = "date")]
         public DateTime? StartDate { get; set; }

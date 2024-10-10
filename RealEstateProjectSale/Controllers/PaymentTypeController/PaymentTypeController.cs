@@ -7,10 +7,11 @@ using RealEstateProjectSaleBusinessObject.DTO.Update;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 using RealEstateProjectSaleServices.Services;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace RealEstateProjectSale.Controllers.PaymentTypeController
 {
-    [Route("api/[controller]")]
+    [Route("api/payment-types")]
     [ApiController]
     public class PaymentTypeController : ControllerBase
     {
@@ -24,13 +25,17 @@ namespace RealEstateProjectSale.Controllers.PaymentTypeController
         }
 
         [HttpGet]
+        [SwaggerOperation(Summary = "Get All PaymentType")]
         public IActionResult GetAllPaymentType()
         {
             try
             {
                 if (_typeServices.GetAllPaymentType() == null)
                 {
-                    return NotFound();
+                    return NotFound(new
+                    {
+                        message = "PaymentType not found."
+                    });
                 }
                 var types = _typeServices.GetAllPaymentType();
                 var response = _mapper.Map<List<PaymentTypeVM>>(types);
@@ -44,6 +49,7 @@ namespace RealEstateProjectSale.Controllers.PaymentTypeController
         }
 
         [HttpGet("{id}")]
+        [SwaggerOperation(Summary = "Get PaymentType by ID")]
         public IActionResult GetPaymentTypeByID(Guid id)
         {
             var type = _typeServices.GetPaymentTypeByID(id);
@@ -55,19 +61,32 @@ namespace RealEstateProjectSale.Controllers.PaymentTypeController
                 return Ok(responese);
             }
 
-            return NotFound();
+            return NotFound(new
+            {
+                message = "PaymentType not found."
+            });
 
         }
 
         [HttpPost]
+        [SwaggerOperation(Summary = "Create a new PaymentType")]
         public IActionResult AddNewPaymentType(PaymentTypeCreateDTO type)
         {
             try
             {
-                var _type = _mapper.Map<PaymentType>(type);
+                var newType = new PaymentTypeCreateDTO
+                {
+                    PaymentTypeID = Guid.NewGuid(),
+                    PaymentName = type.PaymentName
+                };
+
+                var _type = _mapper.Map<PaymentType>(newType);
                 _typeServices.AddNewPaymentType(_type);
 
-                return Ok("Create PaymentType Successfully");
+                return Ok(new
+                {
+                    message = "Create PaymentType Successfully"
+                });
             }
             catch (Exception ex)
             {
@@ -76,23 +95,32 @@ namespace RealEstateProjectSale.Controllers.PaymentTypeController
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdatePaymentType(PaymentTypeUpdateDTO type, Guid id)
+        [SwaggerOperation(Summary = "Update PaymentType by ID")]
+        public IActionResult UpdatePaymentType([FromForm] PaymentTypeUpdateDTO type, Guid id)
         {
             try
             {
                 var existingType = _typeServices.GetPaymentTypeByID(id);
                 if (existingType != null)
                 {
-                    type.PaymentTypeID = existingType.PaymentTypeID;
+                    if (!string.IsNullOrEmpty(type.PaymentName))
+                    {
+                        existingType.PaymentName = type.PaymentName;
+                    }
 
-                    var _type = _mapper.Map<PaymentType>(type);
-                    _typeServices.UpdatePaymentType(_type);
+                    _typeServices.UpdatePaymentType(existingType);
 
-                    return Ok("Update Successfully");
+                    return Ok(new
+                    {
+                        message = "Update PaymentType Successfully"
+                    });
 
                 }
 
-                return NotFound("PaymentType not found.");
+                return NotFound(new
+                {
+                    message = "PaymentType not found."
+                });
 
             }
             catch (Exception ex)
@@ -102,6 +130,7 @@ namespace RealEstateProjectSale.Controllers.PaymentTypeController
         }
 
         [HttpDelete("{id}")]
+        [SwaggerOperation(Summary = "Delete PaymentType by ID")]
         public IActionResult DeletePaymentType(Guid id)
         {
             try
@@ -110,10 +139,16 @@ namespace RealEstateProjectSale.Controllers.PaymentTypeController
                 if (type != null)
                 {
                     _typeServices.DeletePaymentTypeByID(id);
-                    return Ok("Delete PaymentType Successfully");
+                    return Ok(new
+                    {
+                        message = "Delete PaymentType Successfully"
+                    });
                 }
 
-                return NotFound();
+                return NotFound(new
+                {
+                    message = "PaymentType not found."
+                });
             }
             catch (Exception ex)
             {
