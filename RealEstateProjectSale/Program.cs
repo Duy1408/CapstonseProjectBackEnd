@@ -66,6 +66,8 @@ builder.Services.AddScoped<IBlockRepo, BlockRepo>();
 builder.Services.AddScoped<IBlockService, BlockService>();
 builder.Services.AddScoped<IPaymentRepo, PaymentRepo>();
 builder.Services.AddScoped<IPaymentServices, PaymentServices>();
+builder.Services.AddScoped<IZoneRepo, ZoneRepo>();
+builder.Services.AddScoped<IZoneService, ZoneService>();
 
 
 //Azure Blob Storage
