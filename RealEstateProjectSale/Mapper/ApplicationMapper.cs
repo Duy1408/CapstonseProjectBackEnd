@@ -121,6 +121,20 @@ namespace RealEstateProjectSale.Mapper
             CreateMap<ContractPaymentDetailCreateDTO, ContractPaymentDetail>().ReverseMap();
             CreateMap<ContractPaymentDetailUpdateDTO, ContractPaymentDetail>().ReverseMap();
 
+            CreateMap<ZoneCreateDTO, Zone>().ReverseMap();
+            CreateMap<ZoneUpdateDTO, Zone>().ReverseMap();
+            CreateMap<ZoneVM, Zone>().ReverseMap();
+
+            CreateMap<BlockCreateDTO, Block>().ReverseMap();
+            CreateMap<BlockUpdateDTO, Block>().ReverseMap();
+            CreateMap<BlockVM, Block>().ReverseMap();
+
+            CreateMap<FloorCreateDTO, Floor>().ReverseMap();
+            CreateMap<FloorUpdateDTO, Floor>().ReverseMap();
+            CreateMap<FloorVM, Floor>().ReverseMap();
+
+
+
         }
     }
 }
