@@ -11,10 +11,11 @@ using RealEstateProjectSaleBusinessObject.DTO.Create;
 using RealEstateProjectSaleBusinessObject.DTO.Update;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace RealEstateProjectSale.Controllers.PaymentProcessDetailController
 {
-    [Route("api/[controller]")]
+    [Route("api/payment-process-details")]
     [ApiController]
     public class PaymentProcessDetailsController : ControllerBase
     {
@@ -28,14 +29,17 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessDetailController
         }
 
         [HttpGet]
-        [Route("GetAllPaymentProcessDetail")]
+        [SwaggerOperation(Summary = "Get PaymentProcessDetail by ID")]
         public IActionResult GetAllPaymentProcessDetail()
         {
             try
             {
                 if (_detailService.GetPaymentProcessDetail() == null)
                 {
-                    return NotFound();
+                    return NotFound(new
+                    {
+                        message = "PaymentProcessDetail not found."
+                    });
                 }
                 var details = _detailService.GetPaymentProcessDetail();
                 var response = _mapper.Map<List<PaymentProcessDetailVM>>(details);
@@ -48,7 +52,8 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessDetailController
             }
         }
 
-        [HttpGet("GetPaymentProcessDetailByID/{id}")]
+        [HttpGet("{id}")]
+        [SwaggerOperation(Summary = "Get PaymentProcessDetail By ID")]
         public IActionResult GetPaymentProcessDetailByID(Guid id)
         {
             var detail = _detailService.GetPaymentProcessDetailById(id);
@@ -60,12 +65,15 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessDetailController
                 return Ok(responese);
             }
 
-            return NotFound();
+            return NotFound(new
+            {
+                message = "PaymentProcessDetail not found."
+            });
 
         }
 
         [HttpPost]
-        [Route("AddNewPaymentProcessDetail")]
+        [SwaggerOperation(Summary = "Create a new PaymentProcessDetail")]
         public IActionResult AddNew(PaymentProcessDetailCreateDTO detail)
         {
             try
@@ -86,7 +94,10 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessDetailController
                 var _detail = _mapper.Map<PaymentProcessDetail>(newDetail);
                 _detailService.AddNew(_detail);
 
-                return Ok("Create PaymentProcessDetail Successfully");
+                return Ok(new
+                {
+                    message = "Create PaymentProcessDetail Successfully"
+                });
 
             }
             catch (Exception ex)
@@ -95,7 +106,8 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessDetailController
             }
         }
 
-        [HttpPut("UpdatePaymentProcessDetail/{id}")]
+        [HttpPut("{id}")]
+        [SwaggerOperation(Summary = "Update PaymentProcessDetail by ID")]
         public IActionResult UpdatePaymentProcessDetail([FromForm] PaymentProcessDetailUpdateDTO detail, Guid id)
         {
             try
@@ -135,11 +147,17 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessDetailController
 
                     _detailService.UpdatePaymentProcessDetail(existingDetail);
 
-                    return Ok("Update PaymentProcessDetail Successfully");
+                    return Ok(new
+                    {
+                        message = "Update PaymentProcessDetail Successfully"
+                    });
 
                 }
 
-                return NotFound("PaymentProcessDetail not found.");
+                return NotFound(new
+                {
+                    message = "PaymentProcessDetail not found."
+                });
 
             }
             catch (Exception ex)
@@ -148,7 +166,8 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessDetailController
             }
         }
 
-        [HttpDelete("DeletePaymentProcessDetailByID/{id}")]
+        [HttpDelete("{id}")]
+        [SwaggerOperation(Summary = "Delete PaymentProcessDetail by ID")]
         public IActionResult DeletePaymentProcessDetailByID(Guid id)
         {
             try
@@ -157,10 +176,16 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessDetailController
                 if (detail != null)
                 {
                     _detailService.DeletePaymentProcessDetailByID(id);
-                    return Ok("Deleted PaymentProcessDetail Successfully");
+                    return Ok(new
+                    {
+                        message = "Delete PaymentProcessDetail Successfully"
+                    });
                 }
 
-                return NotFound();
+                return NotFound(new
+                {
+                    message = "PaymentProcessDetail not found."
+                });
             }
             catch (Exception ex)
             {
