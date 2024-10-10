@@ -16,7 +16,7 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public double? Amount { get; set; }
         public Guid PromotionID { get; set; }
         public Promotion? Promotion { get; set; }
-        public Guid PropertiesTypeID { get; set; }
+        public Guid PropertyTypeID { get; set; }
         public PropertyType? PropertyType { get; set; }
 
     }
