@@ -15,10 +15,10 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public string ReservationPrice { get; set; }
         public string? Description { get; set; }
         public DateTime CheckinDate { get; set; }
+        public string SaleType { get; set; }
         public bool Status { get; set; }
         public List<Booking>? Bookings { get; set; }
         public List<Notification>? Notifications { get; set; }
-
         public List<OpenForSaleDetail>? OpenForSaleDetails { get; set; }
         public Guid ProjectID { get; set; }
         public Project? Project { get; set; }
