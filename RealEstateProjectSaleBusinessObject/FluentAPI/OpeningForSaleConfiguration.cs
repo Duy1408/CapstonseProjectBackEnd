@@ -21,6 +21,7 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
             builder.Property(x => x.ReservationPrice).IsRequired();
             builder.Property(x => x.Description);
             builder.Property(x => x.CheckinDate).IsRequired();
+            builder.Property(x => x.SaleType).IsRequired();
             builder.Property(x => x.Status).IsRequired();
             builder.HasMany(x => x.Bookings).WithOne(x => x.OpeningForSale).OnDelete(DeleteBehavior.NoAction);
             builder.HasMany(x => x.OpenForSaleDetails).WithOne(x => x.OpeningForSale).OnDelete(DeleteBehavior.NoAction);
