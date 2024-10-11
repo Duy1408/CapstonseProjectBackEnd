@@ -137,8 +137,8 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
                 string checkinDateInput = open.CheckinDate;
 
                 DateTime parsedStartDate = DateTime.ParseExact(startDateInput, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
-                DateTime parsedEndDate = DateTime.ParseExact(startDateInput, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
-                DateTime parsedCheckinDate = DateTime.ParseExact(startDateInput, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                DateTime parsedEndDate = DateTime.ParseExact(endDateInput, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                DateTime parsedCheckinDate = DateTime.ParseExact(checkinDateInput, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
 
                 var newOpen = new OpeningForSaleCreateDTO
                 {
