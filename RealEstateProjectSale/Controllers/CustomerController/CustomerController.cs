@@ -179,10 +179,10 @@ namespace RealEstateProjectSale.Controllers.CustomerController
                     {
                         existingCustomer.PlaceOfResidence = customer.PlaceOfResidence;
                     }
-                    //if (!string.IsNullOrEmpty(customer.DateOfIssue))
-                    //{
-                    //    existingCustomer.DateOfIssue = customer.DateOfIssue;
-                    //}
+                    if (customer.DateOfIssue.HasValue)
+                    {
+                        existingCustomer.DateOfIssue = customer.DateOfIssue.Value;
+                    }
                     if (!string.IsNullOrEmpty(customer.Taxcode))
                     {
                         existingCustomer.Taxcode = customer.Taxcode;
@@ -204,7 +204,6 @@ namespace RealEstateProjectSale.Controllers.CustomerController
                         existingCustomer.Status = customer.Status.Value;
                     }
 
-                    var _customer = _mapper.Map<Customer>(customer);
                     _customerServices.UpdateCustomer(existingCustomer);
 
                     return Ok(new

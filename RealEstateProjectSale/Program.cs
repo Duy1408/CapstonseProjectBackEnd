@@ -70,6 +70,8 @@ builder.Services.AddScoped<IZoneRepo, ZoneRepo>();
 builder.Services.AddScoped<IZoneService, ZoneService>();
 builder.Services.AddScoped<IFloorRepo, FloorRepo>();
 builder.Services.AddScoped<IFloorService, FloorService>();
+builder.Services.AddScoped<IPropertyCategoryRepo, PropertyCategoryRepo>();
+builder.Services.AddScoped<IPropertyCategoryServices, PropertyCategoryServices>();
 
 
 //Azure Blob Storage

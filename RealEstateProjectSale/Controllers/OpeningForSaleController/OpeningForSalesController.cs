@@ -147,6 +147,7 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
                     StartDate = parsedStartDate,
                     EndDate = parsedEndDate,
                     CheckinDate = parsedCheckinDate,
+                    SaleType = open.SaleType,
                     ReservationPrice = open.ReservationPrice,
                     Description = open.Description,
                     Status = true,
@@ -200,6 +201,10 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
                     if (!string.IsNullOrEmpty(open.CheckinDate))
                     {
                         existingOpen.CheckinDate = parsedCheckinDate;
+                    }
+                    if (!string.IsNullOrEmpty(open.SaleType))
+                    {
+                        existingOpen.SaleType = open.SaleType;
                     }
                     if (!string.IsNullOrEmpty(open.ReservationPrice))
                     {
