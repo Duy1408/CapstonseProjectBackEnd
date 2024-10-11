@@ -24,6 +24,7 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
             builder.Property(x => x.LivingRoom).IsRequired();
             builder.Property(x => x.NumberFloor);
             builder.Property(x => x.Basement);
+            builder.Property(x => x.Status);
             builder.HasMany(x => x.Properties).WithOne(x => x.UnitType).OnDelete(DeleteBehavior.NoAction);
         }
     }
