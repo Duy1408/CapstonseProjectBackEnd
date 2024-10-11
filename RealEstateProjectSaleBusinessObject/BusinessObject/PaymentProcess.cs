@@ -12,6 +12,7 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public string PaymentProcessName { get; set; }
         public double? Discount { get; set; }
         public double? TotalPrice { get; set; }
+        public bool Status { get; set; }
         public Guid SalesPolicyID { get; set; }
         public Salespolicy? Salespolicy { get; set; }
         public List<Contract>? Contracts { get; set; }

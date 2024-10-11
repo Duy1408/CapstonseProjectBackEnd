@@ -12,6 +12,7 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public Guid DocumentTemplateID { get; set; }
         public string  DocumentName { get; set; }
         public string?  DocumentFile { get; set; }
+        public bool Status { get; set; }
         public List<Contract>? Contracts { get; set; }
         public List<Booking>? Bookings { get; set; }
 

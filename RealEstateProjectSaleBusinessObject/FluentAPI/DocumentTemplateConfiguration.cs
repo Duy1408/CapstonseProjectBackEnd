@@ -17,6 +17,7 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
             builder.HasKey(x => x.DocumentTemplateID);
             builder.Property(x => x.DocumentName).IsRequired();
             builder.Property(x => x.DocumentFile);
+            builder.Property(x => x.Status);
             builder.HasMany(x => x.Contracts).WithOne(x => x.DocumentTemplate).OnDelete(DeleteBehavior.NoAction);
             builder.HasMany(x => x.Bookings).WithOne(x => x.DocumentTemplate).OnDelete(DeleteBehavior.NoAction);
 

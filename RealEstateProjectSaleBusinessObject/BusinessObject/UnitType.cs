@@ -18,6 +18,7 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public int LivingRoom { get; set; }
         public int? NumberFloor { get; set; }
         public int? Basement { get; set; }
+        public bool Status { get; set; }
         public Guid? PropertyTypeID { get; set; }
         public PropertyType? PropertyType { get; set; }
         public List<Property>? Properties { get; set; }
