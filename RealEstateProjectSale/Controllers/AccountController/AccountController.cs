@@ -34,7 +34,10 @@ namespace RealEstateProjectSale.Controllers.AccountController
             {
                 if (_accountServices.GetAllAccount() == null)
                 {
-                    return NotFound();
+                    return NotFound(new
+                    {
+                        message = "Account not found."
+                    });
                 }
                 var accounts = _accountServices.GetAllAccount();
                 var response = _mapper.Map<List<AccountVM>>(accounts);
@@ -48,7 +51,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
         }
 
         [HttpGet("{id}")]
-        [SwaggerOperation(Summary = "GetAccountByID")]
+        [SwaggerOperation(Summary = "Get Account By ID")]
         public IActionResult GetAccountByID(Guid id)
         {
             var account = _accountServices.GetAccountByID(id);
@@ -60,12 +63,15 @@ namespace RealEstateProjectSale.Controllers.AccountController
                 return Ok(responese);
             }
 
-            return NotFound();
+            return NotFound(new
+            {
+                message = "Account not found."
+            });
 
         }
 
         [HttpPost]
-        [SwaggerOperation(Summary = "AddNewAccount")]
+        [SwaggerOperation(Summary = "Create a new Account")]
         public IActionResult AddNewAccount(AccountCreateDTO account)
         {
             try
@@ -74,7 +80,10 @@ namespace RealEstateProjectSale.Controllers.AccountController
                 u.Email.Equals(account.Email)).FirstOrDefault();
                 if (checkEmail != null)
                 {
-                    return BadRequest("Email Existed");
+                    return BadRequest(new
+                    {
+                        message = "Email Existed"
+                    });
                 }
                 var newAccount = new AccountCreateDTO
                 {
@@ -100,7 +109,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
         }
 
         [HttpPut("{id}")]
-        [SwaggerOperation(Summary = "UpdateAccount")]
+        [SwaggerOperation(Summary = "Update Account")]
         public IActionResult UpdateAccount([FromForm] AccountUpdateDTO account, Guid id)
         {
             try
@@ -149,7 +158,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
         }
 
         [HttpDelete("{id}")]
-        [SwaggerOperation(Summary = "DeleteAccount")]
+        [SwaggerOperation(Summary = "Delete Account")]
         public IActionResult DeleteAccount(Guid id)
         {
 

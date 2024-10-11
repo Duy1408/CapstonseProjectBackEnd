@@ -15,6 +15,7 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public DateTime CheckinDate { get; set; }
+        public string SaleType { get; set; }
         public string ReservationPrice { get; set; }
         public string? Description { get; set; }
         [JsonIgnore]

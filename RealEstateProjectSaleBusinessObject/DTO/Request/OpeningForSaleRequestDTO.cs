@@ -13,6 +13,7 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Request
         public string StartDate { get; set; }
         public string EndDate { get; set; }
         public string CheckinDate { get; set; }
+        public string SaleType { get; set; }
         public string ReservationPrice { get; set; }
         public string? Description { get; set; }
         public Guid ProjectID { get; set; }
