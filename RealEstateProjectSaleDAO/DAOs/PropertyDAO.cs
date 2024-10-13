@@ -29,7 +29,11 @@ namespace RealEstateProjectSaleDAO.DAOs
         public List<Property> GetAllProperty()
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.Properties.ToList();
+            return _context.Properties.Include(c => c.UnitType)
+                                      .Include(c => c.Floor)
+                                      .Include(c => c.Block)
+                                      .Include(c => c.Zone)
+                                      .ToList();
         }
 
         public bool AddNew(Property p)
@@ -71,30 +75,69 @@ namespace RealEstateProjectSaleDAO.DAOs
         public Property GetPropertyByID(Guid id)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.Properties
+            return _context.Properties.Include(c => c.UnitType)
+                                      .Include(c => c.Floor)
+                                      .Include(c => c.Block)
+                                      .Include(c => c.Zone)
                                       .SingleOrDefault(a => a.PropertyID == id);
         }
 
-        public IQueryable<Property> GetPropertyByProjectID(Guid id)
+        public IQueryable<Property> GetPropertyByUnitTypeID(Guid id)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            var a = _context.Properties!;
-                                   
+            var a = _context.Properties!.Include(c => c.UnitType)
+                                      .Include(c => c.Floor)
+                                      .Include(c => c.Block)
+                                      .Include(c => c.Zone)
+                                      .Where(c => c.UnitTypeID == id);
+
             return a;
         }
 
-        public IQueryable<Property> GetPropertyByPropertyTypeID(Guid id)
+        public IQueryable<Property> GetPropertyByFloorID(Guid id)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            var a = _context.Properties!;
-                                  
+            var a = _context.Properties!.Include(c => c.UnitType)
+                                      .Include(c => c.Floor)
+                                      .Include(c => c.Block)
+                                      .Include(c => c.Zone)
+                                      .Where(c => c.FloorID == id);
+
+            return a;
+        }
+
+        public IQueryable<Property> GetPropertyByBlockID(Guid id)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            var a = _context.Properties!.Include(c => c.UnitType)
+                                      .Include(c => c.Floor)
+                                      .Include(c => c.Block)
+                                      .Include(c => c.Zone)
+                                      .Where(c => c.BlockID == id);
+
+            return a;
+        }
+
+        public IQueryable<Property> GetPropertyByZoneID(Guid id)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            var a = _context.Properties!.Include(c => c.UnitType)
+                                      .Include(c => c.Floor)
+                                      .Include(c => c.Block)
+                                      .Include(c => c.Zone)
+                                      .Where(c => c.ZoneID == id);
+
             return a;
         }
 
         public IQueryable<Property> SearchPropertyByName(string searchvalue)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            var a = _context.Properties.Where(a => a.PropertyCode.ToUpper().Contains(searchvalue.Trim().ToUpper()));
+            var a = _context.Properties.Include(c => c.UnitType)
+                                      .Include(c => c.Floor)
+                                      .Include(c => c.Block)
+                                      .Include(c => c.Zone)
+                                      .Where(a => a.PropertyCode.ToUpper().Contains(searchvalue.Trim().ToUpper()));
             return a;
         }
 

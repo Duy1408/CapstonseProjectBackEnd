@@ -74,11 +74,31 @@ namespace RealEstateProjectSale.Mapper
                                        opt => opt.MapFrom(src => src.Staff!.Name));
             CreateMap<BookingCreateDTO, Booking>().ReverseMap();
             CreateMap<BookingUpdateDTO, Booking>().ReverseMap();
-            //bug
-            //CreateMap<PropertyVM, Property>().ReverseMap().ForMember(dest => dest.TypeName,
-            //                           opt => opt.MapFrom(src => src.PropertyType!.TypeName))
-            //                                              .ForMember(dest => dest.ProjectName,
-            //                           opt => opt.MapFrom(src => src.Project!.ProjectName));
+
+            CreateMap<PropertyVM, Property>().ReverseMap().ForMember(dest => dest.BathRoom,
+                                       opt => opt.MapFrom(src => src.UnitType!.BathRoom))
+                                                          .ForMember(dest => dest.BedRoom,
+                                       opt => opt.MapFrom(src => src.UnitType!.BedRoom))
+                                                          .ForMember(dest => dest.KitchenRoom,
+                                       opt => opt.MapFrom(src => src.UnitType!.KitchenRoom))
+                                                          .ForMember(dest => dest.LivingRoom,
+                                       opt => opt.MapFrom(src => src.UnitType!.LivingRoom))
+                                                          .ForMember(dest => dest.NumberFloor,
+                                       opt => opt.MapFrom(src => src.UnitType!.NumberFloor))
+                                                          .ForMember(dest => dest.Basement,
+                                       opt => opt.MapFrom(src => src.UnitType!.Basement))
+                                                          .ForMember(dest => dest.NetFloorArea,
+                                       opt => opt.MapFrom(src => src.UnitType!.NetFloorArea))
+                                                          .ForMember(dest => dest.GrossFloorArea,
+                                       opt => opt.MapFrom(src => src.UnitType!.GrossFloorArea))
+                                                          .ForMember(dest => dest.ImageUnitType,
+                                       opt => opt.MapFrom(src => src.UnitType!.Image))
+                                                          .ForMember(dest => dest.NumFloor,
+                                       opt => opt.MapFrom(src => src.Floor!.NumFloor))
+                                                          .ForMember(dest => dest.BlockName,
+                                       opt => opt.MapFrom(src => src.Block!.BlockName))
+                                                          .ForMember(dest => dest.ZoneName,
+                                       opt => opt.MapFrom(src => src.Zone!.ZoneName));
             CreateMap<PropertyCreateDTO, Property>().ReverseMap();
             CreateMap<PropertyUpdateDTO, Property>().ReverseMap();
 

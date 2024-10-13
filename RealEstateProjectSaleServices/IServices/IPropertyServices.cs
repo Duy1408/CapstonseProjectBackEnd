@@ -13,14 +13,13 @@ namespace RealEstateProjectSaleServices.IServices
         List<Property> GetProperty();
         void AddNew(Property p);
 
-
         Property GetPropertyById(Guid id);
 
         void UpdateProperty(Property p);
-
-        IQueryable<Property> GetPropertyByProjectID(Guid id);
-
-        IQueryable<Property> GetPropertyByPropertyTypeID(Guid id);
+        IQueryable<Property> GetPropertyByUnitTypeID(Guid id);
+        IQueryable<Property> GetPropertyByFloorID(Guid id);
+        IQueryable<Property> GetPropertyByBlockID(Guid id);
+        IQueryable<Property> GetPropertyByZoneID(Guid id);
 
         IQueryable<Property> SearchPropertyByName(string searchvalue);
     }

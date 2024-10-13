@@ -26,19 +26,29 @@ namespace RealEstateProjectSaleRepository.Repository
             return _pro.GetAllProperty();
         }
 
+        public IQueryable<Property> GetPropertyByBlockID(Guid id)
+        {
+            return _pro.GetPropertyByBlockID(id);
+        }
+
+        public IQueryable<Property> GetPropertyByFloorID(Guid id)
+        {
+            return _pro.GetPropertyByFloorID(id);
+        }
+
         public Property GetPropertyById(Guid id)
         {
             return _pro.GetPropertyByID(id);
         }
 
-        public IQueryable<Property> GetPropertyByProjectID(Guid id)
+        public IQueryable<Property> GetPropertyByUnitTypeID(Guid id)
         {
-            return _pro.GetPropertyByProjectID(id);
+            return _pro.GetPropertyByUnitTypeID(id);
         }
 
-        public IQueryable<Property> GetPropertyByPropertyTypeID(Guid id)
+        public IQueryable<Property> GetPropertyByZoneID(Guid id)
         {
-            return _pro.GetPropertyByPropertyTypeID(id);
+            return _pro.GetPropertyByZoneID(id);
         }
 
         public IQueryable<Property> SearchPropertyByName(string searchvalue)
