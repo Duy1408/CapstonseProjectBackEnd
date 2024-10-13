@@ -15,10 +15,11 @@ using RealEstateProjectSaleBusinessObject.DTO.Update;
 using RealEstateProjectSaleBusinessObject.Enums;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace RealEstateProjectSale.Controllers.PropertyController
 {
-    [Route("api/[controller]")]
+    [Route("api/propertys")]
     [ApiController]
     public class PropertyController : ControllerBase
     {
@@ -34,14 +35,17 @@ namespace RealEstateProjectSale.Controllers.PropertyController
         }
 
         [HttpGet]
-        [Route("GetAllProperty")]
+        [SwaggerOperation(Summary = "Get All Property")]
         public IActionResult GetAllProperty()
         {
             try
             {
                 if (_pro.GetProperty() == null)
                 {
-                    return NotFound();
+                    return NotFound(new
+                    {
+                        message = "Property not found."
+                    });
                 }
                 var propertys = _pro.GetProperty();
                 var response = _mapper.Map<List<PropertyVM>>(propertys);
@@ -55,7 +59,8 @@ namespace RealEstateProjectSale.Controllers.PropertyController
 
         }
 
-        [HttpGet("GetPropertyByID/{id}")]
+        [HttpGet("{id}")]
+        [SwaggerOperation(Summary = "Get Property By ID")]
         public IActionResult GetPropertyByID(Guid id)
         {
             var property = _pro.GetPropertyById(id);
@@ -67,14 +72,18 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                 return Ok(responese);
             }
 
-            return NotFound();
+            return NotFound(new
+            {
+                message = "Property not found."
+            });
 
         }
 
-        [HttpGet("GetPropertyByProjectID/{id}")]
-        public IActionResult GetPropertyByProjectID(Guid id)
+        [HttpGet("unitType/{unitTypeID}")]
+        [SwaggerOperation(Summary = "Get Property By UnitTypeID")]
+        public IActionResult GetPropertyByUnitTypeID(Guid unitTypeID)
         {
-            var property = _pro.GetPropertyByProjectID(id);
+            var property = _pro.GetPropertyByUnitTypeID(unitTypeID);
 
             if (property != null)
             {
@@ -82,58 +91,132 @@ namespace RealEstateProjectSale.Controllers.PropertyController
 
                 if (responese.Count == 0)
                 {
-                    return NotFound();
+                    return NotFound(new
+                    {
+                        message = "Property not found."
+                    });
                 }
 
                 return Ok(responese);
             }
 
-            return NotFound();
+            return NotFound(new
+            {
+                message = "Property not found."
+            });
 
         }
 
-        [HttpGet("SearchPropertyByName/{searchValue}")]
+        [HttpGet("zone/{zoneID}")]
+        [SwaggerOperation(Summary = "Get Property By ZoneID")]
+        public IActionResult GetPropertyByZoneID(Guid zoneID)
+        {
+            var property = _pro.GetPropertyByZoneID(zoneID);
+
+            if (property != null)
+            {
+                var responese = property.Select(property => _mapper.Map<PropertyVM>(property)).ToList();
+
+                if (responese.Count == 0)
+                {
+                    return NotFound(new
+                    {
+                        message = "Property not found."
+                    });
+                }
+
+                return Ok(responese);
+            }
+
+            return NotFound(new
+            {
+                message = "Property not found."
+            });
+
+        }
+
+        [HttpGet("block/{blockID}")]
+        [SwaggerOperation(Summary = "Get Property By BlockID")]
+        public IActionResult GetPropertyByBlockID(Guid blockID)
+        {
+            var property = _pro.GetPropertyByBlockID(blockID);
+
+            if (property != null)
+            {
+                var responese = property.Select(property => _mapper.Map<PropertyVM>(property)).ToList();
+
+                if (responese.Count == 0)
+                {
+                    return NotFound(new
+                    {
+                        message = "Property not found."
+                    });
+                }
+
+                return Ok(responese);
+            }
+
+            return NotFound(new
+            {
+                message = "Property not found."
+            });
+
+        }
+
+        [HttpGet("floor/{floorID}")]
+        [SwaggerOperation(Summary = "Get Property By FloorID")]
+        public IActionResult GetPropertyByFloorID(Guid floorID)
+        {
+            var property = _pro.GetPropertyByFloorID(floorID);
+
+            if (property != null)
+            {
+                var responese = property.Select(property => _mapper.Map<PropertyVM>(property)).ToList();
+
+                if (responese.Count == 0)
+                {
+                    return NotFound(new
+                    {
+                        message = "Property not found."
+                    });
+                }
+
+                return Ok(responese);
+            }
+
+            return NotFound(new
+            {
+                message = "Property not found."
+            });
+
+        }
+
+        [HttpGet("search")]
+        [SwaggerOperation(Summary = "Search Property By Name")]
         public ActionResult<Property> SearchPropertyByName(string searchValue)
         {
             if (_pro.GetProperty() == null)
             {
-                return NotFound();
+                return NotFound(new
+                {
+                    message = "Property not found."
+                });
             }
             var property = _pro.SearchPropertyByName(searchValue);
 
             if (property == null)
             {
-                return NotFound("Don't have this Property ");
+                return NotFound(new
+                {
+                    message = "Property not found."
+                });
             }
 
             return Ok(property);
         }
 
-        [HttpGet("GetPropertyByPropertyTypeID/{projectID}/{propertyTypeID}")]
-        public IActionResult GetPropertyByPropertyTypeID(Guid projectID, Guid propertyTypeID)
-        {
-
-            var property = _pro.GetPropertyByPropertyTypeID(propertyTypeID);
-                         //.Where(p => p.ProjectID == projectID);
-
-            if (property != null)
-            {
-                var responese = property.Select(property => _mapper.Map<PropertyVM>(property)).ToList();
-
-                if (responese.Count == 0)
-                {
-                    return NotFound();
-                }
-
-                return Ok(responese);
-            }
-
-            return NotFound();
-
-        }
-
         [HttpPost]
-        [Route("AddNewProperty")]
+        [SwaggerOperation(Summary = "Create a new Property")]
         public IActionResult AddNew([FromForm] PropertyRequestDTO property)
         {
             try
@@ -177,7 +260,10 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                 //_property.Image = blobUrl;
                 _pro.AddNew(_property);
 
-                return Ok("Create Property Successfully");
+                return Ok(new
+                {
+                    message = "Create Property Successfully"
+                });
 
             }
             catch (Exception ex)
@@ -186,7 +272,8 @@ namespace RealEstateProjectSale.Controllers.PropertyController
             }
         }
 
-        [HttpPut("UpdateProperty/{id}")]
+        [HttpPut("{id}")]
+        [SwaggerOperation(Summary = "Update Property by ID")]
         public IActionResult UpdateProperty([FromForm] PropertyUpdateDTO property, Guid id)
         {
             try
@@ -269,11 +356,17 @@ namespace RealEstateProjectSale.Controllers.PropertyController
 
                     _pro.UpdateProperty(existingProperty);
 
-                    return Ok("Update Property Successfully");
+                    return Ok(new
+                    {
+                        message = "Update Property Successfully"
+                    });
 
                 }
 
-                return NotFound("Property not found.");
+                return NotFound(new
+                {
+                    message = "Property not found."
+                });
 
             }
             catch (Exception ex)
