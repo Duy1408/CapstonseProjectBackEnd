@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,10 +12,11 @@ using RealEstateProjectSaleBusinessObject.DTO.Create;
 using RealEstateProjectSaleBusinessObject.DTO.Update;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace RealEstateProjectSale.Controllers.SalespolicyController
 {
-    [Route("api/[controller]")]
+    [Route("api/sales-policys")]
     [ApiController]
     public class SalespoliciesController : ControllerBase
     {
@@ -29,14 +31,17 @@ namespace RealEstateProjectSale.Controllers.SalespolicyController
 
         // GET: api/Salespolicies
         [HttpGet]
-        [Route("GetAllSalePolicy")]
+        [SwaggerOperation(Summary = "Get All SalePolicy")]
         public IActionResult GetAllSalePolicy()
         {
             try
             {
-                if (_sale.GetSalespolicys()==null)
+                if (_sale.GetSalespolicys() == null)
                 {
-                    return NotFound();
+                    return NotFound(new
+                    {
+                        message = "SalePolicy not found."
+                    });
                 }
                 var sales = _sale.GetSalespolicys();
                 var response = _mapper.Map<List<SalepolicyVM>>(sales);
@@ -51,7 +56,8 @@ namespace RealEstateProjectSale.Controllers.SalespolicyController
 
         // GET: api/Salespolicies/5
 
-        [HttpGet("GetSalePolicyByID/{id}")]
+        [HttpGet("{id}")]
+        [SwaggerOperation(Summary = "Get SalePolicy by ID")]
         public IActionResult GetSalePolicyByID(Guid id)
         {
             var sale = _sale.GetSalespolicyById(id);
@@ -63,14 +69,15 @@ namespace RealEstateProjectSale.Controllers.SalespolicyController
                 return Ok(responese);
             }
 
-            return NotFound();
+            return NotFound(new
+            {
+                message = "SalePolicy not found."
+            });
 
         }
 
-        // PUT: api/Salespolicies/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-
-        [HttpPut("UpdateSalePolicy/{id}")]
+        [HttpPut("{id}")]
+        [SwaggerOperation(Summary = "Update SalePolicy by ID")]
         public IActionResult UpdateSalePolicy([FromForm] SalePolicyUpdateDTO sale, Guid id)
         {
             try
@@ -95,15 +102,25 @@ namespace RealEstateProjectSale.Controllers.SalespolicyController
                     {
                         existingSale.ExpressTime = sale.ExpressTime.Value;
                     }
+                    if (sale.ProjectID.HasValue)
+                    {
+                        existingSale.ProjectID = sale.ProjectID.Value;
+                    }
 
 
                     _sale.UpdateSalespolicy(existingSale);
 
-                    return Ok("Update SalePolicy Successfully");
+                    return Ok(new
+                    {
+                        message = "Update SalePolicy Successfully"
+                    });
 
                 }
 
-                return NotFound("SalePolicy not found.");
+                return NotFound(new
+                {
+                    message = "SalePolicy not found."
+                });
 
             }
             catch (Exception ex)
@@ -112,11 +129,8 @@ namespace RealEstateProjectSale.Controllers.SalespolicyController
             }
         }
 
-
-        // POST: api/Salespolicies
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [Route("AddNewSalePolicy")]
+        [SwaggerOperation(Summary = "Create a new SalePolicy")]
         public IActionResult AddNew(SalepolicyCreateDTO sale)
         {
             try
@@ -124,21 +138,22 @@ namespace RealEstateProjectSale.Controllers.SalespolicyController
 
                 var newSale = new SalepolicyCreateDTO
                 {
-
                     SalesPolicyID = Guid.NewGuid(),
                     SalesPolicyType = sale.SalesPolicyType,
-                    ExpressTime = DateTime.Now,
+                    ExpressTime = DateTime.Now.Date,
                     PeopleApplied = null,
                     Status = true,
                     ProjectID = sale.ProjectID,
-                 
                 };
 
                 var salepolicy = _mapper.Map<Salespolicy>(newSale);
-               
+
                 _sale.AddNew(salepolicy);
 
-                return Ok("Create SalePolicy Successfully");
+                return Ok(new
+                {
+                    message = "Create SalePolicy Successfully"
+                });
             }
             catch (Exception ex)
             {
@@ -146,24 +161,33 @@ namespace RealEstateProjectSale.Controllers.SalespolicyController
             }
         }
 
-        // DELETE: api/Salespolicies/5
-        [HttpDelete("DeleteSalePolicy/{id}")]
+        [HttpDelete("{id}")]
+        [SwaggerOperation(Summary = "Delete SalePolicy by ID")]
         public IActionResult DeleteSalePolicy(Guid id)
         {
-            if (_sale.GetSalespolicys()==null)
+            if (_sale.GetSalespolicys() == null)
             {
-                return NotFound();
+                return NotFound(new
+                {
+                    message = "SalePolicy not found."
+                });
             }
             var sale = _sale.GetSalespolicyById(id);
             if (sale == null)
             {
-                return NotFound();
+                return NotFound(new
+                {
+                    message = "SalePolicy not found."
+                });
             }
 
             _sale.ChangeStatus(sale);
 
 
-            return Ok("Delete Successfully");
+            return Ok(new
+            {
+                message = "Delete Comment Successfully"
+            });
         }
 
 

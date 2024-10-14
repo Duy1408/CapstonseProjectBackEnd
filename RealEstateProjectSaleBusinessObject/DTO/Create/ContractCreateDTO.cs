@@ -30,7 +30,7 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
         public string? Description { get; set; }
         public IFormFile? ContractFile { get; set; }
         public string Status { get; set; }
-        public Guid? DocumentID { get; set; }
+        public Guid? DocumentTemplateID { get; set; }
         public Guid BookingID { get; set; }
         public Guid? PaymentProcessID { get; set; }
 

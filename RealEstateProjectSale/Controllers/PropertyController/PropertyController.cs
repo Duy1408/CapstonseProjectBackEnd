@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -313,21 +314,21 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                     {
                         existingProperty.Status = property.Status;
                     }
-                    if (property.UnitTypeID != null)
+                    if (property.UnitTypeID.HasValue)
                     {
-                        existingProperty.UnitTypeID = (Guid)property.UnitTypeID;
+                        existingProperty.UnitTypeID = property.UnitTypeID.Value;
                     }
-                    if (property.FloorID != null)
+                    if (property.FloorID.HasValue)
                     {
-                        existingProperty.FloorID = (Guid)property.FloorID;
+                        existingProperty.FloorID = property.FloorID.Value;
                     }
-                    if (property.BlockID != null)
+                    if (property.BlockID.HasValue)
                     {
-                        existingProperty.BlockID = (Guid)property.BlockID;
+                        existingProperty.BlockID = property.BlockID.Value;
                     }
-                    if (property.ZoneID != null)
+                    if (property.ZoneID.HasValue)
                     {
-                        existingProperty.ZoneID = (Guid)property.ZoneID;
+                        existingProperty.ZoneID = property.ZoneID.Value;
                     }
 
                     _pro.UpdateProperty(existingProperty);

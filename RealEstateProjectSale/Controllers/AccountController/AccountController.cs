@@ -131,9 +131,9 @@ namespace RealEstateProjectSale.Controllers.AccountController
                     {
                         existingAccount.Status = account.Status.Value;
                     }
-                    if (account.RoleID != null)
+                    if (account.RoleID.HasValue)
                     {
-                        existingAccount.RoleID = (Guid)account.RoleID;
+                        existingAccount.RoleID = account.RoleID.Value;
                     }
 
                     _accountServices.UpdateAccount(existingAccount);

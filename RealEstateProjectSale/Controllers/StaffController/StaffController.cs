@@ -8,10 +8,12 @@ using RealEstateProjectSaleBusinessObject.DTO.Create;
 using RealEstateProjectSaleBusinessObject.DTO.Update;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
+using Swashbuckle.AspNetCore.Annotations;
+using System.Diagnostics.Contracts;
 
 namespace RealEstateProjectSale.Controllers.StaffController
 {
-    [Route("api/[controller]")]
+    [Route("api/staffs")]
     [ApiController]
     public class StaffController : ControllerBase
     {
@@ -32,14 +34,17 @@ namespace RealEstateProjectSale.Controllers.StaffController
         }
 
         [HttpGet]
-        [Route("GetAllStaff")]
+        [SwaggerOperation(Summary = "Get All Staff")]
         public IActionResult GetAllStaff()
         {
             try
             {
                 if (_staffServices.GetAllStaff() == null)
                 {
-                    return NotFound();
+                    return NotFound(new
+                    {
+                        message = "Staff not found."
+                    });
                 }
                 var staffs = _staffServices.GetAllStaff();
                 var response = _mapper.Map<List<StaffVM>>(staffs);
@@ -52,7 +57,8 @@ namespace RealEstateProjectSale.Controllers.StaffController
             }
         }
 
-        [HttpGet("GetStaffByID/{id}")]
+        [HttpGet("{id}")]
+        [SwaggerOperation(Summary = "Get Staff by ID")]
         public IActionResult GetStaffByID(Guid id)
         {
             var staff = _staffServices.GetStaffByID(id);
@@ -64,47 +70,32 @@ namespace RealEstateProjectSale.Controllers.StaffController
                 return Ok(responese);
             }
 
-            return NotFound();
+            return NotFound(new
+            {
+                message = "Staff not found."
+            });
 
         }
 
         [HttpPost]
-        [Route("RegisterAccountStaff")]
-        public async Task<IActionResult> AddNewStaff([FromForm] RegisterStaffVM accountStaff)
+        [SwaggerOperation(Summary = "Register Account Staff")]
+        public async Task<IActionResult> AddNewStaff(RegisterStaffVM accountStaff)
         {
             try
             {
-                var containerInstance = _blobServiceClient.GetBlobContainerClient("realestateprojectpictures");
-
-                // Upload image and image signature to Azure Blob Storage if they are provided
-                string? blobUrl1 = null, blobUrl2 = null;
-                if (accountStaff.Image != null)
-                {
-                    var blobName1 = $"{Guid.NewGuid()}_{accountStaff.Image.FileName}";
-                    var blobInstance1 = containerInstance.GetBlobClient(blobName1);
-                    blobInstance1.Upload(accountStaff.Image.OpenReadStream());
-                    var storageAccountUrl = "https://realestateprojectimage.blob.core.windows.net/realestateprojectpictures";
-                    blobUrl1 = $"{storageAccountUrl}/{blobName1}";
-                }
-
-                if (accountStaff.Imagesignature != null)
-                {
-                    var blobName2 = $"{Guid.NewGuid()}_{accountStaff.Imagesignature.FileName}";
-                    var blobInstance2 = containerInstance.GetBlobClient(blobName2);
-                    blobInstance2.Upload(accountStaff.Imagesignature.OpenReadStream());
-                    var storageAccountUrl = "https://realestateprojectimage.blob.core.windows.net/realestateprojectpictures";
-                    blobUrl2 = $"{storageAccountUrl}/{blobName2}";
-                }
 
                 var checkEmail = _accountServices.GetAllAccount().Where(u =>
                 u.Email.Equals(accountStaff.Email)).FirstOrDefault();
 
                 if (checkEmail != null)
                 {
-                    return BadRequest("Email Existed");
+                    return BadRequest(new
+                    {
+                        message = "Email Existed"
+                    });
                 }
 
-                var roleStaff = _roleServices.GetRoleByRoleName("Staff");
+                var roleStaff = _roleServices.GetRoleByRoleName("Assistant Staff");
 
                 var account = new AccountCreateDTO
                 {
@@ -118,6 +109,17 @@ namespace RealEstateProjectSale.Controllers.StaffController
                 var _account = _mapper.Map<Account>(account);
                 _accountServices.AddNewAccount(_account);
 
+                var containerInstance = _blobServiceClient.GetBlobContainerClient("staffimage");
+                string? blobUrl = null;
+                if (accountStaff.Image != null)
+                {
+                    var blobName = $"{Guid.NewGuid()}_{accountStaff.Image.FileName}";
+                    var blobInstance = containerInstance.GetBlobClient(blobName);
+                    blobInstance.Upload(accountStaff.Image.OpenReadStream());
+                    var storageAccountUrl = "https://realestatesystem.blob.core.windows.net/staffimage";
+                    blobUrl = $"{storageAccountUrl}/{blobName}";
+                }
+
                 var staff = new StaffCreateDTO
                 {
                     StaffID = Guid.NewGuid(),
@@ -130,6 +132,7 @@ namespace RealEstateProjectSale.Controllers.StaffController
                     Nationality = accountStaff.Nationality,
                     Placeoforigin = accountStaff.Placeoforigin,
                     PlaceOfresidence = accountStaff.PlaceOfresidence,
+                    DateOfIssue = accountStaff.DateOfIssue,
                     Taxcode = accountStaff.Taxcode,
                     BankName = accountStaff.BankName,
                     BankNumber = accountStaff.BankNumber,
@@ -138,10 +141,13 @@ namespace RealEstateProjectSale.Controllers.StaffController
                 };
 
                 var _staff = _mapper.Map<Staff>(staff);
-                _staff.Image = blobUrl1;
+                _staff.Image = blobUrl;
                 _staffServices.AddNewStaff(_staff);
 
-                return Ok("Create Staff Successfully");
+                return Ok(new
+                {
+                    message = "Register Account Staff Successfully"
+                });
 
             }
             catch (Exception ex)
@@ -150,62 +156,26 @@ namespace RealEstateProjectSale.Controllers.StaffController
             }
         }
 
-        //[HttpPost]
-        //public ActionResult<Staff> AddNewStaff([FromForm] StaffCreateDTO staff)
-        //{
-        //    try
-        //    {
-        //        var containerInstance = _blobServiceClient.GetBlobContainerClient("realestateprojectpictures");
-        //        //get file name from request and upload to azure blod storage
-        //        var blobName = $"{Guid.NewGuid()} {staff.Image?.FileName}";
-        //        //local file path
-        //        var blobInstance = containerInstance.GetBlobClient(blobName);
-        //        blobInstance.Upload(staff.Image?.OpenReadStream());
-
-        //        //storageAccountUrl
-        //        var storageAccountUrl = "https://realestateprojectimage.blob.core.windows.net/realestateprojectpictures";
-        //        //get blod url
-        //        var blobUrl = $"{storageAccountUrl}/{blobName}";
-
-        //        var _staff = _mapper.Map<Staff>(staff);
-        //        _staff.Image = blobUrl;
-        //        _staffServices.AddNewStaff(_staff);
-
-        //        return Ok("Create Staff Successfully");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-
-        //}
-
-        [HttpPut("UpdateStaff/{id}")]
+        [HttpPut("{id}")]
+        [SwaggerOperation(Summary = "Update Staff by ID")]
         public IActionResult UpdateStaff([FromForm] StaffUpdateDTO staff, Guid id)
         {
             try
             {
-                var containerInstance = _blobServiceClient.GetBlobContainerClient("realestateprojectpictures");
-
-                // Upload image and image signature to Azure Blob Storage if they are provided
-                string? blobUrl1 = null, blobUrl2 = null;
+                var containerInstance = _blobServiceClient.GetBlobContainerClient("staffimage");
+                string? blobUrl = null;
                 if (staff.Image != null)
                 {
-                    var blobName1 = $"{Guid.NewGuid()}_{staff.Image.FileName}";
-                    var blobInstance1 = containerInstance.GetBlobClient(blobName1);
-                    blobInstance1.Upload(staff.Image.OpenReadStream());
-                    var storageAccountUrl = "https://realestateprojectimage.blob.core.windows.net/realestateprojectpictures";
-                    blobUrl1 = $"{storageAccountUrl}/{blobName1}";
+                    var blobName = $"{Guid.NewGuid()}_{staff.Image.FileName}";
+                    var blobInstance = containerInstance.GetBlobClient(blobName);
+                    blobInstance.Upload(staff.Image.OpenReadStream());
+                    var storageAccountUrl = "https://realestatesystem.blob.core.windows.net/staffimage";
+                    blobUrl = $"{storageAccountUrl}/{blobName}";
                 }
-
-             
-
-
 
                 var _staff = _staffServices.GetStaffByID(id);
                 if (_staff != null)
                 {
-
                     if (!string.IsNullOrEmpty(staff.Name))
                     {
                         _staff.Name = staff.Name;
@@ -218,11 +188,10 @@ namespace RealEstateProjectSale.Controllers.StaffController
                     {
                         _staff.DateOfBirth = staff.DateOfBirth.Value;
                     }
-                    if (blobUrl1 != null)
+                    if (blobUrl != null)
                     {
-                        _staff.Image = blobUrl1;
+                        _staff.Image = blobUrl;
                     }
-                
                     if (!string.IsNullOrEmpty(staff.IdentityCardNumber))
                     {
                         _staff.IdentityCardNumber = staff.IdentityCardNumber;
@@ -243,6 +212,10 @@ namespace RealEstateProjectSale.Controllers.StaffController
                     {
                         _staff.PlaceOfresidence = staff.PlaceOfresidence;
                     }
+                    if (staff.DateOfIssue.HasValue)
+                    {
+                        _staff.DateOfIssue = staff.DateOfIssue.Value;
+                    }
                     if (!string.IsNullOrEmpty(staff.Taxcode))
                     {
                         _staff.Taxcode = staff.Taxcode;
@@ -251,24 +224,32 @@ namespace RealEstateProjectSale.Controllers.StaffController
                     {
                         _staff.BankName = staff.BankName;
                     }
-                    //if (staff.BankNumber.HasValue)
-                    //{
-                    //    _staff.BankNumber = staff.BankNumber.Value;
-                    //}
+                    if (!string.IsNullOrEmpty(staff.BankNumber))
+                    {
+                        _staff.BankNumber = staff.BankNumber;
+                    }
                     if (staff.Status.HasValue)
                     {
                         _staff.Status = staff.Status.Value;
                     }
+                    if (staff.AccountID.HasValue)
+                    {
+                        _staff.AccountID = staff.AccountID.Value;
+                    }
 
-
-                    //var staffUpdate = _mapper.Map<Staff>(staff);
                     _staffServices.UpdateStaff(_staff);
 
-                    return Ok("Update Staff Successfully");
+                    return Ok(new
+                    {
+                        message = "Update Staff Successfully"
+                    });
 
                 }
 
-                return NotFound("Staff not found.");
+                return NotFound(new
+                {
+                    message = "Staff not found."
+                });
 
             }
             catch (Exception ex)
@@ -277,23 +258,33 @@ namespace RealEstateProjectSale.Controllers.StaffController
             }
         }
 
-        [HttpDelete("DeleteStaff/{id}")]
+        [HttpDelete("{id}")]
+        [SwaggerOperation(Summary = "Delete Staff by ID")]
         public IActionResult DeleteStaff(Guid id)
         {
             if (_staffServices.GetStaffByID(id) == null)
             {
-                return NotFound();
+                return NotFound(new
+                {
+                    message = "Staff not found."
+                });
             }
             var staff = _staffServices.GetStaffByID(id);
             if (staff == null)
             {
-                return NotFound();
+                return NotFound(new
+                {
+                    message = "Staff not found."
+                });
             }
 
             _staffServices.ChangeStatusStaff(staff);
 
 
-            return Ok("Delete Successfully");
+            return Ok(new
+            {
+                message = "Delete Staff Successfully"
+            });
         }
 
     }

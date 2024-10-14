@@ -123,13 +123,13 @@ namespace RealEstateProjectSale.Controllers.ProjectCategoryDetailController
                 var existingDetail = _detailServices.GetProjectCategoryDetailByID(projectID, propertyCategoryID);
                 if (existingDetail != null)
                 {
-                    if (detail.ProjectID != null)
+                    if (detail.ProjectID.HasValue)
                     {
-                        existingDetail.ProjectID = (Guid)detail.ProjectID;
+                        existingDetail.ProjectID = detail.ProjectID.Value;
                     }
-                    if (detail.PropertyCategoryID != null)
+                    if (detail.PropertyCategoryID.HasValue)
                     {
-                        existingDetail.PropertyCategoryID = (Guid)detail.PropertyCategoryID;
+                        existingDetail.PropertyCategoryID = detail.PropertyCategoryID.Value;
                     }
 
 

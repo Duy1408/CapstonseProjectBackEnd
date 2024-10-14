@@ -4,10 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 using RealEstateProjectSaleServices.Services;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace RealEstateProjectSale.Controllers.RoleController
 {
-    [Route("api/[controller]")]
+    [Route("api/roles")]
     [ApiController]
     public class RoleController : ControllerBase
     {
@@ -21,14 +22,17 @@ namespace RealEstateProjectSale.Controllers.RoleController
         }
 
         [HttpGet]
-        [Route("GetAllRole")]
+        [SwaggerOperation(Summary = "Get All Role")]
         public IActionResult GetAllRole()
         {
             try
             {
                 if (_roleServices.GetAllRole() == null)
                 {
-                    return NotFound();
+                    return NotFound(new
+                    {
+                        message = "Role not found."
+                    });
                 }
                 var roles = _roleServices.GetAllRole();
                 var response = _mapper.Map<List<RoleVM>>(roles);
@@ -41,7 +45,8 @@ namespace RealEstateProjectSale.Controllers.RoleController
             }
         }
 
-        [HttpGet("GetRoleByID/{id}")]
+        [HttpGet("{id}")]
+        [SwaggerOperation(Summary = "Get comment by ID")]
         public IActionResult GetRoleByID(Guid id)
         {
             var role = _roleServices.GetRoleByID(id);
@@ -53,7 +58,10 @@ namespace RealEstateProjectSale.Controllers.RoleController
                 return Ok(responese);
             }
 
-            return NotFound();
+            return NotFound(new
+            {
+                message = "Role not found."
+            });
 
         }
 

@@ -40,7 +40,10 @@ namespace RealEstateProjectSale.Controllers.ContractController
             {
                 if (_contractServices.GetAllContract() == null)
                 {
-                    return NotFound();
+                    return NotFound(new
+                    {
+                        message = "Contract not found."
+                    });
                 }
                 var contracts = _contractServices.GetAllContract();
                 var response = _mapper.Map<List<ContractVM>>(contracts);
@@ -66,7 +69,10 @@ namespace RealEstateProjectSale.Controllers.ContractController
                 return Ok(responese);
             }
 
-            return NotFound();
+            return NotFound(new
+            {
+                message = "Contract not found."
+            });
 
         }
 
@@ -103,7 +109,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     Description = contract.Description,
                     ContractFile = contract.ContractFile,
                     Status = ContractStatus.NotSigned.ToString(),
-                    DocumentID = contract.DocumentID,
+                    DocumentTemplateID = contract.DocumentTemplateID,
                     BookingID = contract.BookingID,
                     PaymentProcessID = contract.PaymentProcessID,
 
@@ -113,7 +119,10 @@ namespace RealEstateProjectSale.Controllers.ContractController
                 _contract.ContractFile = blobUrl;
                 _contractServices.AddNewContract(_contract);
 
-                return Ok("Create Contract Successfully");
+                return Ok(new
+                {
+                    message = "Create Contract Successfully"
+                });
             }
             catch (Exception ex)
             {
@@ -153,6 +162,18 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     {
                         existingContract.ContractType = contract.ContractType;
                     }
+                    if (contract.CreatedTime.HasValue)
+                    {
+                        existingContract.CreatedTime = contract.CreatedTime.Value;
+                    }
+                    if (contract.UpdatedTime.HasValue)
+                    {
+                        existingContract.UpdatedTime = contract.UpdatedTime.Value;
+                    }
+                    if (contract.DateSigned.HasValue)
+                    {
+                        existingContract.DateSigned = contract.DateSigned.Value;
+                    }
                     if (contract.ExpiredTime.HasValue)
                     {
                         existingContract.ExpiredTime = contract.ExpiredTime.Value;
@@ -169,10 +190,14 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     {
                         existingContract.Status = contract.Status;
                     }
-                    //if (contract.DocumentID.HasValue)
-                    //{
-                    //    existingContract.DocumentTemplateID = contract.DocumentID.Value;
-                    //}
+                    if (contract.DocumentTemplateID.HasValue)
+                    {
+                        existingContract.DocumentTemplateID = contract.DocumentTemplateID.Value;
+                    }
+                    if (contract.BookingID.HasValue)
+                    {
+                        existingContract.BookingID = contract.BookingID.Value;
+                    }
                     if (contract.PaymentProcessID.HasValue)
                     {
                         existingContract.PaymentProcessID = contract.PaymentProcessID.Value;
@@ -185,11 +210,17 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     existingContract.UpdatedTime = DateTime.Now;
                     _contractServices.UpdateContract(existingContract);
 
-                    return Ok("Update Contract Successfully");
+                    return Ok(new
+                    {
+                        message = "Update Contract Successfully"
+                    });
 
                 }
 
-                return NotFound("Contract not found.");
+                return NotFound(new
+                {
+                    message = "Contract not found."
+                });
 
             }
             catch (Exception ex)
@@ -215,11 +246,18 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
                     _contractServices.UpdateContract(contract);
                     _bookServices.UpdateBooking(book);
-                    return Ok("Signed Contract Successfully");
+
+                    return Ok(new
+                    {
+                        message = "Signed Contract Successfully"
+                    });
 
                 }
 
-                return NotFound("Contract not found.");
+                return NotFound(new
+                {
+                    message = "Contract not found."
+                });
 
             }
             catch (Exception ex)
@@ -236,13 +274,19 @@ namespace RealEstateProjectSale.Controllers.ContractController
             var contract = _contractServices.GetContractByID(id);
             if (contract == null)
             {
-                return NotFound();
+                return NotFound(new
+                {
+                    message = "Contract not found."
+                });
             }
 
             _contractServices.ChangeStatusContract(contract);
 
 
-            return Ok("Delete Successfully");
+            return Ok(new
+            {
+                message = "Delete Contract Successfully"
+            });
         }
 
         private string GenerateNextContractCode()
