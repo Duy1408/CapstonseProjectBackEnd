@@ -30,7 +30,7 @@ namespace RealEstateProjectSale.Controllers.FloorController
 
 
         [HttpGet]
-        [SwaggerOperation(Summary = "Gett all Floor")]
+        [SwaggerOperation(Summary = "Get all Floor")]
 
         public IActionResult GetAllFloor()
         {

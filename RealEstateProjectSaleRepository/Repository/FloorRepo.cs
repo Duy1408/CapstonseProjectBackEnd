@@ -21,27 +21,27 @@ namespace RealEstateProjectSaleRepository.Repository
 
         public void AddNew(Floor p)
         {
-            throw new NotImplementedException();
+            _dao.AddNew(p);
         }
 
         public bool ChangeStatus(Floor p)
         {
-            throw new NotImplementedException();
+            return _dao.ChangeStatus(p);
         }
 
         public Floor GetFloorById(Guid id)
         {
-            throw new NotImplementedException();
+            return _dao.GetFloorByID(id);
         }
 
         public List<Floor> GetFloors()
         {
-            throw new NotImplementedException();
+            return _dao.GetAllFloor();
         }
 
         public void UpdateFloor(Floor p)
         {
-            throw new NotImplementedException();
+            _dao.UpdateFloor(p);
         }
     }
 }
