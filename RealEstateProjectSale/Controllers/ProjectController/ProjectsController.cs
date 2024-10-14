@@ -56,7 +56,10 @@ namespace RealEstateProjectSale.Controllers
 
                 if (projects == null || !projects.Any())
                 {
-                    return NotFound();
+                    return NotFound(new
+                    {
+                        message = "Project not found."
+                    });
                 }
 
                 var projectsQuery = string.IsNullOrEmpty(projectName)
