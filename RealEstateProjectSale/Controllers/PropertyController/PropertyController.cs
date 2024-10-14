@@ -7,6 +7,7 @@ using Azure;
 using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
 using RealEstateProjectSaleBusinessObject.DTO.Create;
@@ -24,31 +25,66 @@ namespace RealEstateProjectSale.Controllers.PropertyController
     public class PropertyController : ControllerBase
     {
         private readonly IPropertyServices _pro;
+        private readonly IPagingServices _pagingServices;
         private readonly IMapper _mapper;
         private readonly BlobServiceClient _blobServiceClient;
 
-        public PropertyController(IPropertyServices pro, BlobServiceClient blobServiceClient, IMapper mapper)
+        public static int PAGE_SIZE { get; set; } = 5;
+
+        public PropertyController(IPropertyServices pro, IPagingServices pagingServices, BlobServiceClient blobServiceClient, IMapper mapper)
         {
             _pro = pro;
+            _pagingServices = pagingServices;
             _blobServiceClient = blobServiceClient;
             _mapper = mapper;
         }
 
         [HttpGet]
         [SwaggerOperation(Summary = "Get All Property")]
-        public IActionResult GetAllProperty()
+        public IActionResult GetAllProperty([FromQuery] string? propertyCode, [FromQuery] Guid? zoneID, [FromQuery] Guid? blockID, [FromQuery] Guid? floorID, [FromQuery] int page = 1)
         {
             try
             {
-                if (_pro.GetProperty() == null)
+                var propertysQuery = _pro.GetProperty().AsQueryable();
+
+                if (propertysQuery == null || !propertysQuery.Any())
                 {
                     return NotFound(new
                     {
                         message = "Property not found."
                     });
                 }
-                var propertys = _pro.GetProperty();
-                var response = _mapper.Map<List<PropertyVM>>(propertys);
+
+                if (!string.IsNullOrEmpty(propertyCode))
+                {
+                    propertysQuery = propertysQuery.Where(p => p.PropertyCode.Contains(propertyCode));
+                }
+                if (zoneID.HasValue)
+                {
+                    propertysQuery = propertysQuery.Where(p => p.ZoneID == zoneID.Value);
+                }
+                if (blockID.HasValue)
+                {
+                    propertysQuery = propertysQuery.Where(p => p.BlockID == blockID.Value);
+                }
+                if (floorID.HasValue)
+                {
+                    propertysQuery = propertysQuery.Where(p => p.FloorID == floorID.Value);
+                }
+
+                var pagedPropertys = _pagingServices.GetPagedList(propertysQuery, page, PAGE_SIZE);
+
+                if (pagedPropertys == null || !pagedPropertys.Any())
+                {
+                    return NotFound(new
+                    {
+                        message = "Property not found."
+                    });
+                }
+
+                var response = _mapper.Map<List<PropertyVM>>(pagedPropertys);
+
+
                 return Ok(response);
             }
             catch (Exception ex)
@@ -217,47 +253,26 @@ namespace RealEstateProjectSale.Controllers.PropertyController
 
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new Property")]
-        public IActionResult AddNew([FromForm] PropertyRequestDTO property)
+        public IActionResult AddNewProperty(PropertyCreateDTO property)
         {
             try
             {
 
-                var containerInstance = _blobServiceClient.GetBlobContainerClient("realestateprojectpictures");
-                string? blobUrl = null;
-                if (property.Image != null)
-                {
-                    var blobName = $"{Guid.NewGuid()}_{property.Image.FileName}";
-                    var blobInstance = containerInstance.GetBlobClient(blobName);
-                    blobInstance.Upload(property.Image.OpenReadStream());
-                    var storageAccountUrl = "https://realestateprojectimage.blob.core.windows.net/realestateprojectpictures";
-                    blobUrl = $"{storageAccountUrl}/{blobName}";
-                }
-
                 var newProperty = new PropertyCreateDTO
                 {
                     PropertyID = Guid.NewGuid(),
-                    PropertyName = property.PropertyName,
-                    Block = property.Block,
-                    Floor = property.Floor,
-                    SizeArea = property.SizeArea,
-                    BedRoom = property.BedRoom,
-                    BathRoom = property.BathRoom,
-                    LivingRoom = property.LivingRoom,
+                    PropertyCode = property.PropertyCode,
                     View = property.View,
-                    InitialPrice = property.InitialPrice,
-                    Discount = property.Discount,
-                    MoneyTax = property.MoneyTax,
-                    MaintenanceCost = property.MaintenanceCost,
-                    TotalPrice = property.TotalPrice,
-                    Image = property.Image,
-                    Status = PropertyStatus.NotForSale.ToString(),
-                    PropertyTypeID = property.PropertyTypeID,
-                    ProjectID = property.ProjectID,
+                    PriceSold = property.PriceSold,
+                    Status = property.Status,
+                    UnitTypeID = property.UnitTypeID,
+                    FloorID = property.FloorID,
+                    BlockID = property.BlockID,
+                    ZoneID = property.ZoneID
+
                 };
 
                 var _property = _mapper.Map<Property>(newProperty);
-                //bug
-                //_property.Image = blobUrl;
                 _pro.AddNew(_property);
 
                 return Ok(new
@@ -279,79 +294,40 @@ namespace RealEstateProjectSale.Controllers.PropertyController
             try
             {
 
-                var containerInstance = _blobServiceClient.GetBlobContainerClient("realestateprojectpictures");
-                string? blobUrl = null;
-                if (property.Image != null)
-                {
-                    var blobName = $"{Guid.NewGuid()}_{property.Image.FileName}";
-                    var blobInstance = containerInstance.GetBlobClient(blobName);
-                    blobInstance.Upload(property.Image.OpenReadStream());
-                    var storageAccountUrl = "https://realestateprojectimage.blob.core.windows.net/realestateprojectpictures";
-                    blobUrl = $"{storageAccountUrl}/{blobName}";
-                }
-
                 var existingProperty = _pro.GetPropertyById(id);
                 if (existingProperty != null)
                 {
-                    //if (!string.IsNullOrEmpty(property.PropertyName))
-                    //{
-                    //    existingProperty.PropertyName = property.PropertyName;
-                    //}
-                    //if (!string.IsNullOrEmpty(property.Block))
-                    //{
-                    //    existingProperty.Block = property.Block;
-                    //}
-                    //if (property.Floor.HasValue)
-                    //{
-                    //    existingProperty.Floor = property.Floor.Value;
-                    //}
-                    //if (property.SizeArea.HasValue)
-                    //{
-                    //    existingProperty.SizeArea = property.SizeArea.Value;
-                    //}
-                    //if (property.BedRoom.HasValue)
-                    //{
-                    //    existingProperty.BedRoom = property.BedRoom.Value;
-                    //}
-                    //if (property.BathRoom.HasValue)
-                    //{
-                    //    existingProperty.BathRoom = property.BathRoom.Value;
-                    //}
-                    //if (property.LivingRoom.HasValue)
-                    //{
-                    //    existingProperty.LivingRoom = property.LivingRoom.Value;
-                    //}
-                    //if (!string.IsNullOrEmpty(property.View))
-                    //{
-                    //    existingProperty.View = property.View;
-                    //}
-                    //if (property.InitialPrice.HasValue)
-                    //{
-                    //    existingProperty.InitialPrice = property.InitialPrice.Value;
-                    //}
-                    //if (property.Discount.HasValue)
-                    //{
-                    //    existingProperty.Discount = property.Discount.Value;
-                    //}
-                    //if (property.MoneyTax.HasValue)
-                    //{
-                    //    existingProperty.MoneyTax = property.MoneyTax.Value;
-                    //}
-                    //if (property.MaintenanceCost.HasValue)
-                    //{
-                    //    existingProperty.MaintenanceCost = property.MaintenanceCost.Value;
-                    //}
-                    //if (property.TotalPrice.HasValue)
-                    //{
-                    //    existingProperty.TotalPrice = property.TotalPrice.Value;
-                    //}
-                    //if (blobUrl != null)
-                    //{
-                    //    existingProperty.Image = blobUrl;
-                    //}
+                    if (!string.IsNullOrEmpty(property.PropertyCode))
+                    {
+                        existingProperty.PropertyCode = property.PropertyCode;
+                    }
+                    if (!string.IsNullOrEmpty(property.View))
+                    {
+                        existingProperty.View = property.View;
+                    }
+                    if (property.PriceSold.HasValue)
+                    {
+                        existingProperty.PriceSold = property.PriceSold.Value;
+                    }
                     if (!string.IsNullOrEmpty(property.Status))
                     {
                         existingProperty.Status = property.Status;
+                    }
+                    if (property.UnitTypeID != null)
+                    {
+                        existingProperty.UnitTypeID = (Guid)property.UnitTypeID;
+                    }
+                    if (property.FloorID != null)
+                    {
+                        existingProperty.FloorID = (Guid)property.FloorID;
+                    }
+                    if (property.BlockID != null)
+                    {
+                        existingProperty.BlockID = (Guid)property.BlockID;
+                    }
+                    if (property.ZoneID != null)
+                    {
+                        existingProperty.ZoneID = (Guid)property.ZoneID;
                     }
 
                     _pro.UpdateProperty(existingProperty);

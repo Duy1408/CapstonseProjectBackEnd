@@ -9,20 +9,15 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Update
 {
     public class PropertyUpdateDTO
     {
-        public string? PropertyName { get; set; }
-        public string? Block { get; set; }
-        public int? Floor { get; set; }
-        public double? SizeArea { get; set; }
-        public int? BedRoom { get; set; }
-        public int? BathRoom { get; set; }
-        public int? LivingRoom { get; set; }
+        public string? PropertyCode { get; set; }
         public string? View { get; set; }
-        public double? InitialPrice { get; set; }
-        public double? Discount { get; set; }
-        public double? MoneyTax { get; set; }
-        public double? MaintenanceCost { get; set; }
-        public double? TotalPrice { get; set; }
-        public IFormFile? Image { get; set; }
+        public double? PriceSold { get; set; }
+
         public string? Status { get; set; }
+        public Guid? UnitTypeID { get; set; }
+        public Guid? FloorID { get; set; }
+        public Guid? BlockID { get; set; }
+        public Guid? ZoneID { get; set; }
+
     }
 }
