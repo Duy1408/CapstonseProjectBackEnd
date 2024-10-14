@@ -74,6 +74,8 @@ builder.Services.AddScoped<IPropertyCategoryRepo, PropertyCategoryRepo>();
 builder.Services.AddScoped<IPropertyCategoryServices, PropertyCategoryServices>();
 builder.Services.AddScoped<IProjectCategoryDetailRepo, ProjectCategoryDetailRepo>();
 builder.Services.AddScoped<IProjectCategoryDetailServices, ProjectCategoryDetailServices>();
+builder.Services.AddScoped<IUnitTypeRepo, UnitTypeRepo>();
+builder.Services.AddScoped<IUnitTypeServices, UnitTypeServices>();
 
 
 //Azure Blob Storage

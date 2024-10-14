@@ -79,7 +79,7 @@ namespace RealEstateProjectSale.Controllers.StaffController
 
         [HttpPost]
         [SwaggerOperation(Summary = "Register Account Staff")]
-        public async Task<IActionResult> AddNewStaff(RegisterStaffVM accountStaff)
+        public async Task<IActionResult> AddNewStaff([FromForm] RegisterStaffVM accountStaff)
         {
             try
             {
