@@ -26,7 +26,7 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
         public DateTime DateOfIssue { get; set; }
         public string? Taxcode { get; set; }
         public string? BankName { get; set; }
-        public int? BankNumber { get; set; }
+        public string? BankNumber { get; set; }
         public bool Status { get; set; }
         public Guid AccountID { get; set; }
 

@@ -11,6 +11,7 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Request
 {
     public class ContractRequestDTO
     {
+        public string ContractCode { get; set; }
         public string ContractName { get; set; }
         public string ContractType { get; set; }
         [Column(TypeName = "date")]
@@ -18,7 +19,7 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Request
         public double? TotalPrice { get; set; }
         public string? Description { get; set; }
         public IFormFile? ContractFile { get; set; }
-        public Guid? DocumentID { get; set; }
+        public Guid? DocumentTemplateID { get; set; }
         public Guid BookingID { get; set; }
         public Guid? PaymentProcessID { get; set; }
 

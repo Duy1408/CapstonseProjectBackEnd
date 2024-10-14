@@ -23,7 +23,7 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public string? Description { get; set; }
         public string? ContractFile { get; set; }
         public string Status { get; set; }
-        public Guid? DocumentID { get; set; }
+        public Guid? DocumentTemplateID { get; set; }
         public string DocumentName { get; set; }
         public Guid BookingID { get; set; }
         public Guid CustomerID { get; set; }

@@ -14,8 +14,7 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public string PersonalEmail { get; set; }
         [Column(TypeName = "date")]
         public DateTime DateOfBirth { get; set; }
-        public string Image { get; set; }
-        public string Imagesignature { get; set; }
+        public string? Image { get; set; }
         public string IdentityCardNumber { get; set; }
         public string Sex { get; set; }
         public string Nationality { get; set; }
@@ -23,9 +22,9 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public string PlaceOfresidence { get; set; }
         [Column(TypeName = "date")]
         public DateTime DateOfIssue { get; set; }
-        public string Taxcode { get; set; }
-        public string BankName { get; set; }
-        public int BankNumber { get; set; }
+        public string? Taxcode { get; set; }
+        public string? BankName { get; set; }
+        public string? BankNumber { get; set; }
         public bool Status { get; set; }
         public Guid AccountID { get; set; }
         public string Email { get; set; }
