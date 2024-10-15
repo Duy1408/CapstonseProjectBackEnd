@@ -54,7 +54,9 @@ namespace RealEstateProjectSale.Controllers.UnitTypeController
                     NetFloorArea = type.NetFloorArea,
                     GrossFloorArea = type.GrossFloorArea,
                     PropertyTypeID = type.PropertyTypeID,
+                    PropertyTypeName = type.PropertyType?.PropertyTypeName,
                     ProjectID = type.ProjectID,
+                    ProjectName = type.Project?.ProjectName,
                     Image = type.Image?.Split(',').ToList() ?? new List<string>(),
                     Status = type.Status
                 }).ToList();
@@ -87,7 +89,9 @@ namespace RealEstateProjectSale.Controllers.UnitTypeController
                     NetFloorArea = type.NetFloorArea,
                     GrossFloorArea = type.GrossFloorArea,
                     PropertyTypeID = type.PropertyTypeID,
+                    PropertyTypeName = type.PropertyType?.PropertyTypeName,
                     ProjectID = type.ProjectID,
+                    ProjectName = type.Project?.ProjectName,
                     Image = type.Image?.Split(',').ToList() ?? new List<string>(),
                     Status = type.Status
                 };
@@ -137,6 +141,8 @@ namespace RealEstateProjectSale.Controllers.UnitTypeController
                     NetFloorArea = type.NetFloorArea,
                     GrossFloorArea = type.GrossFloorArea,
                     Status = true,
+                    PropertyTypeID = type.PropertyTypeID,
+                    ProjectID = type.ProjectID,
                     Image = type.Image.Count > 0 ? type.Image.First() : null
                 };
 
@@ -223,8 +229,14 @@ namespace RealEstateProjectSale.Controllers.UnitTypeController
                     {
                         existingType.Status = type.Status.Value;
                     }
-
-
+                    if (type.PropertyTypeID.HasValue)
+                    {
+                        existingType.PropertyTypeID = type.PropertyTypeID.Value;
+                    }
+                    if (type.ProjectID.HasValue)
+                    {
+                        existingType.ProjectID = type.ProjectID.Value;
+                    }
 
                     _typeService.UpdateUnitType(existingType);
 

@@ -172,6 +172,7 @@ namespace RealEstateProjectSale.Mapper
                                                            .ForMember(dest => dest.ProjectName,
                                  opt => opt.MapFrom(src => src.Project!.ProjectName));
             CreateMap<UnitTypeCreateDTO, UnitType>().ReverseMap();
+            CreateMap<UnitTypeUpdateDTO, UnitType>().ReverseMap();
 
 
         }
