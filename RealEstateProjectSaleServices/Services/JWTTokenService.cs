@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using RealEstateProjectSaleBusinessObject.Admin;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
@@ -16,9 +18,30 @@ namespace RealEstateProjectSaleServices.Services
     public class JWTTokenService : IJWTTokenService
     {
         private readonly IConfiguration _config;
-        public JWTTokenService(IConfiguration config)
+        private readonly AdminAccountConfig _adminAccountConfig;
+        public JWTTokenService(IConfiguration config, IOptions<AdminAccountConfig> adminAccountConfig)
         {
             _config = config;
+            _adminAccountConfig = adminAccountConfig.Value;
+        }
+
+        public string CreateAdminJWTToken()
+        {
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            var claims = new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.NameIdentifier, "Admin"),
+                new Claim(ClaimTypes.Email, _adminAccountConfig.Email),
+                new Claim(ClaimTypes.Role, "Admin")
+            };
+
+            var token = new JwtSecurityToken(claims: claims, expires: DateTime.UtcNow.AddYears(2), signingCredentials: credentials);
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+
         }
 
         public string CreateJWTToken(Account account)
@@ -75,10 +98,18 @@ namespace RealEstateProjectSaleServices.Services
 
             var account = new AuthVM
             {
-                AccountID = new Guid(accountId.Value),
                 Email = emailClaim.Value,
                 RoleName = roleClaim.Value
             };
+
+            if (accountId.Value == "Admin")
+            {
+                account.AccountID = null;
+            }
+            else
+            {
+                account.AccountID = new Guid(accountId.Value);
+            }
 
             return account;
 

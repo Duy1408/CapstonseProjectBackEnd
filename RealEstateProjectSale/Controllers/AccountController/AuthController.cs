@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using RealEstateProjectSaleBusinessObject.Admin;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 using Swashbuckle.AspNetCore.Annotations;
@@ -12,11 +14,13 @@ namespace RealEstateProjectSale.Controllers.AccountController
     {
         private readonly IAccountServices _accountServices;
         private readonly IJWTTokenService _jWTTokenService;
+        private readonly AdminAccountConfig _adminConfig;
 
-        public AuthController(IAccountServices accountServices, IJWTTokenService jWTTokenService)
+        public AuthController(IAccountServices accountServices, IJWTTokenService jWTTokenService, IOptions<AdminAccountConfig> adminConfig)
         {
             _accountServices = accountServices;
             _jWTTokenService = jWTTokenService;
+            _adminConfig = adminConfig.Value;
         }
 
         [SwaggerOperation(Summary = "Login Account", Description = "API này request body là Email hoặc Phone và password.")]
@@ -28,6 +32,16 @@ namespace RealEstateProjectSale.Controllers.AccountController
         {
             try
             {
+                if (account.EmailOrPhone == _adminConfig.Email && account.Password == _adminConfig.Password)
+                {
+                    var token = _jWTTokenService.CreateAdminJWTToken();
+
+                    return Ok(new
+                    {
+                        token = token
+                    });
+                }
+
                 var accountExists = _accountServices.CheckEmailOrPhone(account.EmailOrPhone);
                 if (accountExists == null)
                 {
@@ -71,8 +85,8 @@ namespace RealEstateProjectSale.Controllers.AccountController
             {
 
                 var account = _jWTTokenService.ParseJwtToken(token);
-                return Ok(account);
 
+                return Ok(account);
             }
             catch (Exception ex)
             {

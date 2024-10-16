@@ -4,13 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RealEstateProjectSaleBusinessObject.ViewModels
+namespace RealEstateProjectSaleBusinessObject.Admin
 {
-    public class AuthVM
+    public class AdminAccountConfig
     {
-        public Guid? AccountID { get; set; }
         public string Email { get; set; }
-        public string RoleName { get; set; }
+        public string Password { get; set; }
     }
-
 }
