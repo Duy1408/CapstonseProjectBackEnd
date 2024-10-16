@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 
 namespace RealEstateProjectSaleBusinessObject.DTO.Update
 {
-    public class ZoneUpdateDTO
+    public class DocumentTemplateUpdateDTO
     {
-        public string? ZoneName { get; set; }
-        public IFormFileCollection? ImageZone { get; set; }
+        public string? DocumentName { get; set; }
+        public IFormFile? DocumentFile { get; set; }
         public bool? Status { get; set; }
-        public Guid? ProjectID { get; set; }
     }
 }

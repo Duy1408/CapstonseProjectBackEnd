@@ -156,6 +156,10 @@ namespace RealEstateProjectSale.Mapper
             CreateMap<FloorUpdateDTO, Floor>().ReverseMap();
             CreateMap<FloorVM, Floor>().ReverseMap();
 
+            CreateMap<DocumentTemplateCreateDTO, DocumentTemplate>().ReverseMap();
+            CreateMap<DocumentTemplateCreateDTO, DocumentTemplate>().ReverseMap();
+            CreateMap<DocumentTemplateVM, DocumentTemplate>().ReverseMap();
+
             CreateMap<PropertyCategoryVM, PropertyCategory>().ReverseMap();
             CreateMap<PropertyCategoryCreateDTO, PropertyCategory>().ReverseMap();
             CreateMap<PropertyCategoryUpdateDTO, PropertyCategory>().ReverseMap();
