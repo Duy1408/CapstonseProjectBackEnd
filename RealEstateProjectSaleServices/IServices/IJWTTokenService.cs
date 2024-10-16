@@ -11,6 +11,7 @@ namespace RealEstateProjectSaleServices.IServices
     public interface IJWTTokenService
     {
         string CreateJWTToken(Account account);
+        string CreateAdminJWTToken();
         AuthVM ParseJwtToken(string token);
 
     }

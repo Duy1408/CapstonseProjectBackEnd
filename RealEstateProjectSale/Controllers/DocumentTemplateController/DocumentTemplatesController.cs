@@ -12,7 +12,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace RealEstateProjectSale.Controllers.DocumentTemplateController
 {
-    [Route("api/[controller]")]
+    [Route("api/document-templates")]
     [ApiController]
     public class DocumentTemplatesController : ControllerBase
     {
@@ -36,7 +36,10 @@ namespace RealEstateProjectSale.Controllers.DocumentTemplateController
             {
                 if (_doc.GetDocuments() == null)
                 {
-                    return NotFound();
+                    return NotFound(new
+                    {
+                        message = "DocumentTemplate not found."
+                    });
                 }
                 var docs = _doc.GetDocuments();
                 var response = _mapper.Map<List<DocumentTemplateVM>>(docs);
@@ -50,7 +53,8 @@ namespace RealEstateProjectSale.Controllers.DocumentTemplateController
         }
 
 
-        [HttpGet("GetDocumentTemplatebyID/{id}")]
+        [HttpGet("{id}")]
+        [SwaggerOperation(Summary = "Get DocumentTemplate By ID")]
         public IActionResult GetDocumentTemplateByID(Guid id)
         {
             var doc = _doc.GetDocumentById(id);
@@ -60,31 +64,46 @@ namespace RealEstateProjectSale.Controllers.DocumentTemplateController
                 var responese = _mapper.Map<DocumentTemplateVM>(doc);
                 return Ok(responese);
             }
-            return NotFound();
+
+            return NotFound(new
+            {
+                message = "DocumentTemplate not found."
+            });
         }
 
-        [HttpDelete("DeleteDocumentTemplate/{id}")]
+        [HttpDelete("{id}")]
+        [SwaggerOperation(Summary = "Delete DocumentTemplate By ID")]
         public IActionResult DeleteDocumentTemplate(Guid id)
         {
             if (_doc.GetDocuments() == null)
             {
-                return NotFound();
+                return NotFound(new
+                {
+                    message = "DocumentTemplate not found."
+                });
             }
             var doc = _doc.GetDocumentById(id);
             if (doc == null)
             {
-                return NotFound();
+                return NotFound(new
+                {
+                    message = "DocumentTemplate not found."
+                });
             }
 
             _doc.ChangeStatus(doc);
 
 
-            return Ok("Delete Successfully");
+            return Ok(new
+            {
+                message = "Delete DocumentTemplate Successfully"
+            });
         }
 
 
 
         [HttpPost]
+        [SwaggerOperation(Summary = "Create a new DocumentTemplate")]
         public ActionResult<DocumentTemplate> PostDocument([FromForm] DocumentTemplateRequestDTO doc)
         {
 
@@ -105,14 +124,17 @@ namespace RealEstateProjectSale.Controllers.DocumentTemplateController
 
                     DocumentTemplateID = Guid.NewGuid(),
                     DocumentName = doc.DocumentName,
-                    DocumentFile  = doc.DocumentFile,
+                    DocumentFile = doc.DocumentFile,
                     Status = true,
 
                 };
                 var _document = _mapper.Map<DocumentTemplate>(newDoc);
                 _document.DocumentFile = bloUrl;
                 _doc.AddNew(_document);
-                return Ok("create document successfully");
+                return Ok(new
+                {
+                    message = "Create DocumentTemplate Successfully"
+                });
             }
             catch (Exception ex)
             {
@@ -122,6 +144,7 @@ namespace RealEstateProjectSale.Controllers.DocumentTemplateController
         }
 
         [HttpPut("{id}")]
+        [SwaggerOperation(Summary = "Update DocumentTemplate by ID")]
         public IActionResult UpdateDocument([FromForm] DocumentTemplateUpdateDTO doc, Guid id)
         {
             try
@@ -146,15 +169,22 @@ namespace RealEstateProjectSale.Controllers.DocumentTemplateController
                     if (bloUrl != null)
                     {
                         docupdate.DocumentFile = bloUrl;
-                    }           
+                    }
                     if (doc.Status.HasValue)
                     {
                         docupdate.Status = doc.Status.Value;
                     }
                     _doc.UpdateDocument(docupdate);
-                    return Ok("Update successfully");
+
+                    return Ok(new
+                    {
+                        message = "Update DocumentTemplate Successfully"
+                    });
                 }
-                return NotFound("Doc not found");
+                return NotFound(new
+                {
+                    message = "DocumentTemplate not found."
+                });
 
 
             }

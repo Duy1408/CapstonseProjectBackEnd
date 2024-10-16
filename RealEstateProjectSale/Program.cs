@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RealEstateProjectSale.Mapper;
+using RealEstateProjectSaleBusinessObject.Admin;
 using RealEstateProjectSaleBusinessObject.Model;
 using RealEstateProjectSaleRepository.IRepository;
 using RealEstateProjectSaleRepository.Repository;
@@ -79,6 +80,12 @@ builder.Services.AddScoped<IUnitTypeServices, UnitTypeServices>();
 builder.Services.AddScoped<IDocumentTemplateRepo, DocumentTemplateRepo>();
 builder.Services.AddScoped<IDocumentTemplateService, DocumentTemplateService>();
 
+//Admin Account Config
+builder.Configuration
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+    .AddEnvironmentVariables();
+builder.Services.Configure<AdminAccountConfig>(builder.Configuration.GetSection("AdminAccount"));
 
 //Azure Blob Storage
 builder.Services.AddScoped(_ => new BlobServiceClient(builder.Configuration.GetConnectionString("AzureBlobStorage")));
