@@ -31,7 +31,7 @@ namespace RealEstateProjectSale.Controllers.ZoneController
 
 
         [HttpGet]
-        [SwaggerOperation(Summary = "Gett all Zone")]
+        [SwaggerOperation(Summary = "Get all Zone")]
 
         public IActionResult GetAllZone()
         {
