@@ -80,13 +80,13 @@ namespace RealEstateProjectSale.Controllers.PaymentController
 
             var payment = _mapper.Map<Payment>(newPayment);
             _paymentServices.AddNewPayment(payment);
-            //var total = session.AmountTotal.Value;
-            //var customerEmail = session.CustomerDetails.Email;
 
 
 
-            //return Redirect(s_wasmClientURL + "success");
-            return Redirect("https://realestateproject-bdhcgphcfsf6b4g2.canadacentral-01.azurewebsites.net/index.html/success");
+            return Ok(new
+            {
+                message = "Payment completed successfully."
+            });
         }
 
         [HttpGet]
