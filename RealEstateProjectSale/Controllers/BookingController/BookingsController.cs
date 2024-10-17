@@ -273,7 +273,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new booking")]
         public ActionResult<Booking> AddNew(Guid openForSaleID,
-                    Guid propertyCategoryID, Guid customerID)
+                    Guid propertyCategoryID, Guid projectID, Guid customerID)
         {
             try
             {
@@ -289,9 +289,11 @@ namespace RealEstateProjectSale.Controllers.BookingController
                     Status = BookingStatus.NotDeposited.ToString(),
                     CustomerID = customerID,
                     StaffID = null,
-                    OpenForSaleID = openForSaleID,
+                    ProjectID = projectID,
+                    OpeningForSaleID = openForSaleID,
                     PropertyCategoryID = propertyCategoryID,
-                    DocumentID = null
+                    DocumentID = null,
+                    PropertyID = null
                 };
 
                 var books = _mapper.Map<Booking>(newbook);

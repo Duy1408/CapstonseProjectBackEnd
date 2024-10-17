@@ -9,10 +9,11 @@ using RealEstateProjectSaleServices.IServices;
 using System.Data;
 using RealEstateProjectSaleBusinessObject.DTO.Create;
 using RealEstateProjectSaleBusinessObject.ViewModels;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace RealEstateProjectSale.Controllers.PaymentController
 {
-    [Route("api/[controller]")]
+    [Route("api/payments")]
     [ApiController]
     public class PaymentController : ControllerBase
     {
@@ -26,7 +27,7 @@ namespace RealEstateProjectSale.Controllers.PaymentController
         }
 
         [HttpPost]
-        [Route("CheckoutPaymentDeposited")]
+        [SwaggerOperation(Summary = "Checkout Payment Deposited")]
         public async Task<IActionResult> CheckoutPayment([FromBody] PaymentInformationModel payment)
         {
             try
@@ -50,8 +51,6 @@ namespace RealEstateProjectSale.Controllers.PaymentController
         }
 
         [HttpGet("success/{sessionId}")]
-        // Automatic query parameter handling from ASP.NET.
-        // Example URL: https://localhost:7022/api/payment/{sessionId}
         public IActionResult CheckoutSuccess(string sessionId)
         {
             var session = _paymentServices.CheckoutSuccess(sessionId);
