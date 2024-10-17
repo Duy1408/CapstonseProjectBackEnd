@@ -10,6 +10,8 @@ using System.Data;
 using RealEstateProjectSaleBusinessObject.DTO.Create;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using Swashbuckle.AspNetCore.Annotations;
+using AutoMapper;
+using Stripe;
 
 namespace RealEstateProjectSale.Controllers.PaymentController
 {
@@ -19,11 +21,13 @@ namespace RealEstateProjectSale.Controllers.PaymentController
     {
 
         private readonly IPaymentServices _paymentServices;
+        private readonly IMapper _mapper;
 
 
-        public PaymentController(IPaymentServices paymentServices)
+        public PaymentController(IPaymentServices paymentServices, IMapper mapper)
         {
             _paymentServices = paymentServices;
+            _mapper = mapper;
         }
 
         [HttpPost]
@@ -51,14 +55,13 @@ namespace RealEstateProjectSale.Controllers.PaymentController
         }
 
         [HttpGet("success/{sessionId}")]
-        public IActionResult CheckoutSuccess(string sessionId)
+        public IActionResult CheckoutSuccess(string sessionId, [FromQuery] Guid customerID)
         {
             var session = _paymentServices.CheckoutSuccess(sessionId);
 
-            var userId = Guid.Parse(HttpContext.Request.Query["UserID"]);
-            var model = _paymentServices.GetPaymentModelFromCache(userId);
+            var customerIDCache = Guid.Parse(HttpContext.Request.Query["customerID"]);
+            var model = _paymentServices.GetPaymentModelFromCache(customerIDCache);
 
-            // Chỗ lưu xuống db
             var newPayment = new PaymentCreateDTO
             {
                 PaymentID = model.PaymentID,
@@ -69,9 +72,11 @@ namespace RealEstateProjectSale.Controllers.PaymentController
                 Status = true,
                 PaymentTypeID = model.PaymentTypeID,
                 BookingID = model.BookingID,
-                ContractPaymentDetailID = model.ContractPaymentDetailID
-
+                CustomerID = customerIDCache
             };
+
+            var payment = _mapper.Map<Payment>(newPayment);
+            _paymentServices.AddNewPayment(payment);
             //var total = session.AmountTotal.Value;
             //var customerEmail = session.CustomerDetails.Email;
 

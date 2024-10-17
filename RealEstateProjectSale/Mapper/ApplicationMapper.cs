@@ -178,6 +178,8 @@ namespace RealEstateProjectSale.Mapper
             CreateMap<UnitTypeCreateDTO, UnitType>().ReverseMap();
             CreateMap<UnitTypeUpdateDTO, UnitType>().ReverseMap();
 
+            CreateMap<PaymentCreateDTO, Payment>().ReverseMap();
+
 
         }
     }

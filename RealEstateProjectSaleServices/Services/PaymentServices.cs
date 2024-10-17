@@ -12,23 +12,27 @@ using Stripe.Checkout;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using RealEstateProjectSaleBusinessObject.BusinessObject;
+using RealEstateProjectSaleRepository.IRepository;
 
 namespace RealEstateProjectSaleServices.Services
 {
     public class PaymentServices : IPaymentServices
     {
+        private readonly IPaymentRepo _paymentRepo;
         private readonly IConfiguration _configuration;
         private readonly IMemoryCache _memoryCache;
-        public PaymentServices(IConfiguration configuration, IMemoryCache memoryCache)
+        public PaymentServices(IPaymentRepo paymentRepo, IConfiguration configuration, IMemoryCache memoryCache)
         {
+            _paymentRepo = paymentRepo;
             _configuration = configuration;
             _memoryCache = memoryCache;
         }
 
         public async Task<PaymentResponseModel> CreatePaymentUrl(PaymentInformationModel payment)
         {
-            //truyền UserID
-            _memoryCache.Set($"Order_{payment.UserID}", payment, TimeSpan.FromMinutes(10));
+            //truyền CustomerID
+            _memoryCache.Set($"Order_{payment.CustomerID}", payment, TimeSpan.FromMinutes(10));
 
             string s_wasmClientURL = "https://localhost:7022/swagger/index.html";
             var thisApiUrl = _configuration["PaymentApiUrl:ApiUrl"];
@@ -36,7 +40,7 @@ namespace RealEstateProjectSaleServices.Services
             var options = new SessionCreateOptions
             {
                 // Stripe calls the URLs below when certain checkout events happen such as success and failure.
-                SuccessUrl = $"{thisApiUrl}/api/Payment/success/" + "{CHECKOUT_SESSION_ID}" + "?UserID=" + payment.UserID, // Customer paid.
+                SuccessUrl = $"{thisApiUrl}/api/payments/success/" + "{CHECKOUT_SESSION_ID}" + "?customerID=" + payment.CustomerID, // Customer paid.
                 CancelUrl = s_wasmClientURL + "/failed",  // Checkout cancelled.
                 PaymentMethodTypes = new List<string> { "card" },
                 LineItems = new List<SessionLineItemOptions>
@@ -81,9 +85,20 @@ namespace RealEstateProjectSaleServices.Services
 
         }
 
-        public PaymentInformationModel GetPaymentModelFromCache(Guid userId)
+        public PaymentInformationModel GetPaymentModelFromCache(Guid customerID)
         {
-            return _memoryCache.Get<PaymentInformationModel>($"Order_{userId}");
+            return _memoryCache.Get<PaymentInformationModel>($"Order_{customerID}");
         }
+
+        public List<Payment> GetAllPayment() => _paymentRepo.GetAllPayment();
+
+        public Payment GetPaymentByID(Guid id) => _paymentRepo.GetPaymentByID(id);
+
+        public void AddNewPayment(Payment payment) => _paymentRepo.AddNewPayment(payment);
+
+        public void UpdatePayment(Payment payment) => _paymentRepo.UpdatePayment(payment);
+
+        public bool ChangeStatusPayment(Payment payment) => _paymentRepo.ChangeStatusPayment(payment);
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using RealEstateProjectSaleBusinessObject.Model;
+﻿using RealEstateProjectSaleBusinessObject.BusinessObject;
+using RealEstateProjectSaleBusinessObject.Model;
 using Stripe.Checkout;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,12 @@ namespace RealEstateProjectSaleServices.IServices
 {
     public interface IPaymentServices
     {
+        List<Payment> GetAllPayment();
+        Payment GetPaymentByID(Guid id);
+        void AddNewPayment(Payment payment);
+        void UpdatePayment(Payment payment);
+        bool ChangeStatusPayment(Payment payment);
+
         Task<PaymentResponseModel> CreatePaymentUrl(PaymentInformationModel payment);
 
         Session CheckoutSuccess(string sessionId);
