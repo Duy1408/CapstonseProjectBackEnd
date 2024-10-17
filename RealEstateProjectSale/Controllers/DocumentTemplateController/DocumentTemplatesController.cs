@@ -103,89 +103,70 @@ namespace RealEstateProjectSale.Controllers.DocumentTemplateController
 
 
         [HttpPost]
-        [SwaggerOperation(Summary = "Create a new DocumentTemplate")]
-        public ActionResult<DocumentTemplate> PostDocument([FromForm] DocumentTemplateRequestDTO doc)
+        [SwaggerOperation(Summary = "Create a new document")]
+        public IActionResult AddNew(DocumentTemplateCreateDTO doc)
         {
-
             try
             {
-                var containerInstance = _blobServiceClient.GetBlobContainerClient("documenttemplatefile");
-                string? bloUrl = null;
-                if (doc.DocumentFile != null)
-                {
-                    var blobName = $"{Guid.NewGuid()}_{doc.DocumentFile.FileName}";
-                    var blobInstance = containerInstance.GetBlobClient(blobName);
-                    blobInstance.Upload(doc.DocumentFile.OpenReadStream());
-                    var storageAccountUrl = "https://realestatesystem.blob.core.windows.net/documenttemplatefile";
-                    bloUrl = $"{storageAccountUrl}/{blobName}";
-                }
+
                 var newDoc = new DocumentTemplateCreateDTO
                 {
-
                     DocumentTemplateID = Guid.NewGuid(),
-                    DocumentName = doc.DocumentName,
+                     DocumentName = doc.DocumentName,
                     DocumentFile = doc.DocumentFile,
                     Status = true,
-
                 };
-                var _document = _mapper.Map<DocumentTemplate>(newDoc);
-                _document.DocumentFile = bloUrl;
-                _doc.AddNew(_document);
+
+                var document = _mapper.Map<DocumentTemplate>(newDoc);
+                _doc.AddNew(document);
+               
+
                 return Ok(new
                 {
-                    message = "Create DocumentTemplate Successfully"
+                    message = "Create Doc Successfully"
                 });
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-
         }
 
         [HttpPut("{id}")]
-        [SwaggerOperation(Summary = "Update DocumentTemplate by ID")]
-        public IActionResult UpdateDocument([FromForm] DocumentTemplateUpdateDTO doc, Guid id)
+        [SwaggerOperation(Summary = "Update Doc by ID")]
+        public IActionResult UpdateComment([FromForm] DocumentTemplateUpdateDTO doc, Guid id)
         {
             try
             {
-                var containerInstance = _blobServiceClient.GetBlobContainerClient("documenttemplatefile");
-                string? bloUrl = null;
-                if (doc.DocumentFile != null)
+                var existingDoc = _doc.GetDocumentById(id);
+                if (existingDoc != null)
                 {
-                    var blobName = $"{Guid.NewGuid()}_{doc.DocumentFile.FileName}";
-                    var blobInstance = containerInstance.GetBlobClient(blobName);
-                    blobInstance.Upload(doc.DocumentFile.OpenReadStream());
-                    var storageAccountUrl = "https://realestatesystem.blob.core.windows.net/documenttemplatefile";
-                    bloUrl = $"{storageAccountUrl}/{blobName}";
-                }
-                var docupdate = _doc.GetDocumentById(id);
-                if (docupdate != null)
-                {
+
                     if (!string.IsNullOrEmpty(doc.DocumentName))
                     {
-                        docupdate.DocumentName = doc.DocumentName;
+                        existingDoc.DocumentName =doc.DocumentName;
                     }
-                    if (bloUrl != null)
+                    if (!string.IsNullOrEmpty(doc.DocumentFile)) 
                     {
-                        docupdate.DocumentFile = bloUrl;
+                        existingDoc.DocumentFile = doc.DocumentFile;
                     }
                     if (doc.Status.HasValue)
                     {
-                        docupdate.Status = doc.Status.Value;
+                        existingDoc.Status = doc.Status.Value;
                     }
-                    _doc.UpdateDocument(docupdate);
+
+                    _doc.UpdateDocument(existingDoc);
 
                     return Ok(new
                     {
-                        message = "Update DocumentTemplate Successfully"
+                        message = "Update Document Successfully"
                     });
+
                 }
                 return NotFound(new
                 {
-                    message = "DocumentTemplate not found."
+                    message = "Doucument not found."
                 });
-
 
             }
             catch (Exception ex)
@@ -193,5 +174,6 @@ namespace RealEstateProjectSale.Controllers.DocumentTemplateController
                 return BadRequest(ex.Message);
             }
         }
+
     }
 }
