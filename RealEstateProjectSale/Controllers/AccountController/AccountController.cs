@@ -117,8 +117,6 @@ namespace RealEstateProjectSale.Controllers.AccountController
                 var existingAccount = _accountServices.GetAccountByID(id);
                 if (existingAccount != null)
                 {
-                    account.AccountID = existingAccount.AccountID;
-
                     if (!string.IsNullOrEmpty(account.Email))
                     {
                         existingAccount.Email = account.Email;
