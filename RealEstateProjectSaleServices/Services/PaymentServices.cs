@@ -34,7 +34,7 @@ namespace RealEstateProjectSaleServices.Services
             //truyền CustomerID
             _memoryCache.Set($"Order_{payment.CustomerID}", payment, TimeSpan.FromMinutes(10));
 
-            string s_wasmClientURL = "https://localhost:7022/swagger/index.html";
+            string s_wasmClientURL = "https://realestateproject-bdhcgphcfsf6b4g2.canadacentral-01.azurewebsites.net/index.html";
             var thisApiUrl = _configuration["PaymentApiUrl:ApiUrl"];
 
             var options = new SessionCreateOptions

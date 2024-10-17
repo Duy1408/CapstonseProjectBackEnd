@@ -83,7 +83,7 @@ namespace RealEstateProjectSale.Controllers.PaymentController
 
 
             //return Redirect(s_wasmClientURL + "success");
-            return Redirect("https://localhost:7022/swagger/index.html/success");
+            return Redirect("https://realestateproject-bdhcgphcfsf6b4g2.canadacentral-01.azurewebsites.net/index.html/success");
         }
 
 
