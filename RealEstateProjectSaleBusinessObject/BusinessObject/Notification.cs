@@ -16,7 +16,7 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public bool Status { get; set; }
         public Guid? CustomerID { get; set; }
         public Customer? Customer { get; set; }
-        public Guid? OpenForSaleID { get; set; }
+        public Guid? OpeningForSaleID { get; set; }
         public OpeningForSale? OpeningForSale { get; set; }
 
 
