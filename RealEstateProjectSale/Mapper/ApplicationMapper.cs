@@ -178,7 +178,14 @@ namespace RealEstateProjectSale.Mapper
             CreateMap<UnitTypeCreateDTO, UnitType>().ReverseMap();
             CreateMap<UnitTypeUpdateDTO, UnitType>().ReverseMap();
 
+            CreateMap<PaymentVM, Payment>().ReverseMap().ForMember(dest => dest.PaymentName,
+                                 opt => opt.MapFrom(src => src.PaymentType!.PaymentName))
+                                                        .ForMember(dest => dest.BookingStatus,
+                                 opt => opt.MapFrom(src => src.Booking!.Status))
+                                                        .ForMember(dest => dest.FullName,
+                                 opt => opt.MapFrom(src => src.Customer!.FullName));
             CreateMap<PaymentCreateDTO, Payment>().ReverseMap();
+            CreateMap<PaymentUpdateDTO, Payment>().ReverseMap();
 
 
         }

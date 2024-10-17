@@ -12,6 +12,9 @@ using RealEstateProjectSaleBusinessObject.ViewModels;
 using Swashbuckle.AspNetCore.Annotations;
 using AutoMapper;
 using Stripe;
+using RealEstateProjectSaleBusinessObject.DTO.Update;
+using Stripe.FinancialConnections;
+using RealEstateProjectSaleServices.Services;
 
 namespace RealEstateProjectSale.Controllers.PaymentController
 {
@@ -86,6 +89,126 @@ namespace RealEstateProjectSale.Controllers.PaymentController
             return Redirect("https://realestateproject-bdhcgphcfsf6b4g2.canadacentral-01.azurewebsites.net/index.html/success");
         }
 
+        [HttpGet]
+        [SwaggerOperation(Summary = "Get All Payment")]
+        public IActionResult GetAllPayment()
+        {
+            try
+            {
+                if (_paymentServices.GetAllPayment() == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Payment not found."
+                    });
+                }
+                var payments = _paymentServices.GetAllPayment();
+                var response = _mapper.Map<List<PaymentVM>>(payments);
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("{id}")]
+        [SwaggerOperation(Summary = "Get Payment By ID")]
+        public IActionResult GetPaymentByID(Guid id)
+        {
+            var payment = _paymentServices.GetPaymentByID(id);
+
+            if (payment != null)
+            {
+                var responese = _mapper.Map<PaymentVM>(payment);
+
+                return Ok(responese);
+            }
+
+            return NotFound(new
+            {
+                message = "Payment not found."
+            });
+
+        }
+
+        [HttpPut("{id}")]
+        [SwaggerOperation(Summary = "Update Payment By ID")]
+        public IActionResult UpdatePayment([FromForm] PaymentUpdateDTO payment, Guid id)
+        {
+            try
+            {
+                var existingPayment = _paymentServices.GetPaymentByID(id);
+                if (existingPayment != null)
+                {
+                    if (payment.Amount.HasValue)
+                    {
+                        existingPayment.Amount = payment.Amount.Value;
+                    }
+                    if (!string.IsNullOrEmpty(payment.Content))
+                    {
+                        existingPayment.Content = payment.Content;
+                    }
+                    if (payment.Status.HasValue)
+                    {
+                        existingPayment.Status = payment.Status.Value;
+                    }
+                    if (payment.PaymentTypeID.HasValue)
+                    {
+                        existingPayment.PaymentTypeID = payment.PaymentTypeID.Value;
+                    }
+                    if (payment.BookingID.HasValue)
+                    {
+                        existingPayment.BookingID = payment.BookingID.Value;
+                    }
+                    if (payment.CustomerID.HasValue)
+                    {
+                        existingPayment.CustomerID = payment.CustomerID.Value;
+                    }
+
+                    _paymentServices.UpdatePayment(existingPayment);
+
+                    return Ok(new
+                    {
+                        message = "Update Payment Successfully"
+                    });
+
+                }
+
+                return NotFound(new
+                {
+                    message = "Payment not found."
+                });
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        [SwaggerOperation(Summary = "Delete Payment")]
+        public IActionResult DeletePayment(Guid id)
+        {
+
+            var payment = _paymentServices.GetPaymentByID(id);
+            if (payment == null)
+            {
+                return NotFound(new
+                {
+                    message = "Payment not found."
+                });
+            }
+
+            _paymentServices.ChangeStatusPayment(payment);
+
+            return Ok(new
+            {
+                message = "Delete Payment Successfully"
+            });
+        }
 
 
     }
