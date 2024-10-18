@@ -16,7 +16,7 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Update
         public Guid? StaffID { get; set; }
         public Guid OpenForSaleID { get; set; }
         public Guid PropertyCategoryID { get; set; }
-        public Guid? DocumentID { get; set; }
+        public Guid? DocumentTemplateID { get; set; }
 
     }
 }

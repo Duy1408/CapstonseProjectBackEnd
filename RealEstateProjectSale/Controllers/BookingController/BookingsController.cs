@@ -298,7 +298,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
                     ProjectID = projectID,
                     OpeningForSaleID = openForSaleID,
                     PropertyCategoryID = propertyCategoryID,
-                    DocumentID = null,
+                    DocumentTemplateID = null,
                     PropertyID = null
                 };
 

@@ -22,7 +22,7 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
         public Guid OpeningForSaleID { get; set; }
         public Guid PropertyCategoryID { get; set; }
         public Guid ProjectID { get; set; }
-        public Guid? DocumentID { get; set; }
+        public Guid? DocumentTemplateID { get; set; }
         public Guid? PropertyID { get; set; }
     }
 }
