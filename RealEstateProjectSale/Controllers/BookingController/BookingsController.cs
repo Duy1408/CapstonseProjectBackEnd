@@ -29,14 +29,16 @@ namespace RealEstateProjectSale.Controllers.BookingController
         private readonly BlobServiceClient _blobServiceClient;
         private readonly IDocumentTemplateService _documentService;
         private readonly IMapper _mapper;
+        private readonly ILogger<BookingsController> _logger;
 
         public BookingsController(IBookingServices book, BlobServiceClient blobServiceClient,
-                    IMapper mapper, IDocumentTemplateService documentService)
+                    IMapper mapper, IDocumentTemplateService documentService, ILogger<BookingsController> logger)
         {
             _book = book;
             _blobServiceClient = blobServiceClient;
             _mapper = mapper;
             _documentService = documentService;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -343,7 +345,8 @@ namespace RealEstateProjectSale.Controllers.BookingController
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                _logger.LogError(ex, "Error occurred in GeneratePdfDocument. Stack Trace: {StackTrace}", ex.StackTrace);
+                return StatusCode(500, "An internal error occurred. Please check logs for more details.");
             }
         }
 
