@@ -31,6 +31,11 @@ namespace RealEstateProjectSaleServices.Services
             return _repo.GetSalespolicyById(id);
         }
 
+        public Salespolicy GetSalespolicyByProjectID(Guid projectid)
+        {
+            return _repo.GetSalespolicyByProjectID(projectid);
+        }
+
         public List<Salespolicy> GetSalespolicys()
         {
             return _repo.GetSalespolicys();

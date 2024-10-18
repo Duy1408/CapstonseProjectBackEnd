@@ -76,6 +76,26 @@ namespace RealEstateProjectSale.Controllers.SalespolicyController
 
         }
 
+        [HttpGet(" project/{projectid}")]
+        [SwaggerOperation(Summary = "Get SalePolicy by project ID")]
+        public IActionResult GetSalePolicyByProjectID(Guid projectid)
+        {
+            var sale = _sale.GetSalespolicyByProjectID(projectid);
+
+            if (sale != null)
+            {
+                var responese = _mapper.Map<SalepolicyVM>(sale);
+
+                return Ok(responese);
+            }
+
+            return NotFound(new
+            {
+                message = "SalePolicy not found."
+            });
+
+        }
+
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Update SalePolicy by ID")]
         public IActionResult UpdateSalePolicy([FromForm] SalePolicyUpdateDTO sale, Guid id)

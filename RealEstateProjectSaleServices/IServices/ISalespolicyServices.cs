@@ -19,5 +19,7 @@ namespace RealEstateProjectSaleServices.IServices
         Salespolicy GetSalespolicyById(Guid id);
 
         void UpdateSalespolicy(Salespolicy p);
+        Salespolicy GetSalespolicyByProjectID(Guid projectid);
+
     }
 }
