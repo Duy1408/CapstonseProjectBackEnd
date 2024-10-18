@@ -1,4 +1,5 @@
-﻿using RealEstateProjectSaleBusinessObject.BusinessObject;
+﻿using DinkToPdf;
+using RealEstateProjectSaleBusinessObject.BusinessObject;
 using RealEstateProjectSaleRepository.IRepository;
 using RealEstateProjectSaleServices.IServices;
 using System;
@@ -16,6 +17,35 @@ namespace RealEstateProjectSaleServices.Services
         {
             _repo = repo;
         }
+
+        public byte[] GeneratePdfFromTemplate(string htmlContent)
+        {
+            var converter = new BasicConverter(new PdfTools());
+
+            var globalSettings = new GlobalSettings
+            {
+                ColorMode = DinkToPdf.ColorMode.Color,
+                Orientation = Orientation.Portrait,
+                PaperSize = DinkToPdf.PaperKind.A4,
+                Margins = new MarginSettings { Top = 25, Bottom = 25, Left = 30, Right = 20 }
+            };
+
+            var objectSettings = new ObjectSettings
+            {
+                PagesCount = true,
+                HtmlContent = htmlContent,
+                WebSettings = { DefaultEncoding = "utf-8" }
+            };
+
+            var pdfDocument = new HtmlToPdfDocument()
+            {
+                GlobalSettings = globalSettings,
+                Objects = { objectSettings }
+            };
+
+            return converter.Convert(pdfDocument);
+        }
+
         public void AddNew(DocumentTemplate p)
         {
             _repo.AddNew(p);
@@ -23,7 +53,7 @@ namespace RealEstateProjectSaleServices.Services
 
         public bool ChangeStatus(DocumentTemplate p)
         {
-          return  _repo.ChangeStatus(p);
+            return _repo.ChangeStatus(p);
         }
 
         public DocumentTemplate GetDocumentById(Guid id)

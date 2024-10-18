@@ -12,10 +12,38 @@ namespace RealEstateProjectSaleServices.Services
     public class BookingServices : IBookingServices
     {
         private readonly IBookingRepo _book;
-        public BookingServices(IBookingRepo book)
+        private readonly IDocumentTemplateService _documentService;
+        private readonly ICustomerServices _customerService;
+        public BookingServices(IBookingRepo book, IDocumentTemplateService documentService, ICustomerServices customerService)
         {
             _book = book;
+            _documentService = documentService;
+            _customerService = customerService;
         }
+
+        public string GenerateDocumentContent(Guid templateId)
+        {
+            var documentTemplate = _documentService.GetDocumentById(templateId);
+            if (documentTemplate == null)
+            {
+                throw new Exception("Document template not found");
+            }
+
+            var booking = _book.GetBookingByDocumentID(templateId);
+            var customer = _customerService.GetCustomerByID(booking.CustomerID);
+
+            var htmlContent = documentTemplate.DocumentFile;
+
+            htmlContent = htmlContent.Replace("{OwnerName}", customer.FullName)
+                             .Replace("{OwnerBirthYear}", customer.DateOfBirth.ToString())
+                             .Replace("{OwnerIdNumber}", customer.IdentityCardNumber)
+                             .Replace("{OwnerAddress}", customer.Address)
+                             .Replace("{OwnerPhone}", customer.PhoneNumber);
+
+            return htmlContent;
+        }
+
+
         public void AddNew(Booking p)
         {
             _book.AddNew(p);
@@ -54,6 +82,11 @@ namespace RealEstateProjectSaleServices.Services
         public void UpdateBooking(Booking p)
         {
             _book.UpdateBooking(p);
+        }
+
+        public Booking GetBookingByDocumentID(Guid id)
+        {
+            return _book.GetBookingByDocumentID(id);
         }
     }
 }

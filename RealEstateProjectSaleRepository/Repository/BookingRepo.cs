@@ -36,6 +36,11 @@ namespace RealEstateProjectSaleRepository.Repository
             return dao.GetBookingByDepositedTimed(numberBooking);
         }
 
+        public Booking GetBookingByDocumentID(Guid id)
+        {
+            return dao.GetBookingByDocumentID(id);
+        }
+
         public Booking GetBookingById(Guid id)
         {
             return dao.GetBookingByID(id);

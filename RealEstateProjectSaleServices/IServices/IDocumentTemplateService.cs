@@ -15,5 +15,8 @@ namespace RealEstateProjectSaleServices.IServices
         DocumentTemplate GetDocumentById(Guid id);
         void UpdateDocument(DocumentTemplate p);
         IQueryable<DocumentTemplate> SearchDocument(string name);
+
+        byte[] GeneratePdfFromTemplate(string htmlContent);
+
     }
 }

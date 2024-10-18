@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -26,13 +27,16 @@ namespace RealEstateProjectSale.Controllers.BookingController
     {
         private readonly IBookingServices _book;
         private readonly BlobServiceClient _blobServiceClient;
+        private readonly IDocumentTemplateService _documentService;
         private readonly IMapper _mapper;
 
-        public BookingsController(IBookingServices book, BlobServiceClient blobServiceClient, IMapper mapper)
+        public BookingsController(IBookingServices book, BlobServiceClient blobServiceClient,
+                    IMapper mapper, IDocumentTemplateService documentService)
         {
             _book = book;
             _blobServiceClient = blobServiceClient;
             _mapper = mapper;
+            _documentService = documentService;
         }
 
         [HttpGet]
@@ -310,7 +314,38 @@ namespace RealEstateProjectSale.Controllers.BookingController
             }
         }
 
+        [HttpGet("generate-pdf")]
+        public IActionResult GeneratePdfDocument(Guid templateId)
+        {
+            try
+            {
+                var documentTemplate = _documentService.GetDocumentById(templateId);
 
+                var htmlContent = _book.GenerateDocumentContent(templateId);
+
+                var pdfBytes = _documentService.GeneratePdfFromTemplate(htmlContent);
+
+                using (MemoryStream pdfStream = new MemoryStream(pdfBytes))
+                {
+                    var containerInstance = _blobServiceClient.GetBlobContainerClient("bookingfile");
+
+                    var blobName = $"{Guid.NewGuid()}_{documentTemplate.DocumentName}.pdf";
+                    var blobInstance = containerInstance.GetBlobClient(blobName);
+
+                    blobInstance.Upload(pdfStream, new BlobHttpHeaders { ContentType = "application/pdf" });
+
+                    var blobUrl = blobInstance.Uri.ToString();
+                    return Ok(new
+                    {
+                        url = blobUrl
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
 
     }
 }
