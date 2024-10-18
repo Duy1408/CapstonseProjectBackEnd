@@ -9,17 +9,19 @@ namespace RealEstateProjectSaleRepository.IRepository
 {
     public interface ISalespolicyRepo
     {
-        public bool ChangeStatus(Salespolicy p);
+         bool ChangeStatus(Salespolicy p);
 
 
-        public List<Salespolicy> GetSalespolicys();
-        public void AddNew(Salespolicy p);
+        List<Salespolicy> GetSalespolicys();
+         void AddNew(Salespolicy p);
 
 
-        public Salespolicy GetSalespolicyById(Guid id);
+         Salespolicy GetSalespolicyById(Guid id);
 
-        public void UpdateSalespolicy(Salespolicy p);
+         void UpdateSalespolicy(Salespolicy p);
+        Salespolicy GetSalespolicyByProjectID(Guid projectid);
 
-        
+
+
     }
 }
