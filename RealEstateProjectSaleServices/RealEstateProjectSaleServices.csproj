@@ -18,4 +18,10 @@
 		<ProjectReference Include="..\RealEstateProjectSaleRepository\RealEstateProjectSaleRepository.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<None Update="libwkhtmltox.dll">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
 </Project>
