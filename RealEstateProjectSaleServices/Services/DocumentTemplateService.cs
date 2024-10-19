@@ -1,4 +1,4 @@
-﻿using DinkToPdf;
+﻿using iText.Html2pdf;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
 using RealEstateProjectSaleRepository.IRepository;
 using RealEstateProjectSaleServices.IServices;
@@ -20,30 +20,11 @@ namespace RealEstateProjectSaleServices.Services
 
         public byte[] GeneratePdfFromTemplate(string htmlContent)
         {
-            var converter = new BasicConverter(new PdfTools());
-
-            var globalSettings = new GlobalSettings
+            using (MemoryStream stream = new MemoryStream())
             {
-                ColorMode = DinkToPdf.ColorMode.Color,
-                Orientation = Orientation.Portrait,
-                PaperSize = DinkToPdf.PaperKind.A4,
-                Margins = new MarginSettings { Top = 25, Bottom = 25, Left = 30, Right = 20 }
-            };
-
-            var objectSettings = new ObjectSettings
-            {
-                PagesCount = true,
-                HtmlContent = htmlContent,
-                WebSettings = { DefaultEncoding = "utf-8" }
-            };
-
-            var pdfDocument = new HtmlToPdfDocument()
-            {
-                GlobalSettings = globalSettings,
-                Objects = { objectSettings }
-            };
-
-            return converter.Convert(pdfDocument);
+                HtmlConverter.ConvertToPdf(htmlContent, stream);
+                return stream.ToArray();
+            }
         }
 
         public void AddNew(DocumentTemplate p)
