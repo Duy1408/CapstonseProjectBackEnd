@@ -31,6 +31,11 @@ namespace RealEstateProjectSaleRepository.Repository
             return dao.GetBookingByCheckedIn();
         }
 
+        public List<Booking> GetBookingByCustomerID(Guid id)
+        {
+            return dao.GetBookingByCustomerID(id);
+        }
+
         public List<Booking> GetBookingByDepositedTimed(int numberBooking)
         {
             return dao.GetBookingByDepositedTimed(numberBooking);

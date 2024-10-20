@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RealEstateProjectSaleBusinessObject.Enums.EnumHelpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +9,17 @@ namespace RealEstateProjectSaleBusinessObject.Enums
 {
     public enum ProjectStatus
     {
-        NotForSale,
-        Upcoming,
-        Opening,
-        Delivered
+        [EnumDescription("Sắp mở bán")]
+        SapMoBan = 1,
+
+        [EnumDescription("Đang mở bán")]
+        DangMoBan = 2,
+
+        [EnumDescription("Đã bàn giao")]
+        DaBanGiao = 3
     }
+
+
+
+
 }

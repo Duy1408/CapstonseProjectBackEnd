@@ -18,6 +18,7 @@ using RealEstateProjectSaleBusinessObject.DTO.Create;
 using RealEstateProjectSaleBusinessObject.DTO.Request;
 using RealEstateProjectSaleBusinessObject.DTO.Update;
 using RealEstateProjectSaleBusinessObject.Enums;
+using RealEstateProjectSaleBusinessObject.Enums.EnumHelpers;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 using RealEstateProjectSaleServices.Services;
@@ -232,9 +233,14 @@ namespace RealEstateProjectSale.Controllers
                     {
                         existingProject.Image = string.Join(",", imageUrls);
                     }
-                    if (!string.IsNullOrEmpty(project.Status))
+                    if (!string.IsNullOrEmpty(project.Status) && int.TryParse(project.Status, out int statusValue))
                     {
-                        existingProject.Status = project.Status;
+                        if (Enum.IsDefined(typeof(ProjectStatus), statusValue))
+                        {
+                            var statusEnum = (ProjectStatus)statusValue;
+                            var statusDescription = statusEnum.GetEnumDescription();
+                            existingProject.Status = statusDescription;
+                        }
                     }
 
 
@@ -301,13 +307,13 @@ namespace RealEstateProjectSale.Controllers
                     LegalStatus = pro.LegalStatus,
                     HandOver = pro.HandOver,
                     Convenience = pro.Convenience,
-                    Status = ProjectStatus.NotForSale.ToString(),
+                    Status = ProjectStatus.SapMoBan.GetEnumDescription(),
                     Images = pro.Images.Count > 0 ? pro.Images.First() : null, // Store first image for reference
                 };
 
 
                 var project = _mapper.Map<Project>(newPro);
-                //project.Image = blobUrl;
+
                 project.Image = string.Join(",", imageUrls); // Store all image URLs as a comma-separated string
 
                 _project.AddNew(project);

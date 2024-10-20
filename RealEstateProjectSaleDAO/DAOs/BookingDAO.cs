@@ -153,5 +153,16 @@ namespace RealEstateProjectSaleDAO.DAOs
                                     .SingleOrDefault(a => a.DocumentTemplateID == id);
         }
 
+        public List<Booking> GetBookingByCustomerID(Guid id)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            return _context.Bookings.Include(c => c.OpeningForSale)
+                                    .Include(c => c.Project)
+                                    .Include(c => c.Customer)
+                                    .Include(c => c.Staff)
+                                    .Where(a => a.CustomerID == id)
+                                    .ToList();
+        }
+
     }
 }
