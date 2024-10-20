@@ -25,7 +25,7 @@ namespace RealEstateProjectSaleServices.IServices
         List<Booking> GetBookingByBooked();
         List<Booking> GetBookingByCheckedIn();
         Booking GetBookingByDocumentID(Guid id);
-
+        List<Booking> GetBookingByCustomerID(Guid id);
         string GenerateDocumentContent(Guid templateId);
 
     }

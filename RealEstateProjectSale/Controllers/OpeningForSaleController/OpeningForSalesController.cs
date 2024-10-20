@@ -76,9 +76,9 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
 
         [HttpGet("project/{projectId}")]
         [SwaggerOperation(Summary = "Get OpeningForSale by ProjectID")]
-        public IActionResult GetOpeningForSaleByProjectID(Guid id)
+        public IActionResult GetOpeningForSaleByProjectID(Guid projectId)
         {
-            var open = _open.GetPropertyByProjectID(id);
+            var open = _open.GetPropertyByProjectID(projectId);
 
             if (open != null)
             {

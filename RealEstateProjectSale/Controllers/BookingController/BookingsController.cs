@@ -122,6 +122,26 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
         }
 
+        [HttpGet("customer/{customerId}")]
+        [SwaggerOperation(Summary = "Get Booking by customer ID")]
+        public IActionResult GetBookingByCustomerID(Guid customerId)
+        {
+            var book = _book.GetBookingByCustomerID(customerId);
+
+            if (book != null)
+            {
+                var responese = book.Select(book => _mapper.Map<BookingVM>(book)).ToList();
+
+                return Ok(responese);
+            }
+
+            return NotFound(new
+            {
+                message = "Booking not found."
+            });
+
+        }
+
         // GET: api/Bookings/5
         [HttpGet("deposits/{numberOfBookings}")]
         [SwaggerOperation(Summary = "Get booking by deposit times")]
