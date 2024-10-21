@@ -44,6 +44,11 @@ namespace RealEstateProjectSaleServices.Services
             string s_wasmClientURL = "https://realestateproject-bdhcgphcfsf6b4g2.canadacentral-01.azurewebsites.net/index.html";
             var thisApiUrl = _configuration["PaymentApiUrl:ApiUrl"];
 
+            var firstImage = book.Project.Image
+                                        .Split(',', StringSplitOptions.RemoveEmptyEntries)  // Tách URL bằng dấu phẩy
+                                        .Select(image => image.Trim())  // Loại bỏ khoảng trắng thừa
+                                        .FirstOrDefault();
+
             var options = new SessionCreateOptions
             {
                 // Stripe calls the URLs below when certain checkout events happen such as success and failure.
@@ -51,24 +56,19 @@ namespace RealEstateProjectSaleServices.Services
                 CancelUrl = s_wasmClientURL + "/failed",  // Checkout cancelled.
                 PaymentMethodTypes = new List<string> { "card" },
                 LineItems = new List<SessionLineItemOptions>
-                    { new() {
-                        PriceData = new SessionLineItemPriceDataOptions
+                    { new SessionLineItemOptions
                         {
-                            UnitAmount = (long)book.OpeningForSale.ReservationPrice,
-                            Currency = "VND",
-                            ProductData = new SessionLineItemPriceDataProductDataOptions
+                            PriceData = new SessionLineItemPriceDataOptions
                             {
-                                Name = "Thanh toán giữ chỗ " + book.Project.ProjectName + " " + book.OpeningForSale.DecisionName,
-                                Images = new List<string>
+                                UnitAmount = (long)book.OpeningForSale.ReservationPrice,
+                                Currency = "VND",
+                                ProductData = new SessionLineItemPriceDataProductDataOptions
                                 {
-                                    book.Project.Image
-                                    .Split(',', StringSplitOptions.RemoveEmptyEntries) // Tách URL bằng dấu phẩy
-                                    .Select(image => image.Trim()) // Loại bỏ khoảng trắng
-                                    .FirstOrDefault() // Lấy URL đầu tiên
-                                }
+                                    Name = "Thanh toán giữ chỗ " + book.Project.ProjectName + " " + book.OpeningForSale.DecisionName,
+                                    Images = new List<string> {firstImage }
+                                },
                             },
-                        },
-                        Quantity = 1,
+                            Quantity = 1,
                         },
                     },
                 Mode = "payment"
@@ -93,7 +93,10 @@ namespace RealEstateProjectSaleServices.Services
         public Session CheckoutSuccess(string sessionId)
         {
             var sessionService = new SessionService();
-            var session = sessionService.Get(sessionId);
+            var session = sessionService.Get(sessionId, new SessionGetOptions
+            {
+                Expand = new List<string> { "line_items" }
+            });
 
             return session;
 
