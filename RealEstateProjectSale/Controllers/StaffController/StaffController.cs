@@ -21,16 +21,16 @@ namespace RealEstateProjectSale.Controllers.StaffController
         private readonly IAccountServices _accountServices;
         private readonly IRoleServices _roleServices;
         private readonly IMapper _mapper;
-        private readonly BlobServiceClient _blobServiceClient;
+        private readonly IFileUploadToBlobService _fileService;
 
         public StaffController(IStaffServices staffServices, IAccountServices accountServices,
-                               IRoleServices roleServices, IMapper mapper, BlobServiceClient blobServiceClient)
+                               IRoleServices roleServices, IMapper mapper, IFileUploadToBlobService fileService)
         {
             _staffServices = staffServices;
             _accountServices = accountServices;
             _roleServices = roleServices;
             _mapper = mapper;
-            _blobServiceClient = blobServiceClient;
+            _fileService = fileService;
         }
 
         [HttpGet]
@@ -109,15 +109,10 @@ namespace RealEstateProjectSale.Controllers.StaffController
                 var _account = _mapper.Map<Account>(account);
                 _accountServices.AddNewAccount(_account);
 
-                var containerInstance = _blobServiceClient.GetBlobContainerClient("staffimage");
                 string? blobUrl = null;
                 if (accountStaff.Image != null)
                 {
-                    var blobName = $"{Guid.NewGuid()}_{accountStaff.Image.FileName}";
-                    var blobInstance = containerInstance.GetBlobClient(blobName);
-                    blobInstance.Upload(accountStaff.Image.OpenReadStream());
-                    var storageAccountUrl = "https://realestatesystem.blob.core.windows.net/staffimage";
-                    blobUrl = $"{storageAccountUrl}/{blobName}";
+                    blobUrl = _fileService.UploadSingleImage(accountStaff.Image, "staffimage");
                 }
 
                 var staff = new StaffCreateDTO
@@ -162,15 +157,10 @@ namespace RealEstateProjectSale.Controllers.StaffController
         {
             try
             {
-                var containerInstance = _blobServiceClient.GetBlobContainerClient("staffimage");
                 string? blobUrl = null;
                 if (staff.Image != null)
                 {
-                    var blobName = $"{Guid.NewGuid()}_{staff.Image.FileName}";
-                    var blobInstance = containerInstance.GetBlobClient(blobName);
-                    blobInstance.Upload(staff.Image.OpenReadStream());
-                    var storageAccountUrl = "https://realestatesystem.blob.core.windows.net/staffimage";
-                    blobUrl = $"{storageAccountUrl}/{blobName}";
+                    blobUrl = _fileService.UploadSingleImage(staff.Image, "staffimage");
                 }
 
                 var _staff = _staffServices.GetStaffByID(id);

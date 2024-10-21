@@ -89,6 +89,7 @@ builder.Services.Configure<AdminAccountConfig>(builder.Configuration.GetSection(
 
 //Azure Blob Storage
 builder.Services.AddScoped(_ => new BlobServiceClient(builder.Configuration.GetConnectionString("AzureBlobStorage")));
+builder.Services.AddScoped<IFileUploadToBlobService, FileUploadToBlobService>();
 
 //Stripe Payment
 builder.Services.Configure<PaymentResponseModel>(builder.Configuration.GetSection("Stripe"));
