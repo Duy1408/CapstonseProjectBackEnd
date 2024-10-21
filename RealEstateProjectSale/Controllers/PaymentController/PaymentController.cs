@@ -65,11 +65,13 @@ namespace RealEstateProjectSale.Controllers.PaymentController
             var customerIDCache = Guid.Parse(HttpContext.Request.Query["customerID"]);
             var model = _paymentServices.GetPaymentModelFromCache(customerIDCache);
 
+            var lineItem = session.LineItems?.Data?.FirstOrDefault();
+
             var newPayment = new PaymentCreateDTO
             {
                 PaymentID = model.PaymentID,
                 Amount = session.AmountTotal.Value,
-                Content = model.Content,
+                Content = lineItem.Product.Name,
                 CreatedTime = model.CreatedTime,
                 PaymentTime = DateTime.Now,
                 Status = true,

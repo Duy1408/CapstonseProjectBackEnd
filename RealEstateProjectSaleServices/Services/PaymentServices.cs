@@ -20,18 +20,25 @@ namespace RealEstateProjectSaleServices.Services
     public class PaymentServices : IPaymentServices
     {
         private readonly IPaymentRepo _paymentRepo;
+        private readonly IBookingServices _bookService;
+        private readonly IOpeningForSaleServices _openService;
         private readonly IConfiguration _configuration;
         private readonly IMemoryCache _memoryCache;
-        public PaymentServices(IPaymentRepo paymentRepo, IConfiguration configuration, IMemoryCache memoryCache)
+        public PaymentServices(IPaymentRepo paymentRepo, IConfiguration configuration,
+                    IMemoryCache memoryCache, IBookingServices bookService, IOpeningForSaleServices openService)
         {
             _paymentRepo = paymentRepo;
             _configuration = configuration;
             _memoryCache = memoryCache;
+            _bookService = bookService;
+            _openService = openService;
         }
 
         public async Task<PaymentResponseModel> CreatePaymentUrl(PaymentInformationModel payment)
         {
-            //truyền CustomerID
+            var book = _bookService.GetBookingById(payment.BookingID);
+            var openForSale = _openService.GetOpeningForSaleById(book.OpeningForSaleID);
+
             _memoryCache.Set($"Order_{payment.CustomerID}", payment, TimeSpan.FromMinutes(10));
 
             string s_wasmClientURL = "https://realestateproject-bdhcgphcfsf6b4g2.canadacentral-01.azurewebsites.net/index.html";
@@ -47,11 +54,18 @@ namespace RealEstateProjectSaleServices.Services
                     { new() {
                         PriceData = new SessionLineItemPriceDataOptions
                         {
-                            UnitAmount = (long)payment.Amount,
+                            UnitAmount = (long)book.OpeningForSale.ReservationPrice,
                             Currency = "VND",
                             ProductData = new SessionLineItemPriceDataProductDataOptions
                             {
-                                Name = payment.Content
+                                Name = "Thanh toán giữ chỗ " + book.Project.ProjectName + " " + book.OpeningForSale.DecisionName,
+                                Images = new List<string>
+                                {
+                                    book.Project.Image
+                                    .Split(',', StringSplitOptions.RemoveEmptyEntries) // Tách URL bằng dấu phẩy
+                                    .Select(image => image.Trim()) // Loại bỏ khoảng trắng
+                                    .FirstOrDefault() // Lấy URL đầu tiên
+                                }
                             },
                         },
                         Quantity = 1,

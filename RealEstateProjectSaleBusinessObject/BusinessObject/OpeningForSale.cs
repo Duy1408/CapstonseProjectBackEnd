@@ -12,7 +12,7 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public string DecisionName { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public string ReservationPrice { get; set; }
+        public double ReservationPrice { get; set; }
         public string? Description { get; set; }
         public DateTime CheckinDate { get; set; }
         public string SaleType { get; set; }

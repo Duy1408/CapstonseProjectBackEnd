@@ -206,9 +206,9 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
                     {
                         existingOpen.SaleType = open.SaleType;
                     }
-                    if (!string.IsNullOrEmpty(open.ReservationPrice))
+                    if (open.ReservationPrice.HasValue)
                     {
-                        existingOpen.ReservationPrice = open.ReservationPrice;
+                        existingOpen.ReservationPrice = open.ReservationPrice.Value;
                     }
                     if (!string.IsNullOrEmpty(open.Description))
                     {
