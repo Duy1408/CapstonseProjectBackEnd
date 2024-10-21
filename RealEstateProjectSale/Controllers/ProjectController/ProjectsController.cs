@@ -10,6 +10,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using AutoMapper;
 using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -169,7 +170,7 @@ namespace RealEstateProjectSale.Controllers
                     {
                         var blobName = $"{Guid.NewGuid()}_{image.FileName}";
                         var blobInstance = containerInstance.GetBlobClient(blobName);
-                        blobInstance.Upload(image.OpenReadStream());
+                        blobInstance.Upload(image.OpenReadStream(), new BlobHttpHeaders { ContentType = "image/png" });
                         var storageAccountUrl = "https://realestatesystem.blob.core.windows.net/projectimage";
                         var blobUrl = $"{storageAccountUrl}/{blobName}";
                         imageUrls.Add(blobUrl); // Add each image URL to the list
@@ -284,7 +285,7 @@ namespace RealEstateProjectSale.Controllers
                     {
                         var blobName = $"{Guid.NewGuid()}_{image.FileName}";
                         var blobInstance = containerInstance.GetBlobClient(blobName);
-                        blobInstance.Upload(image.OpenReadStream());
+                        blobInstance.Upload(image.OpenReadStream(), new BlobHttpHeaders { ContentType = "image/png" });
                         var storageAccountUrl = "https://realestatesystem.blob.core.windows.net/projectimage";
 
                         var blobUrl = $"{storageAccountUrl}/{blobName}";

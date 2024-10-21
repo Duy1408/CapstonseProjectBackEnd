@@ -11,8 +11,6 @@ namespace RealEstateProjectSaleBusinessObject.Model
     {
         [JsonIgnore]
         public Guid PaymentID { get; set; } = Guid.NewGuid();
-        public double Amount { get; set; }
-        public string? Content { get; set; }
         [JsonIgnore]
         public DateTime CreatedTime { get; set; } = DateTime.Now;
         public Guid PaymentTypeID { get; set; }
