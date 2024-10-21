@@ -8,6 +8,7 @@ using RealEstateProjectSaleBusinessObject.DTO.Create;
 using RealEstateProjectSaleBusinessObject.DTO.Request;
 using RealEstateProjectSaleBusinessObject.DTO.Update;
 using RealEstateProjectSaleBusinessObject.Enums;
+using RealEstateProjectSaleBusinessObject.Enums.EnumHelpers;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 using RealEstateProjectSaleServices.Services;
@@ -108,7 +109,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     TotalPrice = contract.TotalPrice,
                     Description = contract.Description,
                     ContractFile = contract.ContractFile,
-                    Status = ContractStatus.NotSigned.ToString(),
+                    Status = ContractStatus.ChoXacNhanTTDC.GetEnumDescription(),
                     DocumentTemplateID = contract.DocumentTemplateID,
                     BookingID = contract.BookingID,
                     PaymentProcessID = contract.PaymentProcessID,
@@ -230,8 +231,8 @@ namespace RealEstateProjectSale.Controllers.ContractController
         }
 
         [HttpPut("{id}/signed")]
-        [SwaggerOperation(Summary = "Customer Signed Contract by ID")]
-        public IActionResult CustomerSignedContract(Guid id)
+        [SwaggerOperation(Summary = "Customer Confirmed Deposit Contract by ID")]
+        public IActionResult CustomerConfirmedDepositContract(Guid id)
         {
             try
             {
@@ -240,16 +241,16 @@ namespace RealEstateProjectSale.Controllers.ContractController
                 if (contract != null && book != null)
                 {
                     contract.DateSigned = DateTime.Now;
-                    contract.Status = ContractStatus.Signed.ToString();
+                    contract.Status = ContractStatus.DaXacNhanTTDC.GetEnumDescription();
 
-                    book.Status = BookingStatus.ContractSigned.ToString();
+                    book.Status = BookingStatus.DaKyTTDC.GetEnumDescription();
 
                     _contractServices.UpdateContract(contract);
                     _bookServices.UpdateBooking(book);
 
                     return Ok(new
                     {
-                        message = "Signed Contract Successfully"
+                        message = "Customer Confirmed Deposit Contract Successfully"
                     });
 
                 }

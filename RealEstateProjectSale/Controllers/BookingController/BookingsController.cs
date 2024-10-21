@@ -13,6 +13,7 @@ using RealEstateProjectSaleBusinessObject.BusinessObject;
 using RealEstateProjectSaleBusinessObject.DTO.Create;
 using RealEstateProjectSaleBusinessObject.DTO.Update;
 using RealEstateProjectSaleBusinessObject.Enums;
+using RealEstateProjectSaleBusinessObject.Enums.EnumHelpers;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 using RealEstateProjectSaleServices.Services;
@@ -226,9 +227,14 @@ namespace RealEstateProjectSale.Controllers.BookingController
                     {
                         existingBook.Note = book.Note;
                     }
-                    if (!string.IsNullOrEmpty(book.Status))
+                    if (!string.IsNullOrEmpty(book.Status) && int.TryParse(book.Status, out int statusValue))
                     {
-                        existingBook.Status = book.Status;
+                        if (Enum.IsDefined(typeof(BookingStatus), statusValue))
+                        {
+                            var statusEnum = (BookingStatus)statusValue;
+                            var statusDescription = statusEnum.GetEnumDescription();
+                            existingBook.Status = statusDescription;
+                        }
                     }
                     if (blobUrl != null)
                     {
@@ -271,7 +277,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
                 if (book != null)
                 {
 
-                    book.Status = BookingStatus.CheckedIn.ToString();
+                    book.Status = BookingStatus.DaCheckIn.GetEnumDescription();
 
                     _book.UpdateBooking(book);
 
@@ -310,7 +316,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
                     UpdatedTime = null,
                     BookingFile = null,
                     Note = null,
-                    Status = BookingStatus.NotDeposited.ToString(),
+                    Status = BookingStatus.ChuaThanhToanTienGiuCho.GetEnumDescription(),
                     CustomerID = customerID,
                     StaffID = null,
                     ProjectID = projectID,

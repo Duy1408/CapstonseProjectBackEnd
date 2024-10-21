@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
 using RealEstateProjectSaleBusinessObject.Enums;
+using RealEstateProjectSaleBusinessObject.Enums.EnumHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,7 +47,7 @@ namespace RealEstateProjectSaleDAO.DAOs
                                     .Include(c => c.Project)
                                     .Include(c => c.Customer)
                                     .Include(c => c.Staff)
-                                    .Where(b => b.Status == BookingStatus.Reserved.ToString())
+                                    .Where(b => b.Status == BookingStatus.DaDatCho.GetEnumDescription())
                                     .ToList();
         }
 
@@ -58,7 +59,7 @@ namespace RealEstateProjectSaleDAO.DAOs
                                     .Include(c => c.Project)
                                     .Include(c => c.Customer)
                                     .Include(c => c.Staff)
-                                    .Where(b => b.Status == BookingStatus.CheckedIn.ToString())
+                                    .Where(b => b.Status == BookingStatus.DaCheckIn.GetEnumDescription())
                                     .ToList();
         }
 
@@ -72,8 +73,8 @@ namespace RealEstateProjectSaleDAO.DAOs
                                      .Include(c => c.Staff)
                                      .Where(b => b.DepositedTimed != null
                                      && b.DepositedPrice != null
-                                     && b.Status != BookingStatus.ContractSigned.ToString()
-                                     && b.Status == BookingStatus.CheckedIn.ToString())
+                                     && b.Status != BookingStatus.DaKyTTDC.GetEnumDescription()
+                                     && b.Status == BookingStatus.DaCheckIn.GetEnumDescription())
                                      .OrderBy(b => b.DepositedTimed)
                                      .ThenBy(b => b.BookingID)
                                      .Take(numberBooking)
@@ -90,8 +91,8 @@ namespace RealEstateProjectSaleDAO.DAOs
                                      .Include(c => c.Staff)
                                      .Where(b => b.DepositedTimed != null
                                      && b.DepositedPrice != null
-                                     && b.Status != BookingStatus.ContractSigned.ToString()
-                                     && b.Status == BookingStatus.CheckedIn.ToString())
+                                     && b.Status != BookingStatus.DaKyTTDC.GetEnumDescription()
+                                     && b.Status == BookingStatus.DaCheckIn.GetEnumDescription())
                                      .OrderBy(b => Guid.NewGuid())
                                      .Take(numberBooking)
                                      .ToList();
