@@ -15,6 +15,7 @@ using RealEstateProjectSaleBusinessObject.DTO.Create;
 using RealEstateProjectSaleBusinessObject.DTO.Request;
 using RealEstateProjectSaleBusinessObject.DTO.Update;
 using RealEstateProjectSaleBusinessObject.Enums;
+using RealEstateProjectSaleBusinessObject.Enums.EnumHelpers;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 using Swashbuckle.AspNetCore.Annotations;
@@ -265,7 +266,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                     PropertyCode = property.PropertyCode,
                     View = property.View,
                     PriceSold = property.PriceSold,
-                    Status = property.Status,
+                    Status = PropertyStatus.ChuaBan.GetEnumDescription(),
                     UnitTypeID = property.UnitTypeID,
                     FloorID = property.FloorID,
                     BlockID = property.BlockID,
@@ -310,9 +311,14 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                     {
                         existingProperty.PriceSold = property.PriceSold.Value;
                     }
-                    if (!string.IsNullOrEmpty(property.Status))
+                    if (!string.IsNullOrEmpty(property.Status) && int.TryParse(property.Status, out int statusValue))
                     {
-                        existingProperty.Status = property.Status;
+                        if (Enum.IsDefined(typeof(PropertyStatus), statusValue))
+                        {
+                            var statusEnum = (PropertyStatus)statusValue;
+                            var statusDescription = statusEnum.GetEnumDescription();
+                            existingProperty.Status = statusDescription;
+                        }
                     }
                     if (property.UnitTypeID.HasValue)
                     {
