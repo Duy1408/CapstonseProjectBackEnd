@@ -21,6 +21,6 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Request
         public string? LegalStatus { get; set; }
         public string? HandOver { get; set; }
         public string? Convenience { get; set; }
-        public IFormFileCollection? Images { get; set; }
+        public IFormFileCollection Images { get; set; }
     }
 }
