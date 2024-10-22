@@ -21,7 +21,8 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public DateTime? ExpiredTime { get; set; }
         public double? TotalPrice { get; set; }
         public string? Description { get; set; }
-        public string? ContractFile { get; set; }
+        public string? ContractDepositFile { get; set; }
+        public string? ContractSaleFile { get; set; }
         public string Status { get; set; }
         public Guid? DocumentTemplateID { get; set; }
         public DocumentTemplate? DocumentTemplate { get; set; }

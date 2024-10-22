@@ -117,7 +117,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
                 };
 
                 var _contract = _mapper.Map<Contract>(newContract);
-                _contract.ContractFile = blobUrl;
+                _contract.ContractDepositFile = blobUrl;
                 _contractServices.AddNewContract(_contract);
 
                 return Ok(new
@@ -204,7 +204,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     }
                     if (blobUrl != null)
                     {
-                        existingContract.ContractFile = blobUrl;
+                        existingContract.ContractDepositFile = blobUrl;
                     }
 
                     existingContract.UpdatedTime = DateTime.Now;
