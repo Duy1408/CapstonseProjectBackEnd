@@ -9,6 +9,7 @@ using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
 using RealEstateProjectSaleBusinessObject.DTO.Create;
@@ -18,6 +19,7 @@ using RealEstateProjectSaleBusinessObject.Enums;
 using RealEstateProjectSaleBusinessObject.Enums.EnumHelpers;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
+using RealEstateProjectSaleServices.Services;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace RealEstateProjectSale.Controllers.PropertyController
@@ -30,15 +32,17 @@ namespace RealEstateProjectSale.Controllers.PropertyController
         private readonly IPagingServices _pagingServices;
         private readonly IMapper _mapper;
         private readonly BlobServiceClient _blobServiceClient;
+        private readonly IHubContext<PropertyHub> _hubContext;
 
         public static int PAGE_SIZE { get; set; } = 5;
 
-        public PropertyController(IPropertyServices pro, IPagingServices pagingServices, BlobServiceClient blobServiceClient, IMapper mapper)
+        public PropertyController(IHubContext<PropertyHub> hubContext, IPropertyServices pro, IPagingServices pagingServices, BlobServiceClient blobServiceClient, IMapper mapper)
         {
             _pro = pro;
             _pagingServices = pagingServices;
             _blobServiceClient = blobServiceClient;
             _mapper = mapper;
+            _hubContext = hubContext;
         }
 
         [HttpGet]
@@ -358,5 +362,56 @@ namespace RealEstateProjectSale.Controllers.PropertyController
             }
         }
 
+
+
+
+        [HttpPut("{propertyid}")]
+        [SwaggerOperation(Summary = "Update Property status by ID")]
+        public async Task<IActionResult> UpdateStatusProperty([FromForm] PropertyUpdateDTO property, Guid propertyid)
+        {
+            try
+            {
+
+                var existingProperty = _pro.GetPropertyById(propertyid);
+                if (existingProperty != null)
+                {
+              
+                    if (!string.IsNullOrEmpty(property.Status) && int.TryParse(property.Status, out int statusValue))
+                    {
+                        if (Enum.IsDefined(typeof(PropertyStatus), statusValue))
+                        {
+                            var statusEnum = (PropertyStatus)statusValue;
+                            var statusDescription = statusEnum.GetEnumDescription();
+                            existingProperty.Status = statusDescription;
+                        }
+                    }
+
+                    _pro.UpdateProperty(existingProperty);
+                    await _hubContext.Clients.All.SendAsync("ReceivePropertyStatus", propertyid.ToString(), existingProperty.Status);
+
+
+                    return Ok(new
+                    {
+                        message = "Update Property Successfully"
+                    });
+
+                }
+
+                return NotFound(new
+                {
+                    message = "Property not found."
+                });
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
+
+
+
+
 }
