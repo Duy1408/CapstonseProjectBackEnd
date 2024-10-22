@@ -9,8 +9,9 @@ namespace RealEstateProjectSaleServices.IServices
 {
     public interface IFileUploadToBlobService
     {
-        string UploadSingleFile(IFormFile file, string containerName);
+        string UploadSingleFile(Stream fileStream, string fileName, string containerName);
         string UploadSingleImage(IFormFile image, string containerName);
-        List<string> UploadMultipleFiles();
+        List<string> UploadMultipleImages(List<IFormFile> images, string containerName);
+
     }
 }

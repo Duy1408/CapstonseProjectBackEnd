@@ -19,13 +19,13 @@ namespace RealEstateProjectSale.Controllers.UnitTypeController
     public class UnitTypeController : ControllerBase
     {
         private readonly IUnitTypeServices _typeService;
-        private readonly BlobServiceClient _blobServiceClient;
+        private readonly IFileUploadToBlobService _fileService;
         private readonly IMapper _mapper;
 
-        public UnitTypeController(IUnitTypeServices typeService, BlobServiceClient blobServiceClient, IMapper mapper)
+        public UnitTypeController(IUnitTypeServices typeService, IFileUploadToBlobService fileService, IMapper mapper)
         {
             _typeService = typeService;
-            _blobServiceClient = blobServiceClient;
+            _fileService = fileService;
             _mapper = mapper;
         }
 
@@ -112,22 +112,7 @@ namespace RealEstateProjectSale.Controllers.UnitTypeController
         {
             try
             {
-                var containerInstance = _blobServiceClient.GetBlobContainerClient("unittypeimage");
-                var imageUrls = new List<string>(); // List to hold URLs of all images
-                if (type.Image != null && type.Image.Count > 0)
-                {
-
-                    foreach (var image in type.Image)
-                    {
-                        var blobName = $"{Guid.NewGuid()}_{image.FileName}";
-                        var blobInstance = containerInstance.GetBlobClient(blobName);
-                        blobInstance.Upload(image.OpenReadStream());
-                        var storageAccountUrl = "https://realestatesystem.blob.core.windows.net/unittypeimage";
-
-                        var blobUrl = $"{storageAccountUrl}/{blobName}";
-                        imageUrls.Add(blobUrl); // Add each image URL to the list
-                    }
-                }
+                var imageUrls = _fileService.UploadMultipleImages(type.Image.ToList(), "unittypeimage");
 
                 var newCmt = new UnitTypeCreateDTO
                 {
@@ -169,21 +154,7 @@ namespace RealEstateProjectSale.Controllers.UnitTypeController
         {
             try
             {
-                var containerInstance = _blobServiceClient.GetBlobContainerClient("unittypeimage");
-                var imageUrls = new List<string>(); // List to hold URLs of all images
-                if (type.Image != null && type.Image.Count > 0)
-                {
-
-                    foreach (var image in type.Image)
-                    {
-                        var blobName = $"{Guid.NewGuid()}_{image.FileName}";
-                        var blobInstance = containerInstance.GetBlobClient(blobName);
-                        blobInstance.Upload(image.OpenReadStream());
-                        var storageAccountUrl = "https://realestatesystem.blob.core.windows.net/unittypeimage";
-                        var blobUrl = $"{storageAccountUrl}/{blobName}";
-                        imageUrls.Add(blobUrl); // Add each image URL to the list
-                    }
-                }
+                var imageUrls = _fileService.UploadMultipleImages(type.Image.ToList(), "unittypeimage");
 
                 var existingType = _typeService.GetUnitTypeByID(id);
                 if (existingType != null)

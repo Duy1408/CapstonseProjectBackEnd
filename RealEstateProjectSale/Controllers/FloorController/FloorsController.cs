@@ -18,13 +18,13 @@ namespace RealEstateProjectSale.Controllers.FloorController
     {
         private readonly IFloorService _floor;
         private readonly IMapper _mapper;
-        private readonly BlobServiceClient _blobServiceClient;
+        private readonly IFileUploadToBlobService _fileService;
 
-        public FloorsController(IFloorService floor,IMapper mapper, BlobServiceClient blobServiceClient)
+        public FloorsController(IFloorService floor, IMapper mapper, IFileUploadToBlobService fileService)
         {
             _floor = floor;
             _mapper = mapper;
-            _blobServiceClient = blobServiceClient;
+            _fileService = fileService;
         }
 
 
@@ -79,7 +79,7 @@ namespace RealEstateProjectSale.Controllers.FloorController
                 return NotFound();
             }
 
-           _floor.ChangeStatus(floor);
+            _floor.ChangeStatus(floor);
 
             return Ok("Delete Successfully");
         }
@@ -92,22 +92,7 @@ namespace RealEstateProjectSale.Controllers.FloorController
             try
             {
 
-                var containerInstance = _blobServiceClient.GetBlobContainerClient("floorimage");
-                var imageUrls = new List<string>(); // List to hold URLs of all images
-                if (floor.ImageFloor != null && floor.ImageFloor.Count > 0)
-                {
-
-                    foreach (var image in floor.ImageFloor)
-                    {
-                        var blobName = $"{Guid.NewGuid()}_{image.FileName}";
-                        var blobInstance = containerInstance.GetBlobClient(blobName);
-                        blobInstance.Upload(image.OpenReadStream());
-                        var storageAccountUrl = "https://realestatesystem.blob.core.windows.net/floorimage";
-
-                        var blobUrl = $"{storageAccountUrl}/{blobName}";
-                        imageUrls.Add(blobUrl); // Add each image URL to the list
-                    }
-                }
+                var imageUrls = _fileService.UploadMultipleImages(floor.ImageFloor.ToList(), "floorimage");
 
                 var newFloor = new FloorCreateDTO
                 {
@@ -141,22 +126,7 @@ namespace RealEstateProjectSale.Controllers.FloorController
             try
             {
 
-                var containerInstance = _blobServiceClient.GetBlobContainerClient("floorimage");
-                var imageUrls = new List<string>(); // List to hold URLs of all images
-                if (floor.ImageFloor != null && floor.ImageFloor.Count > 0)
-                {
-
-                    foreach (var image in floor.ImageFloor)
-                    {
-                        var blobName = $"{Guid.NewGuid()}_{image.FileName}";
-                        var blobInstance = containerInstance.GetBlobClient(blobName);
-                        blobInstance.Upload(image.OpenReadStream());
-                        var storageAccountUrl = "https://realestatesystem.blob.core.windows.net/floorimage";
-
-                        var blobUrl = $"{storageAccountUrl}/{blobName}";
-                        imageUrls.Add(blobUrl); // Add each image URL to the list
-                    }
-                }
+                var imageUrls = _fileService.UploadMultipleImages(floor.ImageFloor.ToList(), "floorimage");
 
                 var existingFloor = _floor.GetFloorById(id);
                 if (existingFloor != null)

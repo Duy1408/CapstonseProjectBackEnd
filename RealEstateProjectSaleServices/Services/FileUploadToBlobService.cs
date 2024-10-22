@@ -22,12 +22,12 @@ namespace RealEstateProjectSaleServices.Services
             _configuration = configuration;
         }
 
-        public string UploadSingleFile(IFormFile file, string containerName)
+        public string UploadSingleFile(Stream fileStream, string fileName, string containerName)
         {
             var containerInstance = _blobServiceClient.GetBlobContainerClient(containerName);
-            var blobName = $"{Guid.NewGuid()}_{file.FileName}";
+            var blobName = $"{Guid.NewGuid()}_{fileName}";
             var blobInstance = containerInstance.GetBlobClient(blobName);
-            blobInstance.Upload(file.OpenReadStream(), new BlobHttpHeaders { ContentType = "application/pdf" });
+            blobInstance.Upload(fileStream, new BlobHttpHeaders { ContentType = "application/pdf" });
             var storageAccountUrl = _configuration["AzureStorage:Url"] + containerName;
             var blobUrl = $"{storageAccountUrl}/{blobName}";
 
@@ -47,10 +47,34 @@ namespace RealEstateProjectSaleServices.Services
             return blobUrl;
         }
 
-        public List<string> UploadMultipleFiles()
+        public List<string> UploadMultipleImages(List<IFormFile> images, string containerName)
         {
-            throw new NotImplementedException();
+            var imageUrls = new List<string>();
+            if (images != null && images.Count > 0)
+            {
+                var containerInstance = _blobServiceClient.GetBlobContainerClient(containerName);
+                foreach (var image in images)
+                {
+                    var blobName = $"{Guid.NewGuid()}_{image.FileName}";
+                    var blobInstance = containerInstance.GetBlobClient(blobName);
+                    try
+                    {
+                        blobInstance.Upload(image.OpenReadStream(), new BlobHttpHeaders { ContentType = "image/png" });
+                        var storageAccountUrl = _configuration["AzureStorage:Url"] + containerName;
+                        var blobUrl = $"{storageAccountUrl}/{blobName}";
+                        imageUrls.Add(blobUrl);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new ApplicationException($"Error uploading image {image.FileName} to blob storage", ex);
+                    }
+                }
+            }
+
+            return imageUrls;
         }
+
 
 
     }

@@ -34,17 +34,18 @@ namespace RealEstateProjectSale.Controllers
         private readonly IProjectServices _project;
         private readonly IPagingServices _pagingServices;
         private readonly IMapper _mapper;
-        private readonly BlobServiceClient _blobServiceClient;
+        private readonly IFileUploadToBlobService _fileService;
 
         public static int PAGE_SIZE { get; set; } = 5;
 
 
-        public ProjectsController(IProjectServices project, IPagingServices pagingServices, BlobServiceClient blobServiceClient, IMapper mapper)
+        public ProjectsController(IProjectServices project, IPagingServices pagingServices,
+                    IFileUploadToBlobService fileService, IMapper mapper)
         {
             _project = project;
             _pagingServices = pagingServices;
             _mapper = mapper;
-            _blobServiceClient = blobServiceClient;
+            _fileService = fileService;
         }
 
 
@@ -107,7 +108,6 @@ namespace RealEstateProjectSale.Controllers
 
         }
 
-        // GET: api/Projects/5
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "GetProjectByID")]
         public IActionResult GetProjectByID(Guid id)
@@ -153,29 +153,13 @@ namespace RealEstateProjectSale.Controllers
 
         }
 
-        // PUT: api/Projects/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "UpdateProject")]
         public IActionResult UpdateProject([FromForm] ProjectUpdateDTO project, Guid id)
         {
             try
             {
-                var containerInstance = _blobServiceClient.GetBlobContainerClient("projectimage");
-                var imageUrls = new List<string>(); // List to hold URLs of all images
-                if (project.Images != null && project.Images.Count > 0)
-                {
-
-                    foreach (var image in project.Images)
-                    {
-                        var blobName = $"{Guid.NewGuid()}_{image.FileName}";
-                        var blobInstance = containerInstance.GetBlobClient(blobName);
-                        blobInstance.Upload(image.OpenReadStream(), new BlobHttpHeaders { ContentType = "image/png" });
-                        var storageAccountUrl = "https://realestatesystem.blob.core.windows.net/projectimage";
-                        var blobUrl = $"{storageAccountUrl}/{blobName}";
-                        imageUrls.Add(blobUrl); // Add each image URL to the list
-                    }
-                }
+                var imageUrls = _fileService.UploadMultipleImages(project.Images.ToList(), "projectimage");
 
                 var existingProject = _project.GetProjectById(id);
                 if (existingProject != null)
@@ -267,31 +251,13 @@ namespace RealEstateProjectSale.Controllers
             }
         }
 
-
-        // POST: api/Projects
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [SwaggerOperation(Summary = "AddNewProject")]
         public IActionResult AddNew([FromForm] ProjectRequestDTO pro)
         {
             try
             {
-                var containerInstance = _blobServiceClient.GetBlobContainerClient("projectimage");
-                var imageUrls = new List<string>(); // List to hold URLs of all images
-                if (pro.Images != null && pro.Images.Count > 0)
-                {
-
-                    foreach (var image in pro.Images)
-                    {
-                        var blobName = $"{Guid.NewGuid()}_{image.FileName}";
-                        var blobInstance = containerInstance.GetBlobClient(blobName);
-                        blobInstance.Upload(image.OpenReadStream(), new BlobHttpHeaders { ContentType = "image/png" });
-                        var storageAccountUrl = "https://realestatesystem.blob.core.windows.net/projectimage";
-
-                        var blobUrl = $"{storageAccountUrl}/{blobName}";
-                        imageUrls.Add(blobUrl); // Add each image URL to the list
-                    }
-                }
+                var imageUrls = _fileService.UploadMultipleImages(pro.Images.ToList(), "projectimage");
 
                 var newPro = new ProjectCreateDTO
                 {

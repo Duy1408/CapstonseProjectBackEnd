@@ -22,14 +22,15 @@ namespace RealEstateProjectSale.Controllers.ContractController
     {
         private readonly IContractServices _contractServices;
         private readonly IBookingServices _bookServices;
-        private readonly BlobServiceClient _blobServiceClient;
+        private readonly IFileUploadToBlobService _fileService;
         private readonly IMapper _mapper;
 
-        public ContractController(IContractServices contractServices, IBookingServices bookServices, BlobServiceClient blobServiceClient, IMapper mapper)
+        public ContractController(IContractServices contractServices, IBookingServices bookServices,
+                IFileUploadToBlobService fileService, IMapper mapper)
         {
             _contractServices = contractServices;
             _bookServices = bookServices;
-            _blobServiceClient = blobServiceClient;
+            _fileService = fileService;
             _mapper = mapper;
         }
 
@@ -83,15 +84,14 @@ namespace RealEstateProjectSale.Controllers.ContractController
         {
             try
             {
-                var containerInstance = _blobServiceClient.GetBlobContainerClient("contractfile");
                 string? blobUrl = null;
-                if (contract.ContractFile != null)
+                var contractFile = contract.ContractFile;
+                if (contractFile != null)
                 {
-                    var blobName = $"{Guid.NewGuid()}_{contract.ContractFile.FileName}";
-                    var blobInstance = containerInstance.GetBlobClient(blobName);
-                    blobInstance.Upload(contract.ContractFile.OpenReadStream());
-                    var storageAccountUrl = "https://realestatesystem.blob.core.windows.net/contractfile";
-                    blobUrl = $"{storageAccountUrl}/{blobName}";
+                    using (var pdfStream = contractFile.OpenReadStream())
+                    {
+                        blobUrl = _fileService.UploadSingleFile(pdfStream, contractFile.FileName, "contractfile");
+                    }
                 }
 
                 string nextContractCode = GenerateNextContractCode();
@@ -137,15 +137,14 @@ namespace RealEstateProjectSale.Controllers.ContractController
         {
             try
             {
-                var containerInstance = _blobServiceClient.GetBlobContainerClient("contractfile");
                 string? blobUrl = null;
-                if (contract.ContractFile != null)
+                var contractFile = contract.ContractFile;
+                if (contractFile != null)
                 {
-                    var blobName = $"{Guid.NewGuid()}_{contract.ContractFile.FileName}";
-                    var blobInstance = containerInstance.GetBlobClient(blobName);
-                    blobInstance.Upload(contract.ContractFile.OpenReadStream());
-                    var storageAccountUrl = "https://realestatesystem.blob.core.windows.net/contractfile";
-                    blobUrl = $"{storageAccountUrl}/{blobName}";
+                    using (var pdfStream = contractFile.OpenReadStream())
+                    {
+                        blobUrl = _fileService.UploadSingleFile(pdfStream, contractFile.FileName, "contractfile");
+                    }
                 }
 
                 var existingContract = _contractServices.GetContractByID(id);
