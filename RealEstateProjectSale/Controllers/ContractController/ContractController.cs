@@ -85,12 +85,12 @@ namespace RealEstateProjectSale.Controllers.ContractController
             try
             {
                 string? blobUrl = null;
-                var contractFile = contract.ContractFile;
+                var contractFile = contract.ContractDepositFile;
                 if (contractFile != null)
                 {
                     using (var pdfStream = contractFile.OpenReadStream())
                     {
-                        blobUrl = _fileService.UploadSingleFile(pdfStream, contractFile.FileName, "contractfile");
+                        blobUrl = _fileService.UploadSingleFile(pdfStream, contractFile.FileName, "contractdepositfile");
                     }
                 }
 
@@ -108,7 +108,8 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     ExpiredTime = contract.ExpiredTime,
                     TotalPrice = contract.TotalPrice,
                     Description = contract.Description,
-                    ContractFile = contract.ContractFile,
+                    ContractDepositFile = contract.ContractDepositFile,
+                    ContractSaleFile = null,
                     Status = ContractStatus.ChoXacNhanTTDC.GetEnumDescription(),
                     DocumentTemplateID = contract.DocumentTemplateID,
                     BookingID = contract.BookingID,
@@ -137,13 +138,21 @@ namespace RealEstateProjectSale.Controllers.ContractController
         {
             try
             {
-                string? blobUrl = null;
-                var contractFile = contract.ContractFile;
-                if (contractFile != null)
+                string? blobUrl1 = null, blobUrl2 = null;
+                var depositFile = contract.ContractDepositFile;
+                var saleFile = contract.ContractSaleFile;
+                if (depositFile != null)
                 {
-                    using (var pdfStream = contractFile.OpenReadStream())
+                    using (var pdfDepositStream = depositFile.OpenReadStream())
                     {
-                        blobUrl = _fileService.UploadSingleFile(pdfStream, contractFile.FileName, "contractfile");
+                        blobUrl1 = _fileService.UploadSingleFile(pdfDepositStream, depositFile.FileName, "contractdepositfile");
+                    }
+                }
+                if (saleFile != null)
+                {
+                    using (var pdfSaleStream = saleFile.OpenReadStream())
+                    {
+                        blobUrl2 = _fileService.UploadSingleFile(pdfSaleStream, saleFile.FileName, "contractsalefile");
                     }
                 }
 
@@ -202,9 +211,13 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     {
                         existingContract.PaymentProcessID = contract.PaymentProcessID.Value;
                     }
-                    if (blobUrl != null)
+                    if (blobUrl1 != null)
                     {
-                        existingContract.ContractDepositFile = blobUrl;
+                        existingContract.ContractDepositFile = blobUrl1;
+                    }
+                    if (blobUrl2 != null)
+                    {
+                        existingContract.ContractSaleFile = blobUrl2;
                     }
 
                     existingContract.UpdatedTime = DateTime.Now;

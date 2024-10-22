@@ -18,7 +18,7 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Request
         public DateTime? ExpiredTime { get; set; }
         public double? TotalPrice { get; set; }
         public string? Description { get; set; }
-        public IFormFile? ContractFile { get; set; }
+        public IFormFile? ContractDepositFile { get; set; }
         public Guid? DocumentTemplateID { get; set; }
         public Guid BookingID { get; set; }
         public Guid? PaymentProcessID { get; set; }
