@@ -16,13 +16,14 @@ namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
     public class ContractPaymentDetailController : ControllerBase
     {
         private readonly IContractPaymentDetailServices _detailService;
-        private readonly BlobServiceClient _blobServiceClient;
+        private readonly IFileUploadToBlobService _fileService;
         private readonly IMapper _mapper;
 
-        public ContractPaymentDetailController(IContractPaymentDetailServices detailService, BlobServiceClient blobServiceClient, IMapper mapper)
+        public ContractPaymentDetailController(IContractPaymentDetailServices detailService,
+                    IFileUploadToBlobService fileService, IMapper mapper)
         {
             _detailService = detailService;
-            _blobServiceClient = blobServiceClient;
+            _fileService = fileService;
             _mapper = mapper;
         }
 
@@ -116,15 +117,10 @@ namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
         {
             try
             {
-                var containerInstance = _blobServiceClient.GetBlobContainerClient("remittanceorderimage");
                 string? blobUrl = null;
                 if (detail.RemittanceOrder != null)
                 {
-                    var blobName = $"{Guid.NewGuid()}_{detail.RemittanceOrder.FileName}";
-                    var blobInstance = containerInstance.GetBlobClient(blobName);
-                    blobInstance.Upload(detail.RemittanceOrder.OpenReadStream());
-                    var storageAccountUrl = "https://realestatesystem.blob.core.windows.net/remittanceorderimage";
-                    blobUrl = $"{storageAccountUrl}/{blobName}";
+                    blobUrl = _fileService.UploadSingleImage(detail.RemittanceOrder, "remittanceorderimage");
                 }
 
                 var existingDetail = _detailService.GetContractPaymentDetailByID(id);

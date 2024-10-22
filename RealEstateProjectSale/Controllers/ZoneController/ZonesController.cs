@@ -21,12 +21,12 @@ namespace RealEstateProjectSale.Controllers.ZoneController
     {
         private readonly IZoneService _zone;
         private readonly IMapper _mapper;
-        private readonly BlobServiceClient _blobServiceClient;
-        public ZonesController(IZoneService zone, IMapper mapper, BlobServiceClient blobServiceClient)
+        private readonly IFileUploadToBlobService _fileService;
+        public ZonesController(IZoneService zone, IMapper mapper, IFileUploadToBlobService fileService)
         {
             _zone = zone;
             _mapper = mapper;
-            _blobServiceClient = blobServiceClient;
+            _fileService = fileService;
         }
 
 
@@ -74,21 +74,7 @@ namespace RealEstateProjectSale.Controllers.ZoneController
         {
             try
             {
-                var containerInstance = _blobServiceClient.GetBlobContainerClient("zoneimage");
-                var imageUrls = new List<string>(); // List to hold URLs of all images
-                if (zone.ImageZone != null && zone.ImageZone.Count > 0)
-                {
-
-                    foreach (var image in zone.ImageZone)
-                    {
-                        var blobName = $"{Guid.NewGuid()}_{image.FileName}";
-                        var blobInstance = containerInstance.GetBlobClient(blobName);
-                        blobInstance.Upload(image.OpenReadStream());
-                        var storageAccountUrl = "https://realestatesystem.blob.core.windows.net/zoneimage";
-                        var blobUrl = $"{storageAccountUrl}/{blobName}";
-                        imageUrls.Add(blobUrl); // Add each image URL to the list
-                    }
-                }
+                var imageUrls = _fileService.UploadMultipleImages(zone.ImageZone.ToList(), "zoneimage");
 
                 var existingZone = _zone.GetZoneById(id);
                 if (existingZone != null)
@@ -136,23 +122,10 @@ namespace RealEstateProjectSale.Controllers.ZoneController
         [SwaggerOperation(Summary = "Create a new Zone")]
         public IActionResult AddNewZone([FromForm] ZoneRequestDTO zone, Guid projectId)
         {
-            try {
+            try
+            {
 
-                var containerInstance = _blobServiceClient.GetBlobContainerClient("zoneimage");
-                var imageUrls = new List<string>(); // List to hold URLs of all images
-                if (zone.ImageZone != null && zone.ImageZone.Count > 0)
-                {
-
-                    foreach (var image in zone.ImageZone)
-                    {
-                        var blobName = $"{Guid.NewGuid()}_{image.FileName}";
-                        var blobInstance = containerInstance.GetBlobClient(blobName);
-                        blobInstance.Upload(image.OpenReadStream());
-                        var storageAccountUrl = "https://realestatesystem.blob.core.windows.net/zoneimage";
-                        var blobUrl = $"{storageAccountUrl}/{blobName}";
-                        imageUrls.Add(blobUrl); // Add each image URL to the list
-                    }
-                }
+                var imageUrls = _fileService.UploadMultipleImages(zone.ImageZone.ToList(), "zoneimage");
 
                 var newZone = new ZoneCreateDTO
                 {
@@ -174,9 +147,9 @@ namespace RealEstateProjectSale.Controllers.ZoneController
                     message = "Create Zone Successfully"
                 });
             }
-            catch(Exception ex) { return BadRequest(ex.Message); }
+            catch (Exception ex) { return BadRequest(ex.Message); }
 
-    
+
         }
 
         [HttpDelete("DeleteZone/{id}")]

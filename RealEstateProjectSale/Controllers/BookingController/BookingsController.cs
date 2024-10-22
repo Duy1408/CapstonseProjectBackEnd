@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using iText.Kernel.Pdf;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,7 @@ using RealEstateProjectSaleBusinessObject.Enums.EnumHelpers;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 using RealEstateProjectSaleServices.Services;
+using Stripe;
 using Swashbuckle.AspNetCore.Annotations;
 using static System.Reflection.Metadata.BlobBuilder;
 
@@ -27,15 +29,15 @@ namespace RealEstateProjectSale.Controllers.BookingController
     public class BookingsController : ControllerBase
     {
         private readonly IBookingServices _book;
-        private readonly BlobServiceClient _blobServiceClient;
+        private readonly IFileUploadToBlobService _fileService;
         private readonly IDocumentTemplateService _documentService;
         private readonly IMapper _mapper;
 
-        public BookingsController(IBookingServices book, BlobServiceClient blobServiceClient,
+        public BookingsController(IBookingServices book, IFileUploadToBlobService fileService,
                     IMapper mapper, IDocumentTemplateService documentService)
         {
             _book = book;
-            _blobServiceClient = blobServiceClient;
+            _fileService = fileService;
             _mapper = mapper;
             _documentService = documentService;
         }
@@ -209,15 +211,14 @@ namespace RealEstateProjectSale.Controllers.BookingController
         {
             try
             {
-                var containerInstance = _blobServiceClient.GetBlobContainerClient("bookingfile");
                 string? blobUrl = null;
-                if (book.BookingFile != null)
+                var bookingFile = book.BookingFile;
+                if (bookingFile != null)
                 {
-                    var blobName = $"{Guid.NewGuid()}_{book.BookingFile.FileName}";
-                    var blobInstance = containerInstance.GetBlobClient(blobName);
-                    blobInstance.Upload(book.BookingFile.OpenReadStream());
-                    var storageAccountUrl = "https://realestatesystem.blob.core.windows.net/bookingfile";
-                    blobUrl = $"{storageAccountUrl}/{blobName}";
+                    using (var pdfStream = bookingFile.OpenReadStream())
+                    {
+                        blobUrl = _fileService.UploadSingleFile(pdfStream, bookingFile.FileName, "bookingfile");
+                    }
                 }
 
                 var existingBook = _book.GetBookingById(id);
@@ -353,14 +354,9 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
                 using (MemoryStream pdfStream = new MemoryStream(pdfBytes))
                 {
-                    var containerInstance = _blobServiceClient.GetBlobContainerClient("bookingfile");
+                    string? blobUrl = null;
+                    blobUrl = _fileService.UploadSingleFile(pdfStream, documentTemplate.DocumentName, "bookingfile");
 
-                    var blobName = $"{Guid.NewGuid()}_{documentTemplate.DocumentName}.pdf";
-                    var blobInstance = containerInstance.GetBlobClient(blobName);
-
-                    blobInstance.Upload(pdfStream, new BlobHttpHeaders { ContentType = "application/pdf" });
-
-                    var blobUrl = blobInstance.Uri.ToString();
                     return Ok(new
                     {
                         url = blobUrl

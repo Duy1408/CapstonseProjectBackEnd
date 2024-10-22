@@ -18,14 +18,14 @@ namespace RealEstateProjectSale.Controllers.BlockController
     {
         private readonly IBlockService _block;
         private readonly IMapper _mapper;
-        private readonly BlobServiceClient _blobServiceClient;
+        private readonly IFileUploadToBlobService _fileService;
 
-        public BlocksController(IBlockService block, IMapper mapper, BlobServiceClient blobServiceClient)
+        public BlocksController(IBlockService block, IMapper mapper, IFileUploadToBlobService fileService)
         {
             _block = block;
             _mapper = mapper;
-            _blobServiceClient = blobServiceClient;
-            
+            _fileService = fileService;
+
         }
 
         [HttpGet]
@@ -69,21 +69,7 @@ namespace RealEstateProjectSale.Controllers.BlockController
         {
             try
             {
-                var containerInstance = _blobServiceClient.GetBlobContainerClient("blockimage");
-                var imageUrls = new List<string>(); // List to hold URLs of all images
-                if (block.ImageBlock != null && block.ImageBlock.Count > 0)
-                {
-
-                    foreach (var image in block.ImageBlock)
-                    {
-                        var blobName = $"{Guid.NewGuid()}_{image.FileName}";
-                        var blobInstance = containerInstance.GetBlobClient(blobName);
-                        blobInstance.Upload(image.OpenReadStream());
-                        var storageAccountUrl = "https://realestatesystem.blob.core.windows.net/blockimage";
-                        var blobUrl = $"{storageAccountUrl}/{blobName}";
-                        imageUrls.Add(blobUrl); // Add each image URL to the list
-                    }
-                }
+                var imageUrls = _fileService.UploadMultipleImages(block.ImageBlock.ToList(), "blockimage");
 
                 var existingBlock = _block.GetBlockById(id);
                 if (existingBlock != null)
@@ -126,35 +112,13 @@ namespace RealEstateProjectSale.Controllers.BlockController
             }
         }
 
-
-
-
-
-
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new Block")]
         public IActionResult AddNewBlock([FromForm] BlockRequestDTO block, Guid zoneId)
         {
-            try {
-
-
-
-                var containerInstance = _blobServiceClient.GetBlobContainerClient("blockimage");
-                var imageUrls = new List<string>(); // List to hold URLs of all images
-                if (block.ImageBlock != null && block.ImageBlock.Count > 0)
-                {
-
-                    foreach (var image in block.ImageBlock)
-                    {
-                        var blobName = $"{Guid.NewGuid()}_{image.FileName}";
-                        var blobInstance = containerInstance.GetBlobClient(blobName);
-                        blobInstance.Upload(image.OpenReadStream());
-                        var storageAccountUrl = "https://realestatesystem.blob.core.windows.net/blockimage";
-
-                        var blobUrl = $"{storageAccountUrl}/{blobName}";
-                        imageUrls.Add(blobUrl); // Add each image URL to the list
-                    }
-                }
+            try
+            {
+                var imageUrls = _fileService.UploadMultipleImages(block.ImageBlock.ToList(), "blockimage");
 
                 var newBlock = new BlockCreateDTO
                 {
@@ -174,13 +138,14 @@ namespace RealEstateProjectSale.Controllers.BlockController
                     message = "Create Block Successfully"
                 });
             }
-            catch(Exception ex) {
+            catch (Exception ex)
+            {
 
                 return BadRequest(ex.Message);
             }
         }
 
-      
+
 
         [HttpDelete("DeleteBlock/{id}")]
         public IActionResult DeleteBlock(Guid id)
