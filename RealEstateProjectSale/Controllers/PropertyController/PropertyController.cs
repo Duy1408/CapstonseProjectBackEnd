@@ -365,7 +365,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
 
 
 
-        [HttpPut("{propertyid}")]
+        [HttpPut("status/{propertyid}")]
         [SwaggerOperation(Summary = "Update Property status by ID")]
         public async Task<IActionResult> UpdateStatusProperty([FromForm] PropertyUpdateDTO property, Guid propertyid)
         {
