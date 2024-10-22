@@ -24,7 +24,8 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
             builder.Property(x => x.ExpiredTime);
             builder.Property(x => x.TotalPrice).IsRequired();
             builder.Property(x => x.Description);
-            builder.Property(x => x.ContractFile);
+            builder.Property(x => x.ContractDepositFile);
+            builder.Property(x => x.ContractSaleFile);
             builder.Property(x => x.Status).IsRequired();
             builder.HasOne(x => x.Booking);
             builder.HasMany(x => x.ContractPaymentDetails).WithOne(x => x.Contract);
