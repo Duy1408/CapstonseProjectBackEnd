@@ -15,6 +15,8 @@ using Stripe;
 using RealEstateProjectSaleBusinessObject.DTO.Update;
 using Stripe.FinancialConnections;
 using RealEstateProjectSaleServices.Services;
+using RealEstateProjectSaleBusinessObject.Enums;
+using RealEstateProjectSaleBusinessObject.Enums.EnumHelpers;
 
 namespace RealEstateProjectSale.Controllers.PaymentController
 {
@@ -24,12 +26,14 @@ namespace RealEstateProjectSale.Controllers.PaymentController
     {
 
         private readonly IPaymentServices _paymentServices;
+        private readonly IBookingServices _bookServices;
         private readonly IMapper _mapper;
 
 
-        public PaymentController(IPaymentServices paymentServices, IMapper mapper)
+        public PaymentController(IPaymentServices paymentServices, IBookingServices bookServices, IMapper mapper)
         {
             _paymentServices = paymentServices;
+            _bookServices = bookServices;
             _mapper = mapper;
         }
 
@@ -81,7 +85,9 @@ namespace RealEstateProjectSale.Controllers.PaymentController
             var payment = _mapper.Map<Payment>(newPayment);
             _paymentServices.AddNewPayment(payment);
 
-
+            var book = _bookServices.GetBookingById(newPayment.BookingID);
+            book.Status = BookingStatus.DaDatCho.GetEnumDescription();
+            _bookServices.UpdateBooking(book);
 
             return Ok(new
             {

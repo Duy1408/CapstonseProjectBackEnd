@@ -93,5 +93,10 @@ namespace RealEstateProjectSaleServices.Services
         {
             return _book.GetBookingByCustomerID(id);
         }
+
+        public Booking CheckExistingBooking(Guid openForSaleID, Guid projectID, Guid customerID)
+        {
+            return _book.CheckExistingBooking(openForSaleID, projectID, customerID);
+        }
     }
 }

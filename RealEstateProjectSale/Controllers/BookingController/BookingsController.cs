@@ -308,6 +308,15 @@ namespace RealEstateProjectSale.Controllers.BookingController
         {
             try
             {
+                var existingBooking = _book.CheckExistingBooking(openForSaleID, projectID, customerID);
+                if (existingBooking != null)
+                {
+                    return BadRequest(new
+                    {
+                        message = "Customer has booked this project."
+                    });
+                }
+
                 var newbook = new BookingCreateDTO
                 {
                     BookingID = Guid.NewGuid(),

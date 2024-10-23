@@ -21,6 +21,11 @@ namespace RealEstateProjectSaleRepository.Repository
             dao.AddNew(p);
         }
 
+        public Booking CheckExistingBooking(Guid openForSaleID, Guid projectID, Guid customerID)
+        {
+            return dao.CheckExistingBooking(openForSaleID, projectID, customerID);
+        }
+
         public List<Booking> GetBookingByBooked()
         {
             return dao.GetBookingByBooked();
