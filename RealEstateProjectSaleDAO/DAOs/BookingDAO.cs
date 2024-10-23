@@ -165,5 +165,13 @@ namespace RealEstateProjectSaleDAO.DAOs
                                     .ToList();
         }
 
+        public Booking CheckExistingBooking(Guid openForSaleID, Guid projectID, Guid customerID)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            return _context.Bookings.FirstOrDefault(b => b.OpeningForSaleID == openForSaleID
+                                  && b.ProjectID == projectID
+                                  && b.CustomerID == customerID);
+        }
+
     }
 }
