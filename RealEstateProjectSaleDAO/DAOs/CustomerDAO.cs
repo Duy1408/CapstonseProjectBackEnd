@@ -57,6 +57,20 @@ namespace RealEstateProjectSaleDAO.DAOs
             }
         }
 
+        public Customer GetCustomerByAccountID(Guid id)
+        {
+            try
+            {
+                var customer = _context.Customers!.Include(a => a.Account)
+                                           .SingleOrDefault(c => c.AccountID == id);
+                return customer;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public void UpdateCustomer(Customer customer)
         {
             try

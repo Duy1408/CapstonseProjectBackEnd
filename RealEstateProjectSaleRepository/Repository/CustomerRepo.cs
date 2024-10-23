@@ -19,6 +19,8 @@ namespace RealEstateProjectSaleRepository.Repository
 
         public List<Customer> GetAllCustomer() => dao.GetAllCustomer();
 
+        public Customer GetCustomerByAccountID(Guid id) => dao.GetCustomerByAccountID(id);
+
         public Customer GetCustomerByID(Guid id) => dao.GetCustomerByID(id);
 
         public void UpdateCustomer(Customer customer) => dao.UpdateCustomer(customer);
