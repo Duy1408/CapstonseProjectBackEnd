@@ -12,6 +12,7 @@ namespace RealEstateProjectSaleServices.IServices
         List<Customer> GetAllCustomer();
         void AddNewCustomer(Customer customer);
         Customer GetCustomerByID(Guid id);
+        Customer GetCustomerByAccountID(Guid id);
         void UpdateCustomer(Customer customer);
         bool ChangeStatusCustomer(Customer customer);
 

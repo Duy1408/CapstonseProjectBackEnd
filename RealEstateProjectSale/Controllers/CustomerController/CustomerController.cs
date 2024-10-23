@@ -75,6 +75,26 @@ namespace RealEstateProjectSale.Controllers.CustomerController
 
         }
 
+        [HttpGet("account/{accountId}")]
+        [SwaggerOperation(Summary = "Get Customer By AccountID")]
+        public IActionResult GetCustomerByAccountID(Guid accountId)
+        {
+            var customer = _customerServices.GetCustomerByAccountID(accountId);
+
+            if (customer != null)
+            {
+                var responese = _mapper.Map<CustomerVM>(customer);
+
+                return Ok(responese);
+            }
+
+            return NotFound(new
+            {
+                message = "Customer not found."
+            });
+
+        }
+
         [HttpPost]
         [SwaggerOperation(Summary = "RegisterAccountCustomer")]
         public async Task<IActionResult> AddNewCustomer(RegisterCustomerVM accountCustomer)

@@ -23,6 +23,8 @@ namespace RealEstateProjectSaleServices.Services
 
         public List<Customer> GetAllCustomer() => _customerRepo.GetAllCustomer();
 
+        public Customer GetCustomerByAccountID(Guid id) => _customerRepo.GetCustomerByAccountID(id);
+
         public Customer GetCustomerByID(Guid id) => _customerRepo.GetCustomerByID(id);
 
         public void UpdateCustomer(Customer customer) => _customerRepo.UpdateCustomer(customer);
