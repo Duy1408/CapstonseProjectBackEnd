@@ -154,7 +154,7 @@ namespace RealEstateProjectSale.Controllers.UnitTypeController
         {
             try
             {
-                var imageUrls = _fileService.UploadMultipleImages(type.Image.ToList(), "unittypeimage");
+                var imageUrls = type.Image != null ? _fileService.UploadMultipleImages(type.Image.ToList(), "unittypeimage") : new List<string>();
 
                 var existingType = _typeService.GetUnitTypeByID(id);
                 if (existingType != null)

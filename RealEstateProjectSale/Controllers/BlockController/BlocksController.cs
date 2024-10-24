@@ -69,7 +69,7 @@ namespace RealEstateProjectSale.Controllers.BlockController
         {
             try
             {
-                var imageUrls = _fileService.UploadMultipleImages(block.ImageBlock.ToList(), "blockimage");
+                var imageUrls = block.ImageBlock != null ? _fileService.UploadMultipleImages(block.ImageBlock.ToList(), "blockimage") : new List<string>();
 
                 var existingBlock = _block.GetBlockById(id);
                 if (existingBlock != null)
