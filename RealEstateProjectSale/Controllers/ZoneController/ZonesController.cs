@@ -74,7 +74,7 @@ namespace RealEstateProjectSale.Controllers.ZoneController
         {
             try
             {
-                var imageUrls = _fileService.UploadMultipleImages(zone.ImageZone.ToList(), "zoneimage");
+                var imageUrls = zone.ImageZone != null ? _fileService.UploadMultipleImages(zone.ImageZone.ToList(), "zoneimage") : new List<string>();
 
                 var existingZone = _zone.GetZoneById(id);
                 if (existingZone != null)

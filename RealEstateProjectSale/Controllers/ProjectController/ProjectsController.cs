@@ -159,7 +159,8 @@ namespace RealEstateProjectSale.Controllers
         {
             try
             {
-                var imageUrls = _fileService.UploadMultipleImages(project.Images.ToList(), "projectimage");
+                var imageUrls = project.Images != null ? _fileService.UploadMultipleImages(project.Images.ToList(), "projectimage") : new List<string>();
+
 
                 var existingProject = _project.GetProjectById(id);
                 if (existingProject != null)

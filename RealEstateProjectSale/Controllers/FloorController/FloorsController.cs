@@ -125,8 +125,7 @@ namespace RealEstateProjectSale.Controllers.FloorController
         {
             try
             {
-
-                var imageUrls = _fileService.UploadMultipleImages(floor.ImageFloor.ToList(), "floorimage");
+                var imageUrls = floor.ImageFloor != null ? _fileService.UploadMultipleImages(floor.ImageFloor.ToList(), "floorimage") : new List<string>();
 
                 var existingFloor = _floor.GetFloorById(id);
                 if (existingFloor != null)
