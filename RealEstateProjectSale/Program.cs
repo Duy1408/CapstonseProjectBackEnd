@@ -188,6 +188,8 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 
+app.UseCors(options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
@@ -195,8 +197,6 @@ app.UseEndpoints(endpoints =>
     // Cấu hình route cho SignalR hub
     endpoints.MapHub<PropertyHub>("/propertyHub");
 });
-
-app.UseCors(options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
