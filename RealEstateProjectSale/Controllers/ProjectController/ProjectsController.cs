@@ -69,9 +69,9 @@ namespace RealEstateProjectSale.Controllers
                             ? _project.GetProjects().AsQueryable()
                             : _project.SearchProject(projectName);
 
-                var pagedProjects = _pagingServices.GetPagedList(projectsQuery, page, PAGE_SIZE);
+                var pagedResult = _pagingServices.GetPagedList(projectsQuery, page, PAGE_SIZE);
 
-                if (pagedProjects == null || !pagedProjects.Any())
+                if (pagedResult.Items == null || !pagedResult.Items.Any())
                 {
                     return NotFound(new
                     {
@@ -79,7 +79,7 @@ namespace RealEstateProjectSale.Controllers
                     });
                 }
 
-                var response = pagedProjects.Select(project => new ProjectVM
+                var response = pagedResult.Items.Select(project => new ProjectVM
                 {
                     ProjectID = project.ProjectID,
                     ProjectName = project.ProjectName,
@@ -98,7 +98,12 @@ namespace RealEstateProjectSale.Controllers
                     Status = project.Status,
                 }).ToList();
 
-                return Ok(response);
+                return Ok(new
+                {
+                    TotalPages = pagedResult.TotalPages,
+                    CurrentPage = pagedResult.CurrentPage,
+                    Projects = response
+                });
             }
             catch (Exception ex)
             {

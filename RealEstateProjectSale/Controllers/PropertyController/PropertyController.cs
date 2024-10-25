@@ -78,9 +78,9 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                     propertysQuery = propertysQuery.Where(p => p.FloorID == floorID.Value);
                 }
 
-                var pagedPropertys = _pagingServices.GetPagedList(propertysQuery, page, PAGE_SIZE);
+                var pagedResult = _pagingServices.GetPagedList(propertysQuery, page, PAGE_SIZE);
 
-                if (pagedPropertys == null || !pagedPropertys.Any())
+                if (pagedResult.Items == null || !pagedResult.Items.Any())
                 {
                     return NotFound(new
                     {
@@ -88,10 +88,15 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                     });
                 }
 
-                var response = _mapper.Map<List<PropertyVM>>(pagedPropertys);
+                var response = _mapper.Map<List<PropertyVM>>(pagedResult.Items);
 
 
-                return Ok(response);
+                return Ok(new
+                {
+                    TotalPages = pagedResult.TotalPages,
+                    CurrentPage = pagedResult.CurrentPage,
+                    Propertys = response
+                });
             }
             catch (Exception ex)
             {
@@ -375,7 +380,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                 var existingProperty = _pro.GetPropertyById(propertyid);
                 if (existingProperty != null)
                 {
-              
+
                     if (!string.IsNullOrEmpty(property.Status) && int.TryParse(property.Status, out int statusValue))
                     {
                         if (Enum.IsDefined(typeof(PropertyStatus), statusValue))
