@@ -1,4 +1,6 @@
-﻿using System;
+﻿using RealEstateProjectSaleBusinessObject.Model;
+using RealEstateProjectSaleServices.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +10,7 @@ namespace RealEstateProjectSaleServices.IServices
 {
     public interface IPagingServices
     {
-        List<T> GetPagedList<T>(IQueryable<T> source, int page, int pageSize);
+        PagedResult<T> GetPagedList<T>(IQueryable<T> source, int page, int pageSize);
+
     }
 }
