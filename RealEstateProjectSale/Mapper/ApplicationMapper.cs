@@ -68,6 +68,8 @@ namespace RealEstateProjectSale.Mapper
                                        opt => opt.MapFrom(src => src.OpeningForSale!.DecisionName))
                                                         .ForMember(dest => dest.PropertyCategoryName,
                                        opt => opt.MapFrom(src => src.PropertyCategory!.PropertyCategoryName))
+                                                        .ForMember(dest => dest.ProjectName,
+                                       opt => opt.MapFrom(src => src.Project!.ProjectName))
                                                         .ForMember(dest => dest.CustomerName,
                                        opt => opt.MapFrom(src => src.Customer!.FullName))
                                                         .ForMember(dest => dest.StaffName,

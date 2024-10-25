@@ -74,6 +74,11 @@ namespace RealEstateProjectSale.Controllers.AccountController
         [SwaggerOperation(Summary = "Create a new Account")]
         public IActionResult AddNewAccount(AccountCreateDTO account)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 var checkEmail = _accountServices.GetAllAccount().Where(u =>
