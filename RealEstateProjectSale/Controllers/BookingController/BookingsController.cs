@@ -245,6 +245,26 @@ namespace RealEstateProjectSale.Controllers.BookingController
                     {
                         existingBook.StaffID = book.StaffID.Value;
                     }
+                    if (book.CustomerID.HasValue)
+                    {
+                        existingBook.CustomerID = book.CustomerID.Value;
+                    }
+                    if (book.OpeningForSaleID.HasValue)
+                    {
+                        existingBook.OpeningForSaleID = book.OpeningForSaleID.Value;
+                    }
+                    if (book.PropertyCategoryID.HasValue)
+                    {
+                        existingBook.PropertyCategoryID = book.PropertyCategoryID.Value;
+                    }
+                    if (book.ProjectID.HasValue)
+                    {
+                        existingBook.ProjectID = book.ProjectID.Value;
+                    }
+                    if (book.DocumentTemplateID.HasValue)
+                    {
+                        existingBook.DocumentTemplateID = book.DocumentTemplateID.Value;
+                    }
 
                     existingBook.UpdatedTime = DateTime.Now;
                     _book.UpdateBooking(existingBook);

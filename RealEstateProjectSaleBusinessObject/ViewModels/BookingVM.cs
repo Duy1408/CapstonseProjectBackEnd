@@ -24,6 +24,8 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public string DecisionName { get; set; }
         public Guid PropertyCategoryID { get; set; }
         public string PropertyCategoryName { get; set; }
+        public Guid ProjectID { get; set; }
+        public string ProjectName { get; set; }
         public Guid? DocumentTemplateID { get; set; }
         public string DocumentName { get; set; }
 

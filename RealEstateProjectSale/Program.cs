@@ -1,10 +1,13 @@
 ﻿using Azure.Storage.Blobs;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RealEstateProjectSale.Mapper;
 using RealEstateProjectSaleBusinessObject.Admin;
 using RealEstateProjectSaleBusinessObject.Model;
+using RealEstateProjectSaleBusinessObject.Validation.Create;
 using RealEstateProjectSaleRepository.IRepository;
 using RealEstateProjectSaleRepository.Repository;
 using RealEstateProjectSaleServices.IServices;
@@ -86,6 +89,11 @@ builder.Services.AddScoped<IUnitTypeRepo, UnitTypeRepo>();
 builder.Services.AddScoped<IUnitTypeServices, UnitTypeServices>();
 builder.Services.AddScoped<IDocumentTemplateRepo, DocumentTemplateRepo>();
 builder.Services.AddScoped<IDocumentTemplateService, DocumentTemplateService>();
+
+
+//FluentValidation
+builder.Services.AddControllers()
+        .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<AccountCreateDTOValidator>());
 
 //Admin Account Config
 builder.Configuration
