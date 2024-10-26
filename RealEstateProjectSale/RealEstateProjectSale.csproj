@@ -7,6 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="FirebaseAdmin" Version="3.0.1" />
 		<PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
 		<PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.29" />
@@ -44,6 +45,12 @@
 		</PackageReference>
 		<PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Update="Resources\realestateprojectsale-firebase-adminsdk-98vg4-6a7c7bafae.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
 	</ItemGroup>
 
 

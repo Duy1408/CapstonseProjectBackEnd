@@ -1,7 +1,10 @@
 ﻿using Azure.Storage.Blobs;
+using FirebaseAdmin;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RealEstateProjectSale.Mapper;
@@ -115,6 +118,15 @@ builder.Services.AddMemoryCache();
 
 //Paging
 builder.Services.AddScoped<IPagingServices, PagingServices>();
+
+//Firebase Cloud Messages
+string pathToServiceAccountKey = Path.Combine(AppContext.BaseDirectory, "Resources/realestateprojectsale-firebase-adminsdk-98vg4-6a7c7bafae.json");
+
+// Khởi tạo Firebase App với Service Account
+FirebaseApp.Create(new AppOptions()
+{
+    Credential = GoogleCredential.FromFile(pathToServiceAccountKey)
+});
 
 //Jwt
 builder.Services.AddScoped<IJWTTokenService, JWTTokenService>();
