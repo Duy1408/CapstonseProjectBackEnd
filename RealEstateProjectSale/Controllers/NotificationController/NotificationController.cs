@@ -2,13 +2,17 @@
 using FirebaseAdmin.Messaging;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using RealEstateProjectSaleBusinessObject.BusinessObject;
+using RealEstateProjectSaleBusinessObject.DTO.Create;
+using RealEstateProjectSaleBusinessObject.DTO.Request;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Security.Principal;
 
 namespace RealEstateProjectSale.Controllers.NotificationController
 {
-    [Route("api/[controller]")]
+    [Route("api/notifications")]
     [ApiController]
     public class NotificationController : ControllerBase
     {
@@ -65,7 +69,52 @@ namespace RealEstateProjectSale.Controllers.NotificationController
 
         }
 
+        [HttpPost("send-ios")]
+        public async Task<IActionResult> SendNotification([FromBody] NotificationRequest request)
+        {
+            var message = new Message()
+            {
+                Token = request.DeviceToken,
+                Notification = new FirebaseAdmin.Messaging.Notification
+                {
+                    Title = request.Title,
+                    Body = request.Body
+                },
 
+                Apns = new ApnsConfig
+                {
+                    Aps = new Aps
+                    {
+                        ContentAvailable = true,
+                        Sound = "default"
+                    }
+                }
+            };
+
+            try
+            {
+                string response = await FirebaseMessaging.DefaultInstance.SendAsync(message);
+
+                var newNoti = new NotificationCreateDTO
+                {
+                    NotificationID = Guid.NewGuid(),
+                    Title = request.Title,
+                    Subtiltle = request.Subtiltle,
+                    Body = request.Body,
+                    DeepLink = request.DeepLink,
+                    CustomerID = request.CustomerID,
+                    OpeningForSaleID = request.OpeningForSaleID,
+                };
+                var _noti = _mapper.Map<RealEstateProjectSaleBusinessObject.BusinessObject.Notification>(newNoti);
+                _notiServices.AddNewNotification(_noti);
+
+                return Ok(new { message = "Notification sent successfully", response });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Error sending notification", error = ex.Message });
+            }
+        }
 
 
 

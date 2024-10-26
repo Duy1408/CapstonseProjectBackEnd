@@ -194,7 +194,7 @@ namespace RealEstateProjectSale.Mapper
                                  opt => opt.MapFrom(src => src.Customer!.FullName))
                                                         .ForMember(dest => dest.DecisionName,
                                  opt => opt.MapFrom(src => src.OpeningForSale!.DecisionName));
-
+            CreateMap<NotificationCreateDTO, Notification>().ReverseMap();
 
 
         }
