@@ -190,6 +190,13 @@ namespace RealEstateProjectSale.Mapper
             CreateMap<PaymentUpdateDTO, Payment>().ReverseMap();
 
 
+            CreateMap<NotificationVM, Notification>().ReverseMap().ForMember(dest => dest.FullName,
+                                 opt => opt.MapFrom(src => src.Customer!.FullName))
+                                                        .ForMember(dest => dest.DecisionName,
+                                 opt => opt.MapFrom(src => src.OpeningForSale!.DecisionName));
+
+
+
         }
     }
 }
