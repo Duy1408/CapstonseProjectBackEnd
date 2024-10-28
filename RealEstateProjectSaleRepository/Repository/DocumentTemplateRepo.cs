@@ -23,7 +23,12 @@ namespace RealEstateProjectSaleRepository.Repository
 
         public bool ChangeStatus(DocumentTemplate p)
         {
-          return  _dao.ChangeStatus(p);
+            return _dao.ChangeStatus(p);
+        }
+
+        public DocumentTemplate GetDocumentByDocumentName(string tempName)
+        {
+            return _dao.GetDocumentByDocumentName(tempName);
         }
 
         public DocumentTemplate GetDocumentById(Guid id)

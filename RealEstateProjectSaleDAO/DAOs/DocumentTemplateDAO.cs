@@ -97,5 +97,20 @@ namespace RealEstateProjectSaleDAO.DAOs
             var a = _context.DocumentTemplates.Where(a => a.DocumentName.ToUpper().Contains(searchvalue.Trim().ToUpper()));
             return a;
         }
+
+        public DocumentTemplate GetDocumentByDocumentName(string tempName)
+        {
+            try
+            {
+                var _context = new RealEstateProjectSaleSystemDBContext();
+                var document = _context.DocumentTemplates!.SingleOrDefault(c => c.DocumentName == tempName);
+                return document;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
     }
 }

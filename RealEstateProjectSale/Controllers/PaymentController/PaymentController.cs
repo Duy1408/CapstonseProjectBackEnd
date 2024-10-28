@@ -86,8 +86,18 @@ namespace RealEstateProjectSale.Controllers.PaymentController
             _paymentServices.AddNewPayment(payment);
 
             var book = _bookServices.GetBookingById(newPayment.BookingID);
-            book.Status = BookingStatus.DaDatCho.GetEnumDescription();
-            _bookServices.UpdateBooking(book);
+            if (book != null)
+            {
+                book.DepositedTimed = newPayment.PaymentTime;
+                book.DepositedPrice = newPayment.Amount;
+                book.UpdatedTime = DateTime.Now;
+                book.Status = BookingStatus.DaDatCho.GetEnumDescription();
+                book.Note = newPayment.Content;
+                _bookServices.UpdateBooking(book);
+            }
+
+            var htmlContent = _bookServices.GenerateDocumentContent(book.DocumentTemplateID);
+
 
             return Ok(new
             {

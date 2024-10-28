@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Humanizer;
+using System.Globalization;
 
 namespace RealEstateProjectSaleServices.Services
 {
@@ -14,11 +16,16 @@ namespace RealEstateProjectSaleServices.Services
         private readonly IBookingRepo _book;
         private readonly IDocumentTemplateService _documentService;
         private readonly ICustomerServices _customerService;
-        public BookingServices(IBookingRepo book, IDocumentTemplateService documentService, ICustomerServices customerService)
+        private readonly IProjectServices _projectService;
+        private readonly IPropertyCategoryServices _categoryService;
+        public BookingServices(IBookingRepo book, IDocumentTemplateService documentService,
+            ICustomerServices customerService, IProjectServices projectService, IPropertyCategoryServices categoryService)
         {
             _book = book;
             _documentService = documentService;
             _customerService = customerService;
+            _projectService = projectService;
+            _categoryService = categoryService;
         }
 
         public string GenerateDocumentContent(Guid templateId)
@@ -31,14 +38,29 @@ namespace RealEstateProjectSaleServices.Services
 
             var booking = _book.GetBookingByDocumentID(templateId);
             var customer = _customerService.GetCustomerByID(booking.CustomerID);
+            var project = _projectService.GetProjectById(booking.ProjectID);
+            var propertyCategory = _categoryService.GetPropertyCategoryByID(booking.PropertyCategoryID);
 
             var htmlContent = documentTemplate.DocumentFile;
 
-            htmlContent = htmlContent.Replace("{OwnerName}", customer.FullName)
-                             .Replace("{OwnerBirthYear}", customer.DateOfBirth.ToString())
-                             .Replace("{OwnerIdNumber}", customer.IdentityCardNumber)
-                             .Replace("{OwnerAddress}", customer.Address)
-                             .Replace("{OwnerPhone}", customer.PhoneNumber);
+            htmlContent = htmlContent.Replace("{Logo}", "<img src='https://realestatesystem.blob.core.windows.net/realestate/Logo.png' alt='Logo' style='width:100px; height:auto;'>")
+                             .Replace("{ProjectName}", project.ProjectName)
+                             .Replace("{Location}", project.Location)
+                             .Replace("{PropertyCategoryName}", propertyCategory.PropertyCategoryName)
+                             .Replace("{FullName}", customer.FullName)
+                             .Replace("{IdentityCardNumber}", customer.IdentityCardNumber)
+                             .Replace("{Address}", customer.Address)
+                             .Replace("{PhoneNumber}", "0" + customer.PhoneNumber)
+                             .Replace("{Reason}", "Nộp tiền giữ chỗ tham gia sự kiện mở bán dự án " + project.ProjectName)
+                             .Replace("{DepositedTimed}", booking.DepositedTimed.ToString())
+                             .Replace("{CreatedTime}", booking.CreatedTime.ToString())
+                             .Replace("{DepositedPrice}", booking.DepositedPrice.ToString() + " VND")
+                             .Replace("{MoneyText}", booking.DepositedPrice.HasValue
+                                    ? char.ToUpper(((int)Math.Round(booking.DepositedPrice.Value)).ToWords(new CultureInfo("vi"))[0]) +
+                                    ((int)Math.Round(booking.DepositedPrice.Value)).ToWords(new CultureInfo("vi")).Substring(1) +
+                                    " đồng chẵn."
+                                    : "N/A")
+                             .Replace("{Content}", booking.Note);
 
             return htmlContent;
         }

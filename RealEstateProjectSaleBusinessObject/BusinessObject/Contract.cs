@@ -24,7 +24,7 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public string? ContractDepositFile { get; set; }
         public string? ContractSaleFile { get; set; }
         public string Status { get; set; }
-        public Guid? DocumentTemplateID { get; set; }
+        public Guid DocumentTemplateID { get; set; }
         public DocumentTemplate? DocumentTemplate { get; set; }
 
         public Guid BookingID { get; set; }

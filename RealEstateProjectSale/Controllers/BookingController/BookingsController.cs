@@ -337,6 +337,8 @@ namespace RealEstateProjectSale.Controllers.BookingController
                     });
                 }
 
+                var documentReservation = _documentService.GetDocumentByDocumentName("Phiếu giữ chỗ");
+
                 var newbook = new BookingCreateDTO
                 {
                     BookingID = Guid.NewGuid(),
@@ -352,7 +354,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
                     ProjectID = projectID,
                     OpeningForSaleID = openForSaleID,
                     PropertyCategoryID = propertyCategoryID,
-                    DocumentTemplateID = null,
+                    DocumentTemplateID = documentReservation.DocumentTemplateID,
                     PropertyID = null
                 };
 

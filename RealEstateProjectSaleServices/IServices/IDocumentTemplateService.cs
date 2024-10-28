@@ -18,5 +18,7 @@ namespace RealEstateProjectSaleServices.IServices
 
         byte[] GeneratePdfFromTemplate(string htmlContent);
 
+        DocumentTemplate GetDocumentByDocumentName(string tempName);
+
     }
 }

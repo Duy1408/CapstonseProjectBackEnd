@@ -1,4 +1,6 @@
 ﻿using iText.Html2pdf;
+using iText.Kernel.Geom;
+using iText.Kernel.Pdf;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
 using RealEstateProjectSaleRepository.IRepository;
 using RealEstateProjectSaleServices.IServices;
@@ -55,6 +57,11 @@ namespace RealEstateProjectSaleServices.Services
         public void UpdateDocument(DocumentTemplate p)
         {
             _repo.UpdateDocument(p);
+        }
+
+        public DocumentTemplate GetDocumentByDocumentName(string tempName)
+        {
+            return _repo.GetDocumentByDocumentName(tempName);
         }
     }
 }
