@@ -14,14 +14,14 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
         public void Configure(EntityTypeBuilder<PaymentPolicy> builder)
         {
             builder.ToTable("PaymentPolicy");
-            builder.HasKey(x => x.PaymentPolicyID);
+            builder.Property(x => x.PaymentPolicyID);
             builder.Property(x => x.PaymentPolicyName).IsRequired();
             builder.Property(x => x.PercentEarly);
             builder.Property(x => x.EarlyDate);
             builder.Property(x => x.LateDate);
             builder.Property(x => x.PercentLate);
             builder.Property(x => x.Status);
-
+            builder.HasMany(x => x.ContractPaymentDetails).WithOne(x => x.PaymentPolicy).OnDelete(DeleteBehavior.NoAction);
 
         }
     }

@@ -18,6 +18,7 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public Promotion? Promotion { get; set; }
         public Guid PropertyTypeID { get; set; }
         public PropertyType? PropertyType { get; set; }
+        public List<Contract>? Contracts { get; set; }
 
     }
 }
