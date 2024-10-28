@@ -12,7 +12,6 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public string PropertyCode { get; set; }
         public string? View { get; set; }
         public double? PriceSold { get; set; }
-
         public string Status { get; set; }
         public Guid? UnitTypeID { get; set; }
         public int BathRoom { get; set; }

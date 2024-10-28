@@ -96,7 +96,7 @@ namespace RealEstateProjectSale.Controllers.CustomerController
         }
 
         [HttpPost]
-        [SwaggerOperation(Summary = "RegisterAccountCustomer")]
+        [SwaggerOperation(Summary = "Register Account Customer")]
         public async Task<IActionResult> AddNewCustomer(RegisterCustomerVM accountCustomer)
         {
             try

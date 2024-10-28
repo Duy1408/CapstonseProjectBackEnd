@@ -1,8 +1,10 @@
 ﻿using RealEstateProjectSaleBusinessObject.BusinessObject;
+using RealEstateProjectSaleBusinessObject.JsonConverters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace RealEstateProjectSaleBusinessObject.ViewModels
@@ -12,7 +14,9 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public Guid PaymentID { get; set; }
         public double Amount { get; set; }
         public string? Content { get; set; }
+        [JsonConverter(typeof(DateTimeConverter))]
         public DateTime CreatedTime { get; set; }
+        [JsonConverter(typeof(DateTimeConverter))]
         public DateTime? PaymentTime { get; set; }
         public bool Status { get; set; }
         public Guid PaymentTypeID { get; set; }

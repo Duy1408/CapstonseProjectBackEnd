@@ -1,8 +1,10 @@
-﻿using System;
+﻿using RealEstateProjectSaleBusinessObject.JsonConverters;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace RealEstateProjectSaleBusinessObject.ViewModels
@@ -13,11 +15,15 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public string ContractCode { get; set; }
         public string ContractName { get; set; }
         public string ContractType { get; set; }
+        [JsonConverter(typeof(DateTimeConverter))]
         public DateTime CreatedTime { get; set; }
+        [JsonConverter(typeof(DateTimeConverter))]
         public DateTime? UpdatedTime { get; set; }
         [Column(TypeName = "date")]
+        [JsonConverter(typeof(DateOnlyConverter))]
         public DateTime? DateSigned { get; set; }
         [Column(TypeName = "date")]
+        [JsonConverter(typeof(DateOnlyConverter))]
         public DateTime? ExpiredTime { get; set; }
         public double? TotalPrice { get; set; }
         public string? Description { get; set; }
