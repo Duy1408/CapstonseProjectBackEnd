@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
+using RealEstateProjectSale.Helpers;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
 using RealEstateProjectSaleBusinessObject.DTO.Create;
 using RealEstateProjectSaleBusinessObject.DTO.Request;
@@ -132,13 +133,9 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
         {
             try
             {
-                string startDateInput = open.StartDate;
-                string endDateInput = open.EndDate;
-                string checkinDateInput = open.CheckinDate;
-
-                DateTime parsedStartDate = DateTime.ParseExact(startDateInput, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
-                DateTime parsedEndDate = DateTime.ParseExact(endDateInput, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
-                DateTime parsedCheckinDate = DateTime.ParseExact(checkinDateInput, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                DateTime parsedStartDate = DateTimeHelper.ConvertToDateTime(open.StartDate);
+                DateTime parsedEndDate = DateTimeHelper.ConvertToDateTime(open.EndDate);
+                DateTime parsedCheckinDate = DateTimeHelper.ConvertToDateTime(open.CheckinDate);
 
                 var newOpen = new OpeningForSaleCreateDTO
                 {
@@ -175,13 +172,17 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
         {
             try
             {
-                string startDateInput = open.StartDate;
-                string endDateInput = open.EndDate;
-                string checkinDateInput = open.CheckinDate;
+                DateTime? parsedStartDate = !string.IsNullOrEmpty(open.StartDate)
+                                            ? DateTimeHelper.ConvertToDateTime(open.StartDate)
+                                            : (DateTime?)null;
 
-                DateTime parsedStartDate = DateTime.ParseExact(startDateInput, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
-                DateTime parsedEndDate = DateTime.ParseExact(startDateInput, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
-                DateTime parsedCheckinDate = DateTime.ParseExact(startDateInput, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                DateTime? parsedEndDate = !string.IsNullOrEmpty(open.EndDate)
+                                            ? DateTimeHelper.ConvertToDateTime(open.EndDate)
+                                            : (DateTime?)null;
+
+                DateTime? parsedCheckinDate = !string.IsNullOrEmpty(open.CheckinDate)
+                                              ? DateTimeHelper.ConvertToDateTime(open.CheckinDate)
+                                                : (DateTime?)null;
 
                 var existingOpen = _open.GetOpeningForSaleById(id);
                 if (existingOpen != null)
@@ -192,15 +193,15 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
                     }
                     if (!string.IsNullOrEmpty(open.StartDate))
                     {
-                        existingOpen.StartDate = parsedStartDate;
+                        existingOpen.StartDate = parsedStartDate.Value;
                     }
                     if (!string.IsNullOrEmpty(open.EndDate))
                     {
-                        existingOpen.EndDate = parsedEndDate;
+                        existingOpen.EndDate = parsedEndDate.Value;
                     }
                     if (!string.IsNullOrEmpty(open.CheckinDate))
                     {
-                        existingOpen.CheckinDate = parsedCheckinDate;
+                        existingOpen.CheckinDate = parsedCheckinDate.Value;
                     }
                     if (!string.IsNullOrEmpty(open.SaleType))
                     {
@@ -223,7 +224,7 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
 
                     return Ok(new
                     {
-                        message = "OpeningForSale Comment Successfully"
+                        message = "Update OpeningForSale Successfully"
                     });
 
                 }

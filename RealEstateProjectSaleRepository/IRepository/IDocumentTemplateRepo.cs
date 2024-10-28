@@ -15,5 +15,7 @@ namespace RealEstateProjectSaleRepository.IRepository
         DocumentTemplate GetDocumentById(Guid id);
         void UpdateDocument(DocumentTemplate p);
         IQueryable<DocumentTemplate> SearchDocument(string name);
+        DocumentTemplate GetDocumentByDocumentName(string tempName);
+
     }
 }
