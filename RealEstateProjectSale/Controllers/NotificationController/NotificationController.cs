@@ -18,11 +18,13 @@ namespace RealEstateProjectSale.Controllers.NotificationController
     {
         private readonly INotificationServices _notiServices;
         private readonly IMapper _mapper;
+        private readonly ILogger<NotificationController> _logger;
 
-        public NotificationController(INotificationServices notiServices, IMapper mapper)
+        public NotificationController(INotificationServices notiServices, IMapper mapper, ILogger<NotificationController> logger)
         {
             _notiServices = notiServices;
             _mapper = mapper;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -110,8 +112,16 @@ namespace RealEstateProjectSale.Controllers.NotificationController
 
                 return Ok(new { message = "Notification sent successfully", response });
             }
+            catch (FirebaseMessagingException fme)
+            {
+                // Log lỗi chi tiết của FirebaseMessaging
+                _logger.LogError(fme, "FirebaseMessagingException: {Message}", fme.Message);
+                return BadRequest(new { message = "Error sending notification", error = fme.Message });
+            }
             catch (Exception ex)
             {
+                // Log lỗi chung
+                _logger.LogError(ex, "General Exception: {Message}", ex.Message);
                 return BadRequest(new { message = "Error sending notification", error = ex.Message });
             }
         }
