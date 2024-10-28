@@ -31,5 +31,8 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public List<Payment>? Payments { get; set; }
         public List<Notification>? Notifications { get; set; }
         public List<Comment>? Comments { get; set; }
+        public List<Contract>? Contracts { get; set; }
+
+
     }
 }

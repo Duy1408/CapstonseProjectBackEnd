@@ -25,8 +25,8 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public string? RemittanceOrder { get; set; }
         public Guid ContractID { get; set; }
         public Contract? Contract { get; set; }
-
-
+        public Guid? PaymentPolicyID { get; set; }
+        public PaymentPolicy? PaymentPolicy { get; set; }
 
 
 
