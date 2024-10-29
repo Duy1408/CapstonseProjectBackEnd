@@ -190,10 +190,7 @@ namespace RealEstateProjectSale.Controllers.PaymentController
                     {
                         existingPayment.Status = payment.Status.Value;
                     }
-                    if (payment.PaymentTypeID.HasValue)
-                    {
-                        existingPayment.PaymentTypeID = payment.PaymentTypeID.Value;
-                    }
+              
                     if (payment.BookingID.HasValue)
                     {
                         existingPayment.BookingID = payment.BookingID.Value;

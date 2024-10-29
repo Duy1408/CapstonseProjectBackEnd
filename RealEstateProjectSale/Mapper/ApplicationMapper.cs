@@ -36,9 +36,6 @@ namespace RealEstateProjectSale.Mapper
             CreateMap<ContractCreateDTO, Contract>().ReverseMap();
             CreateMap<ContractUpdateDTO, Contract>().ReverseMap();
 
-            CreateMap<PaymentTypeVM, PaymentType>().ReverseMap();
-            CreateMap<PaymentTypeCreateDTO, PaymentType>().ReverseMap();
-            CreateMap<PaymentTypeUpdateDTO, PaymentType>().ReverseMap();
 
             CreateMap<PromotionDetailVM, PromotionDetail>().ReverseMap().ForMember(dest => dest.PropertyTypeName,
                                       opt => opt.MapFrom(src => src.PropertyType!.PropertyTypeName))
@@ -180,9 +177,7 @@ namespace RealEstateProjectSale.Mapper
             CreateMap<UnitTypeCreateDTO, UnitType>().ReverseMap();
             CreateMap<UnitTypeUpdateDTO, UnitType>().ReverseMap();
 
-            CreateMap<PaymentVM, Payment>().ReverseMap().ForMember(dest => dest.PaymentName,
-                                 opt => opt.MapFrom(src => src.PaymentType!.PaymentName))
-                                                        .ForMember(dest => dest.BookingStatus,
+            CreateMap<PaymentVM, Payment>().ReverseMap().ForMember(dest => dest.BookingStatus,
                                  opt => opt.MapFrom(src => src.Booking!.Status))
                                                         .ForMember(dest => dest.FullName,
                                  opt => opt.MapFrom(src => src.Customer!.FullName));

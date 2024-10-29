@@ -14,8 +14,6 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public DateTime CreatedTime { get; set; }
         public DateTime? PaymentTime { get; set; }
         public bool Status { get; set; }
-        public Guid PaymentTypeID { get; set; }
-        public PaymentType? PaymentType { get; set; }
         public Guid? BookingID { get; set; }
         public Booking? Booking { get; set; }
         public Guid CustomerID { get; set; }

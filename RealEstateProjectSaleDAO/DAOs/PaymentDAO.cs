@@ -21,7 +21,7 @@ namespace RealEstateProjectSaleDAO.DAOs
             try
             {
                 return _context.Payments!.Include(a => a.Customer)
-                                         .Include(a => a.PaymentType)
+                                        
                                          .Include(a => a.Booking)
                                          .ToList();
             }
@@ -50,7 +50,7 @@ namespace RealEstateProjectSaleDAO.DAOs
             try
             {
                 var payment = _context.Payments!.Include(a => a.Customer)
-                                                .Include(a => a.PaymentType)
+                                                
                                                 .Include(a => a.Booking)
                                                 .SingleOrDefault(c => c.PaymentID == id);
                 return payment;
