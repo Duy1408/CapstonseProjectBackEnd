@@ -141,6 +141,7 @@ namespace RealEstateProjectSale.Controllers.CustomerController
                     BankName = accountCustomer.BankName,
                     BankNumber = accountCustomer.BankNumber,
                     Address = accountCustomer.Address,
+                    DeviceToken = null,
                     Status = true,
                     AccountID = account.AccountID
                 };
@@ -218,6 +219,10 @@ namespace RealEstateProjectSale.Controllers.CustomerController
                     if (!string.IsNullOrEmpty(customer.Address))
                     {
                         existingCustomer.Address = customer.Address;
+                    }
+                    if (!string.IsNullOrEmpty(customer.DeviceToken))
+                    {
+                        existingCustomer.DeviceToken = customer.DeviceToken;
                     }
                     if (customer.Status.HasValue)
                     {

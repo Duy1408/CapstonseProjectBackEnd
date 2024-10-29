@@ -37,7 +37,6 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public virtual DbSet<OpeningForSale>? OpeningForSales { get; set; }
         public virtual DbSet<PaymentProcess>? PaymentProcesses { get; set; }
         public virtual DbSet<PaymentProcessDetail>? PaymentProcessDetails { get; set; }
-        public virtual DbSet<PaymentType>? PaymentTypes { get; set; }
         public virtual DbSet<Project>? Projects { get; set; }
         public virtual DbSet<Promotion>? Promotions { get; set; }
         public virtual DbSet<PromotionDetail>? PromotionDetails { get; set; }
