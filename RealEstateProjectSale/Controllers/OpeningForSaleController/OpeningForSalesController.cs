@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Build.Evaluation;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using RealEstateProjectSale.Helpers;
@@ -23,11 +24,14 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
     public class OpeningForSalesController : ControllerBase
     {
         private readonly IOpeningForSaleServices _open;
+        private readonly IProjectServices _projectService;
         private readonly IMapper _mapper;
 
-        public OpeningForSalesController(IOpeningForSaleServices open, IMapper mapper)
+        public OpeningForSalesController(IOpeningForSaleServices open, IMapper mapper,
+            IProjectServices projectService)
         {
             _open = open;
+            _projectService = projectService;
             _mapper = mapper;
         }
 
@@ -133,6 +137,15 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
         {
             try
             {
+                var existingProject = _projectService.GetProjectById(open.ProjectID);
+                if (existingProject == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Project not found."
+                    });
+                }
+
                 var existingOpen = _open.FindByProjectIdAndStatus(open.ProjectID);
                 if (existingOpen != null)
                 {

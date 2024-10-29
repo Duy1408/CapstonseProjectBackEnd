@@ -32,16 +32,23 @@ namespace RealEstateProjectSale.Controllers.BookingController
         private readonly IFileUploadToBlobService _fileService;
         private readonly IDocumentTemplateService _documentService;
         private readonly IOpeningForSaleServices _openService;
+        private readonly ICustomerServices _customerServices;
+        private readonly IProjectServices _projectService;
+        private readonly IProjectCategoryDetailServices _detailServices;
         private readonly IMapper _mapper;
 
         public BookingsController(IBookingServices book, IFileUploadToBlobService fileService,
-                    IMapper mapper, IDocumentTemplateService documentService, IOpeningForSaleServices openService)
+                    IMapper mapper, IDocumentTemplateService documentService, IOpeningForSaleServices openService,
+                    ICustomerServices customerServices, IProjectServices projectService, IProjectCategoryDetailServices detailServices)
         {
             _book = book;
             _fileService = fileService;
             _mapper = mapper;
             _documentService = documentService;
             _openService = openService;
+            _customerServices = customerServices;
+            _projectService = projectService;
+            _detailServices = detailServices;
         }
 
         [HttpGet]
@@ -330,6 +337,33 @@ namespace RealEstateProjectSale.Controllers.BookingController
         {
             try
             {
+                var existingCustomer = _customerServices.GetCustomerByID(customerID);
+                if (existingCustomer == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Customer not found."
+                    });
+                }
+
+                var existingProject = _projectService.GetProjectById(projectID);
+                if (existingProject == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Project not found."
+                    });
+                }
+
+                var existingCategoryDetail = _detailServices.GetProjectCategoryDetailByID(projectID, propertyCategoryID);
+                if (existingCategoryDetail == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Project Category not found."
+                    });
+                }
+
                 var openForSale = _openService.FindByProjectIdAndStatus(projectID);
 
                 var existingBooking = _book.CheckExistingBooking(openForSale.OpeningForSaleID, projectID, customerID);
@@ -365,7 +399,10 @@ namespace RealEstateProjectSale.Controllers.BookingController
                 var books = _mapper.Map<Booking>(newbook);
                 _book.AddNew(books);
 
-                return Ok(newbook);
+                return Ok(new
+                {
+                    message = "Create Booking Successfully"
+                });
 
             }
             catch (Exception ex)

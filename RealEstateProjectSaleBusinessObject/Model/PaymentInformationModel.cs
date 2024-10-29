@@ -9,11 +9,8 @@ namespace RealEstateProjectSaleBusinessObject.Model
 {
     public class PaymentInformationModel
     {
-        [JsonIgnore]
-        public Guid PaymentID { get; set; } = Guid.NewGuid();
-        [JsonIgnore]
-        public DateTime CreatedTime { get; set; } = DateTime.Now;
-        public Guid PaymentTypeID { get; set; }
+        public Guid PaymentID { get; set; }
+        public DateTime CreatedTime { get; set; }
         public Guid BookingID { get; set; }
         public Guid CustomerID { get; set; }
     }

@@ -15,7 +15,6 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
         public DateTime? PaymentTime { get; set; }
         public bool Status { get; set; }
         public Guid CustomerID { get; set; }
-        public Guid PaymentTypeID { get; set; }
         public Guid BookingID { get; set; }
 
     }
