@@ -28,15 +28,14 @@ namespace RealEstateProjectSaleServices.Services
             _categoryService = categoryService;
         }
 
-        public string GenerateDocumentContent(Guid templateId)
+        public string GenerateDocumentContent(Guid bookingId)
         {
-            var documentTemplate = _documentService.GetDocumentById(templateId);
+            var booking = _book.GetBookingById(bookingId);
+            var documentTemplate = _documentService.GetDocumentById(booking.DocumentTemplateID);
             if (documentTemplate == null)
             {
                 throw new Exception("Document template not found");
             }
-
-            var booking = _book.GetBookingByDocumentID(templateId);
             var customer = _customerService.GetCustomerByID(booking.CustomerID);
             var project = _projectService.GetProjectById(booking.ProjectID);
             var propertyCategory = _categoryService.GetPropertyCategoryByID(booking.PropertyCategoryID);
@@ -106,7 +105,7 @@ namespace RealEstateProjectSaleServices.Services
             _book.UpdateBooking(p);
         }
 
-        public Booking GetBookingByDocumentID(Guid id)
+        public List<Booking> GetBookingByDocumentID(Guid id)
         {
             return _book.GetBookingByDocumentID(id);
         }

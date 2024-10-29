@@ -24,10 +24,10 @@ namespace RealEstateProjectSaleServices.IServices
 
         List<Booking> GetBookingByBooked();
         List<Booking> GetBookingByCheckedIn();
-        Booking GetBookingByDocumentID(Guid id);
+        List<Booking> GetBookingByDocumentID(Guid id);
         List<Booking> GetBookingByCustomerID(Guid id);
         Booking CheckExistingBooking(Guid openForSaleID, Guid projectID, Guid customerID);
-        string GenerateDocumentContent(Guid templateId);
+        string GenerateDocumentContent(Guid bookingId);
 
     }
 }

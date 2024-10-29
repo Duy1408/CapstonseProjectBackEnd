@@ -361,10 +361,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
                 var books = _mapper.Map<Booking>(newbook);
                 _book.AddNew(books);
 
-                return Ok(new
-                {
-                    message = "Create Booking Successfully"
-                });
+                return Ok(newbook);
             }
             catch (Exception ex)
             {
@@ -372,33 +369,33 @@ namespace RealEstateProjectSale.Controllers.BookingController
             }
         }
 
-        [HttpGet("generate-pdf")]
-        public IActionResult GeneratePdfDocument(Guid templateId)
-        {
-            try
-            {
-                var documentTemplate = _documentService.GetDocumentById(templateId);
+        //[HttpGet("generate-pdf")]
+        //public IActionResult GeneratePdfDocument(Guid templateId)
+        //{
+        //    try
+        //    {
+        //        var documentTemplate = _documentService.GetDocumentById(templateId);
 
-                var htmlContent = _book.GenerateDocumentContent(templateId);
+        //        var htmlContent = _book.GenerateDocumentContent(templateId);
 
-                var pdfBytes = _documentService.GeneratePdfFromTemplate(htmlContent);
+        //        var pdfBytes = _documentService.GeneratePdfFromTemplate(htmlContent);
 
-                using (MemoryStream pdfStream = new MemoryStream(pdfBytes))
-                {
-                    string? blobUrl = null;
-                    blobUrl = _fileService.UploadSingleFile(pdfStream, documentTemplate.DocumentName, "bookingfile");
+        //        using (MemoryStream pdfStream = new MemoryStream(pdfBytes))
+        //        {
+        //            string? blobUrl = null;
+        //            blobUrl = _fileService.UploadSingleFile(pdfStream, documentTemplate.DocumentName, "bookingfile");
 
-                    return Ok(new
-                    {
-                        url = blobUrl
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+        //            return Ok(new
+        //            {
+        //                url = blobUrl
+        //            });
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
 
     }
 }

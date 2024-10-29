@@ -36,6 +36,9 @@ namespace RealEstateProjectSaleDAO.DAOs
                                     .Include(c => c.Project)
                                     .Include(c => c.Customer)
                                     .Include(c => c.Staff)
+                                    .Include(c => c.PropertyCategory)
+                                    .Include(c => c.Property)
+                                    .Include(c => c.DocumentTemplate)
                                     .ToList();
         }
 
@@ -47,6 +50,9 @@ namespace RealEstateProjectSaleDAO.DAOs
                                     .Include(c => c.Project)
                                     .Include(c => c.Customer)
                                     .Include(c => c.Staff)
+                                    .Include(c => c.PropertyCategory)
+                                    .Include(c => c.Property)
+                                    .Include(c => c.DocumentTemplate)
                                     .Where(b => b.Status == BookingStatus.DaDatCho.GetEnumDescription())
                                     .ToList();
         }
@@ -59,6 +65,9 @@ namespace RealEstateProjectSaleDAO.DAOs
                                     .Include(c => c.Project)
                                     .Include(c => c.Customer)
                                     .Include(c => c.Staff)
+                                    .Include(c => c.PropertyCategory)
+                                    .Include(c => c.Property)
+                                    .Include(c => c.DocumentTemplate)
                                     .Where(b => b.Status == BookingStatus.DaCheckIn.GetEnumDescription())
                                     .ToList();
         }
@@ -71,6 +80,9 @@ namespace RealEstateProjectSaleDAO.DAOs
                                      .Include(c => c.Project)
                                      .Include(c => c.Customer)
                                      .Include(c => c.Staff)
+                                     .Include(c => c.PropertyCategory)
+                                     .Include(c => c.Property)
+                                     .Include(c => c.DocumentTemplate)
                                      .Where(b => b.DepositedTimed != null
                                      && b.DepositedPrice != null
                                      && b.Status != BookingStatus.DaKyTTDC.GetEnumDescription()
@@ -89,6 +101,9 @@ namespace RealEstateProjectSaleDAO.DAOs
                                      .Include(c => c.Project)
                                      .Include(c => c.Customer)
                                      .Include(c => c.Staff)
+                                     .Include(c => c.PropertyCategory)
+                                     .Include(c => c.Property)
+                                     .Include(c => c.DocumentTemplate)
                                      .Where(b => b.DepositedTimed != null
                                      && b.DepositedPrice != null
                                      && b.Status != BookingStatus.DaKyTTDC.GetEnumDescription()
@@ -141,17 +156,24 @@ namespace RealEstateProjectSaleDAO.DAOs
                                     .Include(c => c.Project)
                                     .Include(c => c.Customer)
                                     .Include(c => c.Staff)
+                                    .Include(c => c.PropertyCategory)
+                                    .Include(c => c.Property)
+                                    .Include(c => c.DocumentTemplate)
                                     .SingleOrDefault(a => a.BookingID == id);
         }
 
-        public Booking GetBookingByDocumentID(Guid id)
+        public List<Booking> GetBookingByDocumentID(Guid id)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
             return _context.Bookings.Include(c => c.OpeningForSale)
                                     .Include(c => c.Project)
                                     .Include(c => c.Customer)
                                     .Include(c => c.Staff)
-                                    .SingleOrDefault(a => a.DocumentTemplateID == id);
+                                    .Include(c => c.PropertyCategory)
+                                    .Include(c => c.Property)
+                                    .Include(c => c.DocumentTemplate)
+                                    .Where(a => a.DocumentTemplateID == id)
+                                    .ToList();
         }
 
         public List<Booking> GetBookingByCustomerID(Guid id)
@@ -161,6 +183,9 @@ namespace RealEstateProjectSaleDAO.DAOs
                                     .Include(c => c.Project)
                                     .Include(c => c.Customer)
                                     .Include(c => c.Staff)
+                                    .Include(c => c.PropertyCategory)
+                                    .Include(c => c.Property)
+                                    .Include(c => c.DocumentTemplate)
                                     .Where(a => a.CustomerID == id)
                                     .ToList();
         }
