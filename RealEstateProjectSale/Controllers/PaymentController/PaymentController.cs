@@ -27,13 +27,18 @@ namespace RealEstateProjectSale.Controllers.PaymentController
 
         private readonly IPaymentServices _paymentServices;
         private readonly IBookingServices _bookServices;
+        private readonly IDocumentTemplateService _documentService;
+        private readonly IFileUploadToBlobService _fileService;
         private readonly IMapper _mapper;
 
 
-        public PaymentController(IPaymentServices paymentServices, IBookingServices bookServices, IMapper mapper)
+        public PaymentController(IPaymentServices paymentServices, IBookingServices bookServices,
+            IFileUploadToBlobService fileService, IDocumentTemplateService documentService, IMapper mapper)
         {
             _paymentServices = paymentServices;
             _bookServices = bookServices;
+            _documentService = documentService;
+            _fileService = fileService;
             _mapper = mapper;
         }
 
@@ -94,10 +99,19 @@ namespace RealEstateProjectSale.Controllers.PaymentController
                 book.Status = BookingStatus.DaDatCho.GetEnumDescription();
                 book.Note = newPayment.Content;
                 _bookServices.UpdateBooking(book);
+
+                var htmlContent = _bookServices.GenerateDocumentContent(book.BookingID);
+                var pdfBytes = _documentService.GeneratePdfFromTemplate(htmlContent);
+                string? blobUrl = null;
+                using (MemoryStream pdfStream = new MemoryStream(pdfBytes))
+                {
+                    blobUrl = _fileService.UploadSingleFile(pdfStream, book.DocumentTemplate!.DocumentName, "bookingfile");
+                }
+
+                book.BookingFile = blobUrl;
+                _bookServices.UpdateBooking(book);
+
             }
-
-            var htmlContent = _bookServices.GenerateDocumentContent(book.DocumentTemplateID);
-
 
             return Ok(new
             {
