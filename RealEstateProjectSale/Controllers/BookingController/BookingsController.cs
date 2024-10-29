@@ -31,15 +31,17 @@ namespace RealEstateProjectSale.Controllers.BookingController
         private readonly IBookingServices _book;
         private readonly IFileUploadToBlobService _fileService;
         private readonly IDocumentTemplateService _documentService;
+        private readonly IOpeningForSaleServices _openService;
         private readonly IMapper _mapper;
 
         public BookingsController(IBookingServices book, IFileUploadToBlobService fileService,
-                    IMapper mapper, IDocumentTemplateService documentService)
+                    IMapper mapper, IDocumentTemplateService documentService, IOpeningForSaleServices openService)
         {
             _book = book;
             _fileService = fileService;
             _mapper = mapper;
             _documentService = documentService;
+            _openService = openService;
         }
 
         [HttpGet]
@@ -323,12 +325,14 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new booking")]
-        public ActionResult<Booking> AddNew(Guid openForSaleID,
-                    Guid propertyCategoryID, Guid projectID, Guid customerID)
+        public ActionResult<Booking> AddNew(Guid projectID,
+                    Guid propertyCategoryID, Guid customerID)
         {
             try
             {
-                var existingBooking = _book.CheckExistingBooking(openForSaleID, projectID, customerID);
+                var openForSale = _openService.FindByProjectIdAndStatus(projectID);
+
+                var existingBooking = _book.CheckExistingBooking(openForSale.OpeningForSaleID, projectID, customerID);
                 if (existingBooking != null)
                 {
                     return BadRequest(new
@@ -352,7 +356,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
                     CustomerID = customerID,
                     StaffID = null,
                     ProjectID = projectID,
-                    OpeningForSaleID = openForSaleID,
+                    OpeningForSaleID = openForSale.OpeningForSaleID,
                     PropertyCategoryID = propertyCategoryID,
                     DocumentTemplateID = documentReservation.DocumentTemplateID,
                     PropertyID = null
@@ -362,6 +366,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
                 _book.AddNew(books);
 
                 return Ok(newbook);
+
             }
             catch (Exception ex)
             {

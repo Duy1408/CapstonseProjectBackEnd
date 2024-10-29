@@ -87,7 +87,12 @@ namespace RealEstateProjectSaleDAO.DAOs
             }
         }
 
-
+        public OpeningForSale FindByProjectIdAndStatus(Guid projectId)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            return _context.OpeningForSales.Include(o => o.Project)
+                                           .SingleOrDefault(a => a.ProjectID == projectId && a.Status == true);
+        }
 
         public OpeningForSale GetOpeningForSaleByID(Guid id)
         {
@@ -95,7 +100,7 @@ namespace RealEstateProjectSaleDAO.DAOs
             return _context.OpeningForSales.Include(o => o.Project).SingleOrDefault(a => a.OpeningForSaleID == id);
         }
 
-        public IQueryable<OpeningForSale> GetPropertyByProjectID(Guid id)
+        public IQueryable<OpeningForSale> GetOpeningForSaleByProjectID(Guid id)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
             var a = _context.OpeningForSales!.Include(c => c.Project)

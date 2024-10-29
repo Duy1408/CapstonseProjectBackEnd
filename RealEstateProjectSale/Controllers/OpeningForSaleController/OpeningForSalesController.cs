@@ -79,7 +79,7 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
         [SwaggerOperation(Summary = "Get OpeningForSale by ProjectID")]
         public IActionResult GetOpeningForSaleByProjectID(Guid projectId)
         {
-            var open = _open.GetPropertyByProjectID(projectId);
+            var open = _open.GetOpeningForSaleByProjectID(projectId);
 
             if (open != null)
             {
@@ -133,6 +133,15 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
         {
             try
             {
+                var existingOpen = _open.FindByProjectIdAndStatus(open.ProjectID);
+                if (existingOpen != null)
+                {
+                    return BadRequest(new
+                    {
+                        message = "An OpeningForSale with the same Project already exists."
+                    });
+                }
+
                 DateTime parsedStartDate = DateTimeHelper.ConvertToDateTime(open.StartDate);
                 DateTime parsedEndDate = DateTimeHelper.ConvertToDateTime(open.EndDate);
                 DateTime parsedCheckinDate = DateTimeHelper.ConvertToDateTime(open.CheckinDate);

@@ -15,13 +15,13 @@ namespace RealEstateProjectSaleServices.IServices
         List<OpeningForSale> GetOpeningForSales();
         void AddNew(OpeningForSale o);
 
-
+        OpeningForSale FindByProjectIdAndStatus(Guid projectId);
         OpeningForSale GetOpeningForSaleById(Guid id);
 
         void UpdateOpeningForSale(OpeningForSale o);
 
         IQueryable<OpeningForSale> SearchOpeningForSale(string name);
 
-        IQueryable<OpeningForSale> GetPropertyByProjectID(Guid id);
+        IQueryable<OpeningForSale> GetOpeningForSaleByProjectID(Guid id);
     }
 }
