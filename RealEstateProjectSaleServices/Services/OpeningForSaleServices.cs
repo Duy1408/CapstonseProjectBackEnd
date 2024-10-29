@@ -26,6 +26,11 @@ namespace RealEstateProjectSaleServices.Services
             return _open.ChangeStatus(o);
         }
 
+        public OpeningForSale FindByProjectIdAndStatus(Guid projectId)
+        {
+            return _open.FindByProjectIdAndStatus(projectId);
+        }
+
         public OpeningForSale GetOpeningForSaleById(Guid id)
         {
             return _open.GetOpeningForSaleById(id);
@@ -36,9 +41,9 @@ namespace RealEstateProjectSaleServices.Services
             return _open.GetOpeningForSales();
         }
 
-        public IQueryable<OpeningForSale> GetPropertyByProjectID(Guid id)
+        public IQueryable<OpeningForSale> GetOpeningForSaleByProjectID(Guid id)
         {
-            return _open.GetPropertyByProjectID(id);
+            return _open.GetOpeningForSaleByProjectID(id);
         }
 
         public IQueryable<OpeningForSale> SearchOpeningForSale(string name)

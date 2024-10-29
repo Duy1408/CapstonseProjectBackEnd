@@ -15,13 +15,13 @@ namespace RealEstateProjectSaleRepository.IRepository
         public List<OpeningForSale> GetOpeningForSales();
         public void AddNew(OpeningForSale o);
 
-
+        OpeningForSale FindByProjectIdAndStatus(Guid projectId);
         public OpeningForSale GetOpeningForSaleById(Guid id);
 
         public void UpdateOpeningForSale(OpeningForSale o);
 
         public IQueryable<OpeningForSale> SearchOpeningForSale(string name);
 
-        IQueryable<OpeningForSale> GetPropertyByProjectID(Guid id);
+        IQueryable<OpeningForSale> GetOpeningForSaleByProjectID(Guid id);
     }
 }

@@ -1,8 +1,10 @@
 ﻿using RealEstateProjectSaleBusinessObject.Enums;
+using RealEstateProjectSaleBusinessObject.JsonConverters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace RealEstateProjectSaleBusinessObject.DTO.Create
@@ -12,7 +14,9 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
         public Guid BookingID { get; set; }
         public DateTime? DepositedTimed { get; set; }
         public double? DepositedPrice { get; set; }
+        [JsonConverter(typeof(DateTimeConverter))]
         public DateTime CreatedTime { get; set; }
+        [JsonConverter(typeof(DateTimeConverter))]
         public DateTime? UpdatedTime { get; set; }
         public string? BookingFile { get; set; }
         public string? Note { get; set; }
