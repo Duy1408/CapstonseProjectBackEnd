@@ -29,7 +29,7 @@ namespace RealEstateProjectSale.Controllers.BlockController
         }
 
         [HttpGet]
-        [SwaggerOperation(Summary = "Gett all Block")]
+        [SwaggerOperation(Summary = "Get all Block")]
 
         public IActionResult GetAllBlock()
         {
