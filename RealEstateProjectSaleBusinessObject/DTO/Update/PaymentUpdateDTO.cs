@@ -12,7 +12,6 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Update
         public double? Amount { get; set; }
         public string? Content { get; set; }
         public bool? Status { get; set; }
-        public Guid? PaymentTypeID { get; set; }
         public Guid? BookingID { get; set; }
         public Guid? CustomerID { get; set; }
     }
