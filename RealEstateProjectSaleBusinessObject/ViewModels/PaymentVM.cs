@@ -19,8 +19,6 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         [JsonConverter(typeof(DateTimeConverter))]
         public DateTime? PaymentTime { get; set; }
         public bool Status { get; set; }
-        public Guid PaymentTypeID { get; set; }
-        public string PaymentName { get; set; }
         public Guid? BookingID { get; set; }
         public string BookingStatus { get; set; }
         public Guid CustomerID { get; set; }

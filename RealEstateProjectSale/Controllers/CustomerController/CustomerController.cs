@@ -19,14 +19,16 @@ namespace RealEstateProjectSale.Controllers.CustomerController
 
         private readonly ICustomerServices _customerServices;
         private readonly IAccountServices _accountServices;
+        private readonly IJWTTokenService _jWTTokenService;
         private readonly IRoleServices _roleServices;
         private readonly IMapper _mapper;
 
         public CustomerController(ICustomerServices customerServices, IAccountServices accountServices,
-                                  IMapper mapper, IRoleServices roleServices)
+                                  IMapper mapper, IRoleServices roleServices, IJWTTokenService jWTTokenService)
         {
             _customerServices = customerServices;
             _accountServices = accountServices;
+            _jWTTokenService = jWTTokenService;
             _roleServices = roleServices;
             _mapper = mapper;
         }
@@ -163,7 +165,7 @@ namespace RealEstateProjectSale.Controllers.CustomerController
         }
 
         [HttpPut("{id}")]
-        [SwaggerOperation(Summary = "UpdateCustomer")]
+        [SwaggerOperation(Summary = "Update Customer By Id")]
         public IActionResult UpdateCustomer([FromForm] CustomerUpdateDTO customer, Guid id)
         {
             try
@@ -248,6 +250,54 @@ namespace RealEstateProjectSale.Controllers.CustomerController
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        [HttpPut("device-token")]
+        [SwaggerOperation(Summary = "Update Customer Device Token using tokenJWT")]
+        public IActionResult UpdateDeviceTokenCustomer([FromQuery] string tokenJWT, [FromQuery] string deviceToken)
+        {
+            var account = _jWTTokenService.ParseJwtToken(tokenJWT);
+
+            if (account.AccountID.HasValue)
+            {
+                var existingAccount = _accountServices.GetAccountByID(account.AccountID.Value);
+
+                if (existingAccount == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Account not found."
+                    });
+                }
+
+                var existingCustomer = _customerServices.GetCustomerByAccountID(existingAccount.AccountID);
+                if (existingCustomer == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Customer not found."
+                    });
+                }
+
+                existingCustomer.DeviceToken = deviceToken;
+                _customerServices.UpdateCustomer(existingCustomer);
+
+                return Ok(new
+                {
+                    message = "Update Device Token Successfully"
+                });
+
+            }
+            else
+            {
+                return BadRequest(new
+                {
+                    message = "Invalid Account ID in token."
+                });
+            }
+
+
+
         }
 
 
