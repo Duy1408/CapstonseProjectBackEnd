@@ -22,8 +22,9 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public List<OpenForSaleDetail>? OpenForSaleDetails { get; set; }
         public Guid ProjectID { get; set; }
         public Project? Project { get; set; }
-        public Guid? PropertyCategoryID { get; set; }
-        public PropertyCategory? PropertyCategory { get; set; }
+        public Guid ProjectCategoryDetailID { get; set; }
+         public ProjectCategoryDetail? ProjectCategoryDetail { get; set; }
+
 
 
     }
