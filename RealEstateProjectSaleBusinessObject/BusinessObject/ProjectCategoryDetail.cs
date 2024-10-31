@@ -12,6 +12,7 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public Project? Project { get; set; }
         public Guid PropertyCategoryID { get; set; }
         public PropertyCategory? PropertyCategory { get; set; }
+        public List<Property> Properties { get; set; }
 
     }
 }

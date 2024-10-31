@@ -32,6 +32,8 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public List<UnitType> UnitTypes { get; set; }
         public List<Booking>  Bookings{ get; set; }
 
+ 
+
 
 
     }

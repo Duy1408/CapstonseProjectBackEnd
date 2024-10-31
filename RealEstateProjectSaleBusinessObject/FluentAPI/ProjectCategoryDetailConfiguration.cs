@@ -21,6 +21,8 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
             builder.HasOne(x => x.PropertyCategory)
                 .WithMany(o => o.ProjectCategoryDetails)
                 .HasForeignKey(x => x.PropertyCategoryID);
+            builder.HasMany(x => x.Properties).WithOne(x => x.ProjectCategoryDetail).OnDelete(DeleteBehavior.NoAction);
+
         }
     }
 }
