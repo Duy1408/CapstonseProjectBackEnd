@@ -14,7 +14,7 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public List<Booking>? Bookings { get; set; }
         public List<PropertyType>? PropertyTypes { get; set; }
         public List<ProjectCategoryDetail>? ProjectCategoryDetails { get; set; }
-        public List<OpeningForSale>? OpeningForSales { get; set; }
+       
     
 
 

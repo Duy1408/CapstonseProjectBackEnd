@@ -37,6 +37,8 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public Property? Property { get; set; }
         public Guid DocumentTemplateID { get; set; }
         public DocumentTemplate? DocumentTemplate { get; set; }
+        public Guid ProjectCategoryDetailID { get; set; }
+        public ProjectCategoryDetail? ProjectCategoryDetail { get; set; }
 
 
 
