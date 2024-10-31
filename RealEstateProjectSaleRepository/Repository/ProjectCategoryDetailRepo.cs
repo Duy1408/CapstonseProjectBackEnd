@@ -21,6 +21,8 @@ namespace RealEstateProjectSaleRepository.Repository
 
         public ProjectCategoryDetail GetProjectCategoryDetailByID(Guid projectID, Guid propertyCategoryID) => dao.GetProjectCategoryDetailByID(projectID, propertyCategoryID);
 
+        public ProjectCategoryDetail GetProjectCategoryDetailByID(Guid id) => dao.GetProjectCategoryDetailByID(id);
+
         public List<ProjectCategoryDetail> GetProjectCategoryDetailByProjectID(Guid id) => dao.GetProjectCategoryDetailByProjectID(id);
 
         public void UpdateProjectCategoryDetail(ProjectCategoryDetail detail) => dao.UpdateProjectCategoryDetail(detail);

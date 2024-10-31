@@ -10,24 +10,24 @@ namespace RealEstateProjectSaleServices.IServices
     public interface IBookingServices
     {
 
-        //List<Booking> GetBookings();
-        //void AddNew(Booking p);
+        List<Booking> GetBookings();
+        void AddNew(Booking p);
 
 
-        //Booking GetBookingById(Guid id);
+        Booking GetBookingById(Guid id);
 
-        //void UpdateBooking(Booking p);
+        void UpdateBooking(Booking p);
 
-        //List<Booking> GetBookingByDepositedTimed(int numberBooking);
+        List<Booking> GetBookingByDepositedTimed(int numberBooking);
 
-        //List<Booking> GetBookingByRandom(int numberBooking);
+        List<Booking> GetBookingByRandom(int numberBooking);
 
-        //List<Booking> GetBookingByBooked();
-        //List<Booking> GetBookingByCheckedIn();
-        //List<Booking> GetBookingByDocumentID(Guid id);
-        //List<Booking> GetBookingByCustomerID(Guid id);
+        List<Booking> GetBookingByBooked();
+        List<Booking> GetBookingByCheckedIn();
+        List<Booking> GetBookingByDocumentID(Guid id);
+        List<Booking> GetBookingByCustomerID(Guid id);
         //Booking CheckExistingBooking(Guid openForSaleID, Guid projectID, Guid customerID);
-        //string GenerateDocumentContent(Guid bookingId);
+        string GenerateDocumentContent(Guid bookingId);
 
     }
 }

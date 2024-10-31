@@ -9,19 +9,19 @@ namespace RealEstateProjectSaleRepository.IRepository
 {
     public interface IOpeningForSaleRepo
     {
-        //public bool ChangeStatus(OpeningForSale o);
+        public bool ChangeStatus(OpeningForSale o);
 
 
-        //public List<OpeningForSale> GetOpeningForSales();
-        //public void AddNew(OpeningForSale o);
+        public List<OpeningForSale> GetOpeningForSales();
+        public void AddNew(OpeningForSale o);
 
-        ////OpeningForSale FindByProjectIdAndStatus(Guid projectId);
-        //public OpeningForSale GetOpeningForSaleById(Guid id);
+        OpeningForSale FindByDetailIdAndStatus(Guid detailId);
+        public OpeningForSale GetOpeningForSaleById(Guid id);
 
-        //public void UpdateOpeningForSale(OpeningForSale o);
+        public void UpdateOpeningForSale(OpeningForSale o);
 
-        //public IQueryable<OpeningForSale> SearchOpeningForSale(string name);
+        public IQueryable<OpeningForSale> SearchOpeningForSale(string name);
 
-        //IQueryable<OpeningForSale> GetOpeningForSaleByProjectID(Guid id);
+        IQueryable<OpeningForSale> GetOpeningForSaleByProjectCategoryDetailID(Guid id);
     }
 }

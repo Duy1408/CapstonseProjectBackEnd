@@ -11,17 +11,17 @@ namespace RealEstateProjectSaleServices.IServices
 {
     public interface IPaymentServices
     {
-        //List<Payment> GetAllPayment();
-        //Payment GetPaymentByID(Guid id);
-        //void AddNewPayment(Payment payment);
-        //void UpdatePayment(Payment payment);
-        //bool ChangeStatusPayment(Payment payment);
+        List<Payment> GetAllPayment();
+        Payment GetPaymentByID(Guid id);
+        void AddNewPayment(Payment payment);
+        void UpdatePayment(Payment payment);
+        bool ChangeStatusPayment(Payment payment);
 
-        //Task<PaymentResponseModel> CreatePaymentUrl(PaymentInformationModel payment);
+        Task<PaymentResponseModel> CreatePaymentUrl(PaymentInformationModel payment);
 
-        //Session CheckoutSuccess(string sessionId);
+        Session CheckoutSuccess(string sessionId);
 
-        //PaymentInformationModel GetPaymentModelFromCache(Guid userId);
+        PaymentInformationModel GetPaymentModelFromCache(Guid userId);
 
     }
 }

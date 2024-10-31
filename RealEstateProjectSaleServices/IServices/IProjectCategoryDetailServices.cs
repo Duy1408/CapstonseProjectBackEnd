@@ -10,6 +10,7 @@ namespace RealEstateProjectSaleServices.IServices
     public interface IProjectCategoryDetailServices
     {
         List<ProjectCategoryDetail> GetAllProjectCategoryDetail();
+        ProjectCategoryDetail GetProjectCategoryDetailByID(Guid id);
         List<ProjectCategoryDetail> GetProjectCategoryDetailByProjectID(Guid id);
         void AddNewProjectCategoryDetail(ProjectCategoryDetail detail);
         void UpdateProjectCategoryDetail(ProjectCategoryDetail detail);

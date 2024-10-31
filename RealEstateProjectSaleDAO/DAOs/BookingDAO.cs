@@ -33,10 +33,10 @@ namespace RealEstateProjectSaleDAO.DAOs
             var _context = new RealEstateProjectSaleSystemDBContext();
             return _context.Bookings
                                     .Include(c => c.OpeningForSale)
-                                
+
                                     .Include(c => c.Customer)
                                     .Include(c => c.Staff)
-                                   
+
                                     .Include(c => c.Property)
                                     .Include(c => c.DocumentTemplate)
                                     .ToList();
@@ -47,10 +47,10 @@ namespace RealEstateProjectSaleDAO.DAOs
             var _context = new RealEstateProjectSaleSystemDBContext();
             return _context.Bookings
                                     .Include(c => c.OpeningForSale)
-                            
+
                                     .Include(c => c.Customer)
                                     .Include(c => c.Staff)
-                                    
+
                                     .Include(c => c.Property)
                                     .Include(c => c.DocumentTemplate)
                                     .Where(b => b.Status == BookingStatus.DaDatCho.GetEnumDescription())
@@ -62,10 +62,10 @@ namespace RealEstateProjectSaleDAO.DAOs
             var _context = new RealEstateProjectSaleSystemDBContext();
             return _context.Bookings!
                                     .Include(c => c.OpeningForSale)
-                                    
+
                                     .Include(c => c.Customer)
                                     .Include(c => c.Staff)
-                                   
+
                                     .Include(c => c.Property)
                                     .Include(c => c.DocumentTemplate)
                                     .Where(b => b.Status == BookingStatus.DaCheckIn.GetEnumDescription())
@@ -77,10 +77,10 @@ namespace RealEstateProjectSaleDAO.DAOs
             var _context = new RealEstateProjectSaleSystemDBContext();
             return _context.Bookings!
                                      .Include(c => c.OpeningForSale)
-                                   
+
                                      .Include(c => c.Customer)
                                      .Include(c => c.Staff)
-                                  
+
                                      .Include(c => c.Property)
                                      .Include(c => c.DocumentTemplate)
                                      .Where(b => b.DepositedTimed != null
@@ -98,10 +98,10 @@ namespace RealEstateProjectSaleDAO.DAOs
             var _context = new RealEstateProjectSaleSystemDBContext();
             return _context.Bookings!
                                      .Include(c => c.OpeningForSale)
-                                   
+
                                      .Include(c => c.Customer)
                                      .Include(c => c.Staff)
-                             
+
                                      .Include(c => c.Property)
                                      .Include(c => c.DocumentTemplate)
                                      .Where(b => b.DepositedTimed != null
@@ -153,10 +153,10 @@ namespace RealEstateProjectSaleDAO.DAOs
             var _context = new RealEstateProjectSaleSystemDBContext();
             return _context.Bookings
                                     .Include(c => c.OpeningForSale)
-                                    
+
                                     .Include(c => c.Customer)
                                     .Include(c => c.Staff)
-                                  
+
                                     .Include(c => c.Property)
                                     .Include(c => c.DocumentTemplate)
                                     .SingleOrDefault(a => a.BookingID == id);
@@ -166,10 +166,10 @@ namespace RealEstateProjectSaleDAO.DAOs
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
             return _context.Bookings.Include(c => c.OpeningForSale)
-                                 
+
                                     .Include(c => c.Customer)
                                     .Include(c => c.Staff)
-                           
+
                                     .Include(c => c.Property)
                                     .Include(c => c.DocumentTemplate)
                                     .Where(a => a.DocumentTemplateID == id)
@@ -180,10 +180,10 @@ namespace RealEstateProjectSaleDAO.DAOs
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
             return _context.Bookings.Include(c => c.OpeningForSale)
-                                    
+
                                     .Include(c => c.Customer)
                                     .Include(c => c.Staff)
-                                  
+
                                     .Include(c => c.Property)
                                     .Include(c => c.DocumentTemplate)
                                     .Where(a => a.CustomerID == id)

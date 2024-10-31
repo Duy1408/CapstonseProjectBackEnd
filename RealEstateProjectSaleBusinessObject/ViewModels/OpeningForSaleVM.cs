@@ -22,7 +22,8 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public string ReservationPrice { get; set; }
         public string? Description { get; set; }
         public bool Status { get; set; }
-        public Guid ProjectID { get; set; }
+        public Guid ProjectCategoryDetailID { get; set; }
         public string ProjectName { get; set; }
+        public string PropertyCategoryName { get; set; }
     }
 }
