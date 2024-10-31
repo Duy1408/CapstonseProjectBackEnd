@@ -23,6 +23,7 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
             builder.HasMany(x => x.Comments).WithOne(x => x.Property).OnDelete(DeleteBehavior.NoAction);
             builder.HasMany(x => x.Bookings).WithOne(x => x.Property).OnDelete(DeleteBehavior.NoAction);
             builder.HasMany(x => x.OpenForSaleDetails).WithOne(x => x.Property).OnDelete(DeleteBehavior.NoAction);
+   
         }
 
     }

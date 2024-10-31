@@ -14,13 +14,10 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
         public void Configure(EntityTypeBuilder<ProjectCategoryDetail> builder)
         {
             builder.ToTable("ProjectCategoryDetail");
-            builder.HasKey(x => new { x.ProjectID, x.PropertyCategoryID });
-            builder.HasOne(x => x.Project)
-                 .WithMany(o => o.ProjectCategoryDetails)
-                 .HasForeignKey(x => x.ProjectID);
-            builder.HasOne(x => x.PropertyCategory)
-                .WithMany(o => o.ProjectCategoryDetails)
-                .HasForeignKey(x => x.PropertyCategoryID);
+            builder.ToTable("ProjectCategoryDetail");
+            builder.HasKey(x => x.ProjectCategoryDetailID);
+            builder.Property(x => x.ProjectID);
+            builder.Property(x => x.PropertyCategoryID).IsRequired();
             builder.HasMany(x => x.Properties).WithOne(x => x.ProjectCategoryDetail).OnDelete(DeleteBehavior.NoAction);
 
         }
