@@ -48,9 +48,9 @@ namespace RealEstateProjectSale.Validations.Request
                 .Must(x => BeValidDateRange(x.StartDate, x.CheckinDate, x.EndDate))
                 .WithMessage("Request: StartDate < CheckinDate < EndDate.");
 
-            RuleFor(x => x.ProjectID)
-                .NotEmpty().WithMessage("Project ID is required.")
-                .Must(id => id != Guid.Empty).WithMessage("Project ID must be a valid GUID.");
+            RuleFor(x => x.ProjectCategoryDetailID)
+                .NotEmpty().WithMessage("ProjectCategoryDetail ID is required.")
+                .Must(id => id != Guid.Empty).WithMessage("ProjectCategoryDetail ID must be a valid GUID.");
         }
 
         private bool BeValidDateFormat(string date)

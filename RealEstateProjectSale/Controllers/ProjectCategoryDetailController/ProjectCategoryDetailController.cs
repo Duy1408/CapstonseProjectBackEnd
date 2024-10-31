@@ -47,6 +47,26 @@ namespace RealEstateProjectSale.Controllers.ProjectCategoryDetailController
             }
         }
 
+        [HttpGet("{id}")]
+        [SwaggerOperation(Summary = "Get ProjectCategoryDetail By ID")]
+        public IActionResult GetProjectCategoryDetailByID(Guid id)
+        {
+            var detail = _detailServices.GetProjectCategoryDetailByID(id);
+
+            if (detail != null)
+            {
+                var responese = _mapper.Map<ProjectCategoryDetailVM>(detail);
+
+                return Ok(responese);
+            }
+
+            return NotFound(new
+            {
+                message = "Account not found."
+            });
+
+        }
+
         [HttpGet("{projectID}/{propertyCategoryID}")]
         [SwaggerOperation(Summary = "Get ProjectCategoryDetail By ProjectID and PropertyCategoryID")]
         public IActionResult GetPropertyCategoryByID(Guid projectID, Guid propertyCategoryID)

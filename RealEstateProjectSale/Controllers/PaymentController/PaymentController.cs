@@ -42,209 +42,207 @@ namespace RealEstateProjectSale.Controllers.PaymentController
             _mapper = mapper;
         }
 
-        //[HttpPost]
-        //[SwaggerOperation(Summary = "Checkout Payment Deposited")]
-        //public async Task<IActionResult> CheckoutPayment([FromQuery] Guid customerId, [FromQuery] Guid bookingId)
-        //{
-        //    try
-        //    {
-        //        var payment = new PaymentInformationModel
-        //        {
-        //            PaymentID = Guid.NewGuid(),
-        //            CreatedTime = DateTime.Now,
-        //            BookingID = bookingId,
-        //            CustomerID = customerId
-        //        };
+        [HttpPost]
+        [SwaggerOperation(Summary = "Checkout Payment Deposited")]
+        public async Task<IActionResult> CheckoutPayment([FromQuery] Guid customerId, [FromQuery] Guid bookingId)
+        {
+            try
+            {
+                var payment = new PaymentInformationModel
+                {
+                    PaymentID = Guid.NewGuid(),
+                    CreatedTime = DateTime.Now,
+                    BookingID = bookingId,
+                    CustomerID = customerId
+                };
 
-        //        var paymentResponseModel = await _paymentServices.CreatePaymentUrl(payment);
+                var paymentResponseModel = await _paymentServices.CreatePaymentUrl(payment);
 
-        //        if (paymentResponseModel != null)
-        //        {
-        //            return Ok(paymentResponseModel);
-        //        }
+                if (paymentResponseModel != null)
+                {
+                    return Ok(paymentResponseModel);
+                }
 
-        //        return BadRequest();
+                return BadRequest();
 
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
-        //}
+        }
 
-        //[HttpGet("success/{sessionId}")]
-        //public IActionResult CheckoutSuccess(string sessionId, [FromQuery] Guid customerID)
-        //{
-        //    var session = _paymentServices.CheckoutSuccess(sessionId);
+        [HttpGet("success/{sessionId}")]
+        public IActionResult CheckoutSuccess(string sessionId, [FromQuery] Guid customerID)
+        {
+            var session = _paymentServices.CheckoutSuccess(sessionId);
 
-        //    var customerIDCache = Guid.Parse(HttpContext.Request.Query["customerID"]);
-        //    var model = _paymentServices.GetPaymentModelFromCache(customerIDCache);
+            var customerIDCache = Guid.Parse(HttpContext.Request.Query["customerID"]);
+            var model = _paymentServices.GetPaymentModelFromCache(customerIDCache);
 
-        //    var newPayment = new PaymentCreateDTO
-        //    {
-        //        PaymentID = model.PaymentID,
-        //        Amount = session.AmountTotal.Value,
-        //        Content = session.LineItems?.Data?.FirstOrDefault()?.Description ?? "No Content",
-        //        CreatedTime = model.CreatedTime,
-        //        PaymentTime = DateTime.Now,
-        //        Status = true,
-        //        BookingID = model.BookingID,
-        //        CustomerID = customerIDCache
-        //    };
+            var newPayment = new PaymentCreateDTO
+            {
+                PaymentID = model.PaymentID,
+                Amount = session.AmountTotal.Value,
+                Content = session.LineItems?.Data?.FirstOrDefault()?.Description ?? "No Content",
+                CreatedTime = model.CreatedTime,
+                PaymentTime = DateTime.Now,
+                Status = true,
+                BookingID = model.BookingID,
+                CustomerID = customerIDCache
+            };
 
-        //    var payment = _mapper.Map<Payment>(newPayment);
-        //    _paymentServices.AddNewPayment(payment);
+            var payment = _mapper.Map<Payment>(newPayment);
+            _paymentServices.AddNewPayment(payment);
 
-        //    var book = _bookServices.GetBookingById(newPayment.BookingID);
-        //    if (book != null)
-        //    {
-        //        book.DepositedTimed = newPayment.PaymentTime;
-        //        book.DepositedPrice = newPayment.Amount;
-        //        book.UpdatedTime = DateTime.Now;
-        //        book.Status = BookingStatus.DaDatCho.GetEnumDescription();
-        //        book.Note = newPayment.Content;
-        //        _bookServices.UpdateBooking(book);
+            var book = _bookServices.GetBookingById(newPayment.BookingID);
+            if (book != null)
+            {
+                book.DepositedTimed = newPayment.PaymentTime;
+                book.DepositedPrice = newPayment.Amount;
+                book.UpdatedTime = DateTime.Now;
+                book.Status = BookingStatus.DaDatCho.GetEnumDescription();
+                book.Note = newPayment.Content;
+                _bookServices.UpdateBooking(book);
 
-        //        var htmlContent = _bookServices.GenerateDocumentContent(book.BookingID);
-        //        var pdfBytes = _documentService.GeneratePdfFromTemplate(htmlContent);
-        //        string? blobUrl = null;
-        //        using (MemoryStream pdfStream = new MemoryStream(pdfBytes))
-        //        {
-        //            blobUrl = _fileService.UploadSingleFile(pdfStream, book.DocumentTemplate!.DocumentName, "bookingfile");
-        //        }
+                var htmlContent = _bookServices.GenerateDocumentContent(book.BookingID);
+                var pdfBytes = _documentService.GeneratePdfFromTemplate(htmlContent);
+                string? blobUrl = null;
+                using (MemoryStream pdfStream = new MemoryStream(pdfBytes))
+                {
+                    blobUrl = _fileService.UploadSingleFile(pdfStream, book.DocumentTemplate!.DocumentName, "bookingfile");
+                }
 
-        //        book.BookingFile = blobUrl;
-        //        _bookServices.UpdateBooking(book);
+                book.BookingFile = blobUrl;
+                _bookServices.UpdateBooking(book);
 
-        //    }
+            }
 
-        //    return Ok(new
-        //    {
-        //        message = "Payment completed successfully."
-        //    });
-        //}
+            return Ok(new
+            {
+                message = "Payment completed successfully."
+            });
+        }
 
-        //[HttpGet]
-        //[SwaggerOperation(Summary = "Get All Payment")]
-        //public IActionResult GetAllPayment()
-        //{
-        //    try
-        //    {
-        //        if (_paymentServices.GetAllPayment() == null)
-        //        {
-        //            return NotFound(new
-        //            {
-        //                message = "Payment not found."
-        //            });
-        //        }
-        //        var payments = _paymentServices.GetAllPayment();
-        //        var response = _mapper.Map<List<PaymentVM>>(payments);
+        [HttpGet]
+        [SwaggerOperation(Summary = "Get All Payment")]
+        public IActionResult GetAllPayment()
+        {
+            try
+            {
+                if (_paymentServices.GetAllPayment() == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Payment not found."
+                    });
+                }
+                var payments = _paymentServices.GetAllPayment();
+                var response = _mapper.Map<List<PaymentVM>>(payments);
 
-        //        return Ok(response);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
-        //[HttpGet("{id}")]
-        //[SwaggerOperation(Summary = "Get Payment By ID")]
-        //public IActionResult GetPaymentByID(Guid id)
-        //{
-        //    var payment = _paymentServices.GetPaymentByID(id);
+        [HttpGet("{id}")]
+        [SwaggerOperation(Summary = "Get Payment By ID")]
+        public IActionResult GetPaymentByID(Guid id)
+        {
+            var payment = _paymentServices.GetPaymentByID(id);
 
-        //    if (payment != null)
-        //    {
-        //        var responese = _mapper.Map<PaymentVM>(payment);
+            if (payment != null)
+            {
+                var responese = _mapper.Map<PaymentVM>(payment);
 
-        //        return Ok(responese);
-        //    }
+                return Ok(responese);
+            }
 
-        //    return NotFound(new
-        //    {
-        //        message = "Payment not found."
-        //    });
+            return NotFound(new
+            {
+                message = "Payment not found."
+            });
 
-        //}
+        }
 
-        //[HttpPut("{id}")]
-        //[SwaggerOperation(Summary = "Update Payment By ID")]
-        //public IActionResult UpdatePayment([FromForm] PaymentUpdateDTO payment, Guid id)
-        //{
-        //    try
-        //    {
-        //        var existingPayment = _paymentServices.GetPaymentByID(id);
-        //        if (existingPayment != null)
-        //        {
-        //            if (payment.Amount.HasValue)
-        //            {
-        //                existingPayment.Amount = payment.Amount.Value;
-        //            }
-        //            if (!string.IsNullOrEmpty(payment.Content))
-        //            {
-        //                existingPayment.Content = payment.Content;
-        //            }
-        //            if (payment.Status.HasValue)
-        //            {
-        //                existingPayment.Status = payment.Status.Value;
-        //            }
+        [HttpPut("{id}")]
+        [SwaggerOperation(Summary = "Update Payment By ID")]
+        public IActionResult UpdatePayment([FromForm] PaymentUpdateDTO payment, Guid id)
+        {
+            try
+            {
+                var existingPayment = _paymentServices.GetPaymentByID(id);
+                if (existingPayment != null)
+                {
+                    if (payment.Amount.HasValue)
+                    {
+                        existingPayment.Amount = payment.Amount.Value;
+                    }
+                    if (!string.IsNullOrEmpty(payment.Content))
+                    {
+                        existingPayment.Content = payment.Content;
+                    }
+                    if (payment.Status.HasValue)
+                    {
+                        existingPayment.Status = payment.Status.Value;
+                    }
 
-        //            if (payment.BookingID.HasValue)
-        //            {
-        //                existingPayment.BookingID = payment.BookingID.Value;
-        //            }
-        //            if (payment.CustomerID.HasValue)
-        //            {
-        //                existingPayment.CustomerID = payment.CustomerID.Value;
-        //            }
+                    if (payment.BookingID.HasValue)
+                    {
+                        existingPayment.BookingID = payment.BookingID.Value;
+                    }
+                    if (payment.CustomerID.HasValue)
+                    {
+                        existingPayment.CustomerID = payment.CustomerID.Value;
+                    }
 
-        //            _paymentServices.UpdatePayment(existingPayment);
+                    _paymentServices.UpdatePayment(existingPayment);
 
-        //            return Ok(new
-        //            {
-        //                message = "Update Payment Successfully"
-        //            });
+                    return Ok(new
+                    {
+                        message = "Update Payment Successfully"
+                    });
 
-        //        }
+                }
 
-        //        return NotFound(new
-        //        {
-        //            message = "Payment not found."
-        //        });
+                return NotFound(new
+                {
+                    message = "Payment not found."
+                });
 
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
-        //[HttpDelete("{id}")]
-        //[SwaggerOperation(Summary = "Delete Payment")]
-        //public IActionResult DeletePayment(Guid id)
-        //{
+        [HttpDelete("{id}")]
+        [SwaggerOperation(Summary = "Delete Payment")]
+        public IActionResult DeletePayment(Guid id)
+        {
 
-        //    var payment = _paymentServices.GetPaymentByID(id);
-        //    if (payment == null)
-        //    {
-        //        return NotFound(new
-        //        {
-        //            message = "Payment not found."
-        //        });
-        //    }
+            var payment = _paymentServices.GetPaymentByID(id);
+            if (payment == null)
+            {
+                return NotFound(new
+                {
+                    message = "Payment not found."
+                });
+            }
 
-        //    _paymentServices.ChangeStatusPayment(payment);
+            _paymentServices.ChangeStatusPayment(payment);
 
-        //    return Ok(new
-        //    {
-        //        message = "Delete Payment Successfully"
-        //    });
-        //}
+            return Ok(new
+            {
+                message = "Delete Payment Successfully"
+            });
+        }
 
 
-        //}
-        //}
     }
 }

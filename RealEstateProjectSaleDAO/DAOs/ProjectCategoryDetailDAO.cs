@@ -30,6 +30,21 @@ namespace RealEstateProjectSaleDAO.DAOs
             }
         }
 
+        public ProjectCategoryDetail GetProjectCategoryDetailByID(Guid id)
+        {
+            try
+            {
+                var detail = _context.ProjectCategoryDetails!.Include(a => a.Project)
+                                                             .Include(c => c.PropertyCategory)
+                                                             .SingleOrDefault(c => c.ProjectCategoryDetailID == id);
+                return detail;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public List<ProjectCategoryDetail> GetProjectCategoryDetailByProjectID(Guid id)
         {
             try

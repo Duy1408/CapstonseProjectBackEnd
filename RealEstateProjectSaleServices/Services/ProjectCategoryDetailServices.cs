@@ -25,6 +25,8 @@ namespace RealEstateProjectSaleServices.Services
 
         public ProjectCategoryDetail GetProjectCategoryDetailByID(Guid projectID, Guid propertyCategoryID) => _detail.GetProjectCategoryDetailByID(projectID, propertyCategoryID);
 
+        public ProjectCategoryDetail GetProjectCategoryDetailByID(Guid id) => _detail.GetProjectCategoryDetailByID(id);
+
         public List<ProjectCategoryDetail> GetProjectCategoryDetailByProjectID(Guid id) => _detail.GetProjectCategoryDetailByProjectID(id);
 
         public void UpdateProjectCategoryDetail(ProjectCategoryDetail detail) => _detail.UpdateProjectCategoryDetail(detail);

@@ -18,51 +18,55 @@ namespace RealEstateProjectSaleServices.Services
         private readonly ICustomerServices _customerService;
         private readonly IProjectServices _projectService;
         private readonly IPropertyCategoryServices _categoryService;
+        private readonly IProjectCategoryDetailServices _detailService;
         public BookingServices(IBookingRepo book, IDocumentTemplateService documentService,
-            ICustomerServices customerService, IProjectServices projectService, IPropertyCategoryServices categoryService)
+            ICustomerServices customerService, IProjectServices projectService, IPropertyCategoryServices categoryService,
+            IProjectCategoryDetailServices detailService)
         {
             _book = book;
             _documentService = documentService;
             _customerService = customerService;
             _projectService = projectService;
             _categoryService = categoryService;
+            _detailService = detailService;
         }
 
-        //public string GenerateDocumentContent(Guid bookingId)
-        //{
-        //    var booking = _book.GetBookingById(bookingId);
-        //    var documentTemplate = _documentService.GetDocumentById(booking.DocumentTemplateID);
-        //    if (documentTemplate == null)
-        //    {
-        //        throw new Exception("Document template not found");
-        //    }
-        //    var customer = _customerService.GetCustomerByID(booking.CustomerID);
-        //    var project = _projectService.GetProjectById(booking.ProjectID);
-        //    var propertyCategory = _categoryService.GetPropertyCategoryByID(booking.PropertyCategoryID);
+        public string GenerateDocumentContent(Guid bookingId)
+        {
+            var booking = _book.GetBookingById(bookingId);
+            var documentTemplate = _documentService.GetDocumentById(booking.DocumentTemplateID);
+            if (documentTemplate == null)
+            {
+                throw new Exception("Document template not found");
+            }
+            var customer = _customerService.GetCustomerByID(booking.CustomerID);
+            var categoryDetail = _detailService.GetProjectCategoryDetailByID(booking.ProjectCategoryDetailID);
+            var project = _projectService.GetProjectById(categoryDetail.ProjectID);
+            var propertyCategory = _categoryService.GetPropertyCategoryByID(categoryDetail.PropertyCategoryID);
 
-        //    var htmlContent = documentTemplate.DocumentFile;
+            var htmlContent = documentTemplate.DocumentFile;
 
-        //    htmlContent = htmlContent.Replace("{Logo}", "<img src='https://realestatesystem.blob.core.windows.net/realestate/Logo.png' alt='Logo' style='width:100px; height:auto;'>")
-        //                     .Replace("{ProjectName}", project.ProjectName)
-        //                     .Replace("{Location}", project.Location)
-        //                     .Replace("{PropertyCategoryName}", propertyCategory.PropertyCategoryName)
-        //                     .Replace("{FullName}", customer.FullName)
-        //                     .Replace("{IdentityCardNumber}", customer.IdentityCardNumber)
-        //                     .Replace("{Address}", customer.Address)
-        //                     .Replace("{PhoneNumber}", "0" + customer.PhoneNumber)
-        //                     .Replace("{Reason}", "Nộp tiền giữ chỗ tham gia sự kiện mở bán dự án " + project.ProjectName)
-        //                     .Replace("{DepositedTimed}", booking.DepositedTimed.ToString())
-        //                     .Replace("{CreatedTime}", booking.CreatedTime.ToString())
-        //                     .Replace("{DepositedPrice}", booking.DepositedPrice.ToString() + " VND")
-        //                     .Replace("{MoneyText}", booking.DepositedPrice.HasValue
-        //                            ? char.ToUpper(((int)Math.Round(booking.DepositedPrice.Value)).ToWords(new CultureInfo("vi"))[0]) +
-        //                            ((int)Math.Round(booking.DepositedPrice.Value)).ToWords(new CultureInfo("vi")).Substring(1) +
-        //                            " đồng chẵn."
-        //                            : "N/A")
-        //                     .Replace("{Content}", booking.Note);
+            htmlContent = htmlContent.Replace("{Logo}", "<img src='https://realestatesystem.blob.core.windows.net/realestate/Logo.png' alt='Logo' style='width:100px; height:auto;'>")
+                             .Replace("{ProjectName}", project.ProjectName)
+                             .Replace("{Location}", project.Location)
+                             .Replace("{PropertyCategoryName}", propertyCategory.PropertyCategoryName)
+                             .Replace("{FullName}", customer.FullName)
+                             .Replace("{IdentityCardNumber}", customer.IdentityCardNumber)
+                             .Replace("{Address}", customer.Address)
+                             .Replace("{PhoneNumber}", "0" + customer.PhoneNumber)
+                             .Replace("{Reason}", "Nộp tiền giữ chỗ tham gia sự kiện mở bán dự án " + project.ProjectName)
+                             .Replace("{DepositedTimed}", booking.DepositedTimed.ToString())
+                             .Replace("{CreatedTime}", booking.CreatedTime.ToString())
+                             .Replace("{DepositedPrice}", booking.DepositedPrice.ToString() + " VND")
+                             .Replace("{MoneyText}", booking.DepositedPrice.HasValue
+                                    ? char.ToUpper(((int)Math.Round(booking.DepositedPrice.Value)).ToWords(new CultureInfo("vi"))[0]) +
+                                    ((int)Math.Round(booking.DepositedPrice.Value)).ToWords(new CultureInfo("vi")).Substring(1) +
+                                    " đồng chẵn."
+                                    : "N/A")
+                             .Replace("{Content}", booking.Note);
 
-        //    return htmlContent;
-        //}
+            return htmlContent;
+        }
 
 
         public void AddNew(Booking p)
