@@ -28,8 +28,14 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public Guid? ZoneID { get; set; }
         public Zone? Zone { get; set; }
 
+        public Guid ProjectID { get; set; }
+        public Guid PropertyCategoryID { get; set; }
 
-      
+        public ProjectCategoryDetail? ProjectCategoryDetail { get; set; }
+
+
+
+
 
     }
 }
