@@ -59,18 +59,18 @@ namespace RealEstateProjectSale.Mapper
             CreateMap<SalepolicyCreateDTO, Salespolicy>().ReverseMap();
             CreateMap<SalePolicyUpdateDTO, Salespolicy>().ReverseMap();
 
-            CreateMap<BookingVM, Booking>().ReverseMap().ForMember(dest => dest.DocumentName,
-                                       opt => opt.MapFrom(src => src.DocumentTemplate!.DocumentName))
-                                                        .ForMember(dest => dest.DecisionName,
-                                       opt => opt.MapFrom(src => src.OpeningForSale!.DecisionName))
-                                                        .ForMember(dest => dest.PropertyCategoryName,
-                                       opt => opt.MapFrom(src => src.PropertyCategory!.PropertyCategoryName))
-                                                        .ForMember(dest => dest.ProjectName,
-                                       opt => opt.MapFrom(src => src.Project!.ProjectName))
-                                                        .ForMember(dest => dest.CustomerName,
-                                       opt => opt.MapFrom(src => src.Customer!.FullName))
-                                                        .ForMember(dest => dest.StaffName,
-                                       opt => opt.MapFrom(src => src.Staff!.Name));
+            //CreateMap<BookingVM, Booking>().ReverseMap().ForMember(dest => dest.DocumentName,
+            //                           opt => opt.MapFrom(src => src.DocumentTemplate!.DocumentName))
+            //                                            .ForMember(dest => dest.DecisionName,
+            //                           opt => opt.MapFrom(src => src.OpeningForSale!.DecisionName))
+            //                                            .ForMember(dest => dest.PropertyCategoryName,
+            //                           opt => opt.MapFrom(src => src.PropertyCategory!.PropertyCategoryName))
+            //                                            .ForMember(dest => dest.ProjectName,
+            //                           opt => opt.MapFrom(src => src.Project!.ProjectName))
+            //                                            .ForMember(dest => dest.CustomerName,
+            //                           opt => opt.MapFrom(src => src.Customer!.FullName))
+            //                                            .ForMember(dest => dest.StaffName,
+            //                           opt => opt.MapFrom(src => src.Staff!.Name));
             CreateMap<BookingCreateDTO, Booking>().ReverseMap();
             CreateMap<BookingUpdateDTO, Booking>().ReverseMap();
 
@@ -112,8 +112,8 @@ namespace RealEstateProjectSale.Mapper
             CreateMap<ProjectCreateDTO, Promotion>().ReverseMap();
             CreateMap<PromotionUpdateDTO, Promotion>().ReverseMap();
 
-            CreateMap<OpeningForSaleVM, OpeningForSale>().ReverseMap().ForMember(dest => dest.ProjectName,
-                                  opt => opt.MapFrom(src => src.Project!.ProjectName));
+            //CreateMap<OpeningForSaleVM, OpeningForSale>().ReverseMap().ForMember(dest => dest.ProjectName,
+            //                      opt => opt.MapFrom(src => src.Project!.ProjectName));
             CreateMap<OpeningForSaleCreateDTO, OpeningForSale>().ReverseMap();
             CreateMap<OpeningForSaleUpdateDTO, OpeningForSale>().ReverseMap();
 

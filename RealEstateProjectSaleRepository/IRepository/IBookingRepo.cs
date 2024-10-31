@@ -26,7 +26,7 @@ namespace RealEstateProjectSaleRepository.IRepository
         List<Booking> GetBookingByCheckedIn();
         List<Booking> GetBookingByDocumentID(Guid id);
         List<Booking> GetBookingByCustomerID(Guid id);
-        Booking CheckExistingBooking(Guid openForSaleID, Guid projectID, Guid customerID);
+        //Booking CheckExistingBooking(Guid openForSaleID, Guid projectID, Guid customerID);
 
 
 

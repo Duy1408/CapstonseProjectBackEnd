@@ -35,268 +35,268 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
             _mapper = mapper;
         }
 
-        [HttpGet]
-        [SwaggerOperation(Summary = "Get All OpeningForSale")]
-        public IActionResult GetAllOpeningForSale()
-        {
-            try
-            {
-                if (_open.GetOpeningForSales() == null)
-                {
-                    return NotFound(new
-                    {
-                        message = "OpeningForSale not found."
-                    });
-                }
-                var opens = _open.GetOpeningForSales();
-                var response = _mapper.Map<List<OpeningForSaleVM>>(opens);
+        //[HttpGet]
+        //[SwaggerOperation(Summary = "Get All OpeningForSale")]
+        //public IActionResult GetAllOpeningForSale()
+        //{
+        //    try
+        //    {
+        //        if (_open.GetOpeningForSales() == null)
+        //        {
+        //            return NotFound(new
+        //            {
+        //                message = "OpeningForSale not found."
+        //            });
+        //        }
+        //        var opens = _open.GetOpeningForSales();
+        //        var response = _mapper.Map<List<OpeningForSaleVM>>(opens);
 
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+        //        return Ok(response);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
 
-        [HttpGet("{id}")]
-        [SwaggerOperation(Summary = "Get OpeningForSale By ID")]
-        public IActionResult GetOpeningForSaleByID(Guid id)
-        {
-            var open = _open.GetOpeningForSaleById(id);
+        //[HttpGet("{id}")]
+        //[SwaggerOperation(Summary = "Get OpeningForSale By ID")]
+        //public IActionResult GetOpeningForSaleByID(Guid id)
+        //{
+        //    var open = _open.GetOpeningForSaleById(id);
 
-            if (open != null)
-            {
-                var responese = _mapper.Map<OpeningForSaleVM>(open);
+        //    if (open != null)
+        //    {
+        //        var responese = _mapper.Map<OpeningForSaleVM>(open);
 
-                return Ok(responese);
-            }
+        //        return Ok(responese);
+        //    }
 
-            return NotFound(new
-            {
-                message = "OpeningForSale not found."
-            });
+        //    return NotFound(new
+        //    {
+        //        message = "OpeningForSale not found."
+        //    });
 
-        }
+        //}
 
-        [HttpGet("project/{projectId}")]
-        [SwaggerOperation(Summary = "Get OpeningForSale by ProjectID")]
-        public IActionResult GetOpeningForSaleByProjectID(Guid projectId)
-        {
-            var open = _open.GetOpeningForSaleByProjectID(projectId);
+        //[HttpGet("project/{projectId}")]
+        //[SwaggerOperation(Summary = "Get OpeningForSale by ProjectID")]
+        //public IActionResult GetOpeningForSaleByProjectID(Guid projectId)
+        //{
+        //    var open = _open.GetOpeningForSaleByProjectID(projectId);
 
-            if (open != null)
-            {
-                var responese = open.Select(open => _mapper.Map<OpeningForSaleVM>(open)).ToList();
+        //    if (open != null)
+        //    {
+        //        var responese = open.Select(open => _mapper.Map<OpeningForSaleVM>(open)).ToList();
 
-                if (responese.Count == 0)
-                {
-                    return NotFound(new
-                    {
-                        message = "OpeningForSale not found."
-                    });
-                }
+        //        if (responese.Count == 0)
+        //        {
+        //            return NotFound(new
+        //            {
+        //                message = "OpeningForSale not found."
+        //            });
+        //        }
 
-                return Ok(responese);
-            }
+        //        return Ok(responese);
+        //    }
 
-            return NotFound(new
-            {
-                message = "OpeningForSale not found."
-            });
+        //    return NotFound(new
+        //    {
+        //        message = "OpeningForSale not found."
+        //    });
 
-        }
+        //}
 
-        [HttpGet("search")]
-        [SwaggerOperation(Summary = "Search OpeningForSale by Decision Name")]
-        public ActionResult<OpeningForSale> SearchOpeningForSaleByName(string decisionName)
-        {
-            if (_open.GetOpeningForSales() == null)
-            {
-                return NotFound(new
-                {
-                    message = "OpeningForSale not found."
-                });
-            }
-            var open = _open.SearchOpeningForSale(decisionName);
+        //[HttpGet("search")]
+        //[SwaggerOperation(Summary = "Search OpeningForSale by Decision Name")]
+        //public ActionResult<OpeningForSale> SearchOpeningForSaleByName(string decisionName)
+        //{
+        //    if (_open.GetOpeningForSales() == null)
+        //    {
+        //        return NotFound(new
+        //        {
+        //            message = "OpeningForSale not found."
+        //        });
+        //    }
+        //    var open = _open.SearchOpeningForSale(decisionName);
 
-            if (open == null)
-            {
-                return NotFound(new
-                {
-                    message = "OpeningForSale not found."
-                });
-            }
+        //    if (open == null)
+        //    {
+        //        return NotFound(new
+        //        {
+        //            message = "OpeningForSale not found."
+        //        });
+        //    }
 
-            return Ok(open);
-        }
+        //    return Ok(open);
+        //}
 
-        [HttpPost]
-        [SwaggerOperation(Summary = "Create a new OpeningForSale")]
-        public IActionResult AddNew(OpeningForSaleRequestDTO open)
-        {
-            try
-            {
-                var projectID = open.ProjectID.GetValueOrDefault(Guid.Empty);
+        //[HttpPost]
+        //[SwaggerOperation(Summary = "Create a new OpeningForSale")]
+        //public IActionResult AddNew(OpeningForSaleRequestDTO open)
+        //{
+        //    try
+        //    {
+        //        var projectID = open.ProjectID.GetValueOrDefault(Guid.Empty);
 
-                if (projectID == Guid.Empty)
-                {
-                    throw new ArgumentException("Project ID is required.");
-                }
+        //        if (projectID == Guid.Empty)
+        //        {
+        //            throw new ArgumentException("Project ID is required.");
+        //        }
 
-                var existingProject = _projectService.GetProjectById(projectID);
-                if (existingProject == null)
-                {
-                    return NotFound(new
-                    {
-                        message = "Project not found."
-                    });
-                }
+        //        var existingProject = _projectService.GetProjectById(projectID);
+        //        if (existingProject == null)
+        //        {
+        //            return NotFound(new
+        //            {
+        //                message = "Project not found."
+        //            });
+        //        }
 
-                var existingOpen = _open.FindByProjectIdAndStatus(projectID);
-                if (existingOpen != null)
-                {
-                    return BadRequest(new
-                    {
-                        message = "An OpeningForSale with the same Project already exists."
-                    });
-                }
+        //        var existingOpen = _open.FindByProjectIdAndStatus(projectID);
+        //        if (existingOpen != null)
+        //        {
+        //            return BadRequest(new
+        //            {
+        //                message = "An OpeningForSale with the same Project already exists."
+        //            });
+        //        }
 
-                DateTime parsedStartDate = DateTimeHelper.ConvertToDateTime(open.StartDate);
-                DateTime parsedEndDate = DateTimeHelper.ConvertToDateTime(open.EndDate);
-                DateTime parsedCheckinDate = DateTimeHelper.ConvertToDateTime(open.CheckinDate);
+        //        DateTime parsedStartDate = DateTimeHelper.ConvertToDateTime(open.StartDate);
+        //        DateTime parsedEndDate = DateTimeHelper.ConvertToDateTime(open.EndDate);
+        //        DateTime parsedCheckinDate = DateTimeHelper.ConvertToDateTime(open.CheckinDate);
 
-                var newOpen = new OpeningForSaleCreateDTO
-                {
-                    OpeningForSaleID = Guid.NewGuid(),
-                    DecisionName = open.DecisionName,
-                    StartDate = parsedStartDate,
-                    EndDate = parsedEndDate,
-                    CheckinDate = parsedCheckinDate,
-                    SaleType = open.SaleType,
-                    ReservationPrice = open.ReservationPrice,
-                    Description = open.Description,
-                    Status = true,
-                    ProjectID = projectID
-                };
+        //        var newOpen = new OpeningForSaleCreateDTO
+        //        {
+        //            OpeningForSaleID = Guid.NewGuid(),
+        //            DecisionName = open.DecisionName,
+        //            StartDate = parsedStartDate,
+        //            EndDate = parsedEndDate,
+        //            CheckinDate = parsedCheckinDate,
+        //            SaleType = open.SaleType,
+        //            ReservationPrice = open.ReservationPrice,
+        //            Description = open.Description,
+        //            Status = true,
+        //            ProjectID = projectID
+        //        };
 
-                var opening = _mapper.Map<OpeningForSale>(newOpen);
-                _open.AddNew(opening);
+        //        var opening = _mapper.Map<OpeningForSale>(newOpen);
+        //        _open.AddNew(opening);
 
-                return Ok(new
-                {
-                    message = "Create OpeningForSale Successfully"
-                });
+        //        return Ok(new
+        //        {
+        //            message = "Create OpeningForSale Successfully"
+        //        });
 
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
 
-        [HttpPut("{id}")]
-        [SwaggerOperation(Summary = "Update OpeningForSale by ID")]
-        public IActionResult UpdateComment([FromForm] OpeningForSaleUpdateDTO open, Guid id)
-        {
-            try
-            {
-                DateTime? parsedStartDate = !string.IsNullOrEmpty(open.StartDate)
-                                            ? DateTimeHelper.ConvertToDateTime(open.StartDate)
-                                            : (DateTime?)null;
+        //[HttpPut("{id}")]
+        //[SwaggerOperation(Summary = "Update OpeningForSale by ID")]
+        //public IActionResult UpdateComment([FromForm] OpeningForSaleUpdateDTO open, Guid id)
+        //{
+        //    try
+        //    {
+        //        DateTime? parsedStartDate = !string.IsNullOrEmpty(open.StartDate)
+        //                                    ? DateTimeHelper.ConvertToDateTime(open.StartDate)
+        //                                    : (DateTime?)null;
 
-                DateTime? parsedEndDate = !string.IsNullOrEmpty(open.EndDate)
-                                            ? DateTimeHelper.ConvertToDateTime(open.EndDate)
-                                            : (DateTime?)null;
+        //        DateTime? parsedEndDate = !string.IsNullOrEmpty(open.EndDate)
+        //                                    ? DateTimeHelper.ConvertToDateTime(open.EndDate)
+        //                                    : (DateTime?)null;
 
-                DateTime? parsedCheckinDate = !string.IsNullOrEmpty(open.CheckinDate)
-                                              ? DateTimeHelper.ConvertToDateTime(open.CheckinDate)
-                                                : (DateTime?)null;
+        //        DateTime? parsedCheckinDate = !string.IsNullOrEmpty(open.CheckinDate)
+        //                                      ? DateTimeHelper.ConvertToDateTime(open.CheckinDate)
+        //                                        : (DateTime?)null;
 
-                var existingOpen = _open.GetOpeningForSaleById(id);
-                if (existingOpen != null)
-                {
-                    if (!string.IsNullOrEmpty(open.DecisionName))
-                    {
-                        existingOpen.DecisionName = open.DecisionName;
-                    }
-                    if (!string.IsNullOrEmpty(open.StartDate))
-                    {
-                        existingOpen.StartDate = parsedStartDate.Value;
-                    }
-                    if (!string.IsNullOrEmpty(open.EndDate))
-                    {
-                        existingOpen.EndDate = parsedEndDate.Value;
-                    }
-                    if (!string.IsNullOrEmpty(open.CheckinDate))
-                    {
-                        existingOpen.CheckinDate = parsedCheckinDate.Value;
-                    }
-                    if (!string.IsNullOrEmpty(open.SaleType))
-                    {
-                        existingOpen.SaleType = open.SaleType;
-                    }
-                    if (open.ReservationPrice.HasValue)
-                    {
-                        existingOpen.ReservationPrice = open.ReservationPrice.Value;
-                    }
-                    if (!string.IsNullOrEmpty(open.Description))
-                    {
-                        existingOpen.Description = open.Description;
-                    }
-                    if (open.Status.HasValue)
-                    {
-                        existingOpen.Status = open.Status.Value;
-                    }
+        //        var existingOpen = _open.GetOpeningForSaleById(id);
+        //        if (existingOpen != null)
+        //        {
+        //            if (!string.IsNullOrEmpty(open.DecisionName))
+        //            {
+        //                existingOpen.DecisionName = open.DecisionName;
+        //            }
+        //            if (!string.IsNullOrEmpty(open.StartDate))
+        //            {
+        //                existingOpen.StartDate = parsedStartDate.Value;
+        //            }
+        //            if (!string.IsNullOrEmpty(open.EndDate))
+        //            {
+        //                existingOpen.EndDate = parsedEndDate.Value;
+        //            }
+        //            if (!string.IsNullOrEmpty(open.CheckinDate))
+        //            {
+        //                existingOpen.CheckinDate = parsedCheckinDate.Value;
+        //            }
+        //            if (!string.IsNullOrEmpty(open.SaleType))
+        //            {
+        //                existingOpen.SaleType = open.SaleType;
+        //            }
+        //            if (open.ReservationPrice.HasValue)
+        //            {
+        //                existingOpen.ReservationPrice = open.ReservationPrice.Value;
+        //            }
+        //            if (!string.IsNullOrEmpty(open.Description))
+        //            {
+        //                existingOpen.Description = open.Description;
+        //            }
+        //            if (open.Status.HasValue)
+        //            {
+        //                existingOpen.Status = open.Status.Value;
+        //            }
 
-                    _open.UpdateOpeningForSale(existingOpen);
+        //            _open.UpdateOpeningForSale(existingOpen);
 
-                    return Ok(new
-                    {
-                        message = "Update OpeningForSale Successfully"
-                    });
+        //            return Ok(new
+        //            {
+        //                message = "Update OpeningForSale Successfully"
+        //            });
 
-                }
+        //        }
 
-                return NotFound(new
-                {
-                    message = "OpeningForSale not found."
-                });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+        //        return NotFound(new
+        //        {
+        //            message = "OpeningForSale not found."
+        //        });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
 
-        [HttpDelete("{id}")]
-        [SwaggerOperation(Summary = "Delete OpeningForSale by ID")]
-        public IActionResult DeleteOpeningForSale(Guid id)
-        {
-            if (_open.GetOpeningForSaleById(id) == null)
-            {
-                return NotFound(new
-                {
-                    message = "OpeningForSale not found."
-                });
-            }
-            var open = _open.GetOpeningForSaleById(id);
-            if (open == null)
-            {
-                return NotFound(new
-                {
-                    message = "OpeningForSale not found."
-                });
-            }
+        //[HttpDelete("{id}")]
+        //[SwaggerOperation(Summary = "Delete OpeningForSale by ID")]
+        //public IActionResult DeleteOpeningForSale(Guid id)
+        //{
+        //    if (_open.GetOpeningForSaleById(id) == null)
+        //    {
+        //        return NotFound(new
+        //        {
+        //            message = "OpeningForSale not found."
+        //        });
+        //    }
+        //    var open = _open.GetOpeningForSaleById(id);
+        //    if (open == null)
+        //    {
+        //        return NotFound(new
+        //        {
+        //            message = "OpeningForSale not found."
+        //        });
+        //    }
 
-            _open.ChangeStatus(open);
+        //    _open.ChangeStatus(open);
 
 
-            return Ok(new
-            {
-                message = "Delete OpeningForSale Successfully"
-            });
-        }
+        //    return Ok(new
+        //    {
+        //        message = "Delete OpeningForSale Successfully"
+        //    });
+        //}
 
     }
 }
