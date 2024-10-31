@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RealEstateProjectSaleBusinessObject.Validation.Create
+namespace RealEstateProjectSale.Validations.Create
 {
     public class AccountCreateDTOValidator : AbstractValidator<AccountCreateDTO>
     {

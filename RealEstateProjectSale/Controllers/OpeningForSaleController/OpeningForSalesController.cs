@@ -137,7 +137,14 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
         {
             try
             {
-                var existingProject = _projectService.GetProjectById(open.ProjectID);
+                var projectID = open.ProjectID.GetValueOrDefault(Guid.Empty);
+
+                if (projectID == Guid.Empty)
+                {
+                    throw new ArgumentException("Project ID is required.");
+                }
+
+                var existingProject = _projectService.GetProjectById(projectID);
                 if (existingProject == null)
                 {
                     return NotFound(new
@@ -146,7 +153,7 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
                     });
                 }
 
-                var existingOpen = _open.FindByProjectIdAndStatus(open.ProjectID);
+                var existingOpen = _open.FindByProjectIdAndStatus(projectID);
                 if (existingOpen != null)
                 {
                     return BadRequest(new
@@ -170,7 +177,7 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
                     ReservationPrice = open.ReservationPrice,
                     Description = open.Description,
                     Status = true,
-                    ProjectID = open.ProjectID
+                    ProjectID = projectID
                 };
 
                 var opening = _mapper.Map<OpeningForSale>(newOpen);

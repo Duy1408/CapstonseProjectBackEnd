@@ -9,13 +9,13 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Request
 {
     public class OpeningForSaleRequestDTO
     {
-        public string DecisionName { get; set; }
-        public string StartDate { get; set; }
-        public string EndDate { get; set; }
-        public string CheckinDate { get; set; }
-        public string SaleType { get; set; }
+        public string? DecisionName { get; set; }
+        public string? StartDate { get; set; }
+        public string? EndDate { get; set; }
+        public string? CheckinDate { get; set; }
+        public string? SaleType { get; set; }
         public double ReservationPrice { get; set; }
         public string? Description { get; set; }
-        public Guid ProjectID { get; set; }
+        public Guid? ProjectID { get; set; }
     }
 }

@@ -8,14 +8,15 @@ using Microsoft.AspNetCore.Builder.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RealEstateProjectSale.Mapper;
+using RealEstateProjectSale.Validations.Create;
 using RealEstateProjectSaleBusinessObject.Admin;
 using RealEstateProjectSaleBusinessObject.Model;
-using RealEstateProjectSaleBusinessObject.Validation.Create;
 using RealEstateProjectSaleRepository.IRepository;
 using RealEstateProjectSaleRepository.Repository;
 using RealEstateProjectSaleServices.IServices;
 using RealEstateProjectSaleServices.Services;
 using Stripe;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +30,10 @@ builder.Services.AddSignalR(options =>
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+//FluentValidation
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<AccountCreateDTOValidator>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -93,10 +98,6 @@ builder.Services.AddScoped<IDocumentTemplateService, DocumentTemplateService>();
 builder.Services.AddScoped<INotificationRepo, NotificationRepo>();
 builder.Services.AddScoped<INotificationServices, NotificationServices>();
 
-
-//FluentValidation
-builder.Services.AddControllers()
-        .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<AccountCreateDTOValidator>());
 
 //Admin Account Config
 builder.Configuration
