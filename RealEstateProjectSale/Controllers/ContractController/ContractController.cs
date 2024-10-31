@@ -242,42 +242,42 @@ namespace RealEstateProjectSale.Controllers.ContractController
             }
         }
 
-        [HttpPut("{id}/signed")]
-        [SwaggerOperation(Summary = "Customer Confirmed Deposit Contract by ID")]
-        public IActionResult CustomerConfirmedDepositContract(Guid id)
-        {
-            try
-            {
-                var contract = _contractServices.GetContractByID(id);
-                var book = _bookServices.GetBookingById(contract.BookingID);
-                if (contract != null && book != null)
-                {
-                    contract.DateSigned = DateTime.Now;
-                    contract.Status = ContractStatus.DaXacNhanTTDC.GetEnumDescription();
+        //[HttpPut("{id}/signed")]
+        //[SwaggerOperation(Summary = "Customer Confirmed Deposit Contract by ID")]
+        //public IActionResult CustomerConfirmedDepositContract(Guid id)
+        //{
+        //    try
+        //    {
+        //        var contract = _contractServices.GetContractByID(id);
+        //        var book = _bookServices.GetBookingById(contract.BookingID);
+        //        if (contract != null && book != null)
+        //        {
+        //            contract.DateSigned = DateTime.Now;
+        //            contract.Status = ContractStatus.DaXacNhanTTDC.GetEnumDescription();
 
-                    book.Status = BookingStatus.DaKyTTDC.GetEnumDescription();
+        //            book.Status = BookingStatus.DaKyTTDC.GetEnumDescription();
 
-                    _contractServices.UpdateContract(contract);
-                    _bookServices.UpdateBooking(book);
+        //            _contractServices.UpdateContract(contract);
+        //            _bookServices.UpdateBooking(book);
 
-                    return Ok(new
-                    {
-                        message = "Customer Confirmed Deposit Contract Successfully"
-                    });
+        //            return Ok(new
+        //            {
+        //                message = "Customer Confirmed Deposit Contract Successfully"
+        //            });
 
-                }
+        //        }
 
-                return NotFound(new
-                {
-                    message = "Contract not found."
-                });
+        //        return NotFound(new
+        //        {
+        //            message = "Contract not found."
+        //        });
 
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
 
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Delete Contract by ID")]

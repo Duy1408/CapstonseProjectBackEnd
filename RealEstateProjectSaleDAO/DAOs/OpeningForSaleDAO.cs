@@ -27,11 +27,11 @@ namespace RealEstateProjectSaleDAO.DAOs
 
         }
 
-        public List<OpeningForSale> GetAllOppeningForSale()
-        {
-            var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.OpeningForSales.Include(o => o.Project).ToList();
-        }
+        //public List<OpeningForSale> GetAllOppeningForSale()
+        //{
+        //    var _context = new RealEstateProjectSaleSystemDBContext();
+        //    return _context.OpeningForSales.Include(o => o.Project).ToList();
+        //}
 
         public bool AddNew(OpeningForSale o)
         {
@@ -87,26 +87,26 @@ namespace RealEstateProjectSaleDAO.DAOs
             }
         }
 
-        public OpeningForSale FindByProjectIdAndStatus(Guid projectId)
-        {
-            var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.OpeningForSales.Include(o => o.Project)
-                                           .SingleOrDefault(a => a.ProjectID == projectId && a.Status == true);
-        }
+        //public OpeningForSale FindByProjectIdAndStatus(Guid projectId)
+        //{
+        //    var _context = new RealEstateProjectSaleSystemDBContext();
+        //    return _context.OpeningForSales.Include(o => o.Project)
+        //                                   .SingleOrDefault(a => a.ProjectID == projectId && a.Status == true);
+        //}
 
-        public OpeningForSale GetOpeningForSaleByID(Guid id)
-        {
-            var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.OpeningForSales.Include(o => o.Project).SingleOrDefault(a => a.OpeningForSaleID == id);
-        }
+        //public OpeningForSale GetOpeningForSaleByID(Guid id)
+        //{
+        //    var _context = new RealEstateProjectSaleSystemDBContext();
+        //    return _context.OpeningForSales.Include(o => o.Project).SingleOrDefault(a => a.OpeningForSaleID == id);
+        //}
 
-        public IQueryable<OpeningForSale> GetOpeningForSaleByProjectID(Guid id)
-        {
-            var _context = new RealEstateProjectSaleSystemDBContext();
-            var a = _context.OpeningForSales!.Include(c => c.Project)
-                                    .Where(c => c.ProjectID == id);
-            return a;
-        }
+        //public IQueryable<OpeningForSale> GetOpeningForSaleByProjectID(Guid id)
+        //{
+        //    var _context = new RealEstateProjectSaleSystemDBContext();
+        //    var a = _context.OpeningForSales!.Include(c => c.Project)
+        //                            .Where(c => c.ProjectID == id);
+        //    return a;
+        //}
 
         public IQueryable<OpeningForSale> SearchOpeningForSaleByName(string searchvalue)
         {
