@@ -87,7 +87,7 @@ namespace RealEstateProjectSale.Controllers.ProjectCategoryDetailController
 
         }
 
-        [HttpGet("{projectID}")]
+        [HttpGet("project/{projectID}")]
         [SwaggerOperation(Summary = "Get ProjectCategoryDetail By ProjectID")]
         public IActionResult GetProjectCategoryDetailByProjectID(Guid projectID)
         {
@@ -116,6 +116,7 @@ namespace RealEstateProjectSale.Controllers.ProjectCategoryDetailController
 
                 var newDetail = new ProjectCategoryDetailCreateDTO
                 {
+                    ProjectCategoryDetailID = Guid.NewGuid(),
                     ProjectID = detail.ProjectID,
                     PropertyCategoryID = detail.PropertyCategoryID,
                 };

@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Build.Evaluation;
+using Microsoft.Build.Framework;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using RealEstateProjectSale.Helpers;
@@ -34,6 +35,7 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
             _open = open;
             _projectService = projectService;
             _mapper = mapper;
+            _detailService = detailService;
         }
 
         [HttpGet]
@@ -80,8 +82,8 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
 
         }
 
-        [HttpGet("project/{projectId}")]
-        [SwaggerOperation(Summary = "Get OpeningForSale by ProjectID")]
+        [HttpGet("categoryDetail/{detailId}")]
+        [SwaggerOperation(Summary = "Get OpeningForSale by ProjectCategoryDetailID")]
         public IActionResult GetOpeningForSaleByProjectCategoryDetailID(Guid detailId)
         {
             var open = _open.GetOpeningForSaleByProjectCategoryDetailID(detailId);
@@ -121,7 +123,7 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
             }
             var open = _open.SearchOpeningForSale(decisionName);
 
-            if (open == null)
+            if (open == null || open.Count() == 0)
             {
                 return NotFound(new
                 {
@@ -129,7 +131,9 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
                 });
             }
 
-            return Ok(open);
+            var responese = open.Select(open => _mapper.Map<OpeningForSaleVM>(open)).ToList();
+
+            return Ok(responese);
         }
 
         [HttpPost]

@@ -112,10 +112,11 @@ namespace RealEstateProjectSale.Mapper
             CreateMap<ProjectCreateDTO, Promotion>().ReverseMap();
             CreateMap<PromotionUpdateDTO, Promotion>().ReverseMap();
 
-            CreateMap<OpeningForSaleVM, OpeningForSale>().ReverseMap().ForMember(dest => dest.ProjectName,
+            CreateMap<OpeningForSale, OpeningForSaleVM>().ForMember(dest => dest.ProjectName,
                                   opt => opt.MapFrom(src => src.ProjectCategoryDetail!.Project.ProjectName))
-                                                                      .ForMember(dest => dest.ProjectName,
-                                  opt => opt.MapFrom(src => src.ProjectCategoryDetail!.PropertyCategory.PropertyCategoryName));
+                                                         .ForMember(dest => dest.PropertyCategoryName,
+                                  opt => opt.MapFrom(src => src.ProjectCategoryDetail!.PropertyCategory.PropertyCategoryName))
+                                                         .ReverseMap();
             CreateMap<OpeningForSaleCreateDTO, OpeningForSale>().ReverseMap();
             CreateMap<OpeningForSaleUpdateDTO, OpeningForSale>().ReverseMap();
 
