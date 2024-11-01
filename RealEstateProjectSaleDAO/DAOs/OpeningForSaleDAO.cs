@@ -30,7 +30,11 @@ namespace RealEstateProjectSaleDAO.DAOs
         public List<OpeningForSale> GetAllOppeningForSale()
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.OpeningForSales.Include(o => o.ProjectCategoryDetail).ToList();
+            return _context.OpeningForSales.Include(o => o.ProjectCategoryDetail)
+                                                .ThenInclude(pc => pc.Project)
+                                           .Include(o => o.ProjectCategoryDetail)
+                                                .ThenInclude(pc => pc.PropertyCategory)
+                                           .ToList();
         }
 
         public bool AddNew(OpeningForSale o)
@@ -103,15 +107,22 @@ namespace RealEstateProjectSaleDAO.DAOs
         public IQueryable<OpeningForSale> GetOpeningForSaleByProjectCategoryDetailID(Guid id)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            var a = _context.OpeningForSales!.Include(c => c.ProjectCategoryDetail)
-                                    .Where(c => c.ProjectCategoryDetailID == id);
+            var a = _context.OpeningForSales!.Include(o => o.ProjectCategoryDetail)
+                                                .ThenInclude(pc => pc.Project)
+                                             .Include(o => o.ProjectCategoryDetail)
+                                                .ThenInclude(pc => pc.PropertyCategory)
+                                             .Where(c => c.ProjectCategoryDetailID == id);
             return a;
         }
 
         public IQueryable<OpeningForSale> SearchOpeningForSaleByName(string searchvalue)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            var a = _context.OpeningForSales.Where(a => a.DecisionName.ToUpper().Contains(searchvalue.Trim().ToUpper()));
+            var a = _context.OpeningForSales.Include(o => o.ProjectCategoryDetail)
+                                                .ThenInclude(pc => pc.Project)
+                                             .Include(o => o.ProjectCategoryDetail)
+                                                .ThenInclude(pc => pc.PropertyCategory)
+                                            .Where(a => a.DecisionName.ToUpper().Contains(searchvalue.Trim().ToUpper()));
             return a;
         }
 
