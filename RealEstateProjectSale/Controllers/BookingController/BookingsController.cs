@@ -158,24 +158,15 @@ namespace RealEstateProjectSale.Controllers.BookingController
         [SwaggerOperation(Summary = "Get booking by deposit times")]
         public ActionResult<Booking> GetBookingByDepositedTimed(int numberOfBookings)
         {
-            if (_book.GetBookings() == null)
+            var booking = _book.GetBookingByDepositedTimed(numberOfBookings);
+
+            if (booking == null)
             {
                 return NotFound(new
                 {
                     message = "Booking not found."
                 });
             }
-            var bookingList = _book.GetBookingByDepositedTimed(numberOfBookings);
-
-            if (bookingList == null)
-            {
-                return NotFound(new
-                {
-                    message = "Booking By DepositedTimed not found."
-                });
-            }
-
-            var booking = bookingList.FirstOrDefault();
 
             var response = _mapper.Map<BookingVM>(booking);
 
@@ -187,24 +178,15 @@ namespace RealEstateProjectSale.Controllers.BookingController
         [SwaggerOperation(Summary = "Get random bookings")]
         public ActionResult<Booking> GetBookingByRandom(int numberBooking)
         {
-            if (_book.GetBookings() == null)
+            var booking = _book.GetBookingByRandom(numberBooking);
+
+            if (booking == null)
             {
                 return NotFound(new
                 {
                     message = "Booking not found."
                 });
             }
-            var bookingList = _book.GetBookingByRandom(numberBooking);
-
-            if (bookingList == null)
-            {
-                return NotFound(new
-                {
-                    message = "Booking By Random not found."
-                });
-            }
-
-            var booking = bookingList.FirstOrDefault();
 
             var response = _mapper.Map<BookingVM>(booking);
 
@@ -349,15 +331,6 @@ namespace RealEstateProjectSale.Controllers.BookingController
                     });
                 }
 
-                //var existingCategoryDetail = _detailServices.GetProjectCategoryDetailByID(projectID, propertyCategoryID);
-                //if (existingCategoryDetail == null)
-                //{
-                //    return NotFound(new
-                //    {
-                //        message = "Project Category not found."
-                //    });
-                //}
-
                 var openForSale = _openService.FindByDetailIdAndStatus(categoryDetailID);
 
                 if (openForSale == null)
@@ -368,16 +341,23 @@ namespace RealEstateProjectSale.Controllers.BookingController
                     });
                 }
 
-                //var existingBooking = _book.CheckExistingBooking(openForSale.OpeningForSaleID, projectID, customerID);
-                //if (existingBooking != null)
-                //{
-                //    return BadRequest(new
-                //    {
-                //        message = "Customer has booked this project."
-                //    });
-                //}
+                var existingBooking = _book.CheckExistingBooking(openForSale.OpeningForSaleID, categoryDetailID, customerID);
+                if (existingBooking != null)
+                {
+                    return BadRequest(new
+                    {
+                        message = "Customer has booked this project."
+                    });
+                }
 
                 var documentReservation = _documentService.GetDocumentByDocumentName("Phiếu giữ chỗ");
+                if (documentReservation == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Document not found."
+                    });
+                }
 
                 var newbook = new BookingCreateDTO
                 {

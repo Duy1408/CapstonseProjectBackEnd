@@ -16,6 +16,7 @@ namespace RealEstateProjectSaleRepository.IRepository
         public void AddNew(OpeningForSale o);
 
         OpeningForSale FindByDetailIdAndStatus(Guid detailId);
+        OpeningForSale FindByProjectIdAndStatus(Guid projectId);
         public OpeningForSale GetOpeningForSaleById(Guid id);
 
         public void UpdateOpeningForSale(OpeningForSale o);

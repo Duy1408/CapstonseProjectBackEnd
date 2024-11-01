@@ -76,7 +76,7 @@ namespace RealEstateProjectSaleDAO.DAOs
                                     .ToList();
         }
 
-        public List<Booking> GetBookingByDepositedTimed(int numberBooking)
+        public Booking? GetBookingByDepositedTimed(int numberBooking)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
             return _context.Bookings!.Include(c => c.OpeningForSale)
@@ -90,15 +90,14 @@ namespace RealEstateProjectSaleDAO.DAOs
                                         .ThenInclude(pc => pc.PropertyCategory)
                                      .Where(b => b.DepositedTimed != null
                                      && b.DepositedPrice != null
-                                     && b.Status != BookingStatus.DaKyTTDC.GetEnumDescription()
                                      && b.Status == BookingStatus.DaCheckIn.GetEnumDescription())
                                      .OrderBy(b => b.DepositedTimed)
                                      .ThenBy(b => b.BookingID)
                                      .Take(numberBooking)
-                                     .ToList();
+                                     .FirstOrDefault();
         }
 
-        public List<Booking> GetBookingByRandom(int numberBooking)
+        public Booking? GetBookingByRandom(int numberBooking)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
             return _context.Bookings!.Include(c => c.OpeningForSale)
@@ -112,11 +111,10 @@ namespace RealEstateProjectSaleDAO.DAOs
                                         .ThenInclude(pc => pc.PropertyCategory)
                                      .Where(b => b.DepositedTimed != null
                                      && b.DepositedPrice != null
-                                     && b.Status != BookingStatus.DaKyTTDC.GetEnumDescription()
                                      && b.Status == BookingStatus.DaCheckIn.GetEnumDescription())
                                      .OrderBy(b => Guid.NewGuid())
                                      .Take(numberBooking)
-                                     .ToList();
+                                     .FirstOrDefault();
         }
 
         public bool AddNew(Booking p)
@@ -201,13 +199,13 @@ namespace RealEstateProjectSaleDAO.DAOs
                                     .ToList();
         }
 
-        //public Booking CheckExistingBooking(Guid openForSaleID, Guid projectID, Guid customerID)
-        //{
-        //    var _context = new RealEstateProjectSaleSystemDBContext();
-        //    return _context.Bookings.FirstOrDefault(b => b.OpeningForSaleID == openForSaleID
-        //                          && b.ProjectID == projectID
-        //                          && b.CustomerID == customerID);
-        //}
+        public Booking CheckExistingBooking(Guid openForSaleID, Guid categoryDetailID, Guid customerID)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            return _context.Bookings.FirstOrDefault(b => b.OpeningForSaleID == openForSaleID
+                                  && b.ProjectCategoryDetailID == categoryDetailID
+                                  && b.CustomerID == customerID);
+        }
 
     }
 }

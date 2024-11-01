@@ -16,6 +16,7 @@ namespace RealEstateProjectSaleServices.IServices
         void AddNew(OpeningForSale o);
 
         OpeningForSale FindByDetailIdAndStatus(Guid detailId);
+        OpeningForSale FindByProjectIdAndStatus(Guid projectId);
         OpeningForSale GetOpeningForSaleById(Guid id);
 
         void UpdateOpeningForSale(OpeningForSale o);

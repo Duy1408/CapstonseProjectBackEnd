@@ -21,10 +21,10 @@ namespace RealEstateProjectSaleRepository.Repository
             dao.AddNew(p);
         }
 
-        //public Booking CheckExistingBooking(Guid openForSaleID, Guid projectID, Guid customerID)
-        //{
-        //    return dao.CheckExistingBooking(openForSaleID, projectID, customerID);
-        //}
+        public Booking CheckExistingBooking(Guid openForSaleID, Guid categoryDetailID, Guid customerID)
+        {
+            return dao.CheckExistingBooking(openForSaleID, categoryDetailID, customerID);
+        }
 
         public List<Booking> GetBookingByBooked()
         {
@@ -41,7 +41,7 @@ namespace RealEstateProjectSaleRepository.Repository
             return dao.GetBookingByCustomerID(id);
         }
 
-        public List<Booking> GetBookingByDepositedTimed(int numberBooking)
+        public Booking? GetBookingByDepositedTimed(int numberBooking)
         {
             return dao.GetBookingByDepositedTimed(numberBooking);
         }
@@ -56,7 +56,7 @@ namespace RealEstateProjectSaleRepository.Repository
             return dao.GetBookingByID(id);
         }
 
-        public List<Booking> GetBookingByRandom(int numberBooking)
+        public Booking? GetBookingByRandom(int numberBooking)
         {
             return dao.GetBookingByRandom(numberBooking);
         }

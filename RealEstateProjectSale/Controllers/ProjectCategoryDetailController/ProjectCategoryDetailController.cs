@@ -62,7 +62,7 @@ namespace RealEstateProjectSale.Controllers.ProjectCategoryDetailController
 
             return NotFound(new
             {
-                message = "Account not found."
+                message = "ProjectCategoryDetail not found."
             });
 
         }
