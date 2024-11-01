@@ -370,9 +370,9 @@ namespace RealEstateProjectSale.Controllers.PropertyController
 
 
 
-        [HttpPut("status/{propertyid}")]
+        [HttpPut("select/{propertyid}")]
         [SwaggerOperation(Summary = "Update Property status by ID")]
-        public async Task<IActionResult> UpdateStatusProperty([FromForm] PropertyUpdateDTO property, Guid propertyid)
+        public async Task<IActionResult> UpdateStatusProperty( Guid propertyid)
         {
             try
             {
@@ -380,21 +380,9 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                 var existingProperty = _pro.GetPropertyById(propertyid);
                 if (existingProperty != null)
                 {
-
-                    if (!string.IsNullOrEmpty(property.Status) && int.TryParse(property.Status, out int statusValue))
-                    {
-                        if (Enum.IsDefined(typeof(PropertyStatus), statusValue))
-                        {
-                            var statusEnum = (PropertyStatus)statusValue;
-                            var statusDescription = statusEnum.GetEnumDescription();
-                            existingProperty.Status = statusDescription;
-                        }
-                    }
-
+                    existingProperty.Status = PropertyStatus.GiuCho.GetEnumDescription();
                     _pro.UpdateProperty(existingProperty);
                     await _hubContext.Clients.All.SendAsync("ReceivePropertyStatus", propertyid.ToString(), existingProperty.Status);
-
-
                     return Ok(new
                     {
                         message = "Update Property Successfully"
