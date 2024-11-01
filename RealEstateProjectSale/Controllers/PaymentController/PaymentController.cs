@@ -44,16 +44,18 @@ namespace RealEstateProjectSale.Controllers.PaymentController
 
         [HttpPost]
         [SwaggerOperation(Summary = "Checkout Payment Deposited")]
-        public async Task<IActionResult> CheckoutPayment([FromQuery] Guid customerId, [FromQuery] Guid bookingId)
+        public async Task<IActionResult> CheckoutPayment([FromQuery] Guid bookingId)
         {
             try
             {
+                var booking = _bookServices.GetBookingById(bookingId);
+
                 var payment = new PaymentInformationModel
                 {
                     PaymentID = Guid.NewGuid(),
                     CreatedTime = DateTime.Now,
                     BookingID = bookingId,
-                    CustomerID = customerId
+                    CustomerID = booking.CustomerID
                 };
 
                 var paymentResponseModel = await _paymentServices.CreatePaymentUrl(payment);

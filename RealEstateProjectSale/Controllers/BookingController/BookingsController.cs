@@ -360,6 +360,14 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
                 var openForSale = _openService.FindByDetailIdAndStatus(categoryDetailID);
 
+                if (openForSale == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "OpeningForSale not found."
+                    });
+                }
+
                 //var existingBooking = _book.CheckExistingBooking(openForSale.OpeningForSaleID, projectID, customerID);
                 //if (existingBooking != null)
                 //{

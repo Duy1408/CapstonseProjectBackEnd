@@ -59,18 +59,18 @@ namespace RealEstateProjectSale.Mapper
             CreateMap<SalepolicyCreateDTO, Salespolicy>().ReverseMap();
             CreateMap<SalePolicyUpdateDTO, Salespolicy>().ReverseMap();
 
-            CreateMap<BookingVM, Booking>().ReverseMap().ForMember(dest => dest.DocumentName,
+            CreateMap<Booking, BookingVM>().ForMember(dest => dest.ProjectName,
+                                       opt => opt.MapFrom(src => src.ProjectCategoryDetail!.Project.ProjectName))
+                                                         .ForMember(dest => dest.PropertyCategoryName,
+                                       opt => opt.MapFrom(src => src.ProjectCategoryDetail!.PropertyCategory.PropertyCategoryName))
+                                                        .ForMember(dest => dest.DocumentName,
                                        opt => opt.MapFrom(src => src.DocumentTemplate!.DocumentName))
                                                         .ForMember(dest => dest.DecisionName,
                                        opt => opt.MapFrom(src => src.OpeningForSale!.DecisionName))
-                                                        .ForMember(dest => dest.PropertyCategoryName,
-                                       opt => opt.MapFrom(src => src.ProjectCategoryDetail.PropertyCategory!.PropertyCategoryName))
-                                                        .ForMember(dest => dest.ProjectName,
-                                       opt => opt.MapFrom(src => src.ProjectCategoryDetail!.Project.ProjectName))
                                                         .ForMember(dest => dest.CustomerName,
                                        opt => opt.MapFrom(src => src.Customer!.FullName))
                                                         .ForMember(dest => dest.StaffName,
-                                       opt => opt.MapFrom(src => src.Staff!.Name));
+                                       opt => opt.MapFrom(src => src.Staff!.Name)).ReverseMap();
             CreateMap<BookingCreateDTO, Booking>().ReverseMap();
             CreateMap<BookingUpdateDTO, Booking>().ReverseMap();
 

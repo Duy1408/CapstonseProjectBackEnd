@@ -33,26 +33,29 @@ namespace RealEstateProjectSaleDAO.DAOs
             var _context = new RealEstateProjectSaleSystemDBContext();
             return _context.Bookings
                                     .Include(c => c.OpeningForSale)
-
                                     .Include(c => c.Customer)
                                     .Include(c => c.Staff)
-
                                     .Include(c => c.Property)
                                     .Include(c => c.DocumentTemplate)
+                                    .Include(o => o.ProjectCategoryDetail)
+                                        .ThenInclude(pc => pc.Project)
+                                    .Include(o => o.ProjectCategoryDetail)
+                                        .ThenInclude(pc => pc.PropertyCategory)
                                     .ToList();
         }
 
         public List<Booking> GetBookingByBooked()
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.Bookings
-                                    .Include(c => c.OpeningForSale)
-
+            return _context.Bookings.Include(c => c.OpeningForSale)
                                     .Include(c => c.Customer)
                                     .Include(c => c.Staff)
-
                                     .Include(c => c.Property)
                                     .Include(c => c.DocumentTemplate)
+                                    .Include(o => o.ProjectCategoryDetail)
+                                        .ThenInclude(pc => pc.Project)
+                                    .Include(o => o.ProjectCategoryDetail)
+                                        .ThenInclude(pc => pc.PropertyCategory)
                                     .Where(b => b.Status == BookingStatus.DaDatCho.GetEnumDescription())
                                     .ToList();
         }
@@ -60,14 +63,15 @@ namespace RealEstateProjectSaleDAO.DAOs
         public List<Booking> GetBookingByCheckedIn()
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.Bookings!
-                                    .Include(c => c.OpeningForSale)
-
+            return _context.Bookings!.Include(c => c.OpeningForSale)
                                     .Include(c => c.Customer)
                                     .Include(c => c.Staff)
-
                                     .Include(c => c.Property)
                                     .Include(c => c.DocumentTemplate)
+                                    .Include(o => o.ProjectCategoryDetail)
+                                        .ThenInclude(pc => pc.Project)
+                                    .Include(o => o.ProjectCategoryDetail)
+                                        .ThenInclude(pc => pc.PropertyCategory)
                                     .Where(b => b.Status == BookingStatus.DaCheckIn.GetEnumDescription())
                                     .ToList();
         }
@@ -75,14 +79,15 @@ namespace RealEstateProjectSaleDAO.DAOs
         public List<Booking> GetBookingByDepositedTimed(int numberBooking)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.Bookings!
-                                     .Include(c => c.OpeningForSale)
-
+            return _context.Bookings!.Include(c => c.OpeningForSale)
                                      .Include(c => c.Customer)
                                      .Include(c => c.Staff)
-
                                      .Include(c => c.Property)
                                      .Include(c => c.DocumentTemplate)
+                                     .Include(o => o.ProjectCategoryDetail)
+                                        .ThenInclude(pc => pc.Project)
+                                     .Include(o => o.ProjectCategoryDetail)
+                                        .ThenInclude(pc => pc.PropertyCategory)
                                      .Where(b => b.DepositedTimed != null
                                      && b.DepositedPrice != null
                                      && b.Status != BookingStatus.DaKyTTDC.GetEnumDescription()
@@ -96,14 +101,15 @@ namespace RealEstateProjectSaleDAO.DAOs
         public List<Booking> GetBookingByRandom(int numberBooking)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.Bookings!
-                                     .Include(c => c.OpeningForSale)
-
+            return _context.Bookings!.Include(c => c.OpeningForSale)
                                      .Include(c => c.Customer)
                                      .Include(c => c.Staff)
-
                                      .Include(c => c.Property)
                                      .Include(c => c.DocumentTemplate)
+                                     .Include(o => o.ProjectCategoryDetail)
+                                        .ThenInclude(pc => pc.Project)
+                                     .Include(o => o.ProjectCategoryDetail)
+                                        .ThenInclude(pc => pc.PropertyCategory)
                                      .Where(b => b.DepositedTimed != null
                                      && b.DepositedPrice != null
                                      && b.Status != BookingStatus.DaKyTTDC.GetEnumDescription()
@@ -151,14 +157,15 @@ namespace RealEstateProjectSaleDAO.DAOs
         public Booking GetBookingByID(Guid id)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.Bookings
-                                    .Include(c => c.OpeningForSale)
-
+            return _context.Bookings.Include(c => c.OpeningForSale)
                                     .Include(c => c.Customer)
                                     .Include(c => c.Staff)
-
                                     .Include(c => c.Property)
                                     .Include(c => c.DocumentTemplate)
+                                    .Include(o => o.ProjectCategoryDetail)
+                                        .ThenInclude(pc => pc.Project)
+                                    .Include(o => o.ProjectCategoryDetail)
+                                        .ThenInclude(pc => pc.PropertyCategory)
                                     .SingleOrDefault(a => a.BookingID == id);
         }
 
@@ -166,12 +173,14 @@ namespace RealEstateProjectSaleDAO.DAOs
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
             return _context.Bookings.Include(c => c.OpeningForSale)
-
                                     .Include(c => c.Customer)
                                     .Include(c => c.Staff)
-
                                     .Include(c => c.Property)
                                     .Include(c => c.DocumentTemplate)
+                                    .Include(o => o.ProjectCategoryDetail)
+                                        .ThenInclude(pc => pc.Project)
+                                    .Include(o => o.ProjectCategoryDetail)
+                                        .ThenInclude(pc => pc.PropertyCategory)
                                     .Where(a => a.DocumentTemplateID == id)
                                     .ToList();
         }
@@ -180,12 +189,14 @@ namespace RealEstateProjectSaleDAO.DAOs
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
             return _context.Bookings.Include(c => c.OpeningForSale)
-
                                     .Include(c => c.Customer)
                                     .Include(c => c.Staff)
-
                                     .Include(c => c.Property)
                                     .Include(c => c.DocumentTemplate)
+                                    .Include(o => o.ProjectCategoryDetail)
+                                        .ThenInclude(pc => pc.Project)
+                                    .Include(o => o.ProjectCategoryDetail)
+                                        .ThenInclude(pc => pc.PropertyCategory)
                                     .Where(a => a.CustomerID == id)
                                     .ToList();
         }
