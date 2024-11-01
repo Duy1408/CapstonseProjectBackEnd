@@ -29,5 +29,9 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public string BlockName { get; set; }
         public Guid? ZoneID { get; set; }
         public string ZoneName { get; set; }
+        public Guid ProjectCategoryDetailID { get; set; }
+        public string ProjectName { get; set; }
+        public string PropertyCategoryName { get; set; }
+
     }
 }

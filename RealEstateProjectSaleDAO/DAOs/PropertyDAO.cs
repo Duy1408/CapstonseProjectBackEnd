@@ -33,6 +33,10 @@ namespace RealEstateProjectSaleDAO.DAOs
                                       .Include(c => c.Floor)
                                       .Include(c => c.Block)
                                       .Include(c => c.Zone)
+                                      .Include(o => o.ProjectCategoryDetail)
+                                        .ThenInclude(pc => pc.Project)
+                                        .Include(o => o.ProjectCategoryDetail)
+                                         .ThenInclude(pc => pc.PropertyCategory)
                                       .ToList();
         }
 
@@ -79,6 +83,11 @@ namespace RealEstateProjectSaleDAO.DAOs
                                       .Include(c => c.Floor)
                                       .Include(c => c.Block)
                                       .Include(c => c.Zone)
+                                      .Include(o => o.ProjectCategoryDetail)
+                                       .ThenInclude(pc => pc.Project)
+                                        .Include(o => o.ProjectCategoryDetail)
+                                        .ThenInclude(pc => pc.PropertyCategory)
+
                                       .SingleOrDefault(a => a.PropertyID == id);
         }
 
@@ -89,6 +98,11 @@ namespace RealEstateProjectSaleDAO.DAOs
                                       .Include(c => c.Floor)
                                       .Include(c => c.Block)
                                       .Include(c => c.Zone)
+                                       .Include(o => o.ProjectCategoryDetail)
+                                        .ThenInclude(pc => pc.Project)
+                                          .Include(o => o.ProjectCategoryDetail)
+                                          .ThenInclude(pc => pc.PropertyCategory)
+
                                       .Where(c => c.UnitTypeID == id);
 
             return a;
@@ -101,6 +115,11 @@ namespace RealEstateProjectSaleDAO.DAOs
                                       .Include(c => c.Floor)
                                       .Include(c => c.Block)
                                       .Include(c => c.Zone)
+.Include(o => o.ProjectCategoryDetail)
+    .ThenInclude(pc => pc.Project)
+.Include(o => o.ProjectCategoryDetail)
+    .ThenInclude(pc => pc.PropertyCategory)
+
                                       .Where(c => c.FloorID == id);
 
             return a;
@@ -113,6 +132,11 @@ namespace RealEstateProjectSaleDAO.DAOs
                                       .Include(c => c.Floor)
                                       .Include(c => c.Block)
                                       .Include(c => c.Zone)
+                                       .Include(o => o.ProjectCategoryDetail)
+                                        .ThenInclude(pc => pc.Project)
+                                        .Include(o => o.ProjectCategoryDetail)
+                                         .ThenInclude(pc => pc.PropertyCategory)
+
                                       .Where(c => c.BlockID == id);
 
             return a;
@@ -125,6 +149,11 @@ namespace RealEstateProjectSaleDAO.DAOs
                                       .Include(c => c.Floor)
                                       .Include(c => c.Block)
                                       .Include(c => c.Zone)
+                                         .Include(o => o.ProjectCategoryDetail)
+                                         .ThenInclude(pc => pc.Project)
+                                           .Include(o => o.ProjectCategoryDetail)
+                                            .ThenInclude(pc => pc.PropertyCategory)
+
                                       .Where(c => c.ZoneID == id);
 
             return a;
@@ -137,6 +166,10 @@ namespace RealEstateProjectSaleDAO.DAOs
                                       .Include(c => c.Floor)
                                       .Include(c => c.Block)
                                       .Include(c => c.Zone)
+                                .Include(o => o.ProjectCategoryDetail)
+                                      .ThenInclude(pc => pc.Project)
+                                      .Include(o => o.ProjectCategoryDetail)
+                                      .ThenInclude(pc => pc.PropertyCategory)
                                       .Where(a => a.PropertyCode.ToUpper().Contains(searchvalue.Trim().ToUpper()));
             return a;
         }
