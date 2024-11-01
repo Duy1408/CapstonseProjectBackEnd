@@ -12,16 +12,18 @@ namespace RealEstateProjectSaleBusinessObject.Enums
         [EnumDescription("Chưa bán")]
         ChuaBan = 1,
 
+        [EnumDescription("Mở bán")]
+        MoBan = 2,
         [EnumDescription("Giữ chỗ")]
-        DangMoBan = 2,
+        GiuCho = 3,
 
         [EnumDescription("Đặt cọc")]
-        DatCoc = 3,
+        DatCoc = 4,
 
         [EnumDescription("Đã bán")]
-        DaBan = 4,
+        DaBan = 5,
 
         [EnumDescription("Bàn giao")]
-        BanGiao = 5
+        BanGiao = 6
     }
 }
