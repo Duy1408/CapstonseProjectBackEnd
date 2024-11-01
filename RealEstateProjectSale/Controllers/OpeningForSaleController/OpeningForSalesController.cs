@@ -158,6 +158,16 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
                     });
                 }
 
+                var existingProject = _open.FindByProjectIdAndStatus(existingDetail.ProjectID);
+                if (existingProject != null)
+                {
+                    return NotFound(new
+                    {
+                        message = "An OpeningForSale with the same Project already exists."
+                    });
+                }
+
+
                 var existingOpen = _open.FindByDetailIdAndStatus(detailID);
                 if (existingOpen != null)
                 {

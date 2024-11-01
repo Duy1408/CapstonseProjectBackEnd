@@ -95,13 +95,30 @@ namespace RealEstateProjectSaleDAO.DAOs
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
             return _context.OpeningForSales.Include(o => o.ProjectCategoryDetail)
+                                                .ThenInclude(pc => pc.Project)
+                                           .Include(o => o.ProjectCategoryDetail)
+                                                .ThenInclude(pc => pc.PropertyCategory)
                                            .SingleOrDefault(a => a.ProjectCategoryDetailID == detailId && a.Status == true);
+        }
+
+        public OpeningForSale FindByProjectIdAndStatus(Guid projectId)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            return _context.OpeningForSales.Include(o => o.ProjectCategoryDetail)
+                                                .ThenInclude(pc => pc.Project)
+                                           .Include(o => o.ProjectCategoryDetail)
+                                                .ThenInclude(pc => pc.PropertyCategory)
+                                           .FirstOrDefault(a => a.ProjectCategoryDetail.ProjectID == projectId && a.Status == true);
         }
 
         public OpeningForSale GetOpeningForSaleByID(Guid id)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.OpeningForSales.Include(o => o.ProjectCategoryDetail).SingleOrDefault(a => a.OpeningForSaleID == id);
+            return _context.OpeningForSales.Include(o => o.ProjectCategoryDetail)
+                                                .ThenInclude(pc => pc.Project)
+                                           .Include(o => o.ProjectCategoryDetail)
+                                                .ThenInclude(pc => pc.PropertyCategory)
+                                           .SingleOrDefault(a => a.OpeningForSaleID == id);
         }
 
         public IQueryable<OpeningForSale> GetOpeningForSaleByProjectCategoryDetailID(Guid id)

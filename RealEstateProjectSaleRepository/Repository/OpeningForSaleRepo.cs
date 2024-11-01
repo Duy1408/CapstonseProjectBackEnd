@@ -56,5 +56,10 @@ namespace RealEstateProjectSaleRepository.Repository
         {
             _open.UpdateOpeningForSale(o);
         }
+
+        public OpeningForSale FindByProjectIdAndStatus(Guid projectId)
+        {
+            return _open.FindByProjectIdAndStatus(projectId);
+        }
     }
 }
