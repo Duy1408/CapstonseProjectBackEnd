@@ -20,6 +20,8 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
         public Guid? FloorID { get; set; }
         public Guid? BlockID { get; set; }
         public Guid? ZoneID { get; set; }
+        public Guid? ProjectCategoryDetailID { get; set; }
+
 
     }
 }

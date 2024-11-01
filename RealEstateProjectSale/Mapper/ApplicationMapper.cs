@@ -97,7 +97,12 @@ namespace RealEstateProjectSale.Mapper
                                                           .ForMember(dest => dest.BlockName,
                                        opt => opt.MapFrom(src => src.Block!.BlockName))
                                                           .ForMember(dest => dest.ZoneName,
-                                       opt => opt.MapFrom(src => src.Zone!.ZoneName));
+                                       opt => opt.MapFrom(src => src.Zone!.ZoneName)).ForMember(dest => dest.ProjectName,
+                                  opt => opt.MapFrom(src => src.ProjectCategoryDetail!.Project.ProjectName))
+                                                         .ForMember(dest => dest.PropertyCategoryName,
+                                  opt => opt.MapFrom(src => src.ProjectCategoryDetail!.PropertyCategory.PropertyCategoryName))
+                                                         .ReverseMap();
+
             CreateMap<PropertyCreateDTO, Property>().ReverseMap();
             CreateMap<PropertyUpdateDTO, Property>().ReverseMap();
 

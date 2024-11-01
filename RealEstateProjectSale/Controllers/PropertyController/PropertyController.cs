@@ -47,7 +47,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
 
         [HttpGet]
         [SwaggerOperation(Summary = "Get All Property")]
-        public IActionResult GetAllProperty([FromQuery] string? propertyCode, [FromQuery] Guid? zoneID, [FromQuery] Guid? blockID, [FromQuery] Guid? floorID, [FromQuery] int page = 1)
+        public IActionResult GetAllProperty([FromQuery] string? propertyCode, [FromQuery] Guid? zoneID, [FromQuery] Guid? blockID, [FromQuery] Guid? floorID, [FromQuery] Guid? projectcategorydetailID, [FromQuery] int page = 1)
         {
             try
             {
@@ -76,6 +76,10 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                 if (floorID.HasValue)
                 {
                     propertysQuery = propertysQuery.Where(p => p.FloorID == floorID.Value);
+                }
+                if (projectcategorydetailID.HasValue)
+                {
+                    propertysQuery = propertysQuery.Where(p => p.ProjectCategoryDetailID == projectcategorydetailID.Value);
                 }
 
                 var pagedResult = _pagingServices.GetPagedList(propertysQuery, page, PAGE_SIZE);
@@ -279,7 +283,9 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                     UnitTypeID = property.UnitTypeID,
                     FloorID = property.FloorID,
                     BlockID = property.BlockID,
-                    ZoneID = property.ZoneID
+                    ZoneID = property.ZoneID,
+                    ProjectCategoryDetailID = property.ProjectCategoryDetailID,
+                    
 
                 };
 
@@ -345,7 +351,10 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                     {
                         existingProperty.ZoneID = property.ZoneID.Value;
                     }
-
+                    if (property.ProjectCategoryDetailID.HasValue)
+                    {
+                        existingProperty.ProjectCategoryDetailID = property.ProjectCategoryDetailID.Value;
+                    }
                     _pro.UpdateProperty(existingProperty);
 
                     return Ok(new
