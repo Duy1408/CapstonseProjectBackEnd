@@ -93,7 +93,7 @@ namespace RealEstateProjectSale.Controllers.PaymentController
                     pubKey
                 );
 
-                if (stripeEvent.Type == Events.CheckoutSessionCompleted)
+                if (stripeEvent.Type == Events.PaymentIntentSucceeded)
                 {
                     var paymentIntent = stripeEvent.Data.Object as PaymentIntent;
 
