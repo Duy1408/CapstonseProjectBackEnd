@@ -19,8 +19,6 @@ namespace RealEstateProjectSaleServices.IServices
 
         Task<PaymentResponseModel> CreatePaymentUrl(PaymentInformationModel payment);
 
-        Session CheckoutSuccess(string sessionId);
-
         PaymentInformationModel GetPaymentModelFromCache(Guid userId);
 
     }

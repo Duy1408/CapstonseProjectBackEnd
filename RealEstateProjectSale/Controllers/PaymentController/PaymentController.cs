@@ -97,8 +97,6 @@ namespace RealEstateProjectSale.Controllers.PaymentController
                 {
                     var paymentIntent = stripeEvent.Data.Object as PaymentIntent;
 
-                    //var customerIDCache = Guid.Parse(HttpContext.Request.Query["customerID"]);
-
                     if (!paymentIntent.Metadata.TryGetValue("customCustomerID", out string customCustomerID))
                     {
                         Console.WriteLine("Custom Customer ID is missing in PaymentIntent metadata.");
