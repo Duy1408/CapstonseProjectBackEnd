@@ -8,9 +8,9 @@ namespace RealEstateProjectSaleBusinessObject.Model
 {
     public class PaymentResponseModel
     {
-        public string? SessionId { get; set; }
-
-        public string? PubKey { get; set; }
-        public string? SessionUrl { get; set; }
+        public string? PaymentIntent { get; set; }
+        public string? EphemeralKey { get; set; }
+        public string? Customer { get; set; }
+        public string? PublishableKey { get; set; }
     }
 }
