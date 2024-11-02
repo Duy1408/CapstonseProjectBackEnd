@@ -83,21 +83,29 @@ namespace RealEstateProjectSale.Controllers.PaymentController
         [HttpPost("stripe-webhook")]
         public async Task<IActionResult> StripeWebhook()
         {
-            var pubKey = _configuration["Stripe:WebhookSecret"];
+            var webhookSecret = _configuration["Stripe:WebhookSecret"];
             var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
             try
             {
                 var stripeEvent = EventUtility.ConstructEvent(
                     json,
                     Request.Headers["Stripe-Signature"],
-                    pubKey
+                    webhookSecret
                 );
 
                 if (stripeEvent.Type == Events.PaymentIntentSucceeded)
                 {
                     var paymentIntent = stripeEvent.Data.Object as PaymentIntent;
 
-                    var customerIDCache = Guid.Parse(HttpContext.Request.Query["customerID"]);
+                    //var customerIDCache = Guid.Parse(HttpContext.Request.Query["customerID"]);
+
+                    if (!paymentIntent.Metadata.TryGetValue("customCustomerID", out string customCustomerID))
+                    {
+                        Console.WriteLine("Custom Customer ID is missing in PaymentIntent metadata.");
+                        return BadRequest(new { message = "Custom Customer ID is missing in PaymentIntent metadata." });
+                    }
+                    var customerIDCache = Guid.Parse(customCustomerID);
+
                     var model = _paymentServices.GetPaymentModelFromCache(customerIDCache);
 
                     var newPayment = new PaymentCreateDTO

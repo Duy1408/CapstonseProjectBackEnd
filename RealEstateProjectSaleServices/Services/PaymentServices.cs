@@ -68,7 +68,11 @@ namespace RealEstateProjectSaleServices.Services
                 {
                     Enabled = true,
                 },
-                Description = $"Thanh toán giữ chỗ {detail.Project.ProjectName} {book.OpeningForSale.DecisionName}"
+                Description = $"Thanh toán giữ chỗ {detail.Project.ProjectName} {book.OpeningForSale.DecisionName}",
+                Metadata = new Dictionary<string, string>
+                {
+                    { "customCustomerID", payment.CustomerID.ToString() } // Lưu customerID tùy chỉnh vào metadata
+                }
 
             };
             var paymentIntentService = new PaymentIntentService();
