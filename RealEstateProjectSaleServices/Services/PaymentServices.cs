@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
 using RealEstateProjectSaleRepository.IRepository;
+using Stripe;
 
 namespace RealEstateProjectSaleServices.Services
 {
@@ -45,54 +46,101 @@ namespace RealEstateProjectSaleServices.Services
 
             _memoryCache.Set($"Order_{payment.CustomerID}", payment, TimeSpan.FromMinutes(10));
 
-            string s_wasmClientURL = "https://realestateproject-bdhcgphcfsf6b4g2.canadacentral-01.azurewebsites.net/index.html";
-            var thisApiUrl = _configuration["PaymentApiUrl:ApiUrl"];
+            var customerOptions = new CustomerCreateOptions();
+            var customerService = new CustomerService();
+            var customer = customerService.Create(customerOptions);
 
-            var firstImage = detail.Project.Image
-                                        .Split(',', StringSplitOptions.RemoveEmptyEntries)  // Tách URL bằng dấu phẩy
-                                        .Select(image => image.Trim())  // Loại bỏ khoảng trắng thừa
-                                        .FirstOrDefault();
-
-            var options = new SessionCreateOptions
+            var ephemeralKeyOptions = new EphemeralKeyCreateOptions
             {
-                // Stripe calls the URLs below when certain checkout events happen such as success and failure.
-                SuccessUrl = $"{thisApiUrl}/api/payments/success/" + "{CHECKOUT_SESSION_ID}" + "?customerID=" + payment.CustomerID, // Customer paid.
-                CancelUrl = s_wasmClientURL + "/failed",  // Checkout cancelled.
-                PaymentMethodTypes = new List<string> { "card" },
-                LineItems = new List<SessionLineItemOptions>
-                    { new SessionLineItemOptions
-                        {
-                            PriceData = new SessionLineItemPriceDataOptions
-                            {
-                                UnitAmount = (long)book.OpeningForSale.ReservationPrice,
-                                Currency = "VND",
-                                ProductData = new SessionLineItemPriceDataProductDataOptions
-                                {
-                                    Name = "Thanh toán giữ chỗ " + detail.Project.ProjectName + " " + book.OpeningForSale.DecisionName,
-                                    Images = new List<string> {firstImage }
-                                },
-                            },
-                            Quantity = 1,
-                        },
-                    },
-                Mode = "payment"
+                Customer = customer.Id,
+                StripeVersion = "2024-06-20",
             };
 
-            var service = new SessionService();
-            var session = await service.CreateAsync(options);
+            var ephemeralKeyService = new EphemeralKeyService();
+            var ephemeralKey = ephemeralKeyService.Create(ephemeralKeyOptions);
+
+            var paymentIntentOptions = new PaymentIntentCreateOptions
+            {
+                Amount = (long)book.OpeningForSale.ReservationPrice,
+                Currency = "VND",
+                Customer = customer.Id,
+                AutomaticPaymentMethods = new PaymentIntentAutomaticPaymentMethodsOptions
+                {
+                    Enabled = true,
+                },
+                Description = $"Thanh toán giữ chỗ {detail.Project.ProjectName} {book.OpeningForSale.DecisionName}"
+
+            };
+            var paymentIntentService = new PaymentIntentService();
+            PaymentIntent paymentIntent = paymentIntentService.Create(paymentIntentOptions);
 
             var pubKey = _configuration["Stripe:PubKey"];
-
-            var paymentResponseModel = new PaymentResponseModel()
+            return new PaymentResponseModel
             {
-                SessionId = session.Id,
-                PubKey = pubKey,
-                SessionUrl = session.Url
+                PaymentIntent = paymentIntent.ClientSecret,
+                EphemeralKey = ephemeralKey.Secret,
+                Customer = customer.Id,
+                PublishableKey = pubKey
             };
 
-            return paymentResponseModel;
-
         }
+
+        //public async Task<PaymentResponseModel> CreatePaymentUrl(PaymentInformationModel payment)
+        //{
+        //    var book = _bookService.GetBookingById(payment.BookingID);
+        //    var detail = _detailService.GetProjectCategoryDetailByID(book.ProjectCategoryDetailID);
+        //    var openForSale = _openService.GetOpeningForSaleById(book.OpeningForSaleID);
+
+        //    _memoryCache.Set($"Order_{payment.CustomerID}", payment, TimeSpan.FromMinutes(10));
+
+        //    string s_wasmClientURL = "https://realestateproject-bdhcgphcfsf6b4g2.canadacentral-01.azurewebsites.net/index.html";
+        //    var thisApiUrl = _configuration["PaymentApiUrl:ApiUrl"];
+
+        //    var firstImage = detail.Project.Image
+        //                                .Split(',', StringSplitOptions.RemoveEmptyEntries)  // Tách URL bằng dấu phẩy
+        //                                .Select(image => image.Trim())  // Loại bỏ khoảng trắng thừa
+        //                                .FirstOrDefault();
+
+        //    var options = new SessionCreateOptions
+        //    {
+        //        // Stripe calls the URLs below when certain checkout events happen such as success and failure.
+        //        SuccessUrl = $"{thisApiUrl}/api/payments/success/" + "{CHECKOUT_SESSION_ID}" + "?customerID=" + payment.CustomerID, // Customer paid.
+        //        CancelUrl = s_wasmClientURL + "/failed",  // Checkout cancelled.
+        //        PaymentMethodTypes = new List<string> { "card" },
+        //LineItems = new List<SessionLineItemOptions>
+        //            { new SessionLineItemOptions
+        //                {
+        //                    PriceData = new SessionLineItemPriceDataOptions
+        //                    {
+        //                        UnitAmount = (long) book.OpeningForSale.ReservationPrice,
+        //                        Currency = "VND",
+        //                        ProductData = new SessionLineItemPriceDataProductDataOptions
+        //                        {
+        //                            Name = "Thanh toán giữ chỗ " + detail.Project.ProjectName + " " + book.OpeningForSale.DecisionName,
+        //                            Images = new List<string> { firstImage }
+        //                        },
+        //                    },
+        //                    Quantity = 1,
+        //                },
+        //            },
+        //        Mode = "payment"
+        //    };
+
+        //    var service = new SessionService();
+        //var session = await service.CreateAsync(options);
+
+        //var pubKey = _configuration["Stripe:PubKey"];
+
+        //var paymentResponseModel = new PaymentResponseModel()
+        //{
+        //    SessionId = session.Id,
+        //    PubKey = pubKey,
+        //    SessionUrl = session.Url
+        //};
+
+        //    return paymentResponseModel;
+
+        //}
 
         public Session CheckoutSuccess(string sessionId)
         {

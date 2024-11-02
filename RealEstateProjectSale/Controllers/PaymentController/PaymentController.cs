@@ -17,6 +17,8 @@ using Stripe.FinancialConnections;
 using RealEstateProjectSaleServices.Services;
 using RealEstateProjectSaleBusinessObject.Enums;
 using RealEstateProjectSaleBusinessObject.Enums.EnumHelpers;
+using Google;
+using Stripe.BillingPortal;
 
 namespace RealEstateProjectSale.Controllers.PaymentController
 {
@@ -29,16 +31,19 @@ namespace RealEstateProjectSale.Controllers.PaymentController
         private readonly IBookingServices _bookServices;
         private readonly IDocumentTemplateService _documentService;
         private readonly IFileUploadToBlobService _fileService;
+        private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
 
 
         public PaymentController(IPaymentServices paymentServices, IBookingServices bookServices,
-            IFileUploadToBlobService fileService, IDocumentTemplateService documentService, IMapper mapper)
+            IFileUploadToBlobService fileService, IDocumentTemplateService documentService, IMapper mapper,
+            IConfiguration configuration)
         {
             _paymentServices = paymentServices;
             _bookServices = bookServices;
             _documentService = documentService;
             _fileService = fileService;
+            _configuration = configuration;
             _mapper = mapper;
         }
 
@@ -75,57 +80,134 @@ namespace RealEstateProjectSale.Controllers.PaymentController
 
         }
 
-        [HttpGet("success/{sessionId}")]
-        public IActionResult CheckoutSuccess(string sessionId, [FromQuery] Guid customerID)
+        [HttpPost("stripe-webhook")]
+        public async Task<IActionResult> StripeWebhook()
         {
-            var session = _paymentServices.CheckoutSuccess(sessionId);
-
-            var customerIDCache = Guid.Parse(HttpContext.Request.Query["customerID"]);
-            var model = _paymentServices.GetPaymentModelFromCache(customerIDCache);
-
-            var newPayment = new PaymentCreateDTO
+            var pubKey = _configuration["Stripe:WebhookSecret"];
+            var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
+            try
             {
-                PaymentID = model.PaymentID,
-                Amount = session.AmountTotal.Value,
-                Content = session.LineItems?.Data?.FirstOrDefault()?.Description ?? "No Content",
-                CreatedTime = model.CreatedTime,
-                PaymentTime = DateTime.Now,
-                Status = true,
-                BookingID = model.BookingID,
-                CustomerID = customerIDCache
-            };
+                var stripeEvent = EventUtility.ConstructEvent(
+                    json,
+                    Request.Headers["Stripe-Signature"],
+                    pubKey
+                );
 
-            var payment = _mapper.Map<Payment>(newPayment);
-            _paymentServices.AddNewPayment(payment);
-
-            var book = _bookServices.GetBookingById(newPayment.BookingID);
-            if (book != null)
-            {
-                book.DepositedTimed = newPayment.PaymentTime;
-                book.DepositedPrice = newPayment.Amount;
-                book.UpdatedTime = DateTime.Now;
-                book.Status = BookingStatus.DaDatCho.GetEnumDescription();
-                book.Note = newPayment.Content;
-                _bookServices.UpdateBooking(book);
-
-                var htmlContent = _bookServices.GenerateDocumentContent(book.BookingID);
-                var pdfBytes = _documentService.GeneratePdfFromTemplate(htmlContent);
-                string? blobUrl = null;
-                using (MemoryStream pdfStream = new MemoryStream(pdfBytes))
+                if (stripeEvent.Type == Events.CheckoutSessionCompleted)
                 {
-                    blobUrl = _fileService.UploadSingleFile(pdfStream, book.DocumentTemplate!.DocumentName, "bookingfile");
+                    var paymentIntent = stripeEvent.Data.Object as PaymentIntent;
+
+                    var customerIDCache = Guid.Parse(HttpContext.Request.Query["customerID"]);
+                    var model = _paymentServices.GetPaymentModelFromCache(customerIDCache);
+
+                    var newPayment = new PaymentCreateDTO
+                    {
+                        PaymentID = model.PaymentID,
+                        Amount = paymentIntent.Amount,
+                        Content = paymentIntent.Description,
+                        CreatedTime = model.CreatedTime,
+                        PaymentTime = DateTime.Now,
+                        Status = true,
+                        BookingID = model.BookingID,
+                        CustomerID = customerIDCache
+                    };
+
+                    var payment = _mapper.Map<Payment>(newPayment);
+                    _paymentServices.AddNewPayment(payment);
+
+                    var book = _bookServices.GetBookingById(newPayment.BookingID);
+                    if (book != null)
+                    {
+                        book.DepositedTimed = newPayment.PaymentTime;
+                        book.DepositedPrice = newPayment.Amount;
+                        book.UpdatedTime = DateTime.Now;
+                        book.Status = BookingStatus.DaDatCho.GetEnumDescription();
+                        book.Note = newPayment.Content;
+                        _bookServices.UpdateBooking(book);
+
+                        var htmlContent = _bookServices.GenerateDocumentContent(book.BookingID);
+                        var pdfBytes = _documentService.GeneratePdfFromTemplate(htmlContent);
+                        string? blobUrl = null;
+                        using (MemoryStream pdfStream = new MemoryStream(pdfBytes))
+                        {
+                            blobUrl = _fileService.UploadSingleFile(pdfStream, book.DocumentTemplate!.DocumentName, "bookingfile");
+                        }
+
+                        book.BookingFile = blobUrl;
+                        _bookServices.UpdateBooking(book);
+
+                    }
+
+                    return Ok(new
+                    {
+                        message = "Payment completed successfully."
+                    });
+
                 }
 
-                book.BookingFile = blobUrl;
-                _bookServices.UpdateBooking(book);
-
+                return BadRequest(new
+                {
+                    message = "Payment failed."
+                });
             }
-
-            return Ok(new
+            catch (StripeException e)
             {
-                message = "Payment completed successfully."
-            });
+                return BadRequest(e.Message);
+            }
         }
+
+
+        //[HttpGet("success/{sessionId}")]
+        //public IActionResult CheckoutSuccess(string sessionId, [FromQuery] Guid customerID)
+        //{
+        //    var session = _paymentServices.CheckoutSuccess(sessionId);
+
+        //    var customerIDCache = Guid.Parse(HttpContext.Request.Query["customerID"]);
+        //    var model = _paymentServices.GetPaymentModelFromCache(customerIDCache);
+
+        //    var newPayment = new PaymentCreateDTO
+        //    {
+        //        PaymentID = model.PaymentID,
+        //        Amount = session.AmountTotal.Value,
+        //        Content = session.LineItems?.Data?.FirstOrDefault()?.Description ?? "No Content",
+        //        CreatedTime = model.CreatedTime,
+        //        PaymentTime = DateTime.Now,
+        //        Status = true,
+        //        BookingID = model.BookingID,
+        //        CustomerID = customerIDCache
+        //    };
+
+        //    var payment = _mapper.Map<Payment>(newPayment);
+        //    _paymentServices.AddNewPayment(payment);
+
+        //    var book = _bookServices.GetBookingById(newPayment.BookingID);
+        //    if (book != null)
+        //    {
+        //        book.DepositedTimed = newPayment.PaymentTime;
+        //        book.DepositedPrice = newPayment.Amount;
+        //        book.UpdatedTime = DateTime.Now;
+        //        book.Status = BookingStatus.DaDatCho.GetEnumDescription();
+        //        book.Note = newPayment.Content;
+        //        _bookServices.UpdateBooking(book);
+
+        //        var htmlContent = _bookServices.GenerateDocumentContent(book.BookingID);
+        //        var pdfBytes = _documentService.GeneratePdfFromTemplate(htmlContent);
+        //        string? blobUrl = null;
+        //        using (MemoryStream pdfStream = new MemoryStream(pdfBytes))
+        //        {
+        //            blobUrl = _fileService.UploadSingleFile(pdfStream, book.DocumentTemplate!.DocumentName, "bookingfile");
+        //        }
+
+        //        book.BookingFile = blobUrl;
+        //        _bookServices.UpdateBooking(book);
+
+        //    }
+
+        //    return Ok(new
+        //    {
+        //        message = "Payment completed successfully."
+        //    });
+        //}
 
         [HttpGet]
         [SwaggerOperation(Summary = "Get All Payment")]
