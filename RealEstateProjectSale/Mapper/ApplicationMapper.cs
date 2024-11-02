@@ -74,7 +74,7 @@ namespace RealEstateProjectSale.Mapper
             CreateMap<BookingCreateDTO, Booking>().ReverseMap();
             CreateMap<BookingUpdateDTO, Booking>().ReverseMap();
 
-            CreateMap<PropertyVM, Property>().ReverseMap().ForMember(dest => dest.BathRoom,
+            CreateMap<Property,PropertyVM>().ForMember(dest => dest.BathRoom,
                                        opt => opt.MapFrom(src => src.UnitType!.BathRoom))
                                                           .ForMember(dest => dest.BedRoom,
                                        opt => opt.MapFrom(src => src.UnitType!.BedRoom))
