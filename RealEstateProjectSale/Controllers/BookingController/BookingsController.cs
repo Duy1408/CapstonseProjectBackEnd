@@ -114,6 +114,27 @@ namespace RealEstateProjectSale.Controllers.BookingController
             }
         }
 
+        [HttpGet("{propertyid}")]
+        [SwaggerOperation(Summary = "Get bookings by propertyid")]
+        public IActionResult GetBookingPropertyID(Guid propertyid)
+        {
+            try
+            {
+                if (_book.GetBookings() == null)
+                {
+                    return NotFound();
+                }
+                var books = _book.GetBookingByPropertyID(propertyid);
+                var response = _mapper.Map<List<BookingVM>>(books);
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get Booking By ID")]
         public IActionResult GetBookingByID(Guid id)

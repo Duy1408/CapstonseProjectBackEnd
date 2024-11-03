@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -33,16 +34,26 @@ namespace RealEstateProjectSale.Controllers.PropertyController
         private readonly IMapper _mapper;
         private readonly BlobServiceClient _blobServiceClient;
         private readonly IHubContext<PropertyHub> _hubContext;
+        private readonly IContractServices _contractServices;
+        private readonly IFileUploadToBlobService _fileService;
+        private readonly IBookingServices _booking;
+
+
+
+
 
         public static int PAGE_SIZE { get; set; } = 5;
 
-        public PropertyController(IHubContext<PropertyHub> hubContext, IPropertyServices pro, IPagingServices pagingServices, BlobServiceClient blobServiceClient, IMapper mapper)
+        public PropertyController(IHubContext<PropertyHub> hubContext, IPropertyServices pro, IPagingServices pagingServices, BlobServiceClient blobServiceClient, IMapper mapper, IContractServices contractServices, IFileUploadToBlobService fileService, IBookingServices booking)
         {
             _pro = pro;
             _pagingServices = pagingServices;
             _blobServiceClient = blobServiceClient;
             _mapper = mapper;
             _hubContext = hubContext;
+            _contractServices = contractServices;
+            _fileService = fileService;
+            _booking = booking;
         }
 
         [HttpGet]
@@ -385,24 +396,53 @@ namespace RealEstateProjectSale.Controllers.PropertyController
         {
             try
             {
-
+                
                 var existingProperty = _pro.GetPropertyById(propertyid);
                 if (existingProperty != null)
                 {
                     existingProperty.Status = PropertyStatus.GiuCho.GetEnumDescription();
                     _pro.UpdateProperty(existingProperty);
+                    string nextContractCode = GenerateNextContractCode();
+                    var checkbooking = _booking.GetBookingByPropertyID(propertyid);
+                    if(checkbooking != null)
+                    {
+                        var newContract = new ContractCreateDTO
+                        {
+                            ContractID = Guid.NewGuid(),
+                            ContractCode = nextContractCode,
+                            ContractName = "Thỏa thuận đặt cọc  " + existingProperty.PropertyID,
+                            ContractType = "Đặt cọc",
+                            CreatedTime = DateTime.Now,
+                            UpdatedTime = null,
+                            DateSigned = null,
+                            Status = ContractStatus.ChoXacNhanTTDC.GetEnumDescription(),
+
+                        };
+                    }
+               
+
+
+
                     await _hubContext.Clients.All.SendAsync("ReceivePropertyStatus", propertyid.ToString(), existingProperty.Status);
                     return Ok(new
                     {
                         message = "Update Property Successfully"
                     });
-
                 }
-
                 return NotFound(new
                 {
                     message = "Property not found."
                 });
+
+      
+
+
+
+
+
+
+
+
 
             }
             catch (Exception ex)
@@ -410,6 +450,30 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                 return BadRequest(ex.Message);
             }
         }
+
+
+        private string GenerateNextContractCode()
+        {
+            // Lấy số hợp đồng hiện tại (có thể từ DB hoặc cache)
+            var lastContract = _contractServices.GetLastContract();
+
+            int nextNumber = 1;
+
+            // Nếu có hợp đồng trước đó, lấy số lớn nhất và tăng lên
+            if (lastContract != null)
+            {
+                string lastCode = lastContract.ContractCode.Split('/')[0];  // Lấy phần số trước dấu "/"
+                int.TryParse(lastCode, out nextNumber);
+                nextNumber++;  // Tăng số lên
+            }
+
+            // Định dạng mã hợp đồng, số có 4 chữ số kèm phần định danh "/TTĐC"
+            string nextContractCode = nextNumber.ToString() + "/TTĐC";
+
+            return nextContractCode;
+        }
+
+
 
     }
 
