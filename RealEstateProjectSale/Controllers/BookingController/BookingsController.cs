@@ -114,7 +114,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
             }
         }
 
-        [HttpGet("{propertyid}")]
+        [HttpGet("property/{propertyid}")]
         [SwaggerOperation(Summary = "Get bookings by propertyid")]
         public IActionResult GetBookingPropertyID(Guid propertyid)
         {
