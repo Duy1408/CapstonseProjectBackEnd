@@ -21,6 +21,7 @@ namespace RealEstateProjectSaleRepository.IRepository
         Booking? GetBookingByDepositedTimed(int numberBooking);
 
         Booking? GetBookingByRandom(int numberBooking);
+        Booking? GetBookingByPropertyID(Guid propertyid);
 
         List<Booking> GetBookingByBooked();
         List<Booking> GetBookingByCheckedIn();

@@ -97,6 +97,23 @@ namespace RealEstateProjectSaleDAO.DAOs
                                      .FirstOrDefault();
         }
 
+        public Booking? GetBookingByPropertyID(Guid propertyid)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            return _context.Bookings!.Include(c => c.OpeningForSale)
+                                     .Include(c => c.Customer)
+                                     .Include(c => c.Staff)
+                                     .Include(c => c.Property)
+                                     .Include(c => c.DocumentTemplate)
+                                     .Include(o => o.ProjectCategoryDetail)
+                                        .ThenInclude(pc => pc.Project)
+                                     .Include(o => o.ProjectCategoryDetail)
+                                        .ThenInclude(pc => pc.PropertyCategory)
+                                     .Where(b => b.PropertyID == propertyid                                  
+                                     && b.Status != BookingStatus.DaHuy.GetEnumDescription())               
+                                                                    .FirstOrDefault();
+        }
+
         public Booking? GetBookingByRandom(int numberBooking)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();

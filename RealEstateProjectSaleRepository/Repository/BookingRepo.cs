@@ -56,6 +56,11 @@ namespace RealEstateProjectSaleRepository.Repository
             return dao.GetBookingByID(id);
         }
 
+        public Booking? GetBookingByPropertyID(Guid propertyid)
+        {
+            return dao.GetBookingByPropertyID(propertyid);
+        }
+
         public Booking? GetBookingByRandom(int numberBooking)
         {
             return dao.GetBookingByRandom(numberBooking);
