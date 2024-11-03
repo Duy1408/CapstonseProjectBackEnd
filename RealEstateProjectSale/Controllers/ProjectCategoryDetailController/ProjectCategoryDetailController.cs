@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Google.Api.Gax.ResourceNames;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
 using RealEstateProjectSaleBusinessObject.DTO.Create;
 using RealEstateProjectSaleBusinessObject.DTO.Update;
@@ -15,11 +17,14 @@ namespace RealEstateProjectSale.Controllers.ProjectCategoryDetailController
     public class ProjectCategoryDetailController : ControllerBase
     {
         private readonly IProjectCategoryDetailServices _detailServices;
+        private readonly IOpeningForSaleServices _openService;
         private readonly IMapper _mapper;
 
-        public ProjectCategoryDetailController(IProjectCategoryDetailServices detailServices, IMapper mapper)
+        public ProjectCategoryDetailController(IProjectCategoryDetailServices detailServices,
+            IOpeningForSaleServices openService, IMapper mapper)
         {
             _detailServices = detailServices;
+            _openService = openService;
             _mapper = mapper;
         }
 
@@ -95,7 +100,19 @@ namespace RealEstateProjectSale.Controllers.ProjectCategoryDetailController
 
             if (detail != null)
             {
-                var responese = _mapper.Map<List<ProjectCategoryDetailVM>>(detail);
+
+
+                var details = _mapper.Map<List<ProjectCategoryDetailVM>>(detail);
+
+                var responese = details.Select(detailOpen => new ProjectCategoryDetailOpenVM
+                {
+                    ProjectCategoryDetailID = detailOpen.ProjectCategoryDetailID,
+                    ProjectID = detailOpen.ProjectID,
+                    ProjectName = detailOpen.ProjectName,
+                    PropertyCategoryID = detailOpen.PropertyCategoryID,
+                    PropertyCategoryName = detailOpen.PropertyCategoryName,
+                    OpenForSale = _openService.GetOpeningForSaleByProjectCategoryDetailID(detailOpen.ProjectCategoryDetailID).Any()
+                }).ToList();
 
                 return Ok(responese);
             }
