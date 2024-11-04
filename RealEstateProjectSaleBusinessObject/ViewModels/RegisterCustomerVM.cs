@@ -31,9 +31,7 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public string Nationality { get; set; }
         public string? PlaceofOrigin { get; set; }
         public string? PlaceOfResidence { get; set; }
-        [Column(TypeName = "date")]
         public string? DateOfExpiry { get; set; }
-
         public string? Taxcode { get; set; }
         public string? BankName { get; set; }
         public string? BankNumber { get; set; }
