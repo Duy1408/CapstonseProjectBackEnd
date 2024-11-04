@@ -343,6 +343,15 @@ namespace RealEstateProjectSale.Controllers.BookingController
                     });
                 }
 
+                var existingIdentification = _customerServices.CheckCustomerByIdentification(customerID);
+                if (existingIdentification != null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Customer has not updated identification documents."
+                    });
+                }
+
                 var existingDetail = _detailServices.GetProjectCategoryDetailByID(categoryDetailID);
                 if (existingDetail == null)
                 {

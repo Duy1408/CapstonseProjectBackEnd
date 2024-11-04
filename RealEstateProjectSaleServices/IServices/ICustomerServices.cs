@@ -15,6 +15,7 @@ namespace RealEstateProjectSaleServices.IServices
         Customer GetCustomerByAccountID(Guid id);
         void UpdateCustomer(Customer customer);
         bool ChangeStatusCustomer(Customer customer);
+        Customer CheckCustomerByIdentification(Guid id);
 
     }
 }

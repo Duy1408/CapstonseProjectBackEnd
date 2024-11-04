@@ -105,5 +105,20 @@ namespace RealEstateProjectSaleDAO.DAOs
             }
         }
 
+        public Customer CheckCustomerByIdentification(Guid id)
+        {
+            try
+            {
+                var customer = _context.Customers!.Include(a => a.Account)
+                                           .SingleOrDefault(c => c.CustomerID == id &&
+                                           (c.BankNumber == null || c.IdentityCardNumber == null));
+                return customer;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
     }
 }
