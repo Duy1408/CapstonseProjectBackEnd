@@ -24,7 +24,8 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public string? PlaceOfResidence { get; set; }
         [Column(TypeName = "date")]
         [JsonConverter(typeof(DateOnlyConverter))]
-        public DateTime? DateOfIssue { get; set; }
+        public string? DateOfExpiry { get; set; }
+
         public string? Taxcode { get; set; }
         public string? BankName { get; set; }
         public string? BankNumber { get; set; }

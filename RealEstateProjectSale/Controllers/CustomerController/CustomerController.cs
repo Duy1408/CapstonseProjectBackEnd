@@ -138,7 +138,7 @@ namespace RealEstateProjectSale.Controllers.CustomerController
                     Nationality = accountCustomer.Nationality,
                     PlaceofOrigin = accountCustomer.PlaceofOrigin,
                     PlaceOfResidence = accountCustomer.PlaceOfResidence,
-                    DateOfIssue = accountCustomer.DateOfIssue,
+                    DateOfExpiry = accountCustomer.DateOfExpiry,
                     Taxcode = accountCustomer.Taxcode,
                     BankName = accountCustomer.BankName,
                     BankNumber = accountCustomer.BankNumber,
@@ -202,9 +202,9 @@ namespace RealEstateProjectSale.Controllers.CustomerController
                     {
                         existingCustomer.PlaceOfResidence = customer.PlaceOfResidence;
                     }
-                    if (customer.DateOfIssue.HasValue)
+                    if (!string.IsNullOrEmpty(customer.DateOfExpiry))
                     {
-                        existingCustomer.DateOfIssue = customer.DateOfIssue.Value;
+                        existingCustomer.DateOfExpiry = customer.DateOfExpiry;
                     }
                     if (!string.IsNullOrEmpty(customer.Taxcode))
                     {

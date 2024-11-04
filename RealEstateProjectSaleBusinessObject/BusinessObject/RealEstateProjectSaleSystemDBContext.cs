@@ -46,6 +46,8 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public virtual DbSet<Salespolicy>? Salespolicies { get; set; }
         public virtual DbSet<Staff>? Staffs { get; set; }
         public virtual DbSet<ProjectCategoryDetail>? ProjectCategoryDetails { get; set; }
+        public virtual DbSet<PanoramaImage>? PanoramaImages { get; set; }
+
 
 
 
