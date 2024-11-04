@@ -392,7 +392,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
 
         [HttpPut("select/{propertyid}")]
         [SwaggerOperation(Summary = "Update Property status by ID")]
-        public async Task<IActionResult> UpdateStatusProperty( Guid propertyid)
+        public async Task<IActionResult> UpdateStatusProperty( Guid propertyid, [FromForm] ContractRequestDTO contract)
         {
             try
             {
@@ -402,12 +402,14 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                 {
                     existingProperty.Status = PropertyStatus.GiuCho.GetEnumDescription();
                     _pro.UpdateProperty(existingProperty);
-                    string nextContractCode = GenerateNextContractCode();
+                  
                     var checkbooking = _booking.GetBookingByPropertyID(propertyid);
                     if(checkbooking != null)
                     {
+                        string nextContractCode = GenerateNextContractCode();
                         var newContract = new ContractCreateDTO
                         {
+
                             ContractID = Guid.NewGuid(),
                             ContractCode = nextContractCode,
                             ContractName = "Thỏa thuận đặt cọc  " + existingProperty.PropertyID,
@@ -415,11 +417,26 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                             CreatedTime = DateTime.Now,
                             UpdatedTime = null,
                             DateSigned = null,
+                            ExpiredTime = contract.ExpiredTime,
+                            TotalPrice = contract.TotalPrice,
+                            Description = contract.Description,
+                            ContractDepositFile = contract.ContractDepositFile,
+                            ContractSaleFile = null,
                             Status = ContractStatus.ChoXacNhanTTDC.GetEnumDescription(),
+                            DocumentTemplateID = contract.DocumentTemplateID,
+                            BookingID = contract.BookingID,
+                            PaymentProcessID = contract.PaymentProcessID,
 
                         };
+
+                        
+                var _contract = _mapper.Map<RealEstateProjectSaleBusinessObject.BusinessObject.Contract>(newContract);
+                //_contract.ContractDepositFile = blobUrl;
+                _contractServices.AddNewContract(_contract);
+                     
+
                     }
-               
+
 
 
 
