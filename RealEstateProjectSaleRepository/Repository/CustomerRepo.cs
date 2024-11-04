@@ -17,6 +17,8 @@ namespace RealEstateProjectSaleRepository.Repository
 
         public bool ChangeStatusCustomer(Customer customer) => dao.ChangeStatusCustomer(customer);
 
+        public Customer CheckCustomerByIdentification(Guid id) => dao.CheckCustomerByIdentification(id);
+
         public List<Customer> GetAllCustomer() => dao.GetAllCustomer();
 
         public Customer GetCustomerByAccountID(Guid id) => dao.GetCustomerByAccountID(id);

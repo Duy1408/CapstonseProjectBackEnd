@@ -21,6 +21,8 @@ namespace RealEstateProjectSaleServices.Services
 
         public bool ChangeStatusCustomer(Customer customer) => _customerRepo.ChangeStatusCustomer(customer);
 
+        public Customer CheckCustomerByIdentification(Guid id) => _customerRepo.CheckCustomerByIdentification(id);
+
         public List<Customer> GetAllCustomer() => _customerRepo.GetAllCustomer();
 
         public Customer GetCustomerByAccountID(Guid id) => _customerRepo.GetCustomerByAccountID(id);
