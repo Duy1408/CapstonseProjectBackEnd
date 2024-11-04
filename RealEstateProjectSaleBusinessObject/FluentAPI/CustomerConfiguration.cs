@@ -22,7 +22,7 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
             builder.Property(x => x.Nationality).IsRequired();
             builder.Property(x => x.PlaceofOrigin);
             builder.Property(x => x.PlaceOfResidence);
-            builder.Property(x => x.DateOfIssue);
+            builder.Property(x => x.DateOfExpiry);
             builder.Property(x => x.Taxcode);
             builder.Property(x => x.BankName);
             builder.Property(x => x.BankNumber);
