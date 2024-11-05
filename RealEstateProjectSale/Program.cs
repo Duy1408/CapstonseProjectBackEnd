@@ -13,6 +13,7 @@ using RealEstateProjectSaleBusinessObject.Admin;
 using RealEstateProjectSaleBusinessObject.Model;
 using RealEstateProjectSaleRepository.IRepository;
 using RealEstateProjectSaleRepository.Repository;
+using RealEstateProjectSaleServices.Helper;
 using RealEstateProjectSaleServices.IServices;
 using RealEstateProjectSaleServices.Services;
 using Stripe;
@@ -97,6 +98,9 @@ builder.Services.AddScoped<IDocumentTemplateRepo, DocumentTemplateRepo>();
 builder.Services.AddScoped<IDocumentTemplateService, DocumentTemplateService>();
 builder.Services.AddScoped<INotificationRepo, NotificationRepo>();
 builder.Services.AddScoped<INotificationServices, NotificationServices>();
+//send email
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddTransient<IEmailService, EmailServices>();
 
 
 //Admin Account Config
