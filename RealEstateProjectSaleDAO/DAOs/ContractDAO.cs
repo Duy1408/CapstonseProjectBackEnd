@@ -60,6 +60,8 @@ namespace RealEstateProjectSaleDAO.DAOs
             }
         }
 
+       
+
         public void UpdateContract(Contract contract)
         {
             try
