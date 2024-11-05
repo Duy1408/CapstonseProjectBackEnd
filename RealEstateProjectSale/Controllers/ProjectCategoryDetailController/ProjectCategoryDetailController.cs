@@ -76,7 +76,7 @@ namespace RealEstateProjectSale.Controllers.ProjectCategoryDetailController
         [SwaggerOperation(Summary = "Get ProjectCategoryDetail By ProjectID and PropertyCategoryID")]
         public IActionResult GetPropertyCategoryByID(Guid projectID, Guid propertyCategoryID)
         {
-            var detail = _detailServices.GetProjectCategoryDetailByID(projectID, propertyCategoryID);
+            var detail = _detailServices.GetDetailByProjectIDCategoryID(projectID, propertyCategoryID);
 
             if (detail != null)
             {
@@ -152,13 +152,13 @@ namespace RealEstateProjectSale.Controllers.ProjectCategoryDetailController
             }
         }
 
-        [HttpPut("{projectID}/{propertyCategoryID}")]
+        [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Update ProjectCategoryDetail By ID")]
-        public IActionResult UpdateProjectCategoryDetail([FromForm] ProjectCategoryDetailUpdateDTO detail, Guid projectID, Guid propertyCategoryID)
+        public IActionResult UpdateProjectCategoryDetail([FromForm] ProjectCategoryDetailUpdateDTO detail, Guid id)
         {
             try
             {
-                var existingDetail = _detailServices.GetProjectCategoryDetailByID(projectID, propertyCategoryID);
+                var existingDetail = _detailServices.GetProjectCategoryDetailByID(id);
                 if (existingDetail != null)
                 {
                     if (detail.ProjectID.HasValue)
@@ -192,16 +192,16 @@ namespace RealEstateProjectSale.Controllers.ProjectCategoryDetailController
             }
         }
 
-        [HttpDelete("{projectID}/{propertyCategoryID}")]
-        [SwaggerOperation(Summary = "Delete ProjectCategoryDetail By ProjectID And PropertyCategoryID")]
-        public IActionResult DeleteProjectCategoryDetailByID(Guid projectID, Guid propertyCategoryID)
+        [HttpDelete("{id}")]
+        [SwaggerOperation(Summary = "Delete ProjectCategoryDetail By ID")]
+        public IActionResult DeleteProjectCategoryDetailByID(Guid id)
         {
             try
             {
-                var detail = _detailServices.GetProjectCategoryDetailByProjectID(projectID);
+                var detail = _detailServices.GetProjectCategoryDetailByID(id);
                 if (detail != null)
                 {
-                    _detailServices.DeleteProjectCategoryDetailByID(projectID, propertyCategoryID);
+                    _detailServices.DeleteProjectCategoryDetailByID(id);
                     return Ok(new
                     {
                         message = "Delete ProjectCategoryDetail Successfully"

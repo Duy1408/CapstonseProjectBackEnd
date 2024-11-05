@@ -109,8 +109,8 @@ namespace RealEstateProjectSaleDAO.DAOs
                                         .ThenInclude(pc => pc.Project)
                                      .Include(o => o.ProjectCategoryDetail)
                                         .ThenInclude(pc => pc.PropertyCategory)
-                                     .Where(b => b.PropertyID == propertyid                                  
-                                     && b.Status != BookingStatus.DaHuy.GetEnumDescription())               
+                                     .Where(b => b.PropertyID == propertyid
+                                     && b.Status != BookingStatus.DaHuy.GetEnumDescription())
                                                                     .FirstOrDefault();
         }
 
@@ -214,6 +214,39 @@ namespace RealEstateProjectSaleDAO.DAOs
                                         .ThenInclude(pc => pc.PropertyCategory)
                                     .Where(a => a.CustomerID == id)
                                     .ToList();
+        }
+
+        public List<Booking> GetBookingByStaffID(Guid id)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            return _context.Bookings.Include(c => c.OpeningForSale)
+                                    .Include(c => c.Customer)
+                                    .Include(c => c.Staff)
+                                    .Include(c => c.Property)
+                                    .Include(c => c.DocumentTemplate)
+                                    .Include(o => o.ProjectCategoryDetail)
+                                        .ThenInclude(pc => pc.Project)
+                                    .Include(o => o.ProjectCategoryDetail)
+                                        .ThenInclude(pc => pc.PropertyCategory)
+                                    .Where(a => a.StaffID == id)
+                                    .ToList();
+        }
+
+        public Booking? GetBookingByCustomerSelect(Guid id)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            return _context.Bookings!.Include(c => c.OpeningForSale)
+                                    .Include(c => c.Customer)
+                                    .Include(c => c.Staff)
+                                    .Include(c => c.Property)
+                                    .Include(c => c.DocumentTemplate)
+                                    .Include(o => o.ProjectCategoryDetail)
+                                        .ThenInclude(pc => pc.Project)
+                                    .Include(o => o.ProjectCategoryDetail)
+                                        .ThenInclude(pc => pc.PropertyCategory)
+                                    .Where(b => b.CustomerID == id
+                                     && b.Status == BookingStatus.DaCheckIn.GetEnumDescription())
+                                                                    .FirstOrDefault();
         }
 
         public Booking CheckExistingBooking(Guid openForSaleID, Guid categoryDetailID, Guid customerID)

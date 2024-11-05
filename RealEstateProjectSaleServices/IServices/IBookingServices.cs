@@ -20,13 +20,14 @@ namespace RealEstateProjectSaleServices.IServices
 
         Booking? GetBookingByDepositedTimed(int numberBooking);
         Booking? GetBookingByPropertyID(Guid propertyid);
-
+        Booking? GetBookingByCustomerSelect(Guid id);
         Booking? GetBookingByRandom(int numberBooking);
 
         List<Booking> GetBookingByBooked();
         List<Booking> GetBookingByCheckedIn();
         List<Booking> GetBookingByDocumentID(Guid id);
         List<Booking> GetBookingByCustomerID(Guid id);
+        List<Booking> GetBookingByStaffID(Guid id);
         Booking CheckExistingBooking(Guid openForSaleID, Guid categoryDetailID, Guid customerID);
         string GenerateDocumentContent(Guid bookingId);
 

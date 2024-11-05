@@ -61,7 +61,7 @@ namespace RealEstateProjectSaleDAO.DAOs
             }
         }
 
-        public ProjectCategoryDetail GetProjectCategoryDetailByID(Guid projectID, Guid propertyCategoryID)
+        public ProjectCategoryDetail GetDetailByProjectIDCategoryID(Guid projectID, Guid propertyCategoryID)
         {
             try
             {
@@ -97,7 +97,7 @@ namespace RealEstateProjectSaleDAO.DAOs
         {
             try
             {
-                var a = _context.ProjectCategoryDetails!.SingleOrDefault(c => c.ProjectID == detail.ProjectID);
+                var a = _context.ProjectCategoryDetails!.SingleOrDefault(c => c.ProjectCategoryDetailID == detail.ProjectCategoryDetailID);
 
                 _context.Entry(a).CurrentValues.SetValues(detail);
                 _context.SaveChanges();
@@ -109,10 +109,10 @@ namespace RealEstateProjectSaleDAO.DAOs
             }
         }
 
-        public void DeleteProjectCategoryDetailByID(Guid projectID, Guid propertyCategoryID)
+        public void DeleteProjectCategoryDetailByID(Guid id)
         {
             var detail = _context.ProjectCategoryDetails!
-                        .SingleOrDefault(lo => lo.ProjectID == projectID && lo.PropertyCategoryID == propertyCategoryID);
+                        .SingleOrDefault(lo => lo.ProjectCategoryDetailID == id);
             if (detail != null)
             {
                 _context.Remove(detail);

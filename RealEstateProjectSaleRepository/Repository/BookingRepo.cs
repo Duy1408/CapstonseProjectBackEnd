@@ -41,6 +41,11 @@ namespace RealEstateProjectSaleRepository.Repository
             return dao.GetBookingByCustomerID(id);
         }
 
+        public Booking? GetBookingByCustomerSelect(Guid id)
+        {
+            return dao.GetBookingByCustomerSelect(id);
+        }
+
         public Booking? GetBookingByDepositedTimed(int numberBooking)
         {
             return dao.GetBookingByDepositedTimed(numberBooking);
@@ -64,6 +69,11 @@ namespace RealEstateProjectSaleRepository.Repository
         public Booking? GetBookingByRandom(int numberBooking)
         {
             return dao.GetBookingByRandom(numberBooking);
+        }
+
+        public List<Booking> GetBookingByStaffID(Guid id)
+        {
+            return dao.GetBookingByStaffID(id);
         }
 
         public List<Booking> GetBookings()

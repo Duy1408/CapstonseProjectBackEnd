@@ -128,5 +128,15 @@ namespace RealEstateProjectSaleServices.Services
         {
             return _book.GetBookingByPropertyID(propertyid);
         }
+
+        public Booking? GetBookingByCustomerSelect(Guid id)
+        {
+            return _book.GetBookingByCustomerSelect(id);
+        }
+
+        public List<Booking> GetBookingByStaffID(Guid id)
+        {
+            return _book.GetBookingByStaffID(id);
+        }
     }
 }

@@ -30,10 +30,13 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
         public string? Description { get; set; }
         public IFormFile? ContractDepositFile { get; set; }
         public IFormFile? ContractSaleFile { get; set; }
+        public IFormFile? PriceSheetFile { get; set; }
         public string Status { get; set; }
         public Guid? DocumentTemplateID { get; set; }
         public Guid BookingID { get; set; }
+        public Guid CustomerID { get; set; }
         public Guid? PaymentProcessID { get; set; }
+        public Guid? PromotionDetaiID { get; set; }
 
     }
 }
