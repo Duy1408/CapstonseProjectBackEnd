@@ -37,6 +37,9 @@ namespace RealEstateProjectSale.Controllers.PropertyController
         private readonly IContractServices _contractServices;
         private readonly IFileUploadToBlobService _fileService;
         private readonly IBookingServices _booking;
+        private readonly ICustomerServices _customerService;
+        private readonly IOpenForSaleDetailServices _openDetailService;
+        private readonly IDocumentTemplateService _documentService;
 
 
 
@@ -44,7 +47,11 @@ namespace RealEstateProjectSale.Controllers.PropertyController
 
         public static int PAGE_SIZE { get; set; } = 5;
 
-        public PropertyController(IHubContext<PropertyHub> hubContext, IPropertyServices pro, IPagingServices pagingServices, BlobServiceClient blobServiceClient, IMapper mapper, IContractServices contractServices, IFileUploadToBlobService fileService, IBookingServices booking)
+        public PropertyController(IHubContext<PropertyHub> hubContext, IPropertyServices pro,
+            IPagingServices pagingServices, BlobServiceClient blobServiceClient, IMapper mapper,
+            IContractServices contractServices, IFileUploadToBlobService fileService, IBookingServices booking,
+            ICustomerServices customerService, IOpenForSaleDetailServices openDetailService,
+            IDocumentTemplateService documentService)
         {
             _pro = pro;
             _pagingServices = pagingServices;
@@ -54,6 +61,9 @@ namespace RealEstateProjectSale.Controllers.PropertyController
             _contractServices = contractServices;
             _fileService = fileService;
             _booking = booking;
+            _customerService = customerService;
+            _openDetailService = openDetailService;
+            _documentService = documentService;
         }
 
         [HttpGet]
@@ -296,7 +306,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                     BlockID = property.BlockID,
                     ZoneID = property.ZoneID,
                     ProjectCategoryDetailID = property.ProjectCategoryDetailID,
-                    
+
 
                 };
 
@@ -390,76 +400,91 @@ namespace RealEstateProjectSale.Controllers.PropertyController
 
 
 
-        [HttpPut("select/{propertyid}")]
-        [SwaggerOperation(Summary = "Update Property status by ID")]
-        public async Task<IActionResult> UpdateStatusProperty( Guid propertyid, [FromForm] ContractRequestDTO contract)
+        [HttpPut("select")]
+        [SwaggerOperation(Summary = "Customer select Property after check in")]
+        public async Task<IActionResult> UpdateStatusProperty(Guid propertyid, Guid customerID)
         {
             try
             {
-                
-                var existingProperty = _pro.GetPropertyById(propertyid);
-                if (existingProperty != null)
+                var existingCustomer = _customerService.GetCustomerByID(customerID);
+                if (existingCustomer == null)
                 {
-                    existingProperty.Status = PropertyStatus.GiuCho.GetEnumDescription();
-                    _pro.UpdateProperty(existingProperty);
-                  
-                    var checkbooking = _booking.GetBookingByPropertyID(propertyid);
-                    if(checkbooking != null)
+                    return NotFound(new
                     {
-                        string nextContractCode = GenerateNextContractCode();
-                        var newContract = new ContractCreateDTO
-                        {
-
-                            ContractID = Guid.NewGuid(),
-                            ContractCode = nextContractCode,
-                            ContractName = "Thỏa thuận đặt cọc  " + existingProperty.PropertyID,
-                            ContractType = "Đặt cọc",
-                            CreatedTime = DateTime.Now,
-                            UpdatedTime = null,
-                            DateSigned = null,
-                            ExpiredTime = contract.ExpiredTime,
-                            TotalPrice = contract.TotalPrice,
-                            Description = contract.Description,
-                            ContractDepositFile = contract.ContractDepositFile,
-                            ContractSaleFile = null,
-                            Status = ContractStatus.ChoXacNhanTTDC.GetEnumDescription(),
-                            DocumentTemplateID = contract.DocumentTemplateID,
-                            BookingID = contract.BookingID,
-                            PaymentProcessID = contract.PaymentProcessID,
-
-                        };
-
-                        
-                var _contract = _mapper.Map<RealEstateProjectSaleBusinessObject.BusinessObject.Contract>(newContract);
-                //_contract.ContractDepositFile = blobUrl;
-                _contractServices.AddNewContract(_contract);
-                     
-
-                    }
-
-
-
-
-                    await _hubContext.Clients.All.SendAsync("ReceivePropertyStatus", propertyid.ToString(), existingProperty.Status);
-                    return Ok(new
-                    {
-                        message = "Update Property Successfully"
+                        message = "Customer not found."
                     });
                 }
-                return NotFound(new
+
+                var existingProperty = _pro.GetPropertyById(propertyid);
+                if (existingProperty == null)
                 {
-                    message = "Property not found."
+                    return NotFound(new
+                    {
+                        message = "Property not found."
+                    });
+                }
+
+                existingProperty.Status = PropertyStatus.GiuCho.GetEnumDescription();
+                _pro.UpdateProperty(existingProperty);
+
+                var booking = _booking.GetBookingByCustomerSelect(customerID);
+                if (booking == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Booking not found."
+                    });
+                }
+
+                var openDetail = _openDetailService.GetDetailByPropertyIdOpenId(propertyid, booking.OpeningForSaleID);
+                if (openDetail == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Property not for sale"
+                    });
+                }
+                var documentReservation = _documentService.GetDocumentByDocumentName("Thỏa thuận đặt cọc");
+                if (documentReservation == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Document not found."
+                    });
+                }
+
+                string nextContractCode = GenerateNextContractCode();
+                var newContract = new ContractCreateDTO
+                {
+                    ContractID = Guid.NewGuid(),
+                    ContractCode = nextContractCode,
+                    ContractName = "Thỏa thuận đặt cọc  " + existingProperty.PropertyID,
+                    ContractType = ContractType.DatCoc.GetEnumDescription(),
+                    CreatedTime = DateTime.Now,
+                    UpdatedTime = null,
+                    DateSigned = null,
+                    ExpiredTime = DateTime.Now.AddDays(1),
+                    TotalPrice = openDetail.Price,
+                    Description = null,
+                    ContractDepositFile = null,
+                    ContractSaleFile = null,
+                    PriceSheetFile = null,
+                    Status = ContractStatus.ChoXacNhanTTDC.GetEnumDescription(),
+                    DocumentTemplateID = documentReservation.DocumentTemplateID,
+                    BookingID = booking.BookingID,
+                    CustomerID = customerID,
+                    PaymentProcessID = null,
+                    PromotionDetaiID = null
+                };
+
+                var _contract = _mapper.Map<RealEstateProjectSaleBusinessObject.BusinessObject.Contract>(newContract);
+                _contractServices.AddNewContract(_contract);
+
+                await _hubContext.Clients.All.SendAsync("ReceivePropertyStatus", propertyid.ToString(), existingProperty.Status);
+                return Ok(new
+                {
+                    message = "Update Property Successfully"
                 });
-
-      
-
-
-
-
-
-
-
-
 
             }
             catch (Exception ex)

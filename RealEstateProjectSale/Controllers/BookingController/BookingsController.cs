@@ -175,6 +175,26 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
         }
 
+        [HttpGet("staff/{staffId}")]
+        [SwaggerOperation(Summary = "Get Booking by staff ID")]
+        public IActionResult GetBookingByStaffID(Guid staffId)
+        {
+            var book = _book.GetBookingByStaffID(staffId);
+
+            if (book != null)
+            {
+                var responese = book.Select(book => _mapper.Map<BookingVM>(book)).ToList();
+
+                return Ok(responese);
+            }
+
+            return NotFound(new
+            {
+                message = "Booking not found."
+            });
+
+        }
+
         [HttpGet("deposits/{numberOfBookings}")]
         [SwaggerOperation(Summary = "Get booking by deposit times")]
         public ActionResult<Booking> GetBookingByDepositedTimed(int numberOfBookings)

@@ -68,6 +68,26 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
 
         }
 
+        [HttpGet("{propertyId}/{openId}")]
+        [SwaggerOperation(Summary = "Get OpenForSaleDetail By PropertyID and OpeningForSaleID")]
+        public IActionResult GetDetailByPropertyIdOpenId(Guid propertyId, Guid openId)
+        {
+            var detail = _detailServices.GetDetailByPropertyIdOpenId(propertyId, openId);
+
+            if (detail != null)
+            {
+                var responese = _mapper.Map<OpenForSaleDetailVM>(detail);
+
+                return Ok(responese);
+            }
+
+            return NotFound(new
+            {
+                message = "OpenForSaleDetail not found."
+            });
+
+        }
+
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new OpenForSaleDetail")]
         public IActionResult AddNewOpenForSaleDetail(OpenForSaleDetailCreateDTO detail)

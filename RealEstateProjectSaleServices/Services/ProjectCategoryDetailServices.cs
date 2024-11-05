@@ -19,11 +19,11 @@ namespace RealEstateProjectSaleServices.Services
 
         public void AddNewProjectCategoryDetail(ProjectCategoryDetail detail) => _detail.AddNewProjectCategoryDetail(detail);
 
-        public void DeleteProjectCategoryDetailByID(Guid projectID, Guid propertyCategoryID) => _detail.DeleteProjectCategoryDetailByID(projectID, propertyCategoryID);
+        public void DeleteProjectCategoryDetailByID(Guid id) => _detail.DeleteProjectCategoryDetailByID(id);
 
         public List<ProjectCategoryDetail> GetAllProjectCategoryDetail() => _detail.GetAllProjectCategoryDetail();
 
-        public ProjectCategoryDetail GetProjectCategoryDetailByID(Guid projectID, Guid propertyCategoryID) => _detail.GetProjectCategoryDetailByID(projectID, propertyCategoryID);
+        public ProjectCategoryDetail GetDetailByProjectIDCategoryID(Guid projectID, Guid propertyCategoryID) => _detail.GetDetailByProjectIDCategoryID(projectID, propertyCategoryID);
 
         public ProjectCategoryDetail GetProjectCategoryDetailByID(Guid id) => _detail.GetProjectCategoryDetailByID(id);
 

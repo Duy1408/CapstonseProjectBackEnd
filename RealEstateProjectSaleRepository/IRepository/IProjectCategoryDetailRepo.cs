@@ -14,8 +14,8 @@ namespace RealEstateProjectSaleRepository.IRepository
         List<ProjectCategoryDetail> GetProjectCategoryDetailByProjectID(Guid id);
         void AddNewProjectCategoryDetail(ProjectCategoryDetail detail);
         void UpdateProjectCategoryDetail(ProjectCategoryDetail detail);
-        void DeleteProjectCategoryDetailByID(Guid projectID, Guid propertyCategoryID);
-        ProjectCategoryDetail GetProjectCategoryDetailByID(Guid projectID, Guid propertyCategoryID);
+        void DeleteProjectCategoryDetailByID(Guid id);
+        ProjectCategoryDetail GetDetailByProjectIDCategoryID(Guid projectID, Guid propertyCategoryID);
 
     }
 }

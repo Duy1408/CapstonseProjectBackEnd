@@ -58,6 +58,22 @@ namespace RealEstateProjectSaleDAO.DAOs
             }
         }
 
+        public OpenForSaleDetail GetDetailByPropertyIdOpenId(Guid propertyId, Guid openId)
+        {
+            try
+            {
+                var details = _context.OpenForSaleDetails!.Include(c => c.OpeningForSale)
+                                                          .Include(c => c.Property)
+                                                          .SingleOrDefault(c => c.PropertyID == propertyId
+                                                             && c.OpeningForSaleID == openId);
+                return details;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public void UpdateOpenForSaleDetail(OpenForSaleDetail detail)
         {
             try

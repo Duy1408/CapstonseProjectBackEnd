@@ -15,11 +15,11 @@ namespace RealEstateProjectSaleRepository.Repository
 
         public void AddNewProjectCategoryDetail(ProjectCategoryDetail detail) => dao.AddNewProjectCategoryDetail(detail);
 
-        public void DeleteProjectCategoryDetailByID(Guid projectID, Guid propertyCategoryID) => dao.DeleteProjectCategoryDetailByID(projectID, propertyCategoryID);
+        public void DeleteProjectCategoryDetailByID(Guid id) => dao.DeleteProjectCategoryDetailByID(id);
 
         public List<ProjectCategoryDetail> GetAllProjectCategoryDetail() => dao.GetAllProjectCategoryDetail();
 
-        public ProjectCategoryDetail GetProjectCategoryDetailByID(Guid projectID, Guid propertyCategoryID) => dao.GetProjectCategoryDetailByID(projectID, propertyCategoryID);
+        public ProjectCategoryDetail GetDetailByProjectIDCategoryID(Guid projectID, Guid propertyCategoryID) => dao.GetDetailByProjectIDCategoryID(projectID, propertyCategoryID);
 
         public ProjectCategoryDetail GetProjectCategoryDetailByID(Guid id) => dao.GetProjectCategoryDetailByID(id);
 

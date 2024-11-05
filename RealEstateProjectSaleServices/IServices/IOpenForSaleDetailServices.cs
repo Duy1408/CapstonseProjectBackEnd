@@ -12,6 +12,7 @@ namespace RealEstateProjectSaleServices.IServices
         List<OpenForSaleDetail> GetAllOpenForSaleDetail();
         void AddNewOpenForSaleDetail(OpenForSaleDetail detail);
         OpenForSaleDetail GetOpenForSaleDetailByID(Guid id);
+        OpenForSaleDetail GetDetailByPropertyIdOpenId(Guid propertyId, Guid openId);
         void UpdateOpenForSaleDetail(OpenForSaleDetail detail);
         void DeleteOpenForSaleDetailByID(Guid id);
 

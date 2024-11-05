@@ -110,10 +110,13 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     Description = contract.Description,
                     ContractDepositFile = contract.ContractDepositFile,
                     ContractSaleFile = null,
+                    PriceSheetFile = null,
                     Status = ContractStatus.ChoXacNhanTTDC.GetEnumDescription(),
                     DocumentTemplateID = contract.DocumentTemplateID,
                     BookingID = contract.BookingID,
+                    CustomerID = contract.CustomerID,
                     PaymentProcessID = contract.PaymentProcessID,
+                    PromotionDetaiID = contract.PromotionDetaiID
 
                 };
 
@@ -138,9 +141,10 @@ namespace RealEstateProjectSale.Controllers.ContractController
         {
             try
             {
-                string? blobUrl1 = null, blobUrl2 = null;
+                string? blobUrl1 = null, blobUrl2 = null, blobUrl3 = null;
                 var depositFile = contract.ContractDepositFile;
                 var saleFile = contract.ContractSaleFile;
+                var priceFile = contract.PriceSheetFile;
                 if (depositFile != null)
                 {
                     using (var pdfDepositStream = depositFile.OpenReadStream())
@@ -153,6 +157,13 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     using (var pdfSaleStream = saleFile.OpenReadStream())
                     {
                         blobUrl2 = _fileService.UploadSingleFile(pdfSaleStream, saleFile.FileName, "contractsalefile");
+                    }
+                }
+                if (priceFile != null)
+                {
+                    using (var pdfSaleStream = priceFile.OpenReadStream())
+                    {
+                        blobUrl3 = _fileService.UploadSingleFile(pdfSaleStream, priceFile.FileName, "pricefile");
                     }
                 }
 
@@ -207,9 +218,17 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     {
                         existingContract.BookingID = contract.BookingID.Value;
                     }
+                    if (contract.CustomerID.HasValue)
+                    {
+                        existingContract.CustomerID = contract.CustomerID.Value;
+                    }
                     if (contract.PaymentProcessID.HasValue)
                     {
                         existingContract.PaymentProcessID = contract.PaymentProcessID.Value;
+                    }
+                    if (contract.PromotionDetaiID.HasValue)
+                    {
+                        existingContract.PromotionDetaiID = contract.PromotionDetaiID.Value;
                     }
                     if (blobUrl1 != null)
                     {
@@ -218,6 +237,10 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     if (blobUrl2 != null)
                     {
                         existingContract.ContractSaleFile = blobUrl2;
+                    }
+                    if (blobUrl3 != null)
+                    {
+                        existingContract.PriceSheetFile = blobUrl3;
                     }
 
                     existingContract.UpdatedTime = DateTime.Now;
