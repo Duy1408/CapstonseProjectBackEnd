@@ -98,9 +98,11 @@ builder.Services.AddScoped<IDocumentTemplateRepo, DocumentTemplateRepo>();
 builder.Services.AddScoped<IDocumentTemplateService, DocumentTemplateService>();
 builder.Services.AddScoped<INotificationRepo, NotificationRepo>();
 builder.Services.AddScoped<INotificationServices, NotificationServices>();
+builder.Services.AddScoped<IPanoramaImageRepo, PanoramaImageRepo>();
+builder.Services.AddScoped<IPanoramaImageServices, PanoramaImageServices>();
 //send email
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
-builder.Services.AddTransient<IEmailService, EmailServices>();
+builder.Services.AddScoped<IEmailService, EmailServices>();
 
 
 //Admin Account Config

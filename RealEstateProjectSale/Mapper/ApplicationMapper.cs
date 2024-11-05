@@ -159,6 +159,10 @@ namespace RealEstateProjectSale.Mapper
             CreateMap<BlockUpdateDTO, Block>().ReverseMap();
             CreateMap<BlockVM, Block>().ReverseMap();
 
+            CreateMap<PanoramaImageCreateDTO, PanoramaImage>().ReverseMap();
+            CreateMap<PanadoraImageUpdateDTO, PanoramaImage>().ReverseMap();
+            CreateMap<PanoramaImageVM, PanoramaImage>().ReverseMap();
+
             CreateMap<FloorCreateDTO, Floor>().ReverseMap();
             CreateMap<FloorUpdateDTO, Floor>().ReverseMap();
             CreateMap<FloorVM, Floor>().ReverseMap();
