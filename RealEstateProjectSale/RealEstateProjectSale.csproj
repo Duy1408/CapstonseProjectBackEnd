@@ -45,6 +45,8 @@
 		</PackageReference>
 		<PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
+		<PackageReference Include="MailKit" Version="4.8.0" />
+		<PackageReference Include="MimeKit" Version="4.8.0" />
 	</ItemGroup>
 
 	<ItemGroup>
