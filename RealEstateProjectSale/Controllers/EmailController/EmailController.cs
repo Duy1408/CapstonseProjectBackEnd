@@ -10,30 +10,51 @@ namespace RealEstateProjectSale.Controllers.EmailController
     [ApiController]
     public class EmailController : ControllerBase
     {
+        private readonly IContractServices _contract;
+        private readonly ICustomerServices _customer;
+        private readonly IAccountServices _account;
+
+
         private readonly IEmailService _emailService;
         private static Dictionary<string, (string Otp, DateTime Expiration)> otpStorage = new Dictionary<string, (string, DateTime)>();
-        public EmailController(IEmailService emailService)
+        public EmailController(IEmailService emailService, IContractServices contract, ICustomerServices customer, IAccountServices account)
         {
             _emailService = emailService;
+            _customer = customer;
+            _contract = contract;
+            _account = account;
         }
-
-
         [HttpPost("SendMail")]
-        public async Task<IActionResult> SendEmail(string email)
+        public async Task<IActionResult> SendEmail(Guid contractid)
         {
-            try
+
+            try { 
+
+                var contract = _contract.GetContractByID(contractid);
+            if (contract == null)
             {
-                if (string.IsNullOrEmpty(email) || !IsValidEmail(email))
+                    return NotFound(new { message = "Contract not found." });
+                }
+                var customer = _customer.GetCustomerByID(contract.CustomerID);
+                if (customer == null)
+                {
+                    return NotFound(new { message = "Customer not found." });
+                }
+                var account = _account.GetAccountByID(customer.AccountID);
+
+                if(account == null || string.IsNullOrEmpty(account.Email)|| !IsValidEmail(account.Email))
                 {
                     return BadRequest(new { message = "Invalid email address." });
-                }               
+                }
+            
+                
                 string otp = GenerateOTP();
-                DateTime expirationTime = DateTime.UtcNow.AddMinutes(3);                 
-                otpStorage[email] = (otp, expirationTime);
+                DateTime expirationTime = DateTime.UtcNow.AddMinutes(3);
+                otpStorage[account.Email] = (otp, expirationTime);
                 Mailrequest mailrequest = new Mailrequest();
-                mailrequest.ToEmail = email;
+                mailrequest.ToEmail = account.Email;
                 mailrequest.Subject = "OTP Verification Code";
-                mailrequest.Body = $"Hello, your OTP code is: {otp}";    
+                mailrequest.Body = $"Hello, your OTP code is: {otp}";
                 await _emailService.SendEmailAsync(mailrequest);
                 return Ok(new { message = "OTP has been sent to your email. " });
             }
@@ -42,20 +63,43 @@ namespace RealEstateProjectSale.Controllers.EmailController
                 return BadRequest(new { error = e.Message });
             }
         }
+
+
+
+
+
+
         [HttpPost("verify-otp")]
-        public IActionResult VerifyOtp(string email, string otp)
+        public IActionResult VerifyOtp(Guid contractid, string otp)
         {
-            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(otp))
+           
+            var contract = _contract.GetContractByID(contractid);
+            if (contract == null)
+            {
+                return NotFound(new { message = "Contract not found." });
+            }
+            var customer = _customer.GetCustomerByID(contract.CustomerID);
+            if (customer == null)
+            {
+                return NotFound(new { message = "Customer not found." });
+            }
+            var account = _account.GetAccountByID(customer.AccountID);
+
+            if (account == null || string.IsNullOrEmpty(account.Email) || !IsValidEmail(account.Email))
+            {
+                return BadRequest(new { message = "Invalid email address." });
+            }
+            if (string.IsNullOrEmpty(account.Email) || string.IsNullOrEmpty(otp))
             {
                 return BadRequest(new { message = "Email and OTP are required." });
-            }          
-            if (otpStorage.TryGetValue(email, out var otpEntry))
+            }
+            if (otpStorage.TryGetValue(account.Email, out var otpEntry))
             {
-               
+
                 if (otpEntry.Otp == otp && otpEntry.Expiration > DateTime.UtcNow)
                 {
-                    
-                    otpStorage.Remove(email);
+
+                    otpStorage.Remove(account.Email);
                     return Ok(new { message = "OTP verification successful." });
                 }
                 else
@@ -68,6 +112,7 @@ namespace RealEstateProjectSale.Controllers.EmailController
                 return BadRequest(new { message = "OTP not found for this email." });
             }
         }
+
         private bool IsValidEmail(string email)
         {
             try
