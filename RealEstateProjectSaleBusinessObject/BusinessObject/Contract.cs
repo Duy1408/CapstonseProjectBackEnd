@@ -23,6 +23,7 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public string? Description { get; set; }
         public string? ContractDepositFile { get; set; }
         public string? ContractSaleFile { get; set; }
+        public string? PriceSheetFile { get; set; }
         public string Status { get; set; }
         public Guid DocumentTemplateID { get; set; }
         public DocumentTemplate? DocumentTemplate { get; set; }
