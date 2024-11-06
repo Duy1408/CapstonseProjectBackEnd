@@ -13,7 +13,8 @@ using RealEstateProjectSaleBusinessObject.Admin;
 using RealEstateProjectSaleBusinessObject.Model;
 using RealEstateProjectSaleRepository.IRepository;
 using RealEstateProjectSaleRepository.Repository;
-using RealEstateProjectSaleServices.Helper;
+using RealEstateProjectSaleBusinessObject.Model;
+
 using RealEstateProjectSaleServices.IServices;
 using RealEstateProjectSaleServices.Services;
 using Stripe;

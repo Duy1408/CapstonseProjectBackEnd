@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RealEstateProjectSaleServices.Helper
+namespace RealEstateProjectSaleBusinessObject.Model
 {
     public class EmailSettings
     {
