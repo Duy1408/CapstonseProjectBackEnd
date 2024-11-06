@@ -18,9 +18,9 @@ namespace RealEstateProjectSaleRepository.IRepository
 
         public void UpdateBooking(Booking p);
 
-        Booking? GetBookingByDepositedTimed(int numberBooking);
+        Booking? GetBookingByDepositedTimed();
 
-        Booking? GetBookingByRandom(int numberBooking);
+        Booking? GetBookingByRandom();
         Booking? GetBookingByPropertyID(Guid propertyid);
         Booking? GetBookingByCustomerSelect(Guid id);
 
