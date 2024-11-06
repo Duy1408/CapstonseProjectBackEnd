@@ -36,7 +36,7 @@ namespace RealEstateProjectSale.Controllers.EmailController
                     return BadRequest(new { message = "Invalid email address." });
                 }
                 string otp = GenerateOTP();
-                DateTime expirationTime = DateTime.UtcNow.AddMinutes(3);
+                DateTime expirationTime = DateTime.UtcNow.AddMinutes(1);
                 otpStorage[email] = (otp, expirationTime);
                 Mailrequest mailrequest = new Mailrequest();
                 mailrequest.ToEmail = email;

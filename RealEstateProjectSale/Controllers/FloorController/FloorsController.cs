@@ -109,7 +109,7 @@ namespace RealEstateProjectSale.Controllers.FloorController
                 _floor.AddNew(b);
                 return Ok(new
                 {
-                    message = "Create Block Successfully"
+                    message = "Create Floor Successfully"
                 });
             }
             catch (Exception ex)
