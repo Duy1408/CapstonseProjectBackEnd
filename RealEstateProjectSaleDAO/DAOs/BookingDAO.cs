@@ -76,7 +76,7 @@ namespace RealEstateProjectSaleDAO.DAOs
                                     .ToList();
         }
 
-        public Booking? GetBookingByDepositedTimed(int numberBooking)
+        public Booking? GetBookingByDepositedTimed()
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
             return _context.Bookings!.Include(c => c.OpeningForSale)
@@ -93,7 +93,6 @@ namespace RealEstateProjectSaleDAO.DAOs
                                      && b.Status == BookingStatus.DaCheckIn.GetEnumDescription())
                                      .OrderBy(b => b.DepositedTimed)
                                      .ThenBy(b => b.BookingID)
-                                     .Take(numberBooking)
                                      .FirstOrDefault();
         }
 
@@ -114,7 +113,7 @@ namespace RealEstateProjectSaleDAO.DAOs
                                                                     .FirstOrDefault();
         }
 
-        public Booking? GetBookingByRandom(int numberBooking)
+        public Booking? GetBookingByRandom()
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
             return _context.Bookings!.Include(c => c.OpeningForSale)
@@ -130,7 +129,6 @@ namespace RealEstateProjectSaleDAO.DAOs
                                      && b.DepositedPrice != null
                                      && b.Status == BookingStatus.DaCheckIn.GetEnumDescription())
                                      .OrderBy(b => Guid.NewGuid())
-                                     .Take(numberBooking)
                                      .FirstOrDefault();
         }
 

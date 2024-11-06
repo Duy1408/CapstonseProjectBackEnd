@@ -84,9 +84,9 @@ namespace RealEstateProjectSaleServices.Services
             return _book.GetBookingByCheckedIn();
         }
 
-        public Booking? GetBookingByDepositedTimed(int numberBooking)
+        public Booking? GetBookingByDepositedTimed()
         {
-            return _book.GetBookingByDepositedTimed(numberBooking);
+            return _book.GetBookingByDepositedTimed();
         }
 
         public Booking GetBookingById(Guid id)
@@ -94,9 +94,9 @@ namespace RealEstateProjectSaleServices.Services
             return _book.GetBookingById(id);
         }
 
-        public Booking? GetBookingByRandom(int numberBooking)
+        public Booking? GetBookingByRandom()
         {
-            return _book.GetBookingByRandom(numberBooking);
+            return _book.GetBookingByRandom();
         }
 
         public List<Booking> GetBookings()

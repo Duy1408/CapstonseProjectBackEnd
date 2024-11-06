@@ -21,6 +21,7 @@ namespace RealEstateProjectSaleRepository.IRepository
         IQueryable<Property> GetPropertyByFloorID(Guid id);
         IQueryable<Property> GetPropertyByBlockID(Guid id);
         IQueryable<Property> GetPropertyByZoneID(Guid id);
+        IQueryable<Property> GetPropertyByProjectCategoryDetailID(Guid id);
         IQueryable<Property> SearchPropertyByName(string searchvalue);
 
     }

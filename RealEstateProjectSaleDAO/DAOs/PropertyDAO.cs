@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
+using RealEstateProjectSaleBusinessObject.Enums;
+using RealEstateProjectSaleBusinessObject.Enums.EnumHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -159,6 +161,22 @@ namespace RealEstateProjectSaleDAO.DAOs
             return a;
         }
 
+        public IQueryable<Property> GetPropertyByProjectCategoryDetailID(Guid id)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            var a = _context.Properties!.Include(c => c.UnitType)
+                                      .Include(c => c.Floor)
+                                      .Include(c => c.Block)
+                                      .Include(c => c.Zone)
+                                         .Include(o => o.ProjectCategoryDetail)
+                                         .ThenInclude(pc => pc.Project)
+                                           .Include(o => o.ProjectCategoryDetail)
+                                            .ThenInclude(pc => pc.PropertyCategory)
+                                      .Where(c => c.ProjectCategoryDetailID == id && c.Status == PropertyStatus.MoBan.GetEnumDescription());
+
+            return a;
+        }
+
         public IQueryable<Property> SearchPropertyByName(string searchvalue)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
@@ -172,6 +190,20 @@ namespace RealEstateProjectSaleDAO.DAOs
                                       .ThenInclude(pc => pc.PropertyCategory)
                                       .Where(a => a.PropertyCode.ToUpper().Contains(searchvalue.Trim().ToUpper()));
             return a;
+        }
+
+        public int GetPropertyCountByStatus(string status)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            return _context.Properties.Include(c => c.UnitType)
+                                      .Include(c => c.Floor)
+                                      .Include(c => c.Block)
+                                      .Include(c => c.Zone)
+                                .Include(o => o.ProjectCategoryDetail)
+                                      .ThenInclude(pc => pc.Project)
+                                      .Include(o => o.ProjectCategoryDetail)
+                                      .ThenInclude(pc => pc.PropertyCategory)
+                                      .Count(p => p.Status == status);
         }
 
     }

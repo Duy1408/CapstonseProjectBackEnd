@@ -195,11 +195,11 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
         }
 
-        [HttpGet("deposits/{numberOfBookings}")]
+        [HttpGet("deposits")]
         [SwaggerOperation(Summary = "Get booking by deposit times")]
-        public ActionResult<Booking> GetBookingByDepositedTimed(int numberOfBookings)
+        public ActionResult<Booking> GetBookingByDepositedTimed()
         {
-            var booking = _book.GetBookingByDepositedTimed(numberOfBookings);
+            var booking = _book.GetBookingByDepositedTimed();
 
             if (booking == null)
             {
@@ -215,11 +215,11 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
         }
 
-        [HttpGet("random/{numberBooking}")]
+        [HttpGet("random")]
         [SwaggerOperation(Summary = "Get random bookings")]
-        public ActionResult<Booking> GetBookingByRandom(int numberBooking)
+        public ActionResult<Booking> GetBookingByRandom()
         {
-            var booking = _book.GetBookingByRandom(numberBooking);
+            var booking = _book.GetBookingByRandom();
 
             if (booking == null)
             {
@@ -324,6 +324,13 @@ namespace RealEstateProjectSale.Controllers.BookingController
                 var book = _book.GetBookingById(id);
                 if (book != null)
                 {
+                    if (book.Status != BookingStatus.DaDatCho.GetEnumDescription() && book.Status != BookingStatus.DaCheckIn.GetEnumDescription())
+                    {
+                        return BadRequest(new
+                        {
+                            message = "Customer has not paid the reservation deposit."
+                        });
+                    }
 
                     book.Status = BookingStatus.DaCheckIn.GetEnumDescription();
 

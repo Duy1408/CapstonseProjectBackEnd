@@ -18,10 +18,10 @@ namespace RealEstateProjectSaleServices.IServices
 
         void UpdateBooking(Booking p);
 
-        Booking? GetBookingByDepositedTimed(int numberBooking);
+        Booking? GetBookingByDepositedTimed();
         Booking? GetBookingByPropertyID(Guid propertyid);
         Booking? GetBookingByCustomerSelect(Guid id);
-        Booking? GetBookingByRandom(int numberBooking);
+        Booking? GetBookingByRandom();
 
         List<Booking> GetBookingByBooked();
         List<Booking> GetBookingByCheckedIn();

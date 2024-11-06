@@ -263,6 +263,34 @@ namespace RealEstateProjectSale.Controllers.PropertyController
 
         }
 
+        [HttpGet("categoryDetail/{categoryDetailID}")]
+        [SwaggerOperation(Summary = "Get Property By ProjectCategoryDetailID")]
+        public IActionResult GetPropertyByProjectCategoryDetailID(Guid categoryDetailID)
+        {
+            var property = _pro.GetPropertyByProjectCategoryDetailID(categoryDetailID);
+
+            if (property != null)
+            {
+                var responese = property.Select(property => _mapper.Map<PropertyVM>(property)).ToList();
+
+                if (responese.Count == 0)
+                {
+                    return NotFound(new
+                    {
+                        message = "Property not found."
+                    });
+                }
+
+                return Ok(responese);
+            }
+
+            return NotFound(new
+            {
+                message = "Property not found."
+            });
+
+        }
+
         [HttpGet("search")]
         [SwaggerOperation(Summary = "Search Property By Name")]
         public ActionResult<Property> SearchPropertyByName(string searchValue)
@@ -424,9 +452,6 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                     });
                 }
 
-                existingProperty.Status = PropertyStatus.GiuCho.GetEnumDescription();
-                _pro.UpdateProperty(existingProperty);
-
                 var booking = _booking.GetBookingByCustomerSelect(customerID);
                 if (booking == null)
                 {
@@ -479,6 +504,9 @@ namespace RealEstateProjectSale.Controllers.PropertyController
 
                 var _contract = _mapper.Map<RealEstateProjectSaleBusinessObject.BusinessObject.Contract>(newContract);
                 _contractServices.AddNewContract(_contract);
+
+                existingProperty.Status = PropertyStatus.GiuCho.GetEnumDescription();
+                _pro.UpdateProperty(existingProperty);
 
                 await _hubContext.Clients.All.SendAsync("ReceivePropertyStatus", propertyid.ToString(), existingProperty.Status);
                 return Ok(new
