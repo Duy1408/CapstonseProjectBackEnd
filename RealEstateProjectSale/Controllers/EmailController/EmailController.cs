@@ -24,7 +24,66 @@ namespace RealEstateProjectSale.Controllers.EmailController
             _contract = contract;
             _account = account;
         }
+
+
         [HttpPost("SendMail")]
+        public async Task<IActionResult> SendEmail(string email)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(email) || !IsValidEmail(email))
+                {
+                    return BadRequest(new { message = "Invalid email address." });
+                }
+                string otp = GenerateOTP();
+                DateTime expirationTime = DateTime.UtcNow.AddMinutes(3);
+                otpStorage[email] = (otp, expirationTime);
+                Mailrequest mailrequest = new Mailrequest();
+                mailrequest.ToEmail = email;
+                mailrequest.Subject = "OTP Verification Code";
+                mailrequest.Body = $"Hello, your OTP code is: {otp}";
+                await _emailService.SendEmailAsync(mailrequest);
+                return Ok(new { message = "OTP has been sent to your email. " });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { error = e.Message });
+            }
+        }
+
+
+        [HttpPost("verify-otp")]
+        public IActionResult VerifyOtp(string email, string otp)
+        {
+
+
+
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(otp))
+            {
+                return BadRequest(new { message = "Email and OTP are required." });
+            }
+            if (otpStorage.TryGetValue(email, out var otpEntry))
+            {
+
+                if (otpEntry.Otp == otp && otpEntry.Expiration > DateTime.UtcNow)
+                {
+
+                    otpStorage.Remove(email);
+                    return Ok(new { message = "OTP verification successful." });
+                }
+                else
+                {
+                    return BadRequest(new { message = "Invalid or expired OTP." });
+                }
+            }
+            else
+            {
+                return BadRequest(new { message = "OTP not found for this email." });
+            }
+        }
+
+
+        [HttpPost("SendOtpByContract")]
         public async Task<IActionResult> SendEmail(Guid contractid)
         {
 
@@ -69,7 +128,7 @@ namespace RealEstateProjectSale.Controllers.EmailController
 
 
 
-        [HttpPost("verify-otp")]
+        [HttpPost("verify-otp-by-contract")]
         public IActionResult VerifyOtp(Guid contractid, string otp)
         {
            
