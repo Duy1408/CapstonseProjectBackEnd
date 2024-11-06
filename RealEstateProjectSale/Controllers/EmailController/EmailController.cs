@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using RealEstateProjectSaleServices.Helper;
+using RealEstateProjectSaleBusinessObject.Model;
 using RealEstateProjectSaleServices.IServices;
 using System.Text;
 

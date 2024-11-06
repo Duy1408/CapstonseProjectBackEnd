@@ -2,7 +2,7 @@
 using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
-using RealEstateProjectSaleServices.Helper;
+using RealEstateProjectSaleBusinessObject.Model;
 using RealEstateProjectSaleServices.IServices;
 using System;
 using System.Collections.Generic;
