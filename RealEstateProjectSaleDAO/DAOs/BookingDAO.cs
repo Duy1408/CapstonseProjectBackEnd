@@ -76,7 +76,7 @@ namespace RealEstateProjectSaleDAO.DAOs
                                     .ToList();
         }
 
-        public Booking? GetBookingByDepositedTimed()
+        public Booking? GetBookingByDepositedTimed(Guid id)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
             return _context.Bookings!.Include(c => c.OpeningForSale)
@@ -90,7 +90,8 @@ namespace RealEstateProjectSaleDAO.DAOs
                                         .ThenInclude(pc => pc.PropertyCategory)
                                      .Where(b => b.DepositedTimed != null
                                      && b.DepositedPrice != null
-                                     && b.Status == BookingStatus.DaCheckIn.GetEnumDescription())
+                                     && b.Status == BookingStatus.DaCheckIn.GetEnumDescription()
+                                     && b.ProjectCategoryDetailID == id)
                                      .OrderBy(b => b.DepositedTimed)
                                      .ThenBy(b => b.BookingID)
                                      .FirstOrDefault();
@@ -113,7 +114,7 @@ namespace RealEstateProjectSaleDAO.DAOs
                                                                     .FirstOrDefault();
         }
 
-        public Booking? GetBookingByRandom()
+        public Booking? GetBookingByRandom(Guid id)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
             return _context.Bookings!.Include(c => c.OpeningForSale)
@@ -127,7 +128,8 @@ namespace RealEstateProjectSaleDAO.DAOs
                                         .ThenInclude(pc => pc.PropertyCategory)
                                      .Where(b => b.DepositedTimed != null
                                      && b.DepositedPrice != null
-                                     && b.Status == BookingStatus.DaCheckIn.GetEnumDescription())
+                                     && b.Status == BookingStatus.DaCheckIn.GetEnumDescription()
+                                     && b.ProjectCategoryDetailID == id)
                                      .OrderBy(b => Guid.NewGuid())
                                      .FirstOrDefault();
         }

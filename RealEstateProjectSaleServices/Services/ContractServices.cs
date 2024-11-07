@@ -25,6 +25,8 @@ namespace RealEstateProjectSaleServices.Services
 
         public List<Contract> GetAllContract() => _contractRepo.GetAllContract();
 
+        public List<Contract> GetContractByCustomerID(Guid id) => _contractRepo.GetContractByCustomerID(id);
+
         public Contract GetContractByID(Guid id) => _contractRepo.GetContractByID(id);
 
         public Contract GetLastContract() => _contractRepo.GetLastContract();

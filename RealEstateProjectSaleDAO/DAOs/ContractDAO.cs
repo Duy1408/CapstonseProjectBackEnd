@@ -23,6 +23,8 @@ namespace RealEstateProjectSaleDAO.DAOs
                 return _context.Contracts!.Include(c => c.Booking)
                                           .Include(c => c.DocumentTemplate)
                                           .Include(c => c.PaymentProcess)
+                                          .Include(c => c.PromotionDetail)
+                                          .Include(c => c.Customer)
                                           .ToList();
             }
             catch (Exception ex)
@@ -51,6 +53,8 @@ namespace RealEstateProjectSaleDAO.DAOs
                 var contract = _context.Contracts!.Include(a => a.Booking)
                                                   .Include(a => a.DocumentTemplate)
                                                   .Include(a => a.PaymentProcess)
+                                                  .Include(c => c.PromotionDetail)
+                                                  .Include(c => c.Customer)
                                                   .SingleOrDefault(c => c.ContractID == id);
                 return contract;
             }
@@ -60,7 +64,24 @@ namespace RealEstateProjectSaleDAO.DAOs
             }
         }
 
-       
+        public List<Contract> GetContractByCustomerID(Guid id)
+        {
+            try
+            {
+                var contracts = _context.Contracts!.Include(a => a.Booking)
+                                                   .Include(a => a.DocumentTemplate)
+                                                   .Include(a => a.PaymentProcess)
+                                                   .Include(c => c.PromotionDetail)
+                                                   .Include(c => c.Customer)
+                                                   .Where(c => c.CustomerID == id)
+                                                   .ToList();
+                return contracts;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
 
         public void UpdateContract(Contract contract)
         {

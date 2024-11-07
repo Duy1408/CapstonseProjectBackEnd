@@ -31,8 +31,8 @@ namespace RealEstateProjectSale.Mapper
                                        opt => opt.MapFrom(src => src.PaymentProcess!.PaymentProcessName))
                                                           .ForMember(dest => dest.DocumentName,
                                        opt => opt.MapFrom(src => src.DocumentTemplate!.DocumentName))
-                                                          .ForMember(dest => dest.CustomerID,
-                                       opt => opt.MapFrom(src => src.Booking!.CustomerID));
+                                                          .ForMember(dest => dest.FullName,
+                                       opt => opt.MapFrom(src => src.Customer!.FullName));
             CreateMap<ContractCreateDTO, Contract>().ReverseMap();
             CreateMap<ContractUpdateDTO, Contract>().ReverseMap();
 
@@ -74,7 +74,7 @@ namespace RealEstateProjectSale.Mapper
             CreateMap<BookingCreateDTO, Booking>().ReverseMap();
             CreateMap<BookingUpdateDTO, Booking>().ReverseMap();
 
-            CreateMap<Property,PropertyVM>().ForMember(dest => dest.BathRoom,
+            CreateMap<Property, PropertyVM>().ForMember(dest => dest.BathRoom,
                                        opt => opt.MapFrom(src => src.UnitType!.BathRoom))
                                                           .ForMember(dest => dest.BedRoom,
                                        opt => opt.MapFrom(src => src.UnitType!.BedRoom))

@@ -34,6 +34,7 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public string DocumentName { get; set; }
         public Guid BookingID { get; set; }
         public Guid CustomerID { get; set; }
+        public string FullName { get; set; }
         public Guid? PaymentProcessID { get; set; }
         public string PaymentProcessName { get; set; }
     }
