@@ -104,7 +104,7 @@ namespace RealEstateProjectSale.Controllers.CustomerController
             try
             {
                 var checkEmail = _accountServices.GetAllAccount().Where(u =>
-                u.Email.Equals(accountCustomer.Email)).FirstOrDefault();
+                u.Email.Equals(accountCustomer.Email) && u.Status == true).FirstOrDefault();
 
                 if (checkEmail != null)
                 {

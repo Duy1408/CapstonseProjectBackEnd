@@ -78,6 +78,26 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
         }
 
+        [HttpGet("customer/{customerId}")]
+        [SwaggerOperation(Summary = "Get Contract by customer ID")]
+        public IActionResult GetContractByCustomerID(Guid customerId)
+        {
+            var contract = _contractServices.GetContractByCustomerID(customerId);
+
+            if (contract != null)
+            {
+                var responese = contract.Select(contract => _mapper.Map<ContractVM>(contract)).ToList();
+
+                return Ok(responese);
+            }
+
+            return NotFound(new
+            {
+                message = "Contract not found."
+            });
+
+        }
+
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new Contract")]
         public IActionResult AddNewContract([FromForm] ContractRequestDTO contract)

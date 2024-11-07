@@ -19,6 +19,8 @@ namespace RealEstateProjectSaleRepository.Repository
 
         public List<Contract> GetAllContract() => dao.GetAllContract();
 
+        public List<Contract> GetContractByCustomerID(Guid id) => dao.GetContractByCustomerID(id);
+
         public Contract GetContractByID(Guid id) => dao.GetContractByID(id);
 
         public Contract GetLastContract() => dao.GetLastContract();

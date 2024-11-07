@@ -195,11 +195,11 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
         }
 
-        [HttpGet("deposits")]
-        [SwaggerOperation(Summary = "Get booking by deposit times")]
-        public ActionResult<Booking> GetBookingByDepositedTimed()
+        [HttpGet("deposits/{projectCategoryDetailId}")]
+        [SwaggerOperation(Summary = "Get booking by deposit times By ProjectCategoryDetailID")]
+        public ActionResult<Booking> GetBookingByDepositedTimed(Guid projectCategoryDetailId)
         {
-            var booking = _book.GetBookingByDepositedTimed();
+            var booking = _book.GetBookingByDepositedTimed(projectCategoryDetailId);
 
             if (booking == null)
             {
@@ -215,11 +215,11 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
         }
 
-        [HttpGet("random")]
-        [SwaggerOperation(Summary = "Get random bookings")]
-        public ActionResult<Booking> GetBookingByRandom()
+        [HttpGet("random/{projectCategoryDetailId}")]
+        [SwaggerOperation(Summary = "Get random bookings By ProjectCategoryDetailID")]
+        public ActionResult<Booking> GetBookingByRandom(Guid projectCategoryDetailId)
         {
-            var booking = _book.GetBookingByRandom();
+            var booking = _book.GetBookingByRandom(projectCategoryDetailId);
 
             if (booking == null)
             {
