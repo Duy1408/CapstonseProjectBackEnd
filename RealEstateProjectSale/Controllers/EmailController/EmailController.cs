@@ -6,7 +6,7 @@ using System.Text;
 
 namespace RealEstateProjectSale.Controllers.EmailController
 {
-    [Route("api/[controller]")]
+    [Route("api/emails")]
     [ApiController]
     public class EmailController : ControllerBase
     {
@@ -26,7 +26,7 @@ namespace RealEstateProjectSale.Controllers.EmailController
         }
 
 
-        [HttpPost("email")]
+        [HttpPost("sendemail")]
         public async Task<IActionResult> sendEmail(string email)
         {
             try
