@@ -26,8 +26,8 @@ namespace RealEstateProjectSale.Controllers.EmailController
         }
 
 
-        [HttpPost("sendMail")]
-        public async Task<IActionResult> SendEmail(string email)
+        [HttpPost("email")]
+        public async Task<IActionResult> sendEmail(string email)
         {
             try
             {
@@ -53,7 +53,7 @@ namespace RealEstateProjectSale.Controllers.EmailController
 
 
         [HttpPost("verify-otp")]
-        public IActionResult VerifyOtp(string email, string otp)
+        public IActionResult verifyOtp(string email, string otp)
         {
 
 
@@ -84,7 +84,7 @@ namespace RealEstateProjectSale.Controllers.EmailController
 
 
         [HttpPost("sendotpbycontract")]
-        public async Task<IActionResult> SendEmail(Guid contractid)
+        public async Task<IActionResult> sendEmail(Guid contractid)
         {
 
             try { 
@@ -129,7 +129,7 @@ namespace RealEstateProjectSale.Controllers.EmailController
 
 
         [HttpPost("verify-otp-by-contract")]
-        public IActionResult VerifyOtp(Guid contractid, string otp)
+        public IActionResult verifyOtp(Guid contractid, string otp)
         {
            
             var contract = _contract.GetContractByID(contractid);
