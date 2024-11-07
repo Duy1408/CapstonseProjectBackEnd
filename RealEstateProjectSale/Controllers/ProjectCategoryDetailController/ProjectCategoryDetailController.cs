@@ -41,10 +41,20 @@ namespace RealEstateProjectSale.Controllers.ProjectCategoryDetailController
                         message = "ProjectCategoryDetail not found."
                     });
                 }
-                var details = _detailServices.GetAllProjectCategoryDetail();
-                var response = _mapper.Map<List<ProjectCategoryDetailVM>>(details);
+                var detail = _detailServices.GetAllProjectCategoryDetail();
+                var details = _mapper.Map<List<ProjectCategoryDetailVM>>(detail);
 
-                return Ok(response);
+                var responese = details.Select(detailOpen => new ProjectCategoryDetailOpenVM
+                {
+                    ProjectCategoryDetailID = detailOpen.ProjectCategoryDetailID,
+                    ProjectID = detailOpen.ProjectID,
+                    ProjectName = detailOpen.ProjectName,
+                    PropertyCategoryID = detailOpen.PropertyCategoryID,
+                    PropertyCategoryName = detailOpen.PropertyCategoryName,
+                    OpenForSale = _openService.GetOpeningForSaleByProjectCategoryDetailID(detailOpen.ProjectCategoryDetailID).Any()
+                }).ToList();
+
+                return Ok(responese);
             }
             catch (Exception ex)
             {
