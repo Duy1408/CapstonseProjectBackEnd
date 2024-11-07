@@ -26,7 +26,7 @@ namespace RealEstateProjectSale.Controllers.EmailController
         }
 
 
-        [HttpPost("SendMail")]
+        [HttpPost("sendMail")]
         public async Task<IActionResult> SendEmail(string email)
         {
             try
@@ -83,7 +83,7 @@ namespace RealEstateProjectSale.Controllers.EmailController
         }
 
 
-        [HttpPost("SendOtpByContract")]
+        [HttpPost("sendotpbycontract")]
         public async Task<IActionResult> SendEmail(Guid contractid)
         {
 
