@@ -26,7 +26,7 @@ namespace RealEstateProjectSale.Controllers.EmailController
         }
 
 
-        [HttpPost("sendemail")]
+        [HttpPost("sendEmail")]
         public async Task<IActionResult> sendEmail(string email)
         {
             try
