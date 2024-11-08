@@ -14,7 +14,7 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
         public void Configure(EntityTypeBuilder<PromotionDetail> builder)
         {
             builder.ToTable("PromotionDetail");
-            builder.HasKey(x => x.PromotionDetaiID);
+            builder.HasKey(x => x.PromotionDetailID);
             builder.Property(x => x.Description).IsRequired();
             builder.Property(x => x.Amount);
             builder.HasMany(x => x.Contracts).WithOne(x => x.PromotionDetail).OnDelete(DeleteBehavior.NoAction);

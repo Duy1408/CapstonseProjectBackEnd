@@ -499,7 +499,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                     BookingID = booking.BookingID,
                     CustomerID = customerID,
                     PaymentProcessID = null,
-                    PromotionDetaiID = null
+                    PromotionDetailID = null
                 };
 
                 var _contract = _mapper.Map<RealEstateProjectSaleBusinessObject.BusinessObject.Contract>(newContract);
