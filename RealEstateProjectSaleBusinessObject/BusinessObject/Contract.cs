@@ -34,7 +34,8 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public List<ContractPaymentDetail>? ContractPaymentDetails { get; set; }
         public Guid? PaymentProcessID { get; set; }
         public PaymentProcess? PaymentProcess { get; set; }
-        public Guid? PromotionDetaiID { get; set; }
+        public Guid? PromotionDetailID { get; set; }
+
         public PromotionDetail? PromotionDetail { get; set; }
         public Guid CustomerID { get; set; }
         public Customer? Customer { get; set; }

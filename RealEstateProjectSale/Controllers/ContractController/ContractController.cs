@@ -136,7 +136,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     BookingID = contract.BookingID,
                     CustomerID = contract.CustomerID,
                     PaymentProcessID = contract.PaymentProcessID,
-                    PromotionDetaiID = contract.PromotionDetaiID
+                    PromotionDetailID = contract.PromotionDetailID
 
                 };
 
@@ -246,9 +246,9 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     {
                         existingContract.PaymentProcessID = contract.PaymentProcessID.Value;
                     }
-                    if (contract.PromotionDetaiID.HasValue)
+                    if (contract.PromotionDetailID.HasValue)
                     {
-                        existingContract.PromotionDetaiID = contract.PromotionDetaiID.Value;
+                        existingContract.PromotionDetailID = contract.PromotionDetailID.Value;
                     }
                     if (blobUrl1 != null)
                     {

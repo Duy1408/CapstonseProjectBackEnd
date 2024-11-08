@@ -36,7 +36,7 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
         public Guid BookingID { get; set; }
         public Guid CustomerID { get; set; }
         public Guid? PaymentProcessID { get; set; }
-        public Guid? PromotionDetaiID { get; set; }
+        public Guid? PromotionDetailID { get; set; }
 
     }
 }

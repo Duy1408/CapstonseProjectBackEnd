@@ -49,7 +49,7 @@ namespace RealEstateProjectSaleDAO.DAOs
             {
                 var detail = _context.PromotionDetails!.Include(c => c.Promotion)
                                                        .Include(c => c.PropertyType)
-                                                       .SingleOrDefault(c => c.PromotionDetaiID == id);
+                                                       .SingleOrDefault(c => c.PromotionDetailID == id);
                 return detail;
             }
             catch (Exception ex)
@@ -62,7 +62,7 @@ namespace RealEstateProjectSaleDAO.DAOs
         {
             try
             {
-                var a = _context.PromotionDetails!.SingleOrDefault(c => c.PromotionDetaiID == detail.PromotionDetaiID);
+                var a = _context.PromotionDetails!.SingleOrDefault(c => c.PromotionDetailID == detail.PromotionDetailID);
 
                 _context.Entry(a).CurrentValues.SetValues(detail);
                 _context.SaveChanges();
@@ -76,7 +76,7 @@ namespace RealEstateProjectSaleDAO.DAOs
 
         public void DeletePromotionDetailByID(Guid id)
         {
-            var detail = _context.PromotionDetails!.SingleOrDefault(lo => lo.PromotionDetaiID == id);
+            var detail = _context.PromotionDetails!.SingleOrDefault(lo => lo.PromotionDetailID == id);
             if (detail != null)
             {
                 _context.Remove(detail);

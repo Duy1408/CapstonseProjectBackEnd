@@ -37,5 +37,9 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public string FullName { get; set; }
         public Guid? PaymentProcessID { get; set; }
         public string PaymentProcessName { get; set; }
+        public Guid? PromotionDetailID { get; set; }
+     
+
+
     }
 }
