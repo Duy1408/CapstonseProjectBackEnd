@@ -112,7 +112,6 @@ namespace RealEstateProjectSale.Controllers.PromotionDetailController
                     {
                         existingDetail.Description = detail.Description;
                     }
-             
                     if (detail.Amount.HasValue)
                     {
                         existingDetail.Amount = detail.Amount.Value;
@@ -125,7 +124,7 @@ namespace RealEstateProjectSale.Controllers.PromotionDetailController
                     {
                         existingDetail.PropertyTypeID = detail.PropertyTypeID.Value;
                     }
-                
+
 
                     _detailServices.UpdatePromotionDetail(existingDetail);
 

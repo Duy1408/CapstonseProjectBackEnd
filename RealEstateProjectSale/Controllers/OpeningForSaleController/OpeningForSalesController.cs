@@ -146,7 +146,7 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
 
                 if (detailID == Guid.Empty)
                 {
-                    throw new ArgumentException("Project ID is required.");
+                    throw new ArgumentException("ProjectCategoryDetailID is required.");
                 }
 
                 var existingDetail = _detailService.GetProjectCategoryDetailByID(detailID);
