@@ -12,8 +12,8 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public Guid PropertyID { get; set; }
         public string PropertyCode { get; set; }
         public string? View { get; set; }
-        public double? PriceSold { get; set; }
 
+        public double? PriceSold { get; set; } //= VAT(10% của Price) + PBT(0.5% Price ) + Price (OpenForSaleDetail)
         public string Status { get; set; }
 
         public List<Comment>? Comments { get; set; }

@@ -9,9 +9,7 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
     public class PaymentProcess
     {
         public Guid PaymentProcessID { get; set; }
-        public string PaymentProcessName { get; set; }
-        public double? Discount { get; set; }
-        public double? TotalPrice { get; set; }
+        public string PaymentProcessName { get; set; }//thanh toan 7 dot
         public bool Status { get; set; }
         public Guid SalesPolicyID { get; set; }
         public Salespolicy? Salespolicy { get; set; }

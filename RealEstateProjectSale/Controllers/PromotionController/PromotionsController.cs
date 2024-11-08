@@ -94,17 +94,14 @@ namespace RealEstateProjectSale.Controllers.PromotionController
                     {
                         existingPro.Description = pro.Description;
                     }
-                    if (pro.StartDate.HasValue)
-                    {
-                        existingPro.StartDate = pro.StartDate.Value;
-                    }
-                    if (pro.EndDate.HasValue)
-                    {
-                        existingPro.EndDate = pro.EndDate.Value;
-                    }
+              
                     if (pro.Status.HasValue)
                     {
                         existingPro.Status = pro.Status.Value;
+                    }
+                    if (pro.SalesPolicyID.HasValue)
+                    {
+                        existingPro.SalesPolicyID = pro.SalesPolicyID.Value;
                     }
                     _pro.UpdatePromotion(existingPro);
 

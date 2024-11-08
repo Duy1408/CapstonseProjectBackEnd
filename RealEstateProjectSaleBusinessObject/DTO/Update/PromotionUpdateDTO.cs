@@ -11,10 +11,9 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Update
     {
         public string? PromotionName { get; set; }
         public string? Description { get; set; }
-        [Column(TypeName = "date")]
-        public DateTime? StartDate { get; set; }
-        [Column(TypeName = "date")]
-        public DateTime? EndDate { get; set; }
         public bool? Status { get; set; }
+        public Guid? SalesPolicyID { get; set; }
+
+
     }
 }

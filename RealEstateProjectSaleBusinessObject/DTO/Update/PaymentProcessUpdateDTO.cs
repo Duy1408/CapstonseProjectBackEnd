@@ -9,7 +9,8 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Update
     public class PaymentProcessUpdateDTO
     {
         public string? PaymentProcessName { get; set; }
-        public double? Discount { get; set; }
-        public double? TotalPrice { get; set; }
+        public bool? Status { get; set; }
+        public Guid? SalesPolicyID { get; set; }
+
     }
 }

@@ -79,9 +79,6 @@ namespace RealEstateProjectSale.Controllers.PromotionDetailController
                 {
                     PromotionDetaiID = Guid.NewGuid(),
                     Description = pro.Description,
-                    PromotionType = pro.PromotionType,
-                    DiscountPercent = pro.DiscountPercent,
-                    DiscountAmount = pro.DiscountAmount,
                     Amount = pro.Amount,
                     PromotionID = pro.PromotionID,
                     PropertyTypeID = pro.PropertyTypeID,
@@ -115,22 +112,20 @@ namespace RealEstateProjectSale.Controllers.PromotionDetailController
                     {
                         existingDetail.Description = detail.Description;
                     }
-                    if (!string.IsNullOrEmpty(detail.PromotionType))
-                    {
-                        existingDetail.PromotionType = detail.PromotionType;
-                    }
-                    if (detail.DiscountPercent.HasValue)
-                    {
-                        existingDetail.DiscountPercent = detail.DiscountPercent.Value;
-                    }
-                    if (detail.DiscountAmount.HasValue)
-                    {
-                        existingDetail.DiscountAmount = detail.DiscountAmount.Value;
-                    }
+             
                     if (detail.Amount.HasValue)
                     {
                         existingDetail.Amount = detail.Amount.Value;
                     }
+                    if (detail.PromotionID.HasValue)
+                    {
+                        existingDetail.PromotionID = detail.PromotionID.Value;
+                    }
+                    if (detail.PropertyTypeID.HasValue)
+                    {
+                        existingDetail.PropertyTypeID = detail.PropertyTypeID.Value;
+                    }
+                
 
                     _detailServices.UpdatePromotionDetail(existingDetail);
 
