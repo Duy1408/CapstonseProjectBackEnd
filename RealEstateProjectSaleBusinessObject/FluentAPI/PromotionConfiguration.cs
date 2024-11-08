@@ -17,8 +17,6 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
             builder.HasKey(x => x.PromotionID);
             builder.Property(x => x.PromotionName).IsRequired();
             builder.Property(x => x.Description);
-            builder.Property(x => x.StartDate).IsRequired();
-            builder.Property(x => x.EndDate).IsRequired();
             builder.Property(x => x.Status).IsRequired();
             builder.HasMany(x => x.PromotionDetails).WithOne(x => x.Promotion).OnDelete(DeleteBehavior.NoAction);
 

@@ -15,14 +15,10 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
         {
             builder.ToTable("PaymentProcessDetail");
             builder.HasKey(x => x.PaymentProcessDetailID);
-            builder.Property(x => x.DetailName).IsRequired();
-            builder.Property(x => x.PeriodType).IsRequired();
+            builder.Property(x => x.PaymentStage).IsRequired();
             builder.Property(x => x.Period);
-            builder.Property(x => x.PaymentRate);
-            builder.Property(x => x.PaymentType).IsRequired();
-            builder.Property(x => x.Amount).IsRequired();
-            builder.Property(x => x.Note);
-
+            builder.Property(x => x.Percentage);
+            builder.Property(x => x.Amount);
 
         }
     }

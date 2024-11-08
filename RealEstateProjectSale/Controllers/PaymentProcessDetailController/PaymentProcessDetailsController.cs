@@ -81,13 +81,10 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessDetailController
                 var newDetail = new PaymentProcessDetailCreateDTO
                 {
                     PaymentProcessDetailID = Guid.NewGuid(),
-                    DetailName = detail.DetailName,
-                    PeriodType = detail.PeriodType,
+                    PaymentStage = detail.PaymentStage,              
                     Period = detail.Period,
-                    PaymentRate = detail.PaymentRate,
-                    PaymentType = detail.PaymentType,
-                    Amount = detail.Amount,
-                    Note = detail.Note,
+                    Percentage = detail.Percentage,
+                    Amount = detail.Amount,                  
                     PaymentProcessID = detail.PaymentProcessID,
                 };
 
@@ -116,34 +113,24 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessDetailController
                 if (existingDetail != null)
                 {
 
-                    if (!string.IsNullOrEmpty(detail.DetailName))
+                    if (detail.PaymentStage.HasValue)
                     {
-                        existingDetail.DetailName = detail.DetailName;
+                        existingDetail.PaymentStage = detail.PaymentStage.Value;
                     }
-                    if (!string.IsNullOrEmpty(detail.PeriodType))
+                    if (detail.Period.HasValue)
                     {
-                        existingDetail.PeriodType = detail.PeriodType;
+                        existingDetail.Period = detail.Period.Value;
                     }
-                    if (!string.IsNullOrEmpty(detail.Period))
+                    if (detail.Percentage.HasValue)
                     {
-                        existingDetail.Period = detail.Period;
+                        existingDetail.Percentage = detail.Percentage.Value;
                     }
-                    if (detail.PaymentRate.HasValue)
-                    {
-                        existingDetail.PaymentRate = detail.PaymentRate.Value;
-                    }
-                    if (!string.IsNullOrEmpty(detail.PaymentType))
-                    {
-                        existingDetail.PaymentType = detail.PaymentType;
-                    }
+
                     if (detail.Amount.HasValue)
                     {
                         existingDetail.Amount = detail.Amount.Value;
                     }
-                    if (!string.IsNullOrEmpty(detail.Note))
-                    {
-                        existingDetail.Note = detail.Note;
-                    }
+               
 
                     _detailService.UpdatePaymentProcessDetail(existingDetail);
 

@@ -9,13 +9,10 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
     public class PaymentProcessDetailVM
     {
         public Guid PaymentProcessDetailID { get; set; }
-        public string DetailName { get; set; }
-        public string PeriodType { get; set; }
-        public string? Period { get; set; }
-        public double? PaymentRate { get; set; }
-        public string PaymentType { get; set; }
+        public int PaymentStage { get; set; }
+        public DateTime? Period { get; set; }
+        public float? Percentage { get; set; }
         public double Amount { get; set; }
-        public string? Note { get; set; }
         public Guid PaymentProcessID { get; set; }
         public string PaymentProcessName { get; set; }
     }

@@ -82,8 +82,7 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessController
                 {
                     PaymentProcessID = Guid.NewGuid(),
                     PaymentProcessName = process.PaymentProcessName,
-                    Discount = process.Discount,
-                    TotalPrice = process.TotalPrice,
+                    Status = process.Status,
                     SalesPolicyID = process.SalesPolicyID
                 };
 
@@ -116,13 +115,13 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessController
                     {
                         existingProcess.PaymentProcessName = process.PaymentProcessName;
                     }
-                    if (process.Discount.HasValue)
+                    if (process.Status.HasValue)
                     {
-                        existingProcess.Discount = process.Discount.Value;
+                        existingProcess.Status = process.Status.Value;
                     }
-                    if (process.TotalPrice.HasValue)
+                    if (process.SalesPolicyID.HasValue)
                     {
-                        existingProcess.TotalPrice = process.TotalPrice.Value;
+                        existingProcess.SalesPolicyID = process.SalesPolicyID.Value;
                     }
 
                     _pmtService.UpdatePaymentProcess(existingProcess);

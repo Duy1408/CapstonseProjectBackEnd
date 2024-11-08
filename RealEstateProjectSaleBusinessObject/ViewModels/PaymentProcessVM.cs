@@ -10,8 +10,8 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
     {
         public Guid PaymentProcessID { get; set; }
         public string PaymentProcessName { get; set; }
-        public double? Discount { get; set; }
-        public double? TotalPrice { get; set; }
+        public bool? Status { get; set; }
+
         public Guid SalesPolicyID { get; set; }
         public string SalesPolicyType { get; set; }
     }

@@ -16,8 +16,6 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
             builder.ToTable("PaymentProcess");
             builder.HasKey(x => x.PaymentProcessID);
             builder.Property(x => x.PaymentProcessName).IsRequired();
-            builder.Property(x => x.Discount);
-            builder.Property(x => x.TotalPrice);
             builder.Property(x => x.Status);
             builder.HasMany(x => x.PaymentProcessDetails).WithOne(x => x.PaymentProcess).OnDelete(DeleteBehavior.NoAction);
             builder.HasMany(x => x.Contracts).WithOne(x => x.PaymentProcess).OnDelete(DeleteBehavior.NoAction);
