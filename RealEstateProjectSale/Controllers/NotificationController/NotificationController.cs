@@ -7,6 +7,7 @@ using RealEstateProjectSaleBusinessObject.DTO.Create;
 using RealEstateProjectSaleBusinessObject.DTO.Request;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
+using RealEstateProjectSaleServices.Services;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Security.Principal;
 
@@ -17,12 +18,17 @@ namespace RealEstateProjectSale.Controllers.NotificationController
     public class NotificationController : ControllerBase
     {
         private readonly INotificationServices _notiServices;
+        private readonly ICustomerServices _customerServices;
+        private readonly IOpeningForSaleServices _openServices;
         private readonly IMapper _mapper;
         private readonly ILogger<NotificationController> _logger;
 
-        public NotificationController(INotificationServices notiServices, IMapper mapper, ILogger<NotificationController> logger)
+        public NotificationController(INotificationServices notiServices, IMapper mapper, ICustomerServices customerServices,
+            IOpeningForSaleServices openServices, ILogger<NotificationController> logger)
         {
             _notiServices = notiServices;
+            _customerServices = customerServices;
+            _openServices = openServices;
             _mapper = mapper;
             _logger = logger;
         }
@@ -74,13 +80,50 @@ namespace RealEstateProjectSale.Controllers.NotificationController
         [HttpPost("send-ios")]
         public async Task<IActionResult> SendNotification([FromBody] NotificationRequest request)
         {
+            var customer = _customerServices.GetCustomerByID(request.CustomerID);
+            if (customer == null)
+            {
+                return NotFound(new { message = "Customer not found" });
+            }
+            if (string.IsNullOrEmpty(customer.DeviceToken))
+            {
+                return BadRequest(new { message = "Customer does not have a valid device token." });
+            }
+
+            var open = _openServices.GetOpeningForSaleById(request.OpeningForSaleID);
+            if (open == null)
+            {
+                return NotFound(new { message = "Opening for sale not found" });
+            }
+
+            while (true)
+            {
+                DateTime checkinDate = open.CheckinDate;
+                DateTime currentTime = DateTime.Now;
+
+                if (checkinDate <= currentTime)
+                {
+                    break; // Thời điểm đã đến hoặc trễ, thoát vòng lặp để gửi thông báo
+                }
+
+                // Nếu CheckinDate còn ở tương lai, tính toán thời gian đợi và chờ
+                TimeSpan delay = checkinDate - currentTime;
+                await Task.Delay(delay);
+            }
+
             var message = new Message()
             {
-                Token = request.DeviceToken,
+                Token = customer.DeviceToken,
                 Notification = new FirebaseAdmin.Messaging.Notification
                 {
                     Title = request.Title,
                     Body = request.Body
+                },
+
+                Data = new Dictionary<string, string>
+                {
+                    { "deepLink", request.DeepLink },  // Truyền DeepLink vào payload của thông báo\
+                    { "subtitle", request.Subtiltle }
                 },
 
                 Apns = new ApnsConfig

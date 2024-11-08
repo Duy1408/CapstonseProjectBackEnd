@@ -49,11 +49,5 @@
 		<PackageReference Include="MimeKit" Version="4.8.0" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Content Update="Resources\realestateprojectsale-firebase-adminsdk-98vg4-6a7c7bafae.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	</ItemGroup>
-
 
 </Project>
