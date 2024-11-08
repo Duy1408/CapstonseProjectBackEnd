@@ -81,10 +81,10 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessDetailController
                 var newDetail = new PaymentProcessDetailCreateDTO
                 {
                     PaymentProcessDetailID = Guid.NewGuid(),
-                    PaymentStage = detail.PaymentStage,              
+                    PaymentStage = detail.PaymentStage,
                     Period = detail.Period,
                     Percentage = detail.Percentage,
-                    Amount = detail.Amount,                  
+                    Amount = detail.Amount,
                     PaymentProcessID = detail.PaymentProcessID,
                 };
 
@@ -125,12 +125,15 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessDetailController
                     {
                         existingDetail.Percentage = detail.Percentage.Value;
                     }
-
                     if (detail.Amount.HasValue)
                     {
                         existingDetail.Amount = detail.Amount.Value;
                     }
-               
+                    if (detail.PaymentProcessID.HasValue)
+                    {
+                        existingDetail.PaymentProcessID = detail.PaymentProcessID.Value;
+                    }
+
 
                     _detailService.UpdatePaymentProcessDetail(existingDetail);
 
