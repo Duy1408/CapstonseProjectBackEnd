@@ -430,7 +430,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
 
         [HttpPut("select")]
         [SwaggerOperation(Summary = "Customer select Property after check in")]
-        public async Task<IActionResult> UpdateStatusProperty(Guid propertyid, Guid customerID)
+        public async Task<IActionResult> UpdateStatusProperty(Guid propertyId, Guid customerID)
         {
             try
             {
@@ -443,7 +443,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                     });
                 }
 
-                var existingProperty = _pro.GetPropertyById(propertyid);
+                var existingProperty = _pro.GetPropertyById(propertyId);
                 if (existingProperty == null)
                 {
                     return NotFound(new
@@ -461,7 +461,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                     });
                 }
 
-                var openDetail = _openDetailService.GetDetailByPropertyIdOpenId(propertyid, booking.OpeningForSaleID);
+                var openDetail = _openDetailService.GetDetailByPropertyIdOpenId(propertyId, booking.OpeningForSaleID);
                 if (openDetail == null)
                 {
                     return NotFound(new
@@ -477,6 +477,10 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                         message = "Document not found."
                     });
                 }
+
+                booking.PropertyID = propertyId;
+                booking.Status = BookingStatus.DaDatCho.GetEnumDescription();
+                _booking.UpdateBooking(booking);
 
                 string nextContractCode = GenerateNextContractCode();
                 var newContract = new ContractCreateDTO
@@ -505,10 +509,21 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                 var _contract = _mapper.Map<RealEstateProjectSaleBusinessObject.BusinessObject.Contract>(newContract);
                 _contractServices.AddNewContract(_contract);
 
+                var htmlContent = _contractServices.GenerateDocumentDeposit(_contract.ContractID);
+                var pdfBytes = _documentService.GeneratePdfFromTemplate(htmlContent);
+                string? blobUrl = null;
+                using (MemoryStream pdfStream = new MemoryStream(pdfBytes))
+                {
+                    blobUrl = _fileService.UploadSingleFile(pdfStream, _contract.DocumentTemplate!.DocumentName, "contractdepositfile");
+                }
+
+                _contract.ContractDepositFile = blobUrl;
+                _contractServices.UpdateContract(_contract);
+
                 existingProperty.Status = PropertyStatus.GiuCho.GetEnumDescription();
                 _pro.UpdateProperty(existingProperty);
 
-                await _hubContext.Clients.All.SendAsync("ReceivePropertyStatus", propertyid.ToString(), existingProperty.Status);
+                await _hubContext.Clients.All.SendAsync("ReceivePropertyStatus", propertyId.ToString(), existingProperty.Status);
                 return Ok(new
                 {
                     message = "Update Property Successfully"

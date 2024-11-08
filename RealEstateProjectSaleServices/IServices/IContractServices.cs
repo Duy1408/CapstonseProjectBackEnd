@@ -16,5 +16,6 @@ namespace RealEstateProjectSaleServices.IServices
         void UpdateContract(Contract contract);
         bool ChangeStatusContract(Contract contract);
         Contract GetLastContract();
+        string GenerateDocumentDeposit(Guid bookingId);
     }
 }
