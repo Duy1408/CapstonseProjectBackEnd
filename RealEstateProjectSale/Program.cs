@@ -130,7 +130,7 @@ builder.Services.AddScoped<IPagingServices, PagingServices>();
 //Firebase Cloud Messages
 FirebaseApp.Create(new AppOptions
 {
-    Credential = GoogleCredential.FromFile("Resources/realestateprojectsale-firebase-adminsdk-98vg4-6a7c7bafae.json")
+    Credential = GoogleCredential.FromFile("Resources/realestateprojectsale-firebase-adminsdk-98vg4-2c2087c11f.json")
 });
 
 //Jwt
