@@ -21,17 +21,21 @@ namespace RealEstateProjectSale.Controllers.ContractController
     public class ContractController : ControllerBase
     {
         private readonly IContractServices _contractServices;
+        private readonly IPromotionDetailServices _promotiondetail;
+        private readonly IPaymentProcessServices _paymentprocess;
         private readonly IBookingServices _bookServices;
         private readonly IFileUploadToBlobService _fileService;
         private readonly IMapper _mapper;
 
         public ContractController(IContractServices contractServices, IBookingServices bookServices,
-                IFileUploadToBlobService fileService, IMapper mapper)
+                IFileUploadToBlobService fileService, IMapper mapper, IPromotionDetailServices promotiondetail, IPaymentProcessServices paymentprocess)
         {
             _contractServices = contractServices;
             _bookServices = bookServices;
             _fileService = fileService;
             _mapper = mapper;
+            _promotiondetail = promotiondetail;
+            _paymentprocess = paymentprocess;
         }
 
         [HttpGet]
@@ -98,6 +102,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
         }
 
+
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new Contract")]
         public IActionResult AddNewContract([FromForm] ContractRequestDTO contract)
@@ -154,6 +159,55 @@ namespace RealEstateProjectSale.Controllers.ContractController
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPut("stepthree")]
+        [SwaggerOperation(Summary = "Update Contract chose promotion detail")]
+        public IActionResult CustomerChoosePromotion(Guid contractid, Guid promotiondetailid, Guid paymentprocessid)
+        {
+            try
+            {
+                var contract = _contractServices.GetContractByID(contractid);
+                if(contract == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Contract not found."
+                    });
+                }
+
+                var promotiondetail = _promotiondetail.GetPromotionDetailByID(promotiondetailid);
+                if (promotiondetail == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Promotion not found."
+                    });
+                }
+                var paymentprocess = _paymentprocess.GetPaymentProcessById(paymentprocessid);
+                if (paymentprocess == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Payment not found."
+                    });
+                }
+
+                contract.PaymentProcessID = paymentprocessid;
+                contract.PromotionDetailID = promotiondetailid;
+                _contractServices.UpdateContract(contract);
+                return Ok(new
+                {
+                    message = "Choose Promotion Successfully"
+                });
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
 
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Update Contract by ID")]
