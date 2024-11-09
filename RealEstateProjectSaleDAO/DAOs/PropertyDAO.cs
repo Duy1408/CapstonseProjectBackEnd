@@ -172,7 +172,8 @@ namespace RealEstateProjectSaleDAO.DAOs
                                          .ThenInclude(pc => pc.Project)
                                            .Include(o => o.ProjectCategoryDetail)
                                             .ThenInclude(pc => pc.PropertyCategory)
-                                      .Where(c => c.ProjectCategoryDetailID == id && c.Status == PropertyStatus.MoBan.GetEnumDescription());
+                                      .Where(c => c.ProjectCategoryDetailID == id && (c.Status == PropertyStatus.MoBan.GetEnumDescription() ||
+                                  c.Status == PropertyStatus.GiuCho.GetEnumDescription()));
 
             return a;
         }
