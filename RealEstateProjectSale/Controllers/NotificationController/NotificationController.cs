@@ -96,20 +96,20 @@ namespace RealEstateProjectSale.Controllers.NotificationController
                 return NotFound(new { message = "Opening for sale not found" });
             }
 
-            while (true)
-            {
-                DateTime checkinDate = open.CheckinDate;
-                DateTime currentTime = DateTime.Now;
+            //while (true)
+            //{
+            //    DateTime checkinDate = open.CheckinDate;
+            //    DateTime currentTime = DateTime.Now;
 
-                if (checkinDate <= currentTime)
-                {
-                    break; // Thời điểm đã đến hoặc trễ, thoát vòng lặp để gửi thông báo
-                }
+            //    if (checkinDate <= currentTime)
+            //    {
+            //        break; // Thời điểm đã đến hoặc trễ, thoát vòng lặp để gửi thông báo
+            //    }
 
-                // Nếu CheckinDate còn ở tương lai, tính toán thời gian đợi và chờ
-                TimeSpan delay = checkinDate - currentTime;
-                await Task.Delay(delay);
-            }
+            //    // Nếu CheckinDate còn ở tương lai, tính toán thời gian đợi và chờ
+            //    TimeSpan delay = checkinDate - currentTime;
+            //    await Task.Delay(delay);
+            //}
 
             var message = new Message()
             {
