@@ -7,6 +7,7 @@ using RealEstateProjectSaleBusinessObject.DTO.Create;
 using RealEstateProjectSaleBusinessObject.DTO.Update;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
+using Stripe;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
@@ -81,19 +82,13 @@ namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
                 var newDetail = new ContractPaymentDetailCreateDTO
                 {
                     ContractPaymentDetailID = Guid.NewGuid(),
-                    DetailName = detail.DetailName,
-                    CreatedTime = DateTime.Now,
-                    PaymentRate = detail.PaymentRate,
-                    Amountpaid = detail.Amountpaid,
-                    TaxRate = detail.TaxRate,
-                    MoneyTax = detail.MoneyTax,
-                    MoneyReceived = detail.MoneyReceived,
-                    NumberDayLate = detail.NumberDayLate,
-                    InterestRate = detail.InterestRate,
-                    MoneyInterestRate = detail.MoneyInterestRate,
-                    MoneyExist = detail.MoneyExist,
+                    PaymentRate = detail.PaymentRate,              
                     Description = detail.Description,
+                    Period=detail.Period,
+                    PaidValue = detail.PaidValue,                 
+                    PaidValueLate = detail.PaidValue,
                     RemittanceOrder = null,
+                    Status = false,
                     ContractID = detail.ContractID,
                 };
 
@@ -127,49 +122,30 @@ namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
                 if (existingDetail != null)
                 {
 
-                    if (!string.IsNullOrEmpty(detail.DetailName))
-                    {
-                        existingDetail.DetailName = detail.DetailName;
-                    }
                     if (detail.PaymentRate.HasValue)
                     {
                         existingDetail.PaymentRate = detail.PaymentRate.Value;
                     }
-                    if (detail.Amountpaid.HasValue)
-                    {
-                        existingDetail.Amountpaid = detail.Amountpaid.Value;
-                    }
-                    if (detail.TaxRate.HasValue)
-                    {
-                        existingDetail.TaxRate = detail.TaxRate.Value;
-                    }
-                    if (detail.MoneyTax.HasValue)
-                    {
-                        existingDetail.MoneyTax = detail.MoneyTax.Value;
-                    }
-                    if (detail.MoneyReceived.HasValue)
-                    {
-                        existingDetail.MoneyReceived = detail.MoneyReceived.Value;
-                    }
-                    if (detail.NumberDayLate.HasValue)
-                    {
-                        existingDetail.NumberDayLate = detail.NumberDayLate.Value;
-                    }
-                    if (detail.InterestRate.HasValue)
-                    {
-                        existingDetail.InterestRate = detail.InterestRate.Value;
-                    }
-                    if (detail.MoneyInterestRate.HasValue)
-                    {
-                        existingDetail.MoneyInterestRate = detail.MoneyInterestRate.Value;
-                    }
-                    if (detail.MoneyExist.HasValue)
-                    {
-                        existingDetail.MoneyExist = detail.MoneyExist.Value;
-                    }
+               
                     if (!string.IsNullOrEmpty(detail.Description))
                     {
                         existingDetail.Description = detail.Description;
+                    }
+                    if (detail.Period.HasValue)
+                    {
+                        existingDetail.Period = detail.Period.Value;
+                    }
+                    if (detail.PaidValue.HasValue)
+                    {
+                        existingDetail.PaidValue = detail.PaidValue.Value;
+                    }
+                    if (detail.PaidValueLate.HasValue)
+                    {
+                        existingDetail.PaidValueLate = detail.PaidValueLate.Value;
+                    }
+                    if (detail.Status.HasValue)
+                    {
+                        existingDetail.Status = detail.Status.Value;
                     }
                     if (blobUrl != null)
                     {
