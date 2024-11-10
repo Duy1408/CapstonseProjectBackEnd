@@ -68,13 +68,7 @@ namespace RealEstateProjectSaleServices.Services
                                      .Replace("{PropertyCode}", property.PropertyCode)
                                      .Replace("{PropertyType}", propertyType.PropertyTypeName)
                                      .Replace("{NetFloorArea}", unitType.NetFloorArea.ToString())
-                                     .Replace("{Location}", project.Location)
-                                     .Replace("{DepositedPrice}", booking.DepositedPrice.ToString() + " VND")
-                                     .Replace("{MoneyText}", booking.DepositedPrice.HasValue
-                                    ? char.ToUpper(((int)Math.Round(booking.DepositedPrice.Value)).ToWords(new CultureInfo("vi"))[0]) +
-                                    ((int)Math.Round(booking.DepositedPrice.Value)).ToWords(new CultureInfo("vi")).Substring(1) +
-                                    " đồng chẵn."
-                                    : "N/A");
+                                     .Replace("{Location}", project.Location);
 
             return htmlContent;
         }
