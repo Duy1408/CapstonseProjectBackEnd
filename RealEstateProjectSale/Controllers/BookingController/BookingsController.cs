@@ -410,6 +410,22 @@ namespace RealEstateProjectSale.Controllers.BookingController
                     });
                 }
 
+                var openStatus = _openService.GetOpenForSaleStatusByProjectCategoryDetailID(openForSale.ProjectCategoryDetailID);
+                if (openStatus == OpeningForSaleStatus.ChuaMoBan.GetEnumDescription())
+                {
+                    return BadRequest(new
+                    {
+                        message = "ProjectCategoryDetail chưa cho giữ chỗ."
+                    });
+                }
+                if (openStatus == OpeningForSaleStatus.CheckIn.GetEnumDescription())
+                {
+                    return BadRequest(new
+                    {
+                        message = "ProjectCategoryDetail đang trong thời gian check in để chọn căn."
+                    });
+                }
+
                 var existingBooking = _book.CheckExistingBooking(openForSale.OpeningForSaleID, categoryDetailID, customerID);
                 if (existingBooking != null)
                 {
@@ -426,6 +442,36 @@ namespace RealEstateProjectSale.Controllers.BookingController
                     {
                         message = "Document không tồn tại."
                     });
+                }
+
+                if (openStatus == OpeningForSaleStatus.MuaTrucTiep.GetEnumDescription())
+                {
+                    var newBookDirect = new BookingCreateDTO
+                    {
+                        BookingID = Guid.NewGuid(),
+                        DepositedTimed = DateTime.Now,
+                        DepositedPrice = null,
+                        CreatedTime = DateTime.Now,
+                        UpdatedTime = null,
+                        BookingFile = null,
+                        Note = null,
+                        Status = BookingStatus.DaCheckIn.GetEnumDescription(),
+                        CustomerID = customerID,
+                        StaffID = null,
+                        ProjectCategoryDetailID = categoryDetailID,
+                        OpeningForSaleID = openForSale.OpeningForSaleID,
+                        DocumentTemplateID = documentReservation.DocumentTemplateID,
+                        PropertyID = null
+                    };
+
+                    var booksDirect = _mapper.Map<Booking>(newBookDirect);
+                    _book.AddNew(booksDirect);
+
+                    return Ok(new
+                    {
+                        message = "Tạo Booking thành công"
+                    });
+
                 }
 
                 var newbook = new BookingCreateDTO
