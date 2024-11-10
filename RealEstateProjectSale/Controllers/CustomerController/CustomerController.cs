@@ -43,7 +43,7 @@ namespace RealEstateProjectSale.Controllers.CustomerController
                 {
                     return NotFound(new
                     {
-                        message = "Customer not found."
+                        message = "Khách hàng không tồn tại."
                     });
                 }
                 var customers = _customerServices.GetAllCustomer();
@@ -72,7 +72,7 @@ namespace RealEstateProjectSale.Controllers.CustomerController
 
             return NotFound(new
             {
-                message = "Customer not found."
+                message = "Khách hàng không tồn tại."
             });
 
         }
@@ -92,7 +92,7 @@ namespace RealEstateProjectSale.Controllers.CustomerController
 
             return NotFound(new
             {
-                message = "Customer not found."
+                message = "Khách hàng không tồn tại."
             });
 
         }
@@ -110,7 +110,7 @@ namespace RealEstateProjectSale.Controllers.CustomerController
                 {
                     return BadRequest(new
                     {
-                        message = "Email Existed"
+                        message = "Email tồn tại"
                     });
                 }
 
@@ -153,7 +153,7 @@ namespace RealEstateProjectSale.Controllers.CustomerController
 
                 return Ok(new
                 {
-                    message = "Create Customer Successfully"
+                    message = "Tạo khách hàng thành công "
                 });
 
             }
@@ -235,7 +235,7 @@ namespace RealEstateProjectSale.Controllers.CustomerController
 
                     return Ok(new
                     {
-                        message = "Update Customer Successfully"
+                        message = "Cập nhật khách hàng thành công."
                     });
 
                 }
@@ -266,7 +266,7 @@ namespace RealEstateProjectSale.Controllers.CustomerController
                 {
                     return NotFound(new
                     {
-                        message = "Account not found."
+                        message = "Tài khoản không tồn tại."
                     });
                 }
 
@@ -275,7 +275,7 @@ namespace RealEstateProjectSale.Controllers.CustomerController
                 {
                     return NotFound(new
                     {
-                        message = "Customer not found."
+                        message = "Khách hàng không tồn tại."
                     });
                 }
 
@@ -309,7 +309,7 @@ namespace RealEstateProjectSale.Controllers.CustomerController
             {
                 return NotFound(new
                 {
-                    message = "Customer not found."
+                    message = "Khách hàng không tồn tại."
                 });
             }
             var customer = _customerServices.GetCustomerByID(id);
@@ -317,7 +317,7 @@ namespace RealEstateProjectSale.Controllers.CustomerController
             {
                 return NotFound(new
                 {
-                    message = "Customer not found."
+                    message = "Khách hàng không tồn tại."
                 });
             }
 
@@ -326,7 +326,7 @@ namespace RealEstateProjectSale.Controllers.CustomerController
 
             return Ok(new
             {
-                message = "Delete Customer Successfully"
+                message = "Xóa khách hàng thành công"
             });
         }
 

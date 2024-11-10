@@ -48,7 +48,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
                 {
                     return NotFound(new
                     {
-                        message = "Contract không tồn tại."
+                        message = "Hợp đồng không tồn tại."
                     });
                 }
                 var contracts = _contractServices.GetAllContract();
@@ -77,7 +77,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
             return NotFound(new
             {
-                message = "Contract không tồn tại."
+                message = "Hợp đồng không tồn tại."
             });
 
         }
@@ -97,7 +97,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
             return NotFound(new
             {
-                message = "Contract không tồn tại."
+                message = "Hợp đồng không tồn tại."
             });
 
         }
@@ -150,7 +150,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
                 return Ok(new
                 {
-                    message = "Tạo Contract thành công"
+                    message = "Tạo hợp đồng thành công"
                 });
             }
             catch (Exception ex)
@@ -170,7 +170,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
                 {
                     return NotFound(new
                     {
-                        message = "Contract không tồn tại."
+                        message = "Hợp đồng không tồn tại."
                     });
                 }
 
@@ -320,14 +320,14 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
                     return Ok(new
                     {
-                        message = "Cập nhật Contract thành công."
+                        message = "Cập nhật hợp đồng thành công."
                     });
 
                 }
 
                 return NotFound(new
                 {
-                    message = "Contract không tồn tại."
+                    message = "Hợp đồng không tồn tại."
                 });
 
             }
@@ -347,7 +347,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
             {
                 return NotFound(new
                 {
-                    message = "Contract không tồn tại."
+                    message = "Hợp đồng không tồn tại."
                 });
             }
 
@@ -356,7 +356,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
             return Ok(new
             {
-                message = "Xóa Contract thành công"
+                message = "Xóa hợp đồng thành công"
             });
         }
 

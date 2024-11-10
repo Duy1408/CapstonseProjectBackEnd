@@ -47,7 +47,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
                 {
                     return NotFound(new
                     {
-                        message = "Email hoặc PhoneNumber không tồn tại"
+                        message = "Email hoặc Số điện thoại không tồn tại"
                     });
                 }
 
