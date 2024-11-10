@@ -24,5 +24,7 @@ namespace RealEstateProjectSaleServices.IServices
         IQueryable<OpeningForSale> SearchOpeningForSale(string name);
 
         IQueryable<OpeningForSale> GetOpeningForSaleByProjectCategoryDetailID(Guid id);
+
+        string GetOpenForSaleStatusByProjectCategoryDetailID(Guid projectCategoryDetailID);
     }
 }

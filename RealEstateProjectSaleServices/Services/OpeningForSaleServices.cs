@@ -1,4 +1,6 @@
 ﻿using RealEstateProjectSaleBusinessObject.BusinessObject;
+using RealEstateProjectSaleBusinessObject.Enums;
+using RealEstateProjectSaleBusinessObject.Enums.EnumHelpers;
 using RealEstateProjectSaleRepository.IRepository;
 using RealEstateProjectSaleServices.IServices;
 using System;
@@ -59,6 +61,33 @@ namespace RealEstateProjectSaleServices.Services
         public OpeningForSale FindByProjectIdAndStatus(Guid projectId)
         {
             return _open.FindByProjectIdAndStatus(projectId);
+        }
+
+        public string GetOpenForSaleStatusByProjectCategoryDetailID(Guid projectCategoryDetailID)
+        {
+            var openings = _open.GetOpeningForSaleByProjectCategoryDetailID(projectCategoryDetailID);
+            foreach (var opening in openings)
+            {
+                if (DateTime.Now < opening.StartDate || DateTime.Now > opening.EndDate)
+                {
+                    return OpeningForSaleStatus.ChuaMoBan.GetEnumDescription();
+                }
+                else if (opening.StartDate <= DateTime.Now && DateTime.Now < opening.CheckinDate)
+                {
+                    return OpeningForSaleStatus.GiuCho.GetEnumDescription();
+                }
+                else if (opening.CheckinDate <= DateTime.Now && DateTime.Now < opening.CheckinDate.AddDays(1))
+                {
+                    return OpeningForSaleStatus.CheckIn.GetEnumDescription();
+                }
+                else if (opening.CheckinDate.AddDays(1) <= DateTime.Now && DateTime.Now <= opening.EndDate)
+                {
+                    return OpeningForSaleStatus.MuaTrucTiep.GetEnumDescription();
+                }
+            }
+
+            return OpeningForSaleStatus.ChuaMoBan.GetEnumDescription();
+
         }
     }
 }

@@ -14,6 +14,7 @@ namespace RealEstateProjectSaleBusinessObject.Enums
 
         [EnumDescription("Mở bán")]
         MoBan = 2,
+
         [EnumDescription("Giữ chỗ")]
         GiuCho = 3,
 

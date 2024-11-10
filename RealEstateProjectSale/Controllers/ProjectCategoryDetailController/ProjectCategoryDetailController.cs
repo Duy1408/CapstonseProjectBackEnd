@@ -51,7 +51,7 @@ namespace RealEstateProjectSale.Controllers.ProjectCategoryDetailController
                     ProjectName = detailOpen.ProjectName,
                     PropertyCategoryID = detailOpen.PropertyCategoryID,
                     PropertyCategoryName = detailOpen.PropertyCategoryName,
-                    OpenForSale = _openService.GetOpeningForSaleByProjectCategoryDetailID(detailOpen.ProjectCategoryDetailID).Any()
+                    OpenForSale = _openService.GetOpenForSaleStatusByProjectCategoryDetailID(detailOpen.ProjectCategoryDetailID)
                 }).ToList();
 
                 return Ok(responese);
@@ -121,7 +121,7 @@ namespace RealEstateProjectSale.Controllers.ProjectCategoryDetailController
                     ProjectName = detailOpen.ProjectName,
                     PropertyCategoryID = detailOpen.PropertyCategoryID,
                     PropertyCategoryName = detailOpen.PropertyCategoryName,
-                    OpenForSale = _openService.GetOpeningForSaleByProjectCategoryDetailID(detailOpen.ProjectCategoryDetailID).Any()
+                    OpenForSale = _openService.GetOpenForSaleStatusByProjectCategoryDetailID(detailOpen.ProjectCategoryDetailID)
                 }).ToList();
 
                 return Ok(responese);
