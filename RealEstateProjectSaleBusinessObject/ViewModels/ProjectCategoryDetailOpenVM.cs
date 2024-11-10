@@ -13,6 +13,6 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public string ProjectName { get; set; }
         public Guid PropertyCategoryID { get; set; }
         public string PropertyCategoryName { get; set; }
-        public bool OpenForSale { get; set; }
+        public string OpenForSale { get; set; }
     }
 }
