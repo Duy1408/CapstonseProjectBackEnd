@@ -81,7 +81,7 @@ namespace RealEstateProjectSale.Controllers.FloorController
 
             _floor.ChangeStatus(floor);
 
-            return Ok("Delete Successfully");
+            return Ok("Xóa tầng thành công");
         }
 
 
@@ -109,7 +109,7 @@ namespace RealEstateProjectSale.Controllers.FloorController
                 _floor.AddNew(b);
                 return Ok(new
                 {
-                    message = "Create Floor Successfully"
+                    message = "Tạo tầng thành công."
                 });
             }
             catch (Exception ex)
@@ -151,14 +151,14 @@ namespace RealEstateProjectSale.Controllers.FloorController
 
                     return Ok(new
                     {
-                        message = "Update Floor Successfully"
+                        message = "Cập nhật tầng thành công."
                     });
 
                 }
 
                 return NotFound(new
                 {
-                    message = "Floor not found."
+                    message = "Tầng không tồn tại"
                 });
 
             }

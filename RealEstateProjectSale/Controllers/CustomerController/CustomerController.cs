@@ -242,7 +242,7 @@ namespace RealEstateProjectSale.Controllers.CustomerController
 
                 return NotFound(new
                 {
-                    message = "Customer not found."
+                    message = "Khách hàng không tồn tại."
                 });
 
             }

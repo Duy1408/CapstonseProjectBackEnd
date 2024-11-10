@@ -33,7 +33,7 @@ namespace RealEstateProjectSale.Controllers.EmailController
             {
                 if (string.IsNullOrEmpty(email) || !IsValidEmail(email))
                 {
-                    return BadRequest(new { message = "Invalid email address." });
+                    return BadRequest(new { message = "Lỗi email" });
                 }
                 string otp = GenerateOTP();
                 DateTime expirationTime = DateTime.UtcNow.AddMinutes(1);
@@ -43,7 +43,7 @@ namespace RealEstateProjectSale.Controllers.EmailController
                 mailrequest.Subject = "OTP Verification Code";
                 mailrequest.Body = $"Hello, your OTP code is: {otp}";
                 await _emailService.SendEmailAsync(mailrequest);
-                return Ok(new { message = "OTP has been sent to your email. " });
+                return Ok(new { message = "OTP đã được gửi về email " });
             }
             catch (Exception e)
             {
@@ -60,7 +60,7 @@ namespace RealEstateProjectSale.Controllers.EmailController
 
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(otp))
             {
-                return BadRequest(new { message = "Email and OTP are required." });
+                return BadRequest(new { message = "Yêu cầu nhập email và otp" });
             }
             if (otpStorage.TryGetValue(email, out var otpEntry))
             {
@@ -92,18 +92,18 @@ namespace RealEstateProjectSale.Controllers.EmailController
                 var contract = _contract.GetContractByID(contractid);
             if (contract == null)
             {
-                    return NotFound(new { message = "Contract not found." });
+                    return NotFound(new { message = "Hợp đồng không tồn tại." });
                 }
                 var customer = _customer.GetCustomerByID(contract.CustomerID);
                 if (customer == null)
                 {
-                    return NotFound(new { message = "Customer not found." });
+                    return NotFound(new { message = "Khách hàng không tồn tại." });
                 }
                 var account = _account.GetAccountByID(customer.AccountID);
 
                 if(account == null || string.IsNullOrEmpty(account.Email)|| !IsValidEmail(account.Email))
                 {
-                    return BadRequest(new { message = "Invalid email address." });
+                    return BadRequest(new { message = "Lỗi email." });
                 }
             
                 
@@ -135,12 +135,12 @@ namespace RealEstateProjectSale.Controllers.EmailController
             var contract = _contract.GetContractByID(contractid);
             if (contract == null)
             {
-                return NotFound(new { message = "Contract not found." });
+                return NotFound(new { message = "Hợp đồng không tồn tại." });
             }
             var customer = _customer.GetCustomerByID(contract.CustomerID);
             if (customer == null)
             {
-                return NotFound(new { message = "Customer not found." });
+                return NotFound(new { message = "Khách hàng không tồn tại." });
             }
             var account = _account.GetAccountByID(customer.AccountID);
 

@@ -38,7 +38,7 @@ namespace RealEstateProjectSale.Controllers.DocumentTemplateController
                 {
                     return NotFound(new
                     {
-                        message = "DocumentTemplate not found."
+                        message = "Mẫu tài liệu không tồn tại."
                     });
                 }
                 var docs = _doc.GetDocuments();
@@ -67,7 +67,7 @@ namespace RealEstateProjectSale.Controllers.DocumentTemplateController
 
             return NotFound(new
             {
-                message = "DocumentTemplate not found."
+                message = "Mẫu tài liệu không tồn tại."
             });
         }
 
@@ -79,7 +79,7 @@ namespace RealEstateProjectSale.Controllers.DocumentTemplateController
             {
                 return NotFound(new
                 {
-                    message = "DocumentTemplate not found."
+                    message = "Mẫu tài liệu không tồn tại."
                 });
             }
             var doc = _doc.GetDocumentById(id);
@@ -87,7 +87,7 @@ namespace RealEstateProjectSale.Controllers.DocumentTemplateController
             {
                 return NotFound(new
                 {
-                    message = "DocumentTemplate not found."
+                    message = " Mẫu tài liệu không tồn tại."
                 });
             }
 
@@ -96,7 +96,7 @@ namespace RealEstateProjectSale.Controllers.DocumentTemplateController
 
             return Ok(new
             {
-                message = "Delete DocumentTemplate Successfully"
+                message = "Xóa mẫu tài liệu thành công"
             });
         }
 
@@ -123,7 +123,7 @@ namespace RealEstateProjectSale.Controllers.DocumentTemplateController
 
                 return Ok(new
                 {
-                    message = "Create Doc Successfully"
+                    message = "Tạo mẫu tài liệu thành công"
                 });
             }
             catch (Exception ex)
@@ -159,13 +159,13 @@ namespace RealEstateProjectSale.Controllers.DocumentTemplateController
 
                     return Ok(new
                     {
-                        message = "Update Document Successfully"
+                        message = "Cập nhật mẫu tài liệu thành công"
                     });
 
                 }
                 return NotFound(new
                 {
-                    message = "Doucument not found."
+                    message = "Mẫu tài liệu không tồn tại."
                 });
 
             }

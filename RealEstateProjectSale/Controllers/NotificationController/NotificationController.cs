@@ -43,7 +43,7 @@ namespace RealEstateProjectSale.Controllers.NotificationController
                 {
                     return NotFound(new
                     {
-                        message = "Notification not found."
+                        message = "Thông báo không tồn tại."
                     });
                 }
                 var notis = _notiServices.GetAllNotification();
@@ -72,7 +72,7 @@ namespace RealEstateProjectSale.Controllers.NotificationController
 
             return NotFound(new
             {
-                message = "Notification not found."
+                message = "Thông báo không tồn tại."
             });
 
         }
@@ -83,7 +83,7 @@ namespace RealEstateProjectSale.Controllers.NotificationController
             var customer = _customerServices.GetCustomerByID(request.CustomerID);
             if (customer == null)
             {
-                return NotFound(new { message = "Customer not found" });
+                return NotFound(new { message = "Khách hàng không tồn tại" });
             }
             if (string.IsNullOrEmpty(customer.DeviceToken))
             {
@@ -93,7 +93,7 @@ namespace RealEstateProjectSale.Controllers.NotificationController
             var open = _openServices.GetOpeningForSaleById(request.OpeningForSaleID);
             if (open == null)
             {
-                return NotFound(new { message = "Opening for sale not found" });
+                return NotFound(new { message = "Đợt mở bán không tồn tại" });
             }
 
             //while (true)
@@ -153,7 +153,7 @@ namespace RealEstateProjectSale.Controllers.NotificationController
                 var _noti = _mapper.Map<RealEstateProjectSaleBusinessObject.BusinessObject.Notification>(newNoti);
                 _notiServices.AddNewNotification(_noti);
 
-                return Ok(new { message = "Notification sent successfully", response });
+                return Ok(new { message = "Gửi thông báo thành công.", response });
             }
             catch (FirebaseMessagingException fme)
             {
