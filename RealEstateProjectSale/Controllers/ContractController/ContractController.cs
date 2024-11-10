@@ -125,11 +125,10 @@ namespace RealEstateProjectSale.Controllers.ContractController
                 {
                     ContractID = Guid.NewGuid(),
                     ContractCode = nextContractCode,
-                    ContractName = contract.ContractName,
                     ContractType = contract.ContractType,
                     CreatedTime = DateTime.Now,
                     UpdatedTime = null,
-                    DateSigned = null,
+                 
                     ExpiredTime = contract.ExpiredTime,
                     TotalPrice = contract.TotalPrice,
                     Description = contract.Description,
@@ -248,10 +247,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     {
                         existingContract.ContractCode = contract.ContractCode;
                     }
-                    if (!string.IsNullOrEmpty(contract.ContractName))
-                    {
-                        existingContract.ContractName = contract.ContractName;
-                    }
+               
                     if (!string.IsNullOrEmpty(contract.ContractType))
                     {
                         existingContract.ContractType = contract.ContractType;
@@ -264,10 +260,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     {
                         existingContract.UpdatedTime = contract.UpdatedTime.Value;
                     }
-                    if (contract.DateSigned.HasValue)
-                    {
-                        existingContract.DateSigned = contract.DateSigned.Value;
-                    }
+               
                     if (contract.ExpiredTime.HasValue)
                     {
                         existingContract.ExpiredTime = contract.ExpiredTime.Value;

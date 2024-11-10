@@ -487,11 +487,9 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                 {
                     ContractID = Guid.NewGuid(),
                     ContractCode = nextContractCode,
-                    ContractName = "Thỏa thuận đặt cọc  " + existingProperty.PropertyID,
                     ContractType = ContractType.DatCoc.GetEnumDescription(),
                     CreatedTime = DateTime.Now,
                     UpdatedTime = null,
-                    DateSigned = null,
                     ExpiredTime = DateTime.Now.AddDays(1),
                     TotalPrice = openDetail.Price,
                     Description = null,

@@ -12,7 +12,6 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Request
     public class ContractRequestDTO
     {
         public string ContractCode { get; set; }
-        public string ContractName { get; set; }
         public string ContractType { get; set; }
         [Column(TypeName = "date")]
         public DateTime? ExpiredTime { get; set; }

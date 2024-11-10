@@ -146,8 +146,7 @@ namespace RealEstateProjectSale.Mapper
             CreateMap<PaymentProcessCreateDTO, PaymentProcess>().ReverseMap();
             CreateMap<PaymentProcessUpdateDTO, PaymentProcess>().ReverseMap();
 
-            CreateMap<ContractPaymentDetailVM, ContractPaymentDetail>().ReverseMap().ForMember(dest => dest.ContractName,
-                                 opt => opt.MapFrom(src => src.Contract!.ContractName));
+            CreateMap<ContractPaymentDetailVM, ContractPaymentDetail>().ReverseMap();
             CreateMap<ContractPaymentDetailCreateDTO, ContractPaymentDetail>().ReverseMap();
             CreateMap<ContractPaymentDetailUpdateDTO, ContractPaymentDetail>().ReverseMap();
 

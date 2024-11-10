@@ -1,6 +1,7 @@
 ﻿using RealEstateProjectSaleBusinessObject.JsonConverters;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -11,21 +12,15 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
     public class ContractPaymentDetailVM
     {
         public Guid ContractPaymentDetailID { get; set; }
-        public string DetailName { get; set; }
-        [JsonConverter(typeof(DateTimeConverter))]
-        public DateTime CreatedTime { get; set; }
-        public int PaymentRate { get; set; }
-        public double? Amountpaid { get; set; }
-        public int? TaxRate { get; set; }
-        public double? MoneyTax { get; set; }
-        public double? MoneyReceived { get; set; }
-        public int? NumberDayLate { get; set; }
-        public int? InterestRate { get; set; }
-        public double? MoneyInterestRate { get; set; }
-        public double? MoneyExist { get; set; }
+        public int PaymentRate { get; set; }//dot may
         public string? Description { get; set; }
-        public string? RemittanceOrder { get; set; }
+        [Column(TypeName = "date")]
+        public DateTime? Period { get; set; }//Thời hạn
+        public double? PaidValue { get; set; }
+        public double? PaidValueLate { get; set; }
+        public string? RemittanceOrder { get; set; }//upload chung nhan
+        public bool Status { get; set; }
         public Guid ContractID { get; set; }
-        public string ContractName { get; set; }
+       
     }
 }

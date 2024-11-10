@@ -11,19 +11,16 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
     {
         public Guid ContractID { get; set; }
         public string ContractCode { get; set; }
-        public string ContractName { get; set; }
         public string ContractType { get; set; }
         public DateTime CreatedTime { get; set; }
         public DateTime? UpdatedTime { get; set; }
         [Column(TypeName = "date")]
-        public DateTime? DateSigned { get; set; }
-        [Column(TypeName = "date")]
-        public DateTime? ExpiredTime { get; set; }
+        public DateTime? ExpiredTime { get; set; }//ngay het han
         public double? TotalPrice { get; set; }
         public string? Description { get; set; }
-        public string? ContractDepositFile { get; set; }
-        public string? ContractSaleFile { get; set; }
-        public string? PriceSheetFile { get; set; }
+        public string? ContractDepositFile { get; set; }//file thoa thuan dat coc
+        public string? ContractSaleFile { get; set; }//hop dong mua ban
+        public string? PriceSheetFile { get; set; }//phieu tam tinh
         public string Status { get; set; }
         public Guid DocumentTemplateID { get; set; }
         public DocumentTemplate? DocumentTemplate { get; set; }

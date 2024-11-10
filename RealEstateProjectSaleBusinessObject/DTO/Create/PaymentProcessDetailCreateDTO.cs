@@ -13,6 +13,8 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
         [JsonIgnore]
         public Guid PaymentProcessDetailID { get; set; }
         public int PaymentStage { get; set; }
+        public string? Description { get; set; }
+
         [Column(TypeName = "date")]
         public DateTime? Period { get; set; }
         public float? Percentage { get; set; }

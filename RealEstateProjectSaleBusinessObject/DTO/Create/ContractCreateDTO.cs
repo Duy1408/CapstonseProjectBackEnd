@@ -15,15 +15,11 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
         public Guid ContractID { get; set; }
         [JsonIgnore]
         public string ContractCode { get; set; }
-        public string ContractName { get; set; }
         public string ContractType { get; set; }
         [JsonIgnore]
         public DateTime CreatedTime { get; set; }
         [JsonIgnore]
         public DateTime? UpdatedTime { get; set; }
-        [JsonIgnore]
-        [Column(TypeName = "date")]
-        public DateTime? DateSigned { get; set; }
         [Column(TypeName = "date")]
         public DateTime? ExpiredTime { get; set; }
         public double? TotalPrice { get; set; }
