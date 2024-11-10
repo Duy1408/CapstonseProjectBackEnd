@@ -38,7 +38,7 @@ namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
                 {
                     return NotFound(new
                     {
-                        message = "ContractPaymentDetail không tồn tại."
+                        message = "Chi tiết hợp đồng không tồn tại."
                     });
                 }
                 var details = _detailService.GetAllContractPaymentDetail();
@@ -67,7 +67,7 @@ namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
 
             return NotFound(new
             {
-                message = "ContractPaymentDetail not found."
+                message = "Chi tiết hợp đồng không tồn tại."
             });
 
         }
@@ -97,7 +97,7 @@ namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
 
                 return Ok(new
                 {
-                    message = "Create ContractPaymentDetail Successfully"
+                    message = "Tạo chi tiết hợp đồng thành công."
                 });
             }
             catch (Exception ex)
@@ -163,7 +163,7 @@ namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
 
                 return NotFound(new
                 {
-                    message = "ContractPaymentDetail not found."
+                    message = "Cập nhật chi tiết hợp đồng thành công."
                 });
 
             }
@@ -185,13 +185,13 @@ namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
                     _detailService.DeleteContractPaymentDetailByID(id);
                     return Ok(new
                     {
-                        message = "Delete ContractPaymentDetail Successfully"
+                        message = "Xóa chi tiết hợp đồng thành công."
                     });
                 }
 
                 return NotFound(new
                 {
-                    message = "ContractPaymentDetail not found."
+                    message = "Chi tiết hợp đồng không tồn tại."
                 });
             }
             catch (Exception ex)

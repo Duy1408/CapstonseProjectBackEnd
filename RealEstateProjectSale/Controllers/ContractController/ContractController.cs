@@ -179,7 +179,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
                 {
                     return NotFound(new
                     {
-                        message = "Promotion Detail không tồn tại."
+                        message = "Gói khuyến mãi không tồn tại."
                     });
                 }
                 var paymentprocess = _paymentprocess.GetPaymentProcessById(paymentprocessid);
@@ -187,7 +187,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
                 {
                     return NotFound(new
                     {
-                        message = "Payment Process không tồn tại."
+                        message = "Phương thức thanh toán không tồn tại."
                     });
                 }
 
