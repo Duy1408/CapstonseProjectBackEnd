@@ -47,7 +47,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
                 {
                     return NotFound(new
                     {
-                        message = "Email or PhoneNumber doesn't exist"
+                        message = "Email hoặc PhoneNumber không tồn tại"
                     });
                 }
 
@@ -65,7 +65,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
                 }
                 return BadRequest(new
                 {
-                    message = "The password you entered is incorrect"
+                    message = "Password bạn đã nhập không chính xác."
                 });
             }
             catch (Exception ex)
@@ -90,7 +90,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = "Failed to parse JWT token", error = ex.Message });
+                return BadRequest(new { message = "Không thể phân tích token JWT", error = ex.Message });
             }
         }
 

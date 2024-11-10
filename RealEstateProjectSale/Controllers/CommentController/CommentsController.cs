@@ -42,7 +42,7 @@ namespace RealEstateProjectSale.Controllers.CommentController
                 {
                     return NotFound(new
                     {
-                        message = "Comment not found."
+                        message = "Comment không tồn tại."
                     });
                 }
                 var cmts = _cmt.GetComments();
@@ -71,7 +71,7 @@ namespace RealEstateProjectSale.Controllers.CommentController
 
             return NotFound(new
             {
-                message = "Comment not found."
+                message = "Comment không tồn tại."
             });
 
         }
@@ -91,7 +91,7 @@ namespace RealEstateProjectSale.Controllers.CommentController
 
             return NotFound(new
             {
-                message = "Comment not found."
+                message = "Comment không tồn tại."
             });
 
         }
@@ -104,7 +104,7 @@ namespace RealEstateProjectSale.Controllers.CommentController
             {
                 return NotFound(new
                 {
-                    message = "Comment not found."
+                    message = "Comment không tồn tại."
                 });
             }
             var cmt = _cmt.SearchComment(searchValue);
@@ -113,7 +113,7 @@ namespace RealEstateProjectSale.Controllers.CommentController
             {
                 return NotFound(new
                 {
-                    message = "Don't have this comment"
+                    message = "Không có Comment này"
                 });
             }
             var responese = cmt.Select(cmt => _mapper.Map<CommentVM>(cmt)).ToList();
@@ -145,7 +145,7 @@ namespace RealEstateProjectSale.Controllers.CommentController
 
                 return Ok(new
                 {
-                    message = "Create Comment Successfully"
+                    message = "Tạo Comment thành công"
                 });
             }
             catch (Exception ex)
@@ -178,14 +178,14 @@ namespace RealEstateProjectSale.Controllers.CommentController
 
                     return Ok(new
                     {
-                        message = "Update Comment Successfully"
+                        message = "Cập nhật Comment thành công."
                     });
 
                 }
 
                 return NotFound(new
                 {
-                    message = "Comment not found."
+                    message = "Comment không tồn tại."
                 });
 
             }
@@ -203,7 +203,7 @@ namespace RealEstateProjectSale.Controllers.CommentController
             {
                 return NotFound(new
                 {
-                    message = "Comment not found."
+                    message = "Comment không tồn tại."
                 });
             }
             var cmt = _cmt.GetCommentById(id);
@@ -211,7 +211,7 @@ namespace RealEstateProjectSale.Controllers.CommentController
             {
                 return NotFound(new
                 {
-                    message = "Comment not found."
+                    message = "Comment không tồn tại."
                 });
             }
 
@@ -219,7 +219,7 @@ namespace RealEstateProjectSale.Controllers.CommentController
 
             return Ok(new
             {
-                message = "Delete Comment Successfully"
+                message = "Xóa Comment thành công"
             });
         }
 

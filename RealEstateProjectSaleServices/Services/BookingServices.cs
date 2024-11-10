@@ -138,5 +138,10 @@ namespace RealEstateProjectSaleServices.Services
         {
             return _book.GetBookingByStaffID(id);
         }
+
+        public bool ChangeStatusBooking(Booking booking)
+        {
+            return _book.ChangeStatusBooking(booking);
+        }
     }
 }

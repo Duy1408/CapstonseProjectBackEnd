@@ -59,7 +59,10 @@ namespace RealEstateProjectSale.Controllers.BookingController
             {
                 if (_book.GetBookings() == null)
                 {
-                    return NotFound();
+                    return NotFound(new
+                    {
+                        message = "Booking không tồn tại."
+                    });
                 }
                 var books = _book.GetBookings();
                 var response = _mapper.Map<List<BookingVM>>(books);
@@ -80,7 +83,10 @@ namespace RealEstateProjectSale.Controllers.BookingController
             {
                 if (_book.GetBookingByBooked() == null)
                 {
-                    return NotFound();
+                    return NotFound(new
+                    {
+                        message = "Booking không tồn tại."
+                    });
                 }
                 var books = _book.GetBookingByBooked();
                 var response = _mapper.Map<List<BookingVM>>(books);
@@ -101,7 +107,10 @@ namespace RealEstateProjectSale.Controllers.BookingController
             {
                 if (_book.GetBookingByCheckedIn() == null)
                 {
-                    return NotFound();
+                    return NotFound(new
+                    {
+                        message = "Booking không tồn tại."
+                    });
                 }
                 var books = _book.GetBookingByCheckedIn();
                 var response = _mapper.Map<List<BookingVM>>(books);
@@ -122,7 +131,10 @@ namespace RealEstateProjectSale.Controllers.BookingController
             {
                 if (_book.GetBookings() == null)
                 {
-                    return NotFound();
+                    return NotFound(new
+                    {
+                        message = "Booking không tồn tại."
+                    });
                 }
                 var books = _book.GetBookingByPropertyID(propertyid);
                 var response = _mapper.Map<List<BookingVM>>(books);
@@ -150,7 +162,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
             return NotFound(new
             {
-                message = "Booking not found."
+                message = "Booking không tồn tại."
             });
 
         }
@@ -170,7 +182,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
             return NotFound(new
             {
-                message = "Booking not found."
+                message = "Booking không tồn tại."
             });
 
         }
@@ -190,7 +202,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
             return NotFound(new
             {
-                message = "Booking not found."
+                message = "Booking không tồn tại."
             });
 
         }
@@ -205,7 +217,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
             {
                 return NotFound(new
                 {
-                    message = "Booking not found."
+                    message = "Booking không tồn tại."
                 });
             }
 
@@ -225,7 +237,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
             {
                 return NotFound(new
                 {
-                    message = "Booking not found."
+                    message = "Booking không tồn tại."
                 });
             }
 
@@ -298,14 +310,14 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
                     return Ok(new
                     {
-                        message = "Update Booking Successfully"
+                        message = "Cập nhật Booking thành công."
                     });
 
                 }
 
                 return NotFound(new
                 {
-                    message = "Booking not found."
+                    message = "Booking không tồn tại."
                 });
 
             }
@@ -328,7 +340,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
                     {
                         return BadRequest(new
                         {
-                            message = "Customer has not paid the reservation deposit."
+                            message = "Customer chưa thanh toán tiền đặt cọc giữ chỗ."
                         });
                     }
 
@@ -338,14 +350,14 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
                     return Ok(new
                     {
-                        message = "Customer checked in Successfully"
+                        message = "Customer đã check-in thành công."
                     });
 
                 }
 
                 return NotFound(new
                 {
-                    message = "Booking not found."
+                    message = "Booking không tồn tại."
                 });
 
             }
@@ -366,7 +378,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
                 {
                     return NotFound(new
                     {
-                        message = "Customer not found."
+                        message = "Customer không tồn tại."
                     });
                 }
 
@@ -375,7 +387,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
                 {
                     return NotFound(new
                     {
-                        message = "Customer has not updated identification documents."
+                        message = "Customer chưa cập nhật giấy tờ tùy thân."
                     });
                 }
 
@@ -384,7 +396,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
                 {
                     return NotFound(new
                     {
-                        message = "ProjectCategoryDetail not found."
+                        message = "ProjectCategoryDetail không tồn tại."
                     });
                 }
 
@@ -394,7 +406,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
                 {
                     return NotFound(new
                     {
-                        message = "OpeningForSale not found."
+                        message = "OpenForSale không tồn tại."
                     });
                 }
 
@@ -403,7 +415,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
                 {
                     return BadRequest(new
                     {
-                        message = "Customer has booked this project."
+                        message = "Customer đã đặt chỗ cho ProjectCategoryDetail này."
                     });
                 }
 
@@ -412,7 +424,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
                 {
                     return NotFound(new
                     {
-                        message = "Document not found."
+                        message = "Document không tồn tại."
                     });
                 }
 
@@ -439,7 +451,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
                 return Ok(new
                 {
-                    message = "Create Booking Successfully"
+                    message = "Tạo Booking thành công"
                 });
 
             }
@@ -449,33 +461,28 @@ namespace RealEstateProjectSale.Controllers.BookingController
             }
         }
 
-        //[HttpGet("generate-pdf")]
-        //public IActionResult GeneratePdfDocument(Guid templateId)
-        //{
-        //    try
-        //    {
-        //        var documentTemplate = _documentService.GetDocumentById(templateId);
+        [HttpDelete("{id}")]
+        [SwaggerOperation(Summary = "Delete Booking by ID")]
+        public IActionResult DeleteContract(Guid id)
+        {
 
-        //        var htmlContent = _book.GenerateDocumentContent(templateId);
+            var booking = _book.GetBookingById(id);
+            if (booking == null)
+            {
+                return NotFound(new
+                {
+                    message = "Booking không tồn tại."
+                });
+            }
 
-        //        var pdfBytes = _documentService.GeneratePdfFromTemplate(htmlContent);
+            _book.ChangeStatusBooking(booking);
 
-        //        using (MemoryStream pdfStream = new MemoryStream(pdfBytes))
-        //        {
-        //            string? blobUrl = null;
-        //            blobUrl = _fileService.UploadSingleFile(pdfStream, documentTemplate.DocumentName, "bookingfile");
 
-        //            return Ok(new
-        //            {
-        //                url = blobUrl
-        //            });
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
+            return Ok(new
+            {
+                message = "Xóa Booking thành công"
+            });
+        }
 
     }
 }

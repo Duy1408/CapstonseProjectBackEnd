@@ -31,5 +31,6 @@ namespace RealEstateProjectSaleServices.IServices
         Booking CheckExistingBooking(Guid openForSaleID, Guid categoryDetailID, Guid customerID);
         string GenerateDocumentContent(Guid bookingId);
 
+        bool ChangeStatusBooking(Booking booking);
     }
 }

@@ -37,7 +37,10 @@ namespace RealEstateProjectSale.Controllers.BlockController
             {
                 if (_block.GetBlocks() == null)
                 {
-                    return NotFound();
+                    return NotFound(new
+                    {
+                        message = "Block không tồn tại."
+                    });
                 }
                 var blocks = _block.GetBlocks();
                 var response = _mapper.Map<List<BlockVM>>(blocks);
@@ -60,7 +63,10 @@ namespace RealEstateProjectSale.Controllers.BlockController
                 var responese = _mapper.Map<BlockVM>(block);
                 return Ok(responese);
             }
-            return NotFound();
+            return NotFound(new
+            {
+                message = "Block không tồn tại."
+            });
         }
 
         [HttpPut("{id}")]
@@ -95,14 +101,14 @@ namespace RealEstateProjectSale.Controllers.BlockController
 
                     return Ok(new
                     {
-                        message = "Update Block Successfully"
+                        message = "Cập nhật Block thành công"
                     });
 
                 }
 
                 return NotFound(new
                 {
-                    message = "Block not found."
+                    message = "Block không tồn tại."
                 });
 
             }
@@ -135,7 +141,7 @@ namespace RealEstateProjectSale.Controllers.BlockController
                 _block.AddNew(b);
                 return Ok(new
                 {
-                    message = "Create Block Successfully"
+                    message = "Tạo Block thành công"
                 });
             }
             catch (Exception ex)
@@ -145,9 +151,29 @@ namespace RealEstateProjectSale.Controllers.BlockController
             }
         }
 
+        [HttpDelete("{id}")]
+        [SwaggerOperation(Summary = "Delete Block")]
+        public IActionResult DeleteAccount(Guid id)
+        {
+
+            var block = _block.GetBlockById(id);
+            if (block == null)
+            {
+                return NotFound(new
+                {
+                    message = "Block không tồn tại."
+                });
+            }
+
+            _block.ChangeStatus(block);
+
+            return Ok(new
+            {
+                message = "Xóa Block thành công"
+            });
+        }
 
 
-   
 
     }
 }
