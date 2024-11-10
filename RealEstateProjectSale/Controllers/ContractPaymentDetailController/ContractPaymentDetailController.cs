@@ -38,7 +38,7 @@ namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
                 {
                     return NotFound(new
                     {
-                        message = "ContractPaymentDetail not found."
+                        message = "ContractPaymentDetail không tồn tại."
                     });
                 }
                 var details = _detailService.GetAllContractPaymentDetail();
