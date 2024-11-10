@@ -72,6 +72,26 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessController
 
         }
 
+        [HttpGet("salesPolicy/{salesPolicyId}")]
+        [SwaggerOperation(Summary = "Get PaymentProcess By ProjectID")]
+        public IActionResult GetPaymentProcessByProjectID(Guid salesPolicyId)
+        {
+            var pmt = _pmtService.GetPaymentProcessByProjectID(salesPolicyId);
+
+            if (pmt != null)
+            {
+                var responese = _mapper.Map<List<PaymentProcessVM>>(pmt);
+
+                return Ok(responese);
+            }
+
+            return NotFound(new
+            {
+                message = "SalePolicy not found."
+            });
+
+        }
+
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new PaymentProcess")]
         public IActionResult AddNew(PaymentProcessCreateDTO process)

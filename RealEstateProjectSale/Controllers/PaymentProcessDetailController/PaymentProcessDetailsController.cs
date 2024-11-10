@@ -29,7 +29,7 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessDetailController
         }
 
         [HttpGet]
-        [SwaggerOperation(Summary = "Get PaymentProcessDetail by ID")]
+        [SwaggerOperation(Summary = "Get All PaymentProcessDetail")]
         public IActionResult GetAllPaymentProcessDetail()
         {
             try

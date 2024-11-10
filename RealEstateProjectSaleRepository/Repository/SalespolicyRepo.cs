@@ -31,7 +31,7 @@ namespace RealEstateProjectSaleRepository.Repository
             return _dao.GetSalespolicyByID(id);
         }
 
-        public Salespolicy GetSalespolicyByProjectID(Guid projectid)
+        public List<Salespolicy> GetSalespolicyByProjectID(Guid projectid)
         {
             return _dao.GetSalespolicyByProjectID(projectid);
         }
