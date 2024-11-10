@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
+using RealEstateProjectSaleBusinessObject.Enums;
+using RealEstateProjectSaleBusinessObject.Enums.EnumHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -110,7 +112,7 @@ namespace RealEstateProjectSaleDAO.DAOs
             }
             else
             {
-                //_contract.Status = false;
+                _contract.Status = ContractStatus.DaHuy.GetEnumDescription();
                 _context.Entry(_contract).State = EntityState.Modified;
                 _context.SaveChanges();
                 return true;

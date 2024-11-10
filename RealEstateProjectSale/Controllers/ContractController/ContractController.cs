@@ -48,7 +48,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
                 {
                     return NotFound(new
                     {
-                        message = "Contract not found."
+                        message = "Contract không tồn tại."
                     });
                 }
                 var contracts = _contractServices.GetAllContract();
@@ -77,7 +77,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
             return NotFound(new
             {
-                message = "Contract not found."
+                message = "Contract không tồn tại."
             });
 
         }
@@ -97,7 +97,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
             return NotFound(new
             {
-                message = "Contract not found."
+                message = "Contract không tồn tại."
             });
 
         }
@@ -151,7 +151,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
                 return Ok(new
                 {
-                    message = "Create Contract Successfully"
+                    message = "Tạo Contract thành công"
                 });
             }
             catch (Exception ex)
@@ -167,11 +167,11 @@ namespace RealEstateProjectSale.Controllers.ContractController
             try
             {
                 var contract = _contractServices.GetContractByID(contractid);
-                if(contract == null)
+                if (contract == null)
                 {
                     return NotFound(new
                     {
-                        message = "Contract not found."
+                        message = "Contract không tồn tại."
                     });
                 }
 
@@ -180,7 +180,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
                 {
                     return NotFound(new
                     {
-                        message = "Promotion not found."
+                        message = "Promotion Detail không tồn tại."
                     });
                 }
                 var paymentprocess = _paymentprocess.GetPaymentProcessById(paymentprocessid);
@@ -188,7 +188,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
                 {
                     return NotFound(new
                     {
-                        message = "Payment not found."
+                        message = "Payment Process không tồn tại."
                     });
                 }
 
@@ -197,7 +197,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
                 _contractServices.UpdateContract(contract);
                 return Ok(new
                 {
-                    message = "Choose Promotion Successfully"
+                    message = "Chọn phương thức thanh toán và chính sách ưu đãi thành công."
                 });
 
             }
@@ -322,14 +322,14 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
                     return Ok(new
                     {
-                        message = "Update Contract Successfully"
+                        message = "Cập nhật Contract thành công."
                     });
 
                 }
 
                 return NotFound(new
                 {
-                    message = "Contract not found."
+                    message = "Contract không tồn tại."
                 });
 
             }
@@ -338,43 +338,6 @@ namespace RealEstateProjectSale.Controllers.ContractController
                 return BadRequest(ex.Message);
             }
         }
-
-        //[HttpPut("{id}/signed")]
-        //[SwaggerOperation(Summary = "Customer Confirmed Deposit Contract by ID")]
-        //public IActionResult CustomerConfirmedDepositContract(Guid id)
-        //{
-        //    try
-        //    {
-        //        var contract = _contractServices.GetContractByID(id);
-        //        var book = _bookServices.GetBookingById(contract.BookingID);
-        //        if (contract != null && book != null)
-        //        {
-        //            contract.DateSigned = DateTime.Now;
-        //            contract.Status = ContractStatus.DaXacNhanTTDC.GetEnumDescription();
-
-        //            book.Status = BookingStatus.DaKyTTDC.GetEnumDescription();
-
-        //            _contractServices.UpdateContract(contract);
-        //            _bookServices.UpdateBooking(book);
-
-        //            return Ok(new
-        //            {
-        //                message = "Customer Confirmed Deposit Contract Successfully"
-        //            });
-
-        //        }
-
-        //        return NotFound(new
-        //        {
-        //            message = "Contract not found."
-        //        });
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
 
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Delete Contract by ID")]
@@ -386,7 +349,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
             {
                 return NotFound(new
                 {
-                    message = "Contract not found."
+                    message = "Contract không tồn tại."
                 });
             }
 
@@ -395,7 +358,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
             return Ok(new
             {
-                message = "Delete Contract Successfully"
+                message = "Xóa Contract thành công"
             });
         }
 

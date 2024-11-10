@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿
+using Microsoft.EntityFrameworkCore;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
 using System;
 using System.Collections.Generic;
@@ -29,11 +30,11 @@ namespace RealEstateProjectSaleDAO.DAOs
         public List<Block> GetAllBlock()
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.Blocks.Include(c=>c.Zone) .ToList();
+            return _context.Blocks.Include(c => c.Zone).ToList();
         }
 
 
-   
+
 
         public bool AddNew(Block b)
         {
@@ -56,7 +57,7 @@ namespace RealEstateProjectSaleDAO.DAOs
         public Block GetBlockByID(Guid id)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.Blocks.Include(c=>c.Zone).SingleOrDefault(a => a.BlockID == id);
+            return _context.Blocks.Include(c => c.Zone).SingleOrDefault(a => a.BlockID == id);
         }
 
         public bool UpdateBlock(Block b)

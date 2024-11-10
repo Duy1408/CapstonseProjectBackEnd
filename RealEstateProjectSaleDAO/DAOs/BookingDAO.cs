@@ -257,5 +257,24 @@ namespace RealEstateProjectSaleDAO.DAOs
                                   && b.CustomerID == customerID);
         }
 
+        public bool ChangeStatusBooking(Booking booking)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            var _booking = _context.Bookings!.FirstOrDefault(c => c.BookingID.Equals(booking.BookingID));
+
+
+            if (_booking == null)
+            {
+                return false;
+            }
+            else
+            {
+                _booking.Status = BookingStatus.DaHuy.GetEnumDescription();
+                _context.Entry(_booking).State = EntityState.Modified;
+                _context.SaveChanges();
+                return true;
+            }
+        }
+
     }
 }

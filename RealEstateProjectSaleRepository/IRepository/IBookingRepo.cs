@@ -31,7 +31,7 @@ namespace RealEstateProjectSaleRepository.IRepository
         List<Booking> GetBookingByStaffID(Guid id);
         Booking CheckExistingBooking(Guid openForSaleID, Guid categoryDetailID, Guid customerID);
 
-
+        bool ChangeStatusBooking(Booking booking);
 
     }
 }

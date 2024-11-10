@@ -36,7 +36,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
                 {
                     return NotFound(new
                     {
-                        message = "Account not found."
+                        message = "Account không tồn tại."
                     });
                 }
                 var accounts = _accountServices.GetAllAccount();
@@ -65,7 +65,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
 
             return NotFound(new
             {
-                message = "Account not found."
+                message = "Account không tồn tại."
             });
 
         }
@@ -82,7 +82,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
                 {
                     return BadRequest(new
                     {
-                        message = "Email Existed"
+                        message = "Email đã tồn tại"
                     });
                 }
                 var newAccount = new AccountCreateDTO
@@ -99,7 +99,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
 
                 return Ok(new
                 {
-                    message = "Create Account Successfully"
+                    message = "Tạo Account thành công"
                 });
             }
             catch (Exception ex)
@@ -138,14 +138,14 @@ namespace RealEstateProjectSale.Controllers.AccountController
 
                     return Ok(new
                     {
-                        message = "Update Account Successfully"
+                        message = "Cập nhật Account thành công."
                     });
 
                 }
 
                 return NotFound(new
                 {
-                    message = "Account not found."
+                    message = "Account không tồn tại."
                 });
 
             }
@@ -165,7 +165,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
             {
                 return NotFound(new
                 {
-                    message = "Account not found."
+                    message = "Account không tồn tại."
                 });
             }
 
@@ -173,7 +173,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
 
             return Ok(new
             {
-                message = "Delete Account Successfully"
+                message = "Xóa Account thành công"
             });
         }
 
