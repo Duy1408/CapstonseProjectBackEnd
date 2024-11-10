@@ -23,7 +23,7 @@ namespace RealEstateProjectSaleServices.Services
 
         public bool ChangeStatus(Salespolicy p)
         {
-          return   _repo.ChangeStatus(p);
+            return _repo.ChangeStatus(p);
         }
 
         public Salespolicy GetSalespolicyById(Guid id)
@@ -31,7 +31,7 @@ namespace RealEstateProjectSaleServices.Services
             return _repo.GetSalespolicyById(id);
         }
 
-        public Salespolicy GetSalespolicyByProjectID(Guid projectid)
+        public List<Salespolicy> GetSalespolicyByProjectID(Guid projectid)
         {
             return _repo.GetSalespolicyByProjectID(projectid);
         }

@@ -36,6 +36,11 @@ namespace RealEstateProjectSaleServices.Services
             return _repo.GetPaymentProcessById(id);
         }
 
+        public List<PaymentProcess> GetPaymentProcessByProjectID(Guid salesPolicyId)
+        {
+            return _repo.GetPaymentProcessByProjectID(salesPolicyId);
+        }
+
         public void UpdatePaymentProcess(PaymentProcess p)
         {
             _repo.UpdatePaymentProcess(p);

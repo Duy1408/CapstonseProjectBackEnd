@@ -19,5 +19,6 @@ namespace RealEstateProjectSaleServices.IServices
         PaymentProcess GetPaymentProcessById(Guid id);
 
         void UpdatePaymentProcess(PaymentProcess p);
+        List<PaymentProcess> GetPaymentProcessByProjectID(Guid salesPolicyId);
     }
 }

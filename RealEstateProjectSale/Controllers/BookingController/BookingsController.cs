@@ -136,8 +136,8 @@ namespace RealEstateProjectSale.Controllers.BookingController
                         message = "Booking không tồn tại."
                     });
                 }
-                var books = _book.GetBookingByPropertyID(propertyid);
-                var response = _mapper.Map<List<BookingVM>>(books);
+                var book = _book.GetBookingByPropertyID(propertyid);
+                var response = _mapper.Map<BookingVM>(book);
 
                 return Ok(response);
             }

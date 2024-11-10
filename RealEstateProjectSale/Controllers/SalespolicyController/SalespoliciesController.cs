@@ -76,7 +76,7 @@ namespace RealEstateProjectSale.Controllers.SalespolicyController
 
         }
 
-        [HttpGet(" project/{projectid}")]
+        [HttpGet("project/{projectid}")]
         [SwaggerOperation(Summary = "Get SalePolicy by project ID")]
         public IActionResult GetSalePolicyByProjectID(Guid projectid)
         {
@@ -84,7 +84,7 @@ namespace RealEstateProjectSale.Controllers.SalespolicyController
 
             if (sale != null)
             {
-                var responese = _mapper.Map<SalepolicyVM>(sale);
+                var responese = _mapper.Map<List<SalepolicyVM>>(sale);
 
                 return Ok(responese);
             }

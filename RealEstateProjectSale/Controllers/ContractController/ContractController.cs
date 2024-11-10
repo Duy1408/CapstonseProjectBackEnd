@@ -128,7 +128,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     ContractType = contract.ContractType,
                     CreatedTime = DateTime.Now,
                     UpdatedTime = null,
-                 
+
                     ExpiredTime = contract.ExpiredTime,
                     TotalPrice = contract.TotalPrice,
                     Description = contract.Description,
@@ -194,6 +194,11 @@ namespace RealEstateProjectSale.Controllers.ContractController
                 contract.PaymentProcessID = paymentprocessid;
                 contract.PromotionDetailID = promotiondetailid;
                 _contractServices.UpdateContract(contract);
+
+
+
+
+
                 return Ok(new
                 {
                     message = "Chọn phương thức thanh toán và chính sách ưu đãi thành công."
@@ -247,7 +252,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     {
                         existingContract.ContractCode = contract.ContractCode;
                     }
-               
+
                     if (!string.IsNullOrEmpty(contract.ContractType))
                     {
                         existingContract.ContractType = contract.ContractType;
@@ -260,7 +265,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     {
                         existingContract.UpdatedTime = contract.UpdatedTime.Value;
                     }
-               
+
                     if (contract.ExpiredTime.HasValue)
                     {
                         existingContract.ExpiredTime = contract.ExpiredTime.Value;
