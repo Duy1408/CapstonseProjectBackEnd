@@ -90,7 +90,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
         }
 
         [HttpGet("stepone")]
-        [SwaggerOperation(Summary = "Get Contract by customer ID")]
+        [SwaggerOperation(Summary = "Get Contract by contractid")]
         public IActionResult CustomerCheckInformation(Guid contractid)
         {
 
