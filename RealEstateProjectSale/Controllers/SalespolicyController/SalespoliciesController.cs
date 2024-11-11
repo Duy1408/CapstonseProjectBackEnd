@@ -40,7 +40,7 @@ namespace RealEstateProjectSale.Controllers.SalespolicyController
                 {
                     return NotFound(new
                     {
-                        message = "SalePolicy not found."
+                        message = "Chính sách bán hàng không tồn tại."
                     });
                 }
                 var sales = _sale.GetSalespolicys();
@@ -71,7 +71,7 @@ namespace RealEstateProjectSale.Controllers.SalespolicyController
 
             return NotFound(new
             {
-                message = "SalePolicy not found."
+                message = "Chính sách bán hàng không tồn tại."
             });
 
         }
@@ -91,7 +91,7 @@ namespace RealEstateProjectSale.Controllers.SalespolicyController
 
             return NotFound(new
             {
-                message = "SalePolicy not found."
+                message = "Chính sách bán hàng không tồn tại."
             });
 
         }
@@ -132,14 +132,14 @@ namespace RealEstateProjectSale.Controllers.SalespolicyController
 
                     return Ok(new
                     {
-                        message = "Update SalePolicy Successfully"
+                        message = "Cập nhật chính sách bàn hàng thành công."
                     });
 
                 }
 
                 return NotFound(new
                 {
-                    message = "SalePolicy not found."
+                    message = "Chính sách bán hàng không tồn tại."
                 });
 
             }
@@ -172,7 +172,7 @@ namespace RealEstateProjectSale.Controllers.SalespolicyController
 
                 return Ok(new
                 {
-                    message = "Create SalePolicy Successfully"
+                    message = "Tạo chính sách bàn hàng thành công."
                 });
             }
             catch (Exception ex)
@@ -189,7 +189,7 @@ namespace RealEstateProjectSale.Controllers.SalespolicyController
             {
                 return NotFound(new
                 {
-                    message = "SalePolicy not found."
+                    message = "Chính sách bán hàng không tồn tại."
                 });
             }
             var sale = _sale.GetSalespolicyById(id);
@@ -197,7 +197,7 @@ namespace RealEstateProjectSale.Controllers.SalespolicyController
             {
                 return NotFound(new
                 {
-                    message = "SalePolicy not found."
+                    message = "Chính sách bán hàng không tồn tại."
                 });
             }
 
@@ -206,7 +206,7 @@ namespace RealEstateProjectSale.Controllers.SalespolicyController
 
             return Ok(new
             {
-                message = "Delete Comment Successfully"
+                message = "Xóa chính sách bàn hàng thành công."
             });
         }
 

@@ -39,7 +39,7 @@ namespace RealEstateProjectSale.Controllers.PropertyTypeController
                 {
                     return NotFound(new
                     {
-                        message = "PropertyType not found."
+                        message = "Loại căn không tồn tại."
                     });
                 }
                 var types = _type.GetAllPropertyType();
@@ -68,7 +68,7 @@ namespace RealEstateProjectSale.Controllers.PropertyTypeController
 
             return NotFound(new
             {
-                message = "PropertyType not found."
+                message = "Loại căn không tồn tại."
             });
 
         }
@@ -92,7 +92,7 @@ namespace RealEstateProjectSale.Controllers.PropertyTypeController
 
                 return Ok(new
                 {
-                    message = "Create PropertyType Successfully"
+                    message = "Tạo loại căn thành công."
                 });
             }
             catch (Exception ex)
@@ -120,14 +120,14 @@ namespace RealEstateProjectSale.Controllers.PropertyTypeController
 
                     return Ok(new
                     {
-                        message = "Update PropertyType Successfully"
+                        message = "Cập nhật loại căn thành công."
                     });
 
                 }
 
                 return NotFound(new
                 {
-                    message = "c not found."
+                    message = "Loại căn không tồn tại."
                 });
 
             }
@@ -149,13 +149,13 @@ namespace RealEstateProjectSale.Controllers.PropertyTypeController
                     _type.DeletePropertyTypeByID(id);
                     return Ok(new
                     {
-                        message = "Delete PropertyType Successfully"
+                        message = "Xóa loại căn thành công."
                     });
                 }
 
                 return NotFound(new
                 {
-                    message = "PropertyType not found."
+                    message = "Loại căn không tồn tại."
                 });
             }
             catch (Exception ex)

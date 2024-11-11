@@ -40,7 +40,7 @@ namespace RealEstateProjectSale.Controllers.PromotionController
                 {
                     return NotFound(new
                     {
-                        message = "Promotion not found."
+                        message = "Gói khuyến mãi không tồn tại."
                     });
                 }
                 var pros = _pro.GetPromotions();
@@ -71,7 +71,7 @@ namespace RealEstateProjectSale.Controllers.PromotionController
 
             return NotFound(new
             {
-                message = "Promotion not found."
+                message = "Gói khuyến mãi không tồn tại."
             });
 
         }
@@ -108,14 +108,14 @@ namespace RealEstateProjectSale.Controllers.PromotionController
 
                     return Ok(new
                     {
-                        message = "Update Promotion Successfully"
+                        message = "Cập nhật gói khuyến mãi thành công."
                     });
 
                 }
 
                 return NotFound(new
                 {
-                    message = "Promotion not found."
+                    message = "Gói khuyến mãi không tồn tại."
                 });
 
             }
@@ -150,7 +150,7 @@ namespace RealEstateProjectSale.Controllers.PromotionController
 
                 return Ok(new
                 {
-                    message = "Create Promotion Successfully"
+                    message = "Tạo gói khuyến mãi thành công."
                 });
             }
             catch (Exception ex)
@@ -167,7 +167,7 @@ namespace RealEstateProjectSale.Controllers.PromotionController
             {
                 return NotFound(new
                 {
-                    message = "Promotion not found."
+                    message = "Gói khuyến mãi không tồn tại."
                 });
             }
             var promotion = _pro.GetPromotionById(id);
@@ -175,7 +175,7 @@ namespace RealEstateProjectSale.Controllers.PromotionController
             {
                 return NotFound(new
                 {
-                    message = "Promotion not found."
+                    message = "Gói khuyến mãi không tồn tại."
                 });
             }
 
@@ -183,7 +183,7 @@ namespace RealEstateProjectSale.Controllers.PromotionController
 
             return Ok(new
             {
-                message = "Delete Promotion Successfully"
+                message = "Xóa gói khuyến mãi thành công."
             });
         }
 

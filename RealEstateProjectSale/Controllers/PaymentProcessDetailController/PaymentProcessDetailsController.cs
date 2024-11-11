@@ -38,7 +38,7 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessDetailController
                 {
                     return NotFound(new
                     {
-                        message = "PaymentProcessDetail not found."
+                        message = "Chi tiết đợt thanh toán không tồn tại."
                     });
                 }
                 var details = _detailService.GetPaymentProcessDetail();
@@ -93,7 +93,7 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessDetailController
 
                 return Ok(new
                 {
-                    message = "Create PaymentProcessDetail Successfully"
+                    message = "Tạo chi tiết đợt thành toán thành công."
                 });
 
             }
@@ -139,14 +139,14 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessDetailController
 
                     return Ok(new
                     {
-                        message = "Update PaymentProcessDetail Successfully"
+                        message = "Cập nhật chi tiết đợt thành toán thành công."
                     });
 
                 }
 
                 return NotFound(new
                 {
-                    message = "PaymentProcessDetail not found."
+                    message = "Chi tiết đợt thanh toán không tồn tại."
                 });
 
             }
@@ -168,13 +168,13 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessDetailController
                     _detailService.DeletePaymentProcessDetailByID(id);
                     return Ok(new
                     {
-                        message = "Delete PaymentProcessDetail Successfully"
+                        message = "Xóa chi tiết đợt thành toán thành công."
                     });
                 }
 
                 return NotFound(new
                 {
-                    message = "PaymentProcessDetail not found."
+                    message = "Chi tiết đợt thanh toán không tồn tại."
                 });
             }
             catch (Exception ex)
