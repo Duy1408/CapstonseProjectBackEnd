@@ -37,7 +37,7 @@ namespace RealEstateProjectSaleServices.Services
             return _pro.GetPropertyByFloorID(id);
         }
 
-        public Property GetPropertyById(Guid id)
+        public Property GetPropertyById(Guid? id)
         {
             return _pro.GetPropertyById(id);
         }
