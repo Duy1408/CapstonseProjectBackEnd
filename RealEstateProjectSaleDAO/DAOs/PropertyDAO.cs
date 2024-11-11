@@ -78,7 +78,7 @@ namespace RealEstateProjectSaleDAO.DAOs
             }
         }
 
-        public Property GetPropertyByID(Guid id)
+        public Property GetPropertyByID(Guid? id)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
             return _context.Properties.Include(c => c.UnitType)

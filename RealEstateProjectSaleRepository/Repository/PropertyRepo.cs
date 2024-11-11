@@ -36,7 +36,7 @@ namespace RealEstateProjectSaleRepository.Repository
             return _pro.GetPropertyByFloorID(id);
         }
 
-        public Property GetPropertyById(Guid id)
+        public Property GetPropertyById(Guid? id)
         {
             return _pro.GetPropertyByID(id);
         }

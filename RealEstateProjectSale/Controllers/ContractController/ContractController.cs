@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure;
 using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -26,9 +27,13 @@ namespace RealEstateProjectSale.Controllers.ContractController
         private readonly IBookingServices _bookServices;
         private readonly IFileUploadToBlobService _fileService;
         private readonly IMapper _mapper;
+        private readonly ICustomerServices _customerServices;
+        private readonly IPropertyServices _propertyServices;
 
         public ContractController(IContractServices contractServices, IBookingServices bookServices,
-                IFileUploadToBlobService fileService, IMapper mapper, IPromotionDetailServices promotiondetail, IPaymentProcessServices paymentprocess)
+                IFileUploadToBlobService fileService, IMapper mapper, IPromotionDetailServices promotiondetail, IPaymentProcessServices paymentprocess,
+                ICustomerServices customerServices, IPropertyServices propertyServices
+                )
         {
             _contractServices = contractServices;
             _bookServices = bookServices;
@@ -36,6 +41,8 @@ namespace RealEstateProjectSale.Controllers.ContractController
             _mapper = mapper;
             _promotiondetail = promotiondetail;
             _paymentprocess = paymentprocess;
+            _customerServices = customerServices;
+            _propertyServices = propertyServices;
         }
 
         [HttpGet]
@@ -81,6 +88,65 @@ namespace RealEstateProjectSale.Controllers.ContractController
             });
 
         }
+
+        [HttpGet("stepone")]
+        [SwaggerOperation(Summary = "Get Contract by customer ID")]
+        public IActionResult CustomerCheckInformation(Guid contractid)
+        {
+
+            var contract = _contractServices.GetContractByID(contractid);
+            if (contract == null)
+            {
+                return NotFound(new
+                {
+                    message = "Hợp đồng không tồn tại."
+                });
+            }
+            var book = _bookServices.GetBookingById(contract.BookingID);
+            if (book == null)
+            {
+                return NotFound(new
+                {
+                    message = "Booking không tồn tại."
+                });
+            }
+            var customer = _customerServices.GetCustomerByID(book.CustomerID);
+            if (customer == null)
+            {
+                return NotFound(new
+                {
+                    message = "Khách hàng không tồn tại."
+                });
+            }
+            var property = _propertyServices.GetPropertyById(book.PropertyID);
+            if (property == null)
+            {
+                return NotFound(new
+                {
+                    message = "Căn hộ không tồn tại."
+                });
+            }
+            var customerresponese = _mapper.Map<CustomerVM>(customer);
+            var propertyresponese = _mapper.Map<PropertyVM>(property);
+
+           
+            return Ok(new
+            {
+           customer = customerresponese,
+           property= propertyresponese,
+            });
+
+
+        }
+
+
+
+
+
+
+
+
+
 
         [HttpGet("customer/{customerId}")]
         [SwaggerOperation(Summary = "Get Contract by customer ID")]

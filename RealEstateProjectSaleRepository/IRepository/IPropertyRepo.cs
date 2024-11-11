@@ -14,7 +14,7 @@ namespace RealEstateProjectSaleRepository.IRepository
         public void AddNew(Property p);
 
 
-        public Property GetPropertyById(Guid id);
+        public Property GetPropertyById(Guid? id);
 
         public void UpdateProperty(Property p);
         IQueryable<Property> GetPropertyByUnitTypeID(Guid id);
