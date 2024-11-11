@@ -34,7 +34,7 @@ namespace RealEstateProjectSale.Controllers.PromotionDetailController
                 {
                     return NotFound(new
                     {
-                        message = "PromotionDetail not found."
+                        message = "Chi tiết gói khuyến mãi không tồn tại."
                     });
                 }
                 var details = _detailServices.GetAllPromotionDetail();
@@ -64,7 +64,7 @@ namespace RealEstateProjectSale.Controllers.PromotionDetailController
 
             return NotFound(new
             {
-                message = "PromotionDetail not found."
+                message = "Chi tiết gói khuyến mãi không tồn tại."
             });
 
         }
@@ -90,7 +90,7 @@ namespace RealEstateProjectSale.Controllers.PromotionDetailController
 
                 return Ok(new
                 {
-                    message = "Create PromotionDetail Successfully"
+                    message = "Tạo chi tiết gói khuyến mãi thành công."
                 });
             }
             catch (Exception ex)
@@ -130,14 +130,14 @@ namespace RealEstateProjectSale.Controllers.PromotionDetailController
 
                     return Ok(new
                     {
-                        message = "Update PromotionDetail Successfully"
+                        message = "Cập nhật chi tiết gói khuyến mãi thành công."
                     });
 
                 }
 
                 return NotFound(new
                 {
-                    message = "PromotionDetail not found."
+                    message = "Chi tiết gói khuyến mãi không tồn tại."
                 });
 
             }
@@ -159,13 +159,13 @@ namespace RealEstateProjectSale.Controllers.PromotionDetailController
                     _detailServices.DeletePromotionDetailByID(id);
                     return Ok(new
                     {
-                        message = "Delete PromotionDetail Successfully"
+                        message = "Xóa chi tiết gói khuyến mãi thành công."
                     });
                 }
 
                 return NotFound(new
                 {
-                    message = "PromotionDetail not found."
+                    message = "Chi tiết gói khuyến mãi không tồn tại."
                 });
             }
             catch (Exception ex)

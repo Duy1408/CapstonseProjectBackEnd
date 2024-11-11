@@ -38,7 +38,7 @@ namespace RealEstateProjectSale.Controllers.ProjectCategoryDetailController
                 {
                     return NotFound(new
                     {
-                        message = "ProjectCategoryDetail not found."
+                        message = "Loại hình dự án không tồn tại."
                     });
                 }
                 var detail = _detailServices.GetAllProjectCategoryDetail();
@@ -77,7 +77,7 @@ namespace RealEstateProjectSale.Controllers.ProjectCategoryDetailController
 
             return NotFound(new
             {
-                message = "ProjectCategoryDetail not found."
+                message = "Loại hình dự án không tồn tại."
             });
 
         }
@@ -97,7 +97,7 @@ namespace RealEstateProjectSale.Controllers.ProjectCategoryDetailController
 
             return NotFound(new
             {
-                message = "ProjectCategoryDetail not found."
+                message = "Loại hình dự án không tồn tại."
             });
 
         }
@@ -129,7 +129,7 @@ namespace RealEstateProjectSale.Controllers.ProjectCategoryDetailController
 
             return NotFound(new
             {
-                message = "ProjectCategoryDetail not found."
+                message = "Loại hình dự án không tồn tại."
             });
 
         }
@@ -153,7 +153,7 @@ namespace RealEstateProjectSale.Controllers.ProjectCategoryDetailController
 
                 return Ok(new
                 {
-                    message = "Create ProjectCategoryDetail Successfully"
+                    message = "Tạo loại hình dự án thành công."
                 });
             }
             catch (Exception ex)
@@ -185,14 +185,14 @@ namespace RealEstateProjectSale.Controllers.ProjectCategoryDetailController
 
                     return Ok(new
                     {
-                        message = "Update ProjectCategoryDetail Successfully"
+                        message = "Cập nhật loại hình dự án thành công."
                     });
 
                 }
 
                 return NotFound(new
                 {
-                    message = "ProjectCategoryDetail not found."
+                    message = "Loại hình dự án không tồn tại."
                 });
 
             }
@@ -214,13 +214,13 @@ namespace RealEstateProjectSale.Controllers.ProjectCategoryDetailController
                     _detailServices.DeleteProjectCategoryDetailByID(id);
                     return Ok(new
                     {
-                        message = "Delete ProjectCategoryDetail Successfully"
+                        message = "Xóa loại hình dự án thành công."
                     });
                 }
 
                 return NotFound(new
                 {
-                    message = "ProjectCategoryDetail not found."
+                    message = "Loại hình dự án không tồn tại."
                 });
             }
             catch (Exception ex)

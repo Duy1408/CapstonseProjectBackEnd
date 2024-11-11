@@ -61,7 +61,7 @@ namespace RealEstateProjectSale.Controllers
                 {
                     return NotFound(new
                     {
-                        message = "Project not found."
+                        message = "Dự án không tồn tại."
                     });
                 }
 
@@ -75,7 +75,7 @@ namespace RealEstateProjectSale.Controllers
                 {
                     return NotFound(new
                     {
-                        message = "Project not found."
+                        message = "Dự án không tồn tại."
                     });
                 }
 
@@ -125,7 +125,7 @@ namespace RealEstateProjectSale.Controllers
                 {
                     return NotFound(new
                     {
-                        message = "Project not found."
+                        message = "Dự án không tồn tại."
                     });
                 }
 
@@ -240,14 +240,14 @@ namespace RealEstateProjectSale.Controllers
 
                     return Ok(new
                     {
-                        message = "Update Project Successfully"
+                        message = "Cập nhật dự án thành công."
                     });
 
                 }
 
                 return NotFound(new
                 {
-                    message = "Project not found."
+                    message = "Dự án không tồn tại."
                 });
 
             }
@@ -293,7 +293,7 @@ namespace RealEstateProjectSale.Controllers
 
                 return Ok(new
                 {
-                    message = "Create Project Successfully"
+                    message = "Tạo dự án thành công."
                 });
             }
             catch (Exception ex)
@@ -311,7 +311,7 @@ namespace RealEstateProjectSale.Controllers
             {
                 return NotFound(new
                 {
-                    message = "Project not found."
+                    message = "Dự án không tồn tại."
                 });
             }
             var project = _project.GetProjectById(id);
@@ -319,7 +319,7 @@ namespace RealEstateProjectSale.Controllers
             {
                 return NotFound(new
                 {
-                    message = "Project not found."
+                    message = "Dự án không tồn tại."
                 });
             }
 
@@ -328,7 +328,7 @@ namespace RealEstateProjectSale.Controllers
 
             return Ok(new
             {
-                message = "Delete Project Successfully"
+                message = "Xóa dự án thành công."
             });
         }
 

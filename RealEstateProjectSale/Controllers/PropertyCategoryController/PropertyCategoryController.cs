@@ -34,7 +34,7 @@ namespace RealEstateProjectSale.Controllers.PropertyCategoryController
                 {
                     return NotFound(new
                     {
-                        message = "PropertyCategory not found."
+                        message = "Loại hình không tồn tại."
                     });
                 }
                 var categorys = _categoryServices.GetAllPropertyCategory();
@@ -63,7 +63,7 @@ namespace RealEstateProjectSale.Controllers.PropertyCategoryController
 
             return NotFound(new
             {
-                message = "PropertyCategory not found."
+                message = "Loại hình không tồn tại."
             });
 
         }
@@ -87,7 +87,7 @@ namespace RealEstateProjectSale.Controllers.PropertyCategoryController
 
                 return Ok(new
                 {
-                    message = "Create PropertyCategory Successfully"
+                    message = "Tạo loại hình thành công."
                 });
             }
             catch (Exception ex)
@@ -119,14 +119,14 @@ namespace RealEstateProjectSale.Controllers.PropertyCategoryController
 
                     return Ok(new
                     {
-                        message = "Update PropertyCategory Successfully"
+                        message = "Cập nhật loại hình thành công."
                     });
 
                 }
 
                 return NotFound(new
                 {
-                    message = "PropertyCategory not found."
+                    message = "Loại hình không tồn tại."
                 });
 
             }
@@ -146,7 +146,7 @@ namespace RealEstateProjectSale.Controllers.PropertyCategoryController
             {
                 return NotFound(new
                 {
-                    message = "PropertyCategory not found."
+                    message = "Loại hình không tồn tại."
                 });
             }
 
@@ -154,7 +154,7 @@ namespace RealEstateProjectSale.Controllers.PropertyCategoryController
 
             return Ok(new
             {
-                message = "Delete PropertyCategory Successfully"
+                message = "Xóa loại hình thành công."
             });
         }
 

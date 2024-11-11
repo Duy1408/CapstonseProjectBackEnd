@@ -38,7 +38,7 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessController
                 {
                     return NotFound(new
                     {
-                        message = "PaymentProcess not found."
+                        message = "Đợt thanh toán không tồn tại."
                     });
                 }
                 var process = _pmtService.GetPaymentProcess();
@@ -67,7 +67,7 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessController
 
             return NotFound(new
             {
-                message = "PaymentProcess not found."
+                message = "Đợt thanh toán không tồn tại."
             });
 
         }
@@ -87,7 +87,7 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessController
 
             return NotFound(new
             {
-                message = "SalePolicy not found."
+                message = "Chính sách bán hàng không tồn tại."
             });
 
         }
@@ -111,7 +111,7 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessController
 
                 return Ok(new
                 {
-                    message = "Create PaymentProcess Successfully"
+                    message = "Tạo đợt thành toán thành công."
                 });
 
             }
@@ -148,13 +148,13 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessController
 
                     return Ok(new
                     {
-                        message = "Update PaymentProcess Successfully"
+                        message = "Cập nhật đợt thành toán thành công."
                     });
                 }
 
                 return NotFound(new
                 {
-                    message = "PaymentProcess not found."
+                    message = "Đợt thanh toán không tồn tại."
                 });
 
             }
@@ -176,13 +176,13 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessController
                     _pmtService.DeletePaymentProcessByID(id);
                     return Ok(new
                     {
-                        message = "Delete PaymentProcess Successfully"
+                        message = "Xóa đợt thành toán thành công."
                     });
                 }
 
                 return NotFound(new
                 {
-                    message = "PaymentProcess not found."
+                    message = "Đợt thanh toán không tồn tại."
                 });
             }
             catch (Exception ex)

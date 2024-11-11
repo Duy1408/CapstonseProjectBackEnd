@@ -101,7 +101,7 @@ namespace RealEstateProjectSale.Controllers.UnitTypeController
 
             return NotFound(new
             {
-                message = "UnitType not found."
+                message = "Chi tiết căn phòng không tồn tại."
             });
 
         }
@@ -139,7 +139,7 @@ namespace RealEstateProjectSale.Controllers.UnitTypeController
 
                 return Ok(new
                 {
-                    message = "Create UnitType Successfully"
+                    message = "Tạo chi tiết căn phòng thành công."
                 });
             }
             catch (Exception ex)
@@ -213,14 +213,14 @@ namespace RealEstateProjectSale.Controllers.UnitTypeController
 
                     return Ok(new
                     {
-                        message = "Update UnitType Successfully"
+                        message = "Cập nhật chi tiết căn phòng thành công."
                     });
 
                 }
 
                 return NotFound(new
                 {
-                    message = "UnitType not found."
+                    message = "Chi tiết căn phòng không tồn tại."
                 });
 
             }
@@ -238,7 +238,7 @@ namespace RealEstateProjectSale.Controllers.UnitTypeController
             {
                 return NotFound(new
                 {
-                    message = "UnitType not found."
+                    message = "Chi tiết căn phòng không tồn tại."
                 });
             }
             var type = _typeService.GetUnitTypeByID(id);
@@ -246,7 +246,7 @@ namespace RealEstateProjectSale.Controllers.UnitTypeController
             {
                 return NotFound(new
                 {
-                    message = "UnitType not found."
+                    message = "Chi tiết căn phòng không tồn tại."
                 });
             }
 
@@ -255,7 +255,7 @@ namespace RealEstateProjectSale.Controllers.UnitTypeController
 
             return Ok(new
             {
-                message = "Delete UnitType Successfully"
+                message = "Xóa chi tiết căn phòng thành công."
             });
         }
 

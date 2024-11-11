@@ -124,7 +124,7 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
                 {
                     return BadRequest(new
                     {
-                        message = "Căn và đợt mở bán khác loại hình."
+                        message = "Căn và đợt mở bán khác loại hình dự án."
                     });
                 }
 

@@ -146,14 +146,14 @@ namespace RealEstateProjectSale.Controllers.PaymentController
 
                     return Ok(new
                     {
-                        message = "Payment completed successfully."
+                        message = "Hoàn thành thanh toán."
                     });
 
                 }
 
                 return BadRequest(new
                 {
-                    message = "Payment failed."
+                    message = "Thanh toán thất bại."
                 });
             }
             catch (StripeException e)
@@ -225,7 +225,7 @@ namespace RealEstateProjectSale.Controllers.PaymentController
                 {
                     return NotFound(new
                     {
-                        message = "Payment not found."
+                        message = "Thanh toán không tồn tại."
                     });
                 }
                 var payments = _paymentServices.GetAllPayment();
@@ -254,7 +254,7 @@ namespace RealEstateProjectSale.Controllers.PaymentController
 
             return NotFound(new
             {
-                message = "Payment not found."
+                message = "Thanh toán không tồn tại."
             });
 
         }
@@ -294,14 +294,14 @@ namespace RealEstateProjectSale.Controllers.PaymentController
 
                     return Ok(new
                     {
-                        message = "Update Payment Successfully"
+                        message = "Cập nhật thanh toán thành công."
                     });
 
                 }
 
                 return NotFound(new
                 {
-                    message = "Payment not found."
+                    message = "Thanh toán không tồn tại."
                 });
 
             }
@@ -321,7 +321,7 @@ namespace RealEstateProjectSale.Controllers.PaymentController
             {
                 return NotFound(new
                 {
-                    message = "Payment not found."
+                    message = "Thanh toán không tồn tại."
                 });
             }
 
@@ -329,7 +329,7 @@ namespace RealEstateProjectSale.Controllers.PaymentController
 
             return Ok(new
             {
-                message = "Delete Payment Successfully"
+                message = "Xóa thanh toán thành công."
             });
         }
 

@@ -48,7 +48,7 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
                 {
                     return NotFound(new
                     {
-                        message = "OpeningForSale not found."
+                        message = "Đợt mở bán không tồn tại."
                     });
                 }
                 var opens = _open.GetOpeningForSales();
@@ -77,7 +77,7 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
 
             return NotFound(new
             {
-                message = "OpeningForSale not found."
+                message = "Đợt mở bán không tồn tại."
             });
 
         }
@@ -96,7 +96,7 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
                 {
                     return NotFound(new
                     {
-                        message = "OpeningForSale not found."
+                        message = "Đợt mở bán không tồn tại."
                     });
                 }
 
@@ -105,7 +105,7 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
 
             return NotFound(new
             {
-                message = "OpeningForSale not found."
+                message = "Đợt mở bán không tồn tại."
             });
 
         }
@@ -118,7 +118,7 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
             {
                 return NotFound(new
                 {
-                    message = "OpeningForSale not found."
+                    message = "Đợt mở bán không tồn tại."
                 });
             }
             var open = _open.SearchOpeningForSale(decisionName);
@@ -127,7 +127,7 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
             {
                 return NotFound(new
                 {
-                    message = "OpeningForSale not found."
+                    message = "Đợt mở bán không tồn tại."
                 });
             }
 
@@ -154,7 +154,7 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
                 {
                     return NotFound(new
                     {
-                        message = "ProjectCategoryDetail not found."
+                        message = "Loại hình dự án không tồn tại."
                     });
                 }
 
@@ -173,7 +173,8 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
                 {
                     return BadRequest(new
                     {
-                        message = "An OpeningForSale with the same ProjectCategoryDetail already exists."
+                        message = 
+                        "Đợt mở bán loại hình dự án này đã tồn tại."
                     });
                 }
 
@@ -200,7 +201,7 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
 
                 return Ok(new
                 {
-                    message = "Create OpeningForSale Successfully"
+                    message = "Tạo đợt mở bán thành công."
                 });
 
             }
@@ -268,14 +269,14 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
 
                     return Ok(new
                     {
-                        message = "Update OpeningForSale Successfully"
+                        message = "Cập nhật đợt mở bán thành công."
                     });
 
                 }
 
                 return NotFound(new
                 {
-                    message = "OpeningForSale not found."
+                    message = "Đợt mở bán không tồn tại."
                 });
             }
             catch (Exception ex)
@@ -292,7 +293,7 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
             {
                 return NotFound(new
                 {
-                    message = "OpeningForSale not found."
+                    message = "Đợt mở bán không tồn tại."
                 });
             }
             var open = _open.GetOpeningForSaleById(id);
@@ -300,7 +301,7 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
             {
                 return NotFound(new
                 {
-                    message = "OpeningForSale not found."
+                    message = "Đợt mở bán không tồn tại."
                 });
             }
 
@@ -309,7 +310,7 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
 
             return Ok(new
             {
-                message = "Delete OpeningForSale Successfully"
+                message = "Xóa đợt mở bán thành công."
             });
         }
 

@@ -78,7 +78,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                 {
                     return NotFound(new
                     {
-                        message = "Property not found."
+                        message = "Căn không tồn tại."
                     });
                 }
 
@@ -109,7 +109,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                 {
                     return NotFound(new
                     {
-                        message = "Property not found."
+                        message = "Căn không tồn tại."
                     });
                 }
 
@@ -146,7 +146,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
 
             return NotFound(new
             {
-                message = "Property not found."
+                message = "Căn này không tồn tại."
             });
 
         }
@@ -165,7 +165,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                 {
                     return NotFound(new
                     {
-                        message = "Property not found."
+                        message = "Căn này không tồn tại."
                     });
                 }
 
@@ -174,7 +174,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
 
             return NotFound(new
             {
-                message = "Property not found."
+                message = "Căn này không tồn tại."
             });
 
         }
@@ -193,7 +193,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                 {
                     return NotFound(new
                     {
-                        message = "Property not found."
+                        message = "Căn này không tồn tại."
                     });
                 }
 
@@ -202,7 +202,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
 
             return NotFound(new
             {
-                message = "Property not found."
+                message = "Căn này không tồn tại."
             });
 
         }
@@ -221,7 +221,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                 {
                     return NotFound(new
                     {
-                        message = "Property not found."
+                        message = "Căn này không tồn tại."
                     });
                 }
 
@@ -230,7 +230,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
 
             return NotFound(new
             {
-                message = "Property not found."
+                message = "Căn này không tồn tại."
             });
 
         }
@@ -249,7 +249,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                 {
                     return NotFound(new
                     {
-                        message = "Property not found."
+                        message = "Căn này không tồn tại."
                     });
                 }
 
@@ -258,7 +258,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
 
             return NotFound(new
             {
-                message = "Property not found."
+                message = "Căn này không tồn tại."
             });
 
         }
@@ -277,7 +277,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                 {
                     return NotFound(new
                     {
-                        message = "Property not found."
+                        message = "Căn này không tồn tại."
                     });
                 }
 
@@ -286,7 +286,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
 
             return NotFound(new
             {
-                message = "Property not found."
+                message = "Căn này không tồn tại."
             });
 
         }
@@ -299,7 +299,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
             {
                 return NotFound(new
                 {
-                    message = "Property not found."
+                    message = "Căn này không tồn tại."
                 });
             }
             var property = _pro.SearchPropertyByName(searchValue);
@@ -308,7 +308,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
             {
                 return NotFound(new
                 {
-                    message = "Property not found."
+                    message = "Căn này không tồn tại."
                 });
             }
 
@@ -343,7 +343,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
 
                 return Ok(new
                 {
-                    message = "Create Property Successfully"
+                    message = "Tạo căn thành công."
                 });
 
             }
@@ -408,14 +408,14 @@ namespace RealEstateProjectSale.Controllers.PropertyController
 
                     return Ok(new
                     {
-                        message = "Update Property Successfully"
+                        message = "Cập nhật căn thành công."
                     });
 
                 }
 
                 return NotFound(new
                 {
-                    message = "Property not found."
+                    message = "Căn này không tồn tại."
                 });
 
             }
@@ -439,7 +439,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                 {
                     return NotFound(new
                     {
-                        message = "Customer not found."
+                        message = "Khách hàng không tồn tại."
                     });
                 }
 
@@ -448,7 +448,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                 {
                     return NotFound(new
                     {
-                        message = "Property not found."
+                        message = "Căn này không tồn tại."
                     });
                 }
 
@@ -457,7 +457,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                 {
                     return NotFound(new
                     {
-                        message = "Booking not found."
+                        message = "Đặt giữ chỗ không tồn tại."
                     });
                 }
 
@@ -466,7 +466,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                 {
                     return NotFound(new
                     {
-                        message = "Property not for sale"
+                        message = "Căn hiện tại chưa được mở bán."
                     });
                 }
                 var documentReservation = _documentService.GetDocumentByDocumentName("Thỏa thuận đặt cọc");
@@ -474,7 +474,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                 {
                     return NotFound(new
                     {
-                        message = "Document not found."
+                        message = "Hợp đồng không tồn tại"
                     });
                 }
 
@@ -524,7 +524,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                 await _hubContext.Clients.All.SendAsync("ReceivePropertyStatus", propertyId.ToString(), existingProperty.Status);
                 return Ok(new
                 {
-                    message = "Update Property Successfully"
+                    message = "Cập nhật căn thành công."
                 });
 
             }

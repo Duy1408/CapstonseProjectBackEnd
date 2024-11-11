@@ -100,14 +100,14 @@ namespace RealEstateProjectSale.Controllers.ZoneController
 
                     return Ok(new
                     {
-                        message = "Update Zone Successfully"
+                        message = "Cập nhật phân khu thành công."
                     });
 
                 }
 
                 return NotFound(new
                 {
-                    message = "Zone not found."
+                    message = "Phân khu không tồn tại."
                 });
 
             }
@@ -144,7 +144,7 @@ namespace RealEstateProjectSale.Controllers.ZoneController
 
                 return Ok(new
                 {
-                    message = "Create Zone Successfully"
+                    message = "Tạo phân khu thành công."
                 });
             }
             catch (Exception ex) { return BadRequest(ex.Message); }
@@ -168,7 +168,7 @@ namespace RealEstateProjectSale.Controllers.ZoneController
             _zone.ChangeStatus(zone);
 
 
-            return Ok("Delete Successfully");
+            return Ok("Xóa phân khu thành công.");
         }
 
 

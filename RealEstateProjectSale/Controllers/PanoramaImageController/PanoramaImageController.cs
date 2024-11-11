@@ -79,7 +79,7 @@ namespace RealEstateProjectSale.Controllers.PanoramaImageController
             _panorama.DeletePanoramaImage(panorama);
 
 
-            return Ok("Delete Successfully");
+            return Ok("Xóa hình panorama thành công.");
         }
 
 
@@ -108,7 +108,7 @@ namespace RealEstateProjectSale.Controllers.PanoramaImageController
                
                 return Ok(new
                 {
-                    message = "Create Panorama Image Successfully"
+                    message = "Tạo hình panorama thành công."
                 });
             }
             catch (Exception ex)
@@ -149,14 +149,14 @@ namespace RealEstateProjectSale.Controllers.PanoramaImageController
 
                     return Ok(new
                     {
-                        message = "Update panorama image Successfully"
+                        message = "Cập nhật hình panorama thành công."
                     });
 
                 }
 
                 return NotFound(new
                 {
-                    message = "panorama image not found."
+                    message = "Hình panorama không tồn tại."
                 });
 
             }

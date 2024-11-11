@@ -43,7 +43,7 @@ namespace RealEstateProjectSale.Controllers.StaffController
                 {
                     return NotFound(new
                     {
-                        message = "Staff not found."
+                        message = "Nhân viên không tồn tại."
                     });
                 }
                 var staffs = _staffServices.GetAllStaff();
@@ -72,7 +72,7 @@ namespace RealEstateProjectSale.Controllers.StaffController
 
             return NotFound(new
             {
-                message = "Staff not found."
+                message = "Nhân viên không tồn tại."
             });
 
         }
@@ -91,7 +91,7 @@ namespace RealEstateProjectSale.Controllers.StaffController
                 {
                     return BadRequest(new
                     {
-                        message = "Email Existed"
+                        message = "Email đã tồn tại."
                     });
                 }
 
@@ -141,7 +141,7 @@ namespace RealEstateProjectSale.Controllers.StaffController
 
                 return Ok(new
                 {
-                    message = "Register Account Staff Successfully"
+                    message = "Tạo tài khoản nhân viên thành công."
                 });
 
             }
@@ -231,14 +231,14 @@ namespace RealEstateProjectSale.Controllers.StaffController
 
                     return Ok(new
                     {
-                        message = "Update Staff Successfully"
+                        message = "Cập nhật thông tin nhân viên thành công."
                     });
 
                 }
 
                 return NotFound(new
                 {
-                    message = "Staff not found."
+                    message = "Nhân viên không tồn tại."
                 });
 
             }
@@ -256,7 +256,7 @@ namespace RealEstateProjectSale.Controllers.StaffController
             {
                 return NotFound(new
                 {
-                    message = "Staff not found."
+                    message = "Nhân viên không tồn tại."
                 });
             }
             var staff = _staffServices.GetStaffByID(id);
@@ -264,7 +264,7 @@ namespace RealEstateProjectSale.Controllers.StaffController
             {
                 return NotFound(new
                 {
-                    message = "Staff not found."
+                    message = "Nhân viên không tồn tại."
                 });
             }
 
@@ -273,7 +273,7 @@ namespace RealEstateProjectSale.Controllers.StaffController
 
             return Ok(new
             {
-                message = "Delete Staff Successfully"
+                message = "Xóa nhân viên thành công."
             });
         }
 
