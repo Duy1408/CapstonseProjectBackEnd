@@ -85,5 +85,14 @@ namespace RealEstateProjectSaleDAO.DAOs
             var _context = new RealEstateProjectSaleSystemDBContext();
             return _context.PaymentProcessDetails.Include(p => p.PaymentProcess).SingleOrDefault(a => a.PaymentProcessDetailID == id);
         }
+
+        public List<PaymentProcessDetail> GetPaymentProcessDetailByPaymentProcessID(Guid pmtId)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            return _context.PaymentProcessDetails.Include(c => c.PaymentProcess)
+                                         .Where(a => a.PaymentProcessID == pmtId)
+                                         .ToList();
+        }
+
     }
 }

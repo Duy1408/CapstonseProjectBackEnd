@@ -13,7 +13,7 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public string PropertyCode { get; set; }
         public string? View { get; set; }
 
-        public double? PriceSold { get; set; } //= VAT(10% của Price) + PBT(0.5% Price ) + Price (OpenForSaleDetail)
+        public double? PriceSold { get; set; } //= VAT(10% của Price(đã trừ promotion)) + PBT(2% Price(đã trừ promotion) ) + Price (OpenForSaleDetail)
         public string Status { get; set; }
 
         public List<Comment>? Comments { get; set; }

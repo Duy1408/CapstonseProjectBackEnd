@@ -9,31 +9,34 @@ namespace RealEstateProjectSaleBusinessObject.Enums
 {
     public enum ContractStatus
     {
+        [EnumDescription("Chờ xác nhận thông tin giao dịch")]
+        ChoXacNhanTTGD = 1,
+
         [EnumDescription("Chờ xác nhận TTĐC")]
-        ChoXacNhanTTDC = 1,
+        ChoXacNhanTTDC = 2,
 
         [EnumDescription("Đã xác nhận TTĐC")]
-        DaXacNhanTTDC = 2,
+        DaXacNhanTTDC = 3,
 
         [EnumDescription("Đã xác nhận chính sách bán hàng")]
-        DaXacNhanCSBH = 3,
+        DaXacNhanCSBH = 4,
 
         [EnumDescription("Đã xác nhận phiếu tính giá")]
-        DaXacNhanPhieuTinhGia = 4,
+        DaXacNhanPhieuTinhGia = 5,
 
         [EnumDescription("Đã thanh toán đợt 1 hợp đồng mua bán")]
-        DaThanhToanDotMotHDMB = 5,
+        DaThanhToanDotMotHDMB = 6,
 
         [EnumDescription("Đã xác nhận hợp đồng mua bán")]
-        DaXacNhanHDMB = 6,
+        DaXacNhanHDMB = 7,
 
         [EnumDescription("Đã bàn giao quyền sở hữu đất")]
-        DaBanGiaoQSHD = 7,
+        DaBanGiaoQSHD = 8,
 
         [EnumDescription("Đã xác nhận chuyển nhượng")]
-        DaXacNhanChuyenNhuong = 8,
+        DaXacNhanChuyenNhuong = 9,
 
         [EnumDescription("Đã hủy")]
-        DaHuy = 9
+        DaHuy = 10
     }
 }

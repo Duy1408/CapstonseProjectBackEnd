@@ -496,7 +496,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                     ContractDepositFile = null,
                     ContractSaleFile = null,
                     PriceSheetFile = null,
-                    Status = ContractStatus.ChoXacNhanTTDC.GetEnumDescription(),
+                    Status = ContractStatus.ChoXacNhanTTGD.GetEnumDescription(),
                     DocumentTemplateID = documentReservation.DocumentTemplateID,
                     BookingID = booking.BookingID,
                     CustomerID = customerID,

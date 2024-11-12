@@ -1,4 +1,5 @@
 ﻿using RealEstateProjectSaleBusinessObject.BusinessObject;
+using RealEstateProjectSaleBusinessObject.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,5 +18,6 @@ namespace RealEstateProjectSaleServices.IServices
         bool ChangeStatusContract(Contract contract);
         Contract GetLastContract();
         string GenerateDocumentDeposit(Guid bookingId);
+        string GeneratePaymentProcessTable(Guid contractId, Guid paymentprocessId);
     }
 }

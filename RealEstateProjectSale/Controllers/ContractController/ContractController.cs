@@ -14,6 +14,7 @@ using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 using RealEstateProjectSaleServices.Services;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Drawing;
 
 namespace RealEstateProjectSale.Controllers.ContractController
 {
@@ -118,7 +119,15 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     message = "Khách hàng không tồn tại."
                 });
             }
-            var property = _propertyServices.GetPropertyById(book.PropertyID);
+
+            var propertyId = book.PropertyID.GetValueOrDefault(Guid.Empty);
+
+            if (propertyId == Guid.Empty)
+            {
+                throw new ArgumentException("Booking không có căn hộ.");
+            }
+
+            var property = _propertyServices.GetPropertyById(propertyId);
             if (property == null)
             {
                 return NotFound(new
@@ -129,11 +138,11 @@ namespace RealEstateProjectSale.Controllers.ContractController
             var customerresponese = _mapper.Map<CustomerVM>(customer);
             var propertyresponese = _mapper.Map<PropertyVM>(property);
 
-           
+
             return Ok(new
             {
-           customer = customerresponese,
-           property= propertyresponese,
+                customer = customerresponese,
+                property = propertyresponese,
             });
 
 
@@ -201,7 +210,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     ContractDepositFile = contract.ContractDepositFile,
                     ContractSaleFile = null,
                     PriceSheetFile = null,
-                    Status = ContractStatus.ChoXacNhanTTDC.GetEnumDescription(),
+                    Status = ContractStatus.ChoXacNhanTTGD.GetEnumDescription(),
                     DocumentTemplateID = contract.DocumentTemplateID,
                     BookingID = contract.BookingID,
                     CustomerID = contract.CustomerID,

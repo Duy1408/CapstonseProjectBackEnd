@@ -36,6 +36,11 @@ namespace RealEstateProjectSaleRepository.Repository
             return _dao.GetPaymentProcessDetailByID(id);
         }
 
+        public List<PaymentProcessDetail> GetPaymentProcessDetailByPaymentProcessID(Guid pmtId)
+        {
+            return _dao.GetPaymentProcessDetailByPaymentProcessID(pmtId);
+        }
+
         public void UpdatePaymentProcessDetail(PaymentProcessDetail p)
         {
             _dao.UpdatePaymentProcessDetail(p);

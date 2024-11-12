@@ -17,7 +17,8 @@ namespace RealEstateProjectSaleRepository.IRepository
 
 
         public PaymentProcessDetail GetPaymentProcessDetailById(Guid id);
-
+        List<PaymentProcessDetail> GetPaymentProcessDetailByPaymentProcessID(Guid pmtId);
         public void UpdatePaymentProcessDetail(PaymentProcessDetail p);
+
     }
 }
