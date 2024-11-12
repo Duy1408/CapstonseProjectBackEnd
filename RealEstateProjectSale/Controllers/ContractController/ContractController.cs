@@ -10,6 +10,7 @@ using RealEstateProjectSaleBusinessObject.DTO.Request;
 using RealEstateProjectSaleBusinessObject.DTO.Update;
 using RealEstateProjectSaleBusinessObject.Enums;
 using RealEstateProjectSaleBusinessObject.Enums.EnumHelpers;
+using RealEstateProjectSaleBusinessObject.Model;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 using RealEstateProjectSaleServices.Services;
@@ -32,11 +33,12 @@ namespace RealEstateProjectSale.Controllers.ContractController
         private readonly ICustomerServices _customerServices;
         private readonly IPropertyServices _propertyServices;
         private readonly IDocumentTemplateService _documentTemplateService;
+        private readonly IEmailService _emailService;
 
         public ContractController(IContractServices contractServices, IBookingServices bookServices,
                 IFileUploadToBlobService fileService, IMapper mapper, IPromotionDetailServices promotiondetail, IPaymentProcessServices paymentprocess,
                 ICustomerServices customerServices, IPropertyServices propertyServices,
-                IDocumentTemplateService documentTemplateService
+                IDocumentTemplateService documentTemplateService, IEmailService emailService
                 )
         {
             _contractServices = contractServices;
@@ -48,6 +50,8 @@ namespace RealEstateProjectSale.Controllers.ContractController
             _customerServices = customerServices;
             _propertyServices = propertyServices;
             _documentTemplateService = documentTemplateService;
+            _emailService = emailService;
+
         }
 
         [HttpGet]
@@ -184,6 +188,46 @@ namespace RealEstateProjectSale.Controllers.ContractController
             });
 
         }
+
+
+
+        [HttpPost("step-two")]
+        public async Task<IActionResult> sendDeposittoemail(string email, Guid contractid)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(email) || !IsValidEmail(email))
+                {
+                    return BadRequest(new { message = "Lỗi email" });
+                }
+                var contract = _contractServices.GetContractByID(contractid);
+                if (contract == null)
+                {
+                    return BadRequest(new { message = "Hợp đồng không tồn tại" });
+                }
+
+                contract.Status = ContractStatus.DaXacNhanTTDC.GetEnumDescription();
+                _contractServices.UpdateContract(contract);
+                Mailrequest mailrequest = new Mailrequest();
+                mailrequest.ToEmail = email;
+                mailrequest.Subject = "Xác nhận thảo thuận đặt cọc";
+                mailrequest.Body =
+                    $"<h5>THÔNG BÁO XÁC NHẬN THÀNH CÔNG THỎA THUẬN ĐẶT CỌC</h5>" +
+                    $"<div>Kính gửi quý khách {contract.Customer.FullName}</div>" +
+                    $"<div>Thảo thuận đặt cọc của Quý khách đã được xác nhận. Quý khách có thể xem lại thông tin Thỏa thuận đặt cọc, đề nghị thanh toán. Quý khách vui lòng thực hiện chọn Phương án thanh toán, chính sách bán hàng</div>" +
+                    $"<div>Hợp đồng mua bán:</div>" +
+                    $"<div>.Đường link xem Thỏa thuận đặt cọc</div>" +
+                    $"<a href='{contract.ContractDepositFile}'>{contract.ContractDepositFile}</a>";
+
+                await _emailService.SendEmailAsync(mailrequest);
+                return Ok(new { message = "Xác nhận thỏa thuận đặt cọc đã gửi về mail " });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { error = e.Message });
+            }
+        }
+
 
         [HttpGet("customer/{customerId}")]
         [SwaggerOperation(Summary = "Get Contract by customer ID")]
@@ -499,6 +543,19 @@ namespace RealEstateProjectSale.Controllers.ContractController
             string nextContractCode = nextNumber.ToString() + "/TTĐC";
 
             return nextContractCode;
+        }
+
+        private bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
 
