@@ -4,6 +4,7 @@ using RealEstateProjectSaleBusinessObject.BusinessObject;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleRepository.IRepository;
 using RealEstateProjectSaleServices.IServices;
+using Stripe;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -26,11 +27,14 @@ namespace RealEstateProjectSaleServices.Services
         private readonly IUnitTypeServices _unitTypeService;
         private readonly IPropertyTypeServices _propertyTypeService;
         private readonly IPaymentProcessDetailServices _pmtDetailService;
+        private readonly IOpenForSaleDetailServices _openDetailService;
+        private readonly IPromotionDetailServices _promotionDetailService;
 
         public ContractServices(IContractRepo contractRepo, IDocumentTemplateService documentService,
             ICustomerServices customerService, IProjectServices projectService, IBookingServices bookingService,
             IProjectCategoryDetailServices detailService, IPropertyServices propertyService, IUnitTypeServices unitTypeService,
-            IPropertyTypeServices propertyTypeService, IPaymentProcessDetailServices pmtDetailService)
+            IPropertyTypeServices propertyTypeService, IPaymentProcessDetailServices pmtDetailService, IOpenForSaleDetailServices openDetailService,
+            IPromotionDetailServices promotionDetailService)
         {
             _contractRepo = contractRepo;
             _documentService = documentService;
@@ -42,6 +46,8 @@ namespace RealEstateProjectSaleServices.Services
             _unitTypeService = unitTypeService;
             _propertyTypeService = propertyTypeService;
             _pmtDetailService = pmtDetailService;
+            _openDetailService = openDetailService;
+            _promotionDetailService = promotionDetailService;
         }
 
         public string GenerateDocumentDeposit(Guid contractId)
@@ -75,21 +81,97 @@ namespace RealEstateProjectSaleServices.Services
             return htmlContent;
         }
 
-        public string GeneratePaymentProcessTable(Guid contractId, Guid paymentprocessId)
+        public string GenerateDocumentPriceSheet(Guid contractId)
         {
-            var paymentDetails = _pmtDetailService.GetPaymentProcessDetailByPaymentProcessID(paymentprocessId);
+            var contract = _contractRepo.GetContractByID(contractId);
+            var documentTemplate = _documentService.GetDocumentById(contract.DocumentTemplateID);
+            if (documentTemplate == null)
+            {
+                throw new Exception("Document template not found");
+            }
 
-            double totalAmount = 0;
+            var promotionDetailId = contract.PromotionDetailID.GetValueOrDefault(Guid.Empty);
+            if (promotionDetailId == Guid.Empty)
+            {
+                throw new ArgumentException("Booking không có căn hộ.");
+            }
+            var promotionDetail = _promotionDetailService.GetPromotionDetailByID(promotionDetailId);
+            var booking = _bookingService.GetBookingById(contract.BookingID);
+            var property = _propertyService.GetPropertyById(booking.PropertyID!.Value);
+            var propertyId = booking.PropertyID.GetValueOrDefault(Guid.Empty);
+            if (propertyId == Guid.Empty)
+            {
+                throw new ArgumentException("Booking không có căn hộ.");
+            }
+            var openDetail = _openDetailService.GetDetailByPropertyIdOpenId(propertyId, booking.OpeningForSaleID);
+            var unitType = _unitTypeService.GetUnitTypeByID(property.UnitTypeID!.Value);
+
+            //Tính tiền
+            var pricePromotion = openDetail.Price - promotionDetail.Amount;
+            var vat = pricePromotion * 0.1;
+            var priceIncludingVAT = pricePromotion + vat;
+            var maintenanceCost = pricePromotion * 0.02;
+            var totalPrice = priceIncludingVAT + maintenanceCost;
+            string updatedTime = contract.UpdatedTime.HasValue
+                                        ? contract.UpdatedTime.Value.ToString("yyyy/MM/dd HH:mm")
+                                        : "";
+
+            var paymentProcessTableHtml = GeneratePaymentProcessTable(contract.PaymentProcessID, totalPrice);
+
+            var htmlContent = documentTemplate.DocumentFile;
+            htmlContent = htmlContent.Replace("{PropertyCode}", property.PropertyCode)
+                                     .Replace("{UpdatedTimeContract}", updatedTime)
+                                     .Replace("{NetFloorArea}", unitType.NetFloorArea.ToString())
+                                     .Replace("{GrossFloorArea}", unitType.GrossFloorArea.ToString())
+                                     .Replace("{PriceOpen}", openDetail.Price.ToString())
+                                     .Replace("{AmountPromotion}", promotionDetail.Amount.ToString())
+                                     .Replace("{VAT}", vat.ToString())
+                                     .Replace("{PriceIncludingVAT}", priceIncludingVAT.ToString())
+                                     .Replace("{MaintenanceCost}", maintenanceCost.ToString())
+                                     .Replace("{TotalPrice}", totalPrice.ToString())
+                                     .Replace("{PaymentProcessTable}", paymentProcessTableHtml);
+
+            return htmlContent;
+
+        }
+
+        public string GeneratePaymentProcessTable(Guid? paymentprocessId, double? totalPrice)
+        {
+            var pmtId = paymentprocessId.GetValueOrDefault(Guid.Empty);
+            if (pmtId == Guid.Empty)
+            {
+                throw new ArgumentException("Booking không có căn hộ.");
+            }
+            var paymentDetails = _pmtDetailService.GetPaymentProcessDetailByPaymentProcessID(pmtId)
+                                          .OrderBy(detail => detail.PaymentStage)
+                                          .ToList();
+
+            double? totalAmount = totalPrice;
+            double? firstAmount = paymentDetails.FirstOrDefault()?.Amount;
             var tableHtml = new StringBuilder();
 
-            foreach (var detail in paymentDetails)
+            for (int i = 0; i < paymentDetails.Count; i++)
             {
-                string paymentStage = detail.PaymentStage > 1 ? $"Đợt {detail.PaymentStage}" : "TTĐC - Lần 1";
+                var detail = paymentDetails[i];
+                string paymentStage = detail.PaymentStage > 1 ? $"Đợt {detail.PaymentStage}" : "Đợt 1: Ký TTĐC";
                 string period = detail.Period.HasValue ? detail.Period.Value.ToString("dd-MM-yyyy") : "";
                 string percentage = detail.Percentage.HasValue ? $"{detail.Percentage.Value * 100}%" : "0%";
-                string amount = detail.Amount.HasValue ? $"{detail.Amount.Value:N0} VND" : "0 VND";
 
-                totalAmount += detail.Amount ?? 0;
+                double? amountValue;
+
+                // Kiểm tra nếu là dòng cuối cùng
+                if (i == paymentDetails.Count - 1)
+                {
+                    // Nếu là dòng cuối cùng, tính amount theo công thức điều chỉnh với dòng đầu tiên
+                    amountValue = (totalAmount * (detail.Percentage ?? 0)) - (firstAmount ?? 0);
+                }
+                else
+                {
+                    // Tính amount bình thường nếu không phải là dòng cuối
+                    amountValue = detail.Amount ?? (totalAmount * (detail.Percentage ?? 0));
+                }
+
+                string amount = $"{amountValue:N0} VND";
 
                 tableHtml.Append($@"
                 <tr>

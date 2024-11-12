@@ -18,6 +18,7 @@ namespace RealEstateProjectSaleServices.IServices
         bool ChangeStatusContract(Contract contract);
         Contract GetLastContract();
         string GenerateDocumentDeposit(Guid bookingId);
-        string GeneratePaymentProcessTable(Guid contractId, Guid paymentprocessId);
+        string GeneratePaymentProcessTable(Guid? paymentprocessId, double? totalPrice);
+        string GenerateDocumentPriceSheet(Guid contractId);
     }
 }

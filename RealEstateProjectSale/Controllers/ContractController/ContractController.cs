@@ -14,6 +14,7 @@ using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 using RealEstateProjectSaleServices.Services;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Diagnostics.Contracts;
 using System.Drawing;
 
 namespace RealEstateProjectSale.Controllers.ContractController
@@ -164,7 +165,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
                 });
             }
 
-          
+
 
             var htmlContent = _contractServices.GenerateDocumentDeposit(contract.ContractID);
             var pdfBytes = _documentTemplateService.GeneratePdfFromTemplate(htmlContent);
@@ -183,15 +184,6 @@ namespace RealEstateProjectSale.Controllers.ContractController
             });
 
         }
-
-
-
-
-
-
-
-
-
 
         [HttpGet("customer/{customerId}")]
         [SwaggerOperation(Summary = "Get Contract by customer ID")]
@@ -212,7 +204,6 @@ namespace RealEstateProjectSale.Controllers.ContractController
             });
 
         }
-
 
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new Contract")]
@@ -255,7 +246,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
                 };
 
-                var _contract = _mapper.Map<Contract>(newContract);
+                var _contract = _mapper.Map<RealEstateProjectSaleBusinessObject.BusinessObject.Contract>(newContract);
                 _contract.ContractDepositFile = blobUrl;
                 _contractServices.AddNewContract(_contract);
 
@@ -302,12 +293,30 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     });
                 }
 
+                var documentReservation = _documentTemplateService.GetDocumentByDocumentName("Phiếu tạm tính");
+                if (documentReservation == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Hợp đồng không tồn tại"
+                    });
+                }
+
                 contract.PaymentProcessID = paymentprocessid;
                 contract.PromotionDetailID = promotiondetailid;
+                contract.DocumentTemplateID = documentReservation.DocumentTemplateID;
                 _contractServices.UpdateContract(contract);
 
+                var htmlContent = _contractServices.GenerateDocumentPriceSheet(contract.ContractID);
+                var pdfBytes = _documentTemplateService.GeneratePdfFromTemplate(htmlContent);
+                string? blobUrl = null;
+                using (MemoryStream pdfStream = new MemoryStream(pdfBytes))
+                {
+                    blobUrl = _fileService.UploadSingleFile(pdfStream, contract.DocumentTemplate!.DocumentName, "contractdepositfile");
+                }
 
-
+                contract.PriceSheetFile = blobUrl;
+                _contractServices.UpdateContract(contract);
 
 
                 return Ok(new
