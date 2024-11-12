@@ -30,10 +30,12 @@ namespace RealEstateProjectSale.Controllers.ContractController
         private readonly IMapper _mapper;
         private readonly ICustomerServices _customerServices;
         private readonly IPropertyServices _propertyServices;
+        private readonly IDocumentTemplateService _documentTemplateService;
 
         public ContractController(IContractServices contractServices, IBookingServices bookServices,
                 IFileUploadToBlobService fileService, IMapper mapper, IPromotionDetailServices promotiondetail, IPaymentProcessServices paymentprocess,
-                ICustomerServices customerServices, IPropertyServices propertyServices
+                ICustomerServices customerServices, IPropertyServices propertyServices,
+                IDocumentTemplateService documentTemplateService
                 )
         {
             _contractServices = contractServices;
@@ -44,6 +46,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
             _paymentprocess = paymentprocess;
             _customerServices = customerServices;
             _propertyServices = propertyServices;
+            _documentTemplateService = documentTemplateService;
         }
 
         [HttpGet]
@@ -145,6 +148,39 @@ namespace RealEstateProjectSale.Controllers.ContractController
                 property = propertyresponese,
             });
 
+
+        }
+
+        [HttpGet("steptwo")]
+        [SwaggerOperation(Summary = "Show customer depositdocument")]
+        public IActionResult ShowCustomerDepositDocument(Guid contractid)
+        {
+            var contract = _contractServices.GetContractByID(contractid);
+            if (contract == null)
+            {
+                return NotFound(new
+                {
+                    message = "Hợp đồng không tồn tại."
+                });
+            }
+
+          
+
+            var htmlContent = _contractServices.GenerateDocumentDeposit(contract.ContractID);
+            var pdfBytes = _documentTemplateService.GeneratePdfFromTemplate(htmlContent);
+            string? blobUrl = null;
+            using (MemoryStream pdfStream = new MemoryStream(pdfBytes))
+            {
+                blobUrl = _fileService.UploadSingleFile(pdfStream, contract.DocumentTemplate!.DocumentName, "contractdepositfile");
+            }
+
+            contract.ContractDepositFile = blobUrl;
+            _contractServices.UpdateContract(contract);
+
+            return Ok(new
+            {
+                message = "Show deposit document"
+            });
 
         }
 
