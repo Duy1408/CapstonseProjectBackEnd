@@ -151,7 +151,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
         }
 
-        [HttpGet("steptwo")]
+        [HttpPut("check-step-one")]
         [SwaggerOperation(Summary = "Show customer depositdocument")]
         public IActionResult ShowCustomerDepositDocument(Guid contractid)
         {
@@ -175,8 +175,8 @@ namespace RealEstateProjectSale.Controllers.ContractController
             }
 
             contract.ContractDepositFile = blobUrl;
+            contract.Status = ContractStatus.ChoXacNhanTTGD.GetEnumDescription();
             _contractServices.UpdateContract(contract);
-
             return Ok(new
             {
                 message = "Show deposit document"
