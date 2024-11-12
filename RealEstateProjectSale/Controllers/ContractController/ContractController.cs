@@ -175,7 +175,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
             }
 
             contract.ContractDepositFile = blobUrl;
-            contract.Status = ContractStatus.ChoXacNhanTTGD.GetEnumDescription();
+            contract.Status = ContractStatus.ChoXacNhanTTDC.GetEnumDescription();
             _contractServices.UpdateContract(contract);
             return Ok(new
             {
