@@ -192,6 +192,8 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
 
         [HttpPost("step-two")]
+        [SwaggerOperation(Summary = "Sent mail depositdocument to customer")]
+
         public async Task<IActionResult> sendDeposittoemail(string email, Guid contractid)
         {
             try
