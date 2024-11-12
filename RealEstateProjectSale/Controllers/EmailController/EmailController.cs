@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using RealEstateProjectSaleBusinessObject.Enums;
+using RealEstateProjectSaleBusinessObject.Enums.EnumHelpers;
 using RealEstateProjectSaleBusinessObject.Model;
 using RealEstateProjectSaleServices.IServices;
 using System.Text;
@@ -24,6 +26,45 @@ namespace RealEstateProjectSale.Controllers.EmailController
             _contract = contract;
             _account = account;
         }
+
+        [HttpPost("step-two")]
+        public async Task<IActionResult> sendDeposittoemail(string email, Guid contractid)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(email) || !IsValidEmail(email))
+                {
+                    return BadRequest(new { message = "Lỗi email" });
+                }
+                var contract = _contract.GetContractByID(contractid);
+                if(contract==null)
+                {
+                    return BadRequest(new { message = "Hợp đồng không tồn tại" });
+                }
+
+                contract.Status = ContractStatus.DaXacNhanTTDC.GetEnumDescription();
+                Mailrequest mailrequest = new Mailrequest();
+                mailrequest.ToEmail = email;
+                mailrequest.Subject = "Xác nhận thảo thuận đặt cọc";
+                mailrequest.Body =
+                    $"<h5>THÔNG BÁO XÁC NHẬN THÀNH CÔNG THỎA THUẬN ĐẶT CỌC</h5>" +
+                    $"<div>Kính gửi quý khách {contract.Customer.FullName}</div>"+
+                    $"<div>Thảo thuận đặt cọc của Quý khách đã được xác nhận. Quý khách có thể xem lại thông tin Thỏa thuận đặt cọc, đề nghị thanh toán. Quý khách vui lòng thực hiện chọn Phương án thanh toán, chính sách bán hàng</div>"+
+                    $"<div>Hợp đồng mua bán:</div>" +
+                    $"<div>.Đường link xem Thỏa thuận đặt cọc</div>" +
+                    $"<a href='{contract.ContractDepositFile}'>{contract.ContractDepositFile}</a>";
+            
+                await _emailService.SendEmailAsync(mailrequest);
+                return Ok(new { message = "Xác nhận thỏa thuận đặt cọc đã gửi về mail " });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { error = e.Message });
+            }
+        }
+
+
+
 
 
         [HttpPost("sendEmail")]
