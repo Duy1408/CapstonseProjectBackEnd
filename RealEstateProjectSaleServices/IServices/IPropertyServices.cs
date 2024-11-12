@@ -13,7 +13,7 @@ namespace RealEstateProjectSaleServices.IServices
         List<Property> GetProperty();
         void AddNew(Property p);
 
-        Property GetPropertyById(Guid? id);
+        Property GetPropertyById(Guid id);
 
         void UpdateProperty(Property p);
         IQueryable<Property> GetPropertyByUnitTypeID(Guid id);

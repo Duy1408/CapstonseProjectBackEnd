@@ -67,9 +67,28 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessDetailController
 
             return NotFound(new
             {
-                message = "PaymentProcessDetail not found."
+                message = "Chi tiết đợt thanh toán không tồn tại."
             });
 
+        }
+
+        [HttpGet("paymentProcess/{pmtId}")]
+        [SwaggerOperation(Summary = "Get PaymentProcessDetail By PaymentProcessID")]
+        public IActionResult GetPaymentProcessDetailByPaymentProcessID(Guid pmtId)
+        {
+            var detail = _detailService.GetPaymentProcessDetailByPaymentProcessID(pmtId);
+
+            if (detail != null)
+            {
+                var responese = _mapper.Map<List<PaymentProcessDetailVM>>(detail);
+
+                return Ok(responese);
+            }
+
+            return NotFound(new
+            {
+                message = "Chi tiết đợt thanh toán không tồn tại."
+            });
         }
 
         [HttpPost]

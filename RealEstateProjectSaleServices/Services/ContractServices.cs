@@ -25,11 +25,12 @@ namespace RealEstateProjectSaleServices.Services
         private readonly IPropertyServices _propertyService;
         private readonly IUnitTypeServices _unitTypeService;
         private readonly IPropertyTypeServices _propertyTypeService;
+        private readonly IPaymentProcessDetailServices _pmtDetailService;
 
         public ContractServices(IContractRepo contractRepo, IDocumentTemplateService documentService,
             ICustomerServices customerService, IProjectServices projectService, IBookingServices bookingService,
             IProjectCategoryDetailServices detailService, IPropertyServices propertyService, IUnitTypeServices unitTypeService,
-            IPropertyTypeServices propertyTypeService)
+            IPropertyTypeServices propertyTypeService, IPaymentProcessDetailServices pmtDetailService)
         {
             _contractRepo = contractRepo;
             _documentService = documentService;
@@ -40,6 +41,7 @@ namespace RealEstateProjectSaleServices.Services
             _propertyService = propertyService;
             _unitTypeService = unitTypeService;
             _propertyTypeService = propertyTypeService;
+            _pmtDetailService = pmtDetailService;
         }
 
         public string GenerateDocumentDeposit(Guid contractId)
@@ -71,6 +73,41 @@ namespace RealEstateProjectSaleServices.Services
                                      .Replace("{Location}", project.Location);
 
             return htmlContent;
+        }
+
+        public string GeneratePaymentProcessTable(Guid contractId, Guid paymentprocessId)
+        {
+            var paymentDetails = _pmtDetailService.GetPaymentProcessDetailByPaymentProcessID(paymentprocessId);
+
+            double totalAmount = 0;
+            var tableHtml = new StringBuilder();
+
+            foreach (var detail in paymentDetails)
+            {
+                string paymentStage = detail.PaymentStage > 1 ? $"Đợt {detail.PaymentStage}" : "TTĐC - Lần 1";
+                string period = detail.Period.HasValue ? detail.Period.Value.ToString("dd-MM-yyyy") : "";
+                string percentage = detail.Percentage.HasValue ? $"{detail.Percentage.Value * 100}%" : "0%";
+                string amount = detail.Amount.HasValue ? $"{detail.Amount.Value:N0} VND" : "0 VND";
+
+                totalAmount += detail.Amount ?? 0;
+
+                tableHtml.Append($@"
+                <tr>
+                    <td>{paymentStage} {detail.Description}</td>
+                    <td>{period}</td>
+                    <td style='text-align:center'>{percentage}</td>
+                    <td style='text-align:right'>{amount}</td>
+                </tr>");
+            }
+
+            tableHtml.Append($@"
+            <tr>
+                <td colspan='3' style='text-align:right'><strong>Tổng cộng</strong></td>
+                <td style='background-color:#d4a014; text-align:right'><strong>{totalAmount:N0} VND</strong></td>
+            </tr>");
+
+            return tableHtml.ToString();
+
         }
 
         public void AddNewContract(Contract contract) => _contractRepo.AddNewContract(contract);
