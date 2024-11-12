@@ -153,9 +153,9 @@ namespace RealEstateProjectSaleServices.Services
             for (int i = 0; i < paymentDetails.Count; i++)
             {
                 var detail = paymentDetails[i];
-                string paymentStage = detail.PaymentStage > 1 ? $"Đợt {detail.PaymentStage}" : "Đợt 1: Ký TTĐC";
+                string paymentStage = detail.PaymentStage > 0 ? $"Đợt {detail.PaymentStage}" : "Đợt 1: Ký TTĐC";
                 string period = detail.Period.HasValue ? detail.Period.Value.ToString("dd-MM-yyyy") : "";
-                string percentage = detail.Percentage.HasValue ? $"{detail.Percentage.Value * 100}%" : "0%";
+                string percentage = detail.Percentage.HasValue ? $"{(detail.Percentage.Value * 100):N0}%" : "0%";
 
                 double? amountValue;
 
@@ -175,7 +175,7 @@ namespace RealEstateProjectSaleServices.Services
 
                 tableHtml.Append($@"
                 <tr>
-                    <td>{paymentStage} {detail.Description}</td>
+                    <td>{paymentStage}: {detail.Description}</td>
                     <td>{period}</td>
                     <td style='text-align:center'>{percentage}</td>
                     <td style='text-align:right'>{amount}</td>

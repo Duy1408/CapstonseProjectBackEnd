@@ -14,9 +14,11 @@ using RealEstateProjectSaleBusinessObject.Model;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 using RealEstateProjectSaleServices.Services;
+using Stripe;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Diagnostics.Contracts;
 using System.Drawing;
+using System.Text;
 
 namespace RealEstateProjectSale.Controllers.ContractController
 {
@@ -34,11 +36,14 @@ namespace RealEstateProjectSale.Controllers.ContractController
         private readonly IPropertyServices _propertyServices;
         private readonly IDocumentTemplateService _documentTemplateService;
         private readonly IEmailService _emailService;
+        private readonly IAccountServices _accountService;
+
+        private static Dictionary<string, (string Otp, DateTime Expiration)> otpStorage = new Dictionary<string, (string, DateTime)>();
 
         public ContractController(IContractServices contractServices, IBookingServices bookServices,
                 IFileUploadToBlobService fileService, IMapper mapper, IPromotionDetailServices promotiondetail, IPaymentProcessServices paymentprocess,
                 ICustomerServices customerServices, IPropertyServices propertyServices,
-                IDocumentTemplateService documentTemplateService, IEmailService emailService
+                IDocumentTemplateService documentTemplateService, IEmailService emailService, IAccountServices accountService
                 )
         {
             _contractServices = contractServices;
@@ -51,7 +56,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
             _propertyServices = propertyServices;
             _documentTemplateService = documentTemplateService;
             _emailService = emailService;
-
+            _accountService = accountService;
         }
 
         [HttpGet]
@@ -98,8 +103,28 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
         }
 
-        [HttpGet("stepone")]
-        [SwaggerOperation(Summary = "Get Contract by contractid")]
+        [HttpGet("customer/{customerId}")]
+        [SwaggerOperation(Summary = "Get Contract by customer ID")]
+        public IActionResult GetContractByCustomerID(Guid customerId)
+        {
+            var contract = _contractServices.GetContractByCustomerID(customerId);
+
+            if (contract != null)
+            {
+                var responese = contract.Select(contract => _mapper.Map<ContractVM>(contract)).ToList();
+
+                return Ok(responese);
+            }
+
+            return NotFound(new
+            {
+                message = "Hợp đồng không tồn tại."
+            });
+
+        }
+
+        [HttpGet("step-one")]
+        [SwaggerOperation(Summary = "Show thông tin giao dịch ở bước 1 của Contract")]
         public IActionResult CustomerCheckInformation(Guid contractid)
         {
 
@@ -157,7 +182,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
         }
 
         [HttpPut("check-step-one")]
-        [SwaggerOperation(Summary = "Show customer depositdocument")]
+        [SwaggerOperation(Summary = "Khách hàng nhấn nút Xác nhận ở bước 1")]
         public IActionResult ShowCustomerDepositDocument(Guid contractid)
         {
             var contract = _contractServices.GetContractByID(contractid);
@@ -189,40 +214,40 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
         }
 
-
-
-        [HttpPost("step-two")]
-        [SwaggerOperation(Summary = "Sent mail depositdocument to customer")]
-
-        public async Task<IActionResult> sendDeposittoemail(string email, Guid contractid)
+        [HttpPost("step-two-send-otp")]
+        [SwaggerOperation(Summary = "Gửi mã OTP qua mail cho khách hàng ở bước 2")]
+        public async Task<IActionResult> sendEmail(Guid contractid)
         {
+
             try
             {
-                if (string.IsNullOrEmpty(email) || !IsValidEmail(email))
-                {
-                    return BadRequest(new { message = "Lỗi email" });
-                }
+
                 var contract = _contractServices.GetContractByID(contractid);
                 if (contract == null)
                 {
-                    return BadRequest(new { message = "Hợp đồng không tồn tại" });
+                    return NotFound(new { message = "Hợp đồng không tồn tại." });
+                }
+                var customer = _customerServices.GetCustomerByID(contract.CustomerID);
+                if (customer == null)
+                {
+                    return NotFound(new { message = "Khách hàng không tồn tại." });
+                }
+                var account = _accountService.GetAccountByID(customer.AccountID);
+
+                if (account == null || string.IsNullOrEmpty(account.Email) || !IsValidEmail(account.Email))
+                {
+                    return BadRequest(new { message = "Lỗi email." });
                 }
 
-                contract.Status = ContractStatus.DaXacNhanTTDC.GetEnumDescription();
-                _contractServices.UpdateContract(contract);
+                string otp = GenerateOTP();
+                DateTime expirationTime = DateTime.UtcNow.AddMinutes(3);
+                otpStorage[account.Email] = (otp, expirationTime);
                 Mailrequest mailrequest = new Mailrequest();
-                mailrequest.ToEmail = email;
-                mailrequest.Subject = "Xác nhận thảo thuận đặt cọc";
-                mailrequest.Body =
-                    $"<h5>THÔNG BÁO XÁC NHẬN THÀNH CÔNG THỎA THUẬN ĐẶT CỌC</h5>" +
-                    $"<div>Kính gửi quý khách {contract.Customer.FullName}</div>" +
-                    $"<div>Thảo thuận đặt cọc của Quý khách đã được xác nhận. Quý khách có thể xem lại thông tin Thỏa thuận đặt cọc, đề nghị thanh toán. Quý khách vui lòng thực hiện chọn Phương án thanh toán, chính sách bán hàng</div>" +
-                    $"<div>Hợp đồng mua bán:</div>" +
-                    $"<div>.Đường link xem Thỏa thuận đặt cọc</div>" +
-                    $"<a href='{contract.ContractDepositFile}'>{contract.ContractDepositFile}</a>";
-
+                mailrequest.ToEmail = account.Email;
+                mailrequest.Subject = "OTP Verification Code";
+                mailrequest.Body = $"Hello, your OTP code is: {otp}";
                 await _emailService.SendEmailAsync(mailrequest);
-                return Ok(new { message = "Xác nhận thỏa thuận đặt cọc đã gửi về mail " });
+                return Ok(new { message = "OTP has been sent to your email. " });
             }
             catch (Exception e)
             {
@@ -230,25 +255,147 @@ namespace RealEstateProjectSale.Controllers.ContractController
             }
         }
 
-
-        [HttpGet("customer/{customerId}")]
-        [SwaggerOperation(Summary = "Get Contract by customer ID")]
-        public IActionResult GetContractByCustomerID(Guid customerId)
+        [HttpPost("step-two-verify-otp")]
+        [SwaggerOperation(Summary = "Khách hàng xác nhận mã OTP ở bước 2")]
+        public IActionResult verifyOtp(Guid contractid, string otp)
         {
-            var contract = _contractServices.GetContractByCustomerID(customerId);
-
-            if (contract != null)
+            try
             {
-                var responese = contract.Select(contract => _mapper.Map<ContractVM>(contract)).ToList();
+                var contract = _contractServices.GetContractByID(contractid);
+                if (contract == null)
+                {
+                    return NotFound(new { message = "Hợp đồng không tồn tại." });
+                }
+                var customer = _customerServices.GetCustomerByID(contract.CustomerID);
+                if (customer == null)
+                {
+                    return NotFound(new { message = "Khách hàng không tồn tại." });
+                }
+                var account = _accountService.GetAccountByID(customer.AccountID);
 
-                return Ok(responese);
+                if (account == null || string.IsNullOrEmpty(account.Email) || !IsValidEmail(account.Email))
+                {
+                    return BadRequest(new { message = "Địa chỉ Email không hợp lệ." });
+                }
+                if (string.IsNullOrEmpty(account.Email) || string.IsNullOrEmpty(otp))
+                {
+                    return BadRequest(new { message = "Email and OTP là bắt buộc." });
+                }
+                if (otpStorage.TryGetValue(account.Email, out var otpEntry))
+                {
+
+                    if (otpEntry.Otp == otp && otpEntry.Expiration > DateTime.UtcNow)
+                    {
+
+                        otpStorage.Remove(account.Email);
+
+                        contract.Status = ContractStatus.DaXacNhanTTDC.GetEnumDescription();
+                        _contractServices.UpdateContract(contract);
+
+                        //Gửi mail thông báo xán nhận TTDC thành công
+                        Mailrequest mailrequest = new Mailrequest();
+                        mailrequest.ToEmail = account.Email;
+                        mailrequest.Subject = "Xác nhận thảo thuận đặt cọc";
+                        mailrequest.Body =
+                            $"<h5>THÔNG BÁO XÁC NHẬN THÀNH CÔNG THỎA THUẬN ĐẶT CỌC</h5>" +
+                            $"<div>Kính gửi quý khách {contract.Customer.FullName}</div>" +
+                            $"<div>Thảo thuận đặt cọc của Quý khách đã được xác nhận. Quý khách có thể xem lại thông tin Thỏa thuận đặt cọc, đề nghị thanh toán. Quý khách vui lòng thực hiện chọn Phương án thanh toán, chính sách bán hàng</div>" +
+                            $"<div>Hợp đồng mua bán:</div>" +
+                            $"<div>.Đường link xem Thỏa thuận đặt cọc</div>" +
+                            $"<a href='{contract.ContractDepositFile}'>{contract.ContractDepositFile}</a>";
+
+                        _emailService.SendEmailAsync(mailrequest);
+
+
+                        return Ok(new { message = "Xác minh OTP thành công." });
+                    }
+                    else
+                    {
+                        return BadRequest(new { message = "OTP không hợp lệ hoặc đã hết hạn." });
+                    }
+                }
+                else
+                {
+                    return BadRequest(new { message = "Không tìm thấy OTP cho email này." });
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { error = e.Message });
             }
 
-            return NotFound(new
-            {
-                message = "Hợp đồng không tồn tại."
-            });
+        }
 
+        [HttpPut("check-step-three")]
+        [SwaggerOperation(Summary = "Khách hàng nhấn nút Xác nhận ở bước 3")]
+        public IActionResult CustomerChoosePromotion(Guid contractid, Guid promotiondetailid, Guid paymentprocessid)
+        {
+            try
+            {
+                var contract = _contractServices.GetContractByID(contractid);
+                if (contract == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Hợp đồng không tồn tại."
+                    });
+                }
+
+                var promotiondetail = _promotiondetail.GetPromotionDetailByID(promotiondetailid);
+                if (promotiondetail == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Gói khuyến mãi không tồn tại."
+                    });
+                }
+                var paymentprocess = _paymentprocess.GetPaymentProcessById(paymentprocessid);
+                if (paymentprocess == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Phương thức thanh toán không tồn tại."
+                    });
+                }
+
+                var documentReservation = _documentTemplateService.GetDocumentByDocumentName("Phiếu tạm tính");
+                if (documentReservation == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Hợp đồng không tồn tại"
+                    });
+                }
+
+                contract.PaymentProcessID = paymentprocessid;
+                contract.PromotionDetailID = promotiondetailid;
+                contract.DocumentTemplateID = documentReservation.DocumentTemplateID;
+                contract.UpdatedTime = DateTime.Now;
+                _contractServices.UpdateContract(contract);
+
+                var htmlContent = _contractServices.GenerateDocumentPriceSheet(contract.ContractID);
+                var pdfBytes = _documentTemplateService.GeneratePdfFromTemplate(htmlContent);
+                string? blobUrl = null;
+                using (MemoryStream pdfStream = new MemoryStream(pdfBytes))
+                {
+                    blobUrl = _fileService.UploadSingleFile(pdfStream, contract.DocumentTemplate!.DocumentName, "contractdepositfile");
+                }
+
+                contract.PriceSheetFile = blobUrl;
+                contract.Status = ContractStatus.DaXacNhanCSBH.GetEnumDescription();
+                _contractServices.UpdateContract(contract);
+
+
+                return Ok(new
+                {
+                    message = "Chọn phương thức thanh toán và chính sách ưu đãi thành công."
+                });
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]
@@ -306,78 +453,6 @@ namespace RealEstateProjectSale.Controllers.ContractController
                 return BadRequest(ex.Message);
             }
         }
-
-        [HttpPut("stepthree")]
-        [SwaggerOperation(Summary = "Update Contract chose promotion detail")]
-        public IActionResult CustomerChoosePromotion(Guid contractid, Guid promotiondetailid, Guid paymentprocessid)
-        {
-            try
-            {
-                var contract = _contractServices.GetContractByID(contractid);
-                if (contract == null)
-                {
-                    return NotFound(new
-                    {
-                        message = "Hợp đồng không tồn tại."
-                    });
-                }
-
-                var promotiondetail = _promotiondetail.GetPromotionDetailByID(promotiondetailid);
-                if (promotiondetail == null)
-                {
-                    return NotFound(new
-                    {
-                        message = "Gói khuyến mãi không tồn tại."
-                    });
-                }
-                var paymentprocess = _paymentprocess.GetPaymentProcessById(paymentprocessid);
-                if (paymentprocess == null)
-                {
-                    return NotFound(new
-                    {
-                        message = "Phương thức thanh toán không tồn tại."
-                    });
-                }
-
-                var documentReservation = _documentTemplateService.GetDocumentByDocumentName("Phiếu tạm tính");
-                if (documentReservation == null)
-                {
-                    return NotFound(new
-                    {
-                        message = "Hợp đồng không tồn tại"
-                    });
-                }
-
-                contract.PaymentProcessID = paymentprocessid;
-                contract.PromotionDetailID = promotiondetailid;
-                contract.DocumentTemplateID = documentReservation.DocumentTemplateID;
-                _contractServices.UpdateContract(contract);
-
-                var htmlContent = _contractServices.GenerateDocumentPriceSheet(contract.ContractID);
-                var pdfBytes = _documentTemplateService.GeneratePdfFromTemplate(htmlContent);
-                string? blobUrl = null;
-                using (MemoryStream pdfStream = new MemoryStream(pdfBytes))
-                {
-                    blobUrl = _fileService.UploadSingleFile(pdfStream, contract.DocumentTemplate!.DocumentName, "contractdepositfile");
-                }
-
-                contract.PriceSheetFile = blobUrl;
-                _contractServices.UpdateContract(contract);
-
-
-                return Ok(new
-                {
-                    message = "Chọn phương thức thanh toán và chính sách ưu đãi thành công."
-                });
-
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-
 
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Update Contract by ID")]
@@ -560,6 +635,18 @@ namespace RealEstateProjectSale.Controllers.ContractController
             }
         }
 
+        private string GenerateOTP(int length = 6)
+        {
+            var random = new Random();
+            var otp = new StringBuilder();
+
+            for (int i = 0; i < length; i++)
+            {
+                otp.Append(random.Next(0, 10));
+            }
+
+            return otp.ToString();
+        }
 
     }
 }
