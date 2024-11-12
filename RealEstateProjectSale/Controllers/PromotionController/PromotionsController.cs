@@ -94,7 +94,7 @@ namespace RealEstateProjectSale.Controllers.PromotionController
                     {
                         existingPro.Description = pro.Description;
                     }
-              
+
                     if (pro.Status.HasValue)
                     {
                         existingPro.Status = pro.Status.Value;
@@ -137,8 +137,6 @@ namespace RealEstateProjectSale.Controllers.PromotionController
                     PromotionID = Guid.NewGuid(),
                     PromotionName = pro.PromotionName,
                     Description = pro.Description,
-                    StartDate = pro.StartDate,
-                    EndDate = pro.EndDate,
                     Status = true,
                     SalesPolicyID = pro.SalesPolicyID
 
