@@ -179,7 +179,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
             _contractServices.UpdateContract(contract);
             return Ok(new
             {
-                message = "Show deposit document"
+                message = "Xác nhận thông tin giao dịch thành công."
             });
 
         }
