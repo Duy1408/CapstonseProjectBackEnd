@@ -507,16 +507,16 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                 var _contract = _mapper.Map<RealEstateProjectSaleBusinessObject.BusinessObject.Contract>(newContract);
                 _contractServices.AddNewContract(_contract);
 
-                var htmlContent = _contractServices.GenerateDocumentDeposit(_contract.ContractID);
-                var pdfBytes = _documentService.GeneratePdfFromTemplate(htmlContent);
-                string? blobUrl = null;
-                using (MemoryStream pdfStream = new MemoryStream(pdfBytes))
-                {
-                    blobUrl = _fileService.UploadSingleFile(pdfStream, _contract.DocumentTemplate!.DocumentName, "contractdepositfile");
-                }
+                //var htmlContent = _contractServices.GenerateDocumentDeposit(_contract.ContractID);
+                //var pdfBytes = _documentService.GeneratePdfFromTemplate(htmlContent);
+                //string? blobUrl = null;
+                //using (MemoryStream pdfStream = new MemoryStream(pdfBytes))
+                //{
+                //    blobUrl = _fileService.UploadSingleFile(pdfStream, _contract.DocumentTemplate!.DocumentName, "contractdepositfile");
+                //}
 
-                _contract.ContractDepositFile = blobUrl;
-                _contractServices.UpdateContract(_contract);
+                //_contract.ContractDepositFile = blobUrl;
+                //_contractServices.UpdateContract(_contract);
 
                 existingProperty.Status = PropertyStatus.GiuCho.GetEnumDescription();
                 _pro.UpdateProperty(existingProperty);
