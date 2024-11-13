@@ -21,5 +21,8 @@ namespace RealEstateProjectSaleServices.IServices
         void UpdatePromotion(Promotion p);
 
         IQueryable<Promotion> SearchPromotion(string name);
+
+        Promotion FindBySalesPolicyIdAndStatus(Guid salePolicyId);
+
     }
 }

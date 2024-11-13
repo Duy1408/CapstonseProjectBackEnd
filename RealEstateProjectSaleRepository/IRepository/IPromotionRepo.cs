@@ -19,5 +19,7 @@ namespace RealEstateProjectSaleRepository.IRepository
         public void UpdatePromotion(Promotion p);
 
         public IQueryable<Promotion> SearchPromotion(string name);
+
+        Promotion FindBySalesPolicyIdAndStatus(Guid salePolicyId);
     }
 }
