@@ -61,7 +61,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
             IProjectCategoryDetailServices projectCategoryDetailServices, IProjectServices projectServices,
              ISalespolicyServices salespolicyServices, IUnitTypeServices unitTypeServices,
-             IPropertyTypeServices propertyTypeServices, IPromotionServices promotionServices
+             IPropertyTypeServices propertyTypeServices, IPromotionServices promotionServices,
 
                 IContractPaymentDetailServices contractDetailService
 
@@ -658,6 +658,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
                 $"<a href='{contract.PriceSheetFile}'>{contract.PriceSheetFile}</a>";
 
             _emailService.SendEmailAsync(mailrequest);
+        
 
             _contractServices.CreateContractPaymentDetail(contractid);
 
