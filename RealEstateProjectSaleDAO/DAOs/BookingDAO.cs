@@ -60,7 +60,7 @@ namespace RealEstateProjectSaleDAO.DAOs
                                     .ToList();
         }
 
-        public List<Booking> GetBookingByCheckedIn()
+        public List<Booking> GetBookingByCheckedIn(Guid openId)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
             return _context.Bookings!.Include(c => c.OpeningForSale)
@@ -72,7 +72,8 @@ namespace RealEstateProjectSaleDAO.DAOs
                                         .ThenInclude(pc => pc.Project)
                                     .Include(o => o.ProjectCategoryDetail)
                                         .ThenInclude(pc => pc.PropertyCategory)
-                                    .Where(b => b.Status == BookingStatus.DaCheckIn.GetEnumDescription())
+                                    .Where(b => b.OpeningForSaleID == openId &&
+                                    b.Status == BookingStatus.DaCheckIn.GetEnumDescription())
                                     .ToList();
         }
 

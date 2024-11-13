@@ -79,9 +79,9 @@ namespace RealEstateProjectSaleServices.Services
             return _book.GetBookingByBooked();
         }
 
-        public List<Booking> GetBookingByCheckedIn()
+        public List<Booking> GetBookingByCheckedIn(Guid openId)
         {
-            return _book.GetBookingByCheckedIn();
+            return _book.GetBookingByCheckedIn(openId);
         }
 
         public Booking? GetBookingByDepositedTimed(Guid id)
