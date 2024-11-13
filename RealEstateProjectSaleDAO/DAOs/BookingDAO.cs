@@ -72,8 +72,11 @@ namespace RealEstateProjectSaleDAO.DAOs
                                         .ThenInclude(pc => pc.Project)
                                     .Include(o => o.ProjectCategoryDetail)
                                         .ThenInclude(pc => pc.PropertyCategory)
-                                    .Where(b => b.OpeningForSaleID == openId &&
-                                    b.Status == BookingStatus.DaCheckIn.GetEnumDescription())
+                                    .Where(b => b.OpeningForSaleID == openId
+                                    && b.Status == BookingStatus.DaCheckIn.GetEnumDescription()
+                                    && b.DepositedTimed != null)
+                                    .OrderBy(b => b.DepositedTimed)
+                                    .ThenBy(b => b.BookingID)
                                     .ToList();
         }
 
