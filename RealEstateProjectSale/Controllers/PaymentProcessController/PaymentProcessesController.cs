@@ -73,7 +73,7 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessController
         }
 
         [HttpGet("salesPolicy/{salesPolicyId}")]
-        [SwaggerOperation(Summary = "Get PaymentProcess By ProjectID")]
+        [SwaggerOperation(Summary = "Get PaymentProcess By SalePolicyID")]
         public IActionResult GetPaymentProcessBySalesPolicyID(Guid salesPolicyId)
         {
             var pmt = _pmtService.GetPaymentProcessBySalesPolicyID(salesPolicyId);
