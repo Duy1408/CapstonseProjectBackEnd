@@ -11,7 +11,7 @@ namespace RealEstateProjectSaleServices.Services
 {
     public class PromotionServices : IPromotionServices
     {
-       private readonly IPromotionRepo _pro;
+        private readonly IPromotionRepo _pro;
         public PromotionServices(IPromotionRepo pro)
         {
             _pro = pro;
@@ -24,6 +24,11 @@ namespace RealEstateProjectSaleServices.Services
         public bool ChangeStatus(Promotion p)
         {
             return _pro.ChangeStatus(p);
+        }
+
+        public Promotion FindBySalesPolicyIdAndStatus(Guid salePolicyId)
+        {
+            return _pro.FindBySalesPolicyIdAndStatus(salePolicyId);
         }
 
         public Promotion GetPromotionById(Guid id)
@@ -43,7 +48,7 @@ namespace RealEstateProjectSaleServices.Services
 
         public void UpdatePromotion(Promotion p)
         {
-             _pro.UpdatePromotion(p);
+            _pro.UpdatePromotion(p);
         }
     }
 }

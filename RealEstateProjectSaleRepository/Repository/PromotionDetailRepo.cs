@@ -19,6 +19,8 @@ namespace RealEstateProjectSaleRepository.Repository
 
         public List<PromotionDetail> GetAllPromotionDetail() => dao.GetAllPromotionDetail();
 
+        public PromotionDetail GetDetailByPromotionIDPropertyTypeID(Guid promotionID, Guid propertyTypeID) => dao.GetDetailByPromotionIDPropertyTypeID(promotionID, propertyTypeID);
+
         public PromotionDetail GetPromotionDetailByID(Guid id) => dao.GetPromotionDetailByID(id);
 
         public void UpdatePromotionDetail(PromotionDetail detail) => dao.UpdatePromotionDetail(detail);

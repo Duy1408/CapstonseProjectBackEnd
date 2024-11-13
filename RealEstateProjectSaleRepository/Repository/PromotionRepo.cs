@@ -12,7 +12,7 @@ namespace RealEstateProjectSaleRepository.Repository
     public class PromotionRepo : IPromotionRepo
     {
         private PromotionDAO _pro;
-     
+
         public PromotionRepo()
         {
             _pro = new PromotionDAO();
@@ -25,6 +25,11 @@ namespace RealEstateProjectSaleRepository.Repository
         public bool ChangeStatus(Promotion p)
         {
             return _pro.ChangeStatus(p);
+        }
+
+        public Promotion FindBySalesPolicyIdAndStatus(Guid salePolicyId)
+        {
+            return _pro.FindBySalesPolicyIdAndStatus(salePolicyId);
         }
 
         public Promotion GetPromotionById(Guid id)
@@ -44,7 +49,7 @@ namespace RealEstateProjectSaleRepository.Repository
 
         public void UpdatePromotion(Promotion p)
         {
-             _pro.UpdatePromotion(p);
+            _pro.UpdatePromotion(p);
         }
     }
 }

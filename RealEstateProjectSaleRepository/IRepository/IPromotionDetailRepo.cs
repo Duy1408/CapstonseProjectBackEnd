@@ -14,6 +14,7 @@ namespace RealEstateProjectSaleRepository.IRepository
         PromotionDetail GetPromotionDetailByID(Guid id);
         void UpdatePromotionDetail(PromotionDetail detail);
         void DeletePromotionDetailByID(Guid id);
+        PromotionDetail GetDetailByPromotionIDPropertyTypeID(Guid promotionID, Guid propertyTypeID);
 
     }
 }

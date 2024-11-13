@@ -11,6 +11,7 @@ using RealEstateProjectSaleBusinessObject.DTO.Create;
 using RealEstateProjectSaleBusinessObject.DTO.Update;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
+using RealEstateProjectSaleServices.Services;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace RealEstateProjectSale.Controllers.PromotionController
@@ -20,13 +21,15 @@ namespace RealEstateProjectSale.Controllers.PromotionController
     public class PromotionsController : ControllerBase
     {
         private readonly IPromotionServices _pro;
+        private readonly ISalespolicyServices _salePolicyService;
         private readonly IMapper _mapper;
 
 
-        public PromotionsController(IPromotionServices pro, IMapper mapper)
+        public PromotionsController(IPromotionServices pro, IMapper mapper, ISalespolicyServices salePolicyService)
         {
             _pro = pro;
             _mapper = mapper;
+            _salePolicyService = salePolicyService;
         }
 
         // GET: api/Promotions
@@ -131,6 +134,23 @@ namespace RealEstateProjectSale.Controllers.PromotionController
         {
             try
             {
+                var existingSalePolicy = _salePolicyService.GetSalespolicyById(pro.SalesPolicyID);
+                if (existingSalePolicy == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Chính sách bán hàng không tồn tại."
+                    });
+                }
+
+                var existingPromotion = _pro.FindBySalesPolicyIdAndStatus(pro.SalesPolicyID);
+                if (existingPromotion != null)
+                {
+                    return BadRequest(new
+                    {
+                        message = "Khuyến mãi của chính sách bán hàng này đã tồn tại."
+                    });
+                }
 
                 var newPro = new PromotionCreateDTO
                 {

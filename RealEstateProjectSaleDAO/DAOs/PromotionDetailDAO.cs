@@ -58,6 +58,22 @@ namespace RealEstateProjectSaleDAO.DAOs
             }
         }
 
+        public PromotionDetail GetDetailByPromotionIDPropertyTypeID(Guid promotionID, Guid propertyTypeID)
+        {
+            try
+            {
+                var detail = _context.PromotionDetails!.Include(c => c.Promotion)
+                                                       .Include(c => c.PropertyType)
+                                                       .SingleOrDefault(c => c.PromotionID == promotionID
+                                                             && c.PropertyTypeID == propertyTypeID);
+                return detail;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public void UpdatePromotionDetail(PromotionDetail detail)
         {
             try
