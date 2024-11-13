@@ -20,6 +20,7 @@ namespace RealEstateProjectSaleServices.IServices
 
         void UpdateSalespolicy(Salespolicy p);
         List<Salespolicy> GetSalespolicyByProjectID(Guid projectid);
+        Salespolicy FindByProjectIdAndStatus(Guid projectId);
 
     }
 }

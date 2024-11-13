@@ -26,6 +26,11 @@ namespace RealEstateProjectSaleServices.Services
             return _repo.ChangeStatus(p);
         }
 
+        public Salespolicy FindByProjectIdAndStatus(Guid projectId)
+        {
+            return _repo.FindByProjectIdAndStatus(projectId);
+        }
+
         public Salespolicy GetSalespolicyById(Guid id)
         {
             return _repo.GetSalespolicyById(id);

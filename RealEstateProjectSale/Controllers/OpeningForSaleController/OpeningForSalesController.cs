@@ -146,7 +146,7 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
 
                 if (detailID == Guid.Empty)
                 {
-                    throw new ArgumentException("ProjectCategoryDetailID is required.");
+                    throw new ArgumentException("ProjectCategoryDetailID là bắt buộc.");
                 }
 
                 var existingDetail = _detailService.GetProjectCategoryDetailByID(detailID);
@@ -173,8 +173,7 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
                 {
                     return BadRequest(new
                     {
-                        message = 
-                        "Đợt mở bán loại hình dự án này đã tồn tại."
+                        message = "Đợt mở bán loại hình dự án này đã tồn tại."
                     });
                 }
 
