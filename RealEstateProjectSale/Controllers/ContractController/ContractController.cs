@@ -15,6 +15,7 @@ using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 using RealEstateProjectSaleServices.Services;
 using Stripe;
+using Stripe.FinancialConnections;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Diagnostics.Contracts;
 using System.Drawing;
@@ -315,7 +316,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
                             $"<div>Kính gửi quý khách {contract.Customer.FullName}</div>" +
                             $"<div>Thảo thuận đặt cọc của Quý khách đã được xác nhận. Quý khách có thể xem lại thông tin Thỏa thuận đặt cọc, đề nghị thanh toán. Quý khách vui lòng thực hiện chọn Phương án thanh toán, chính sách bán hàng</div>" +
                             $"<div>Hợp đồng mua bán:</div>" +
-                            $"<div>.Đường link xem Thỏa thuận đặt cọc</div>" +
+                            $"<div>Đường link xem Thỏa thuận đặt cọc</div>" +
                             $"<a href='{contract.ContractDepositFile}'>{contract.ContractDepositFile}</a>";
 
                         _emailService.SendEmailAsync(mailrequest);
@@ -372,7 +373,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     });
                 }
 
-                var documentReservation = _documentTemplateService.GetDocumentByDocumentName("Phiếu tạm tính");
+                var documentReservation = _documentTemplateService.GetDocumentByDocumentName("Phiếu tính giá");
                 if (documentReservation == null)
                 {
                     return NotFound(new
@@ -399,6 +400,34 @@ namespace RealEstateProjectSale.Controllers.ContractController
                 contract.Status = ContractStatus.DaXacNhanCSBH.GetEnumDescription();
                 _contractServices.UpdateContract(contract);
 
+                var customer = _customerServices.GetCustomerByID(contract.CustomerID);
+                if (customer == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Khách hàng không tồn tại."
+                    });
+                }
+
+                var account = _accountService.GetAccountByID(customer.AccountID);
+                if (account == null || string.IsNullOrEmpty(account.Email) || !IsValidEmail(account.Email))
+                {
+                    return BadRequest(new { message = "Địa chỉ Email không hợp lệ." });
+                }
+
+                //Gửi mail thông báo yêu cầu xác nhận PTG
+                Mailrequest mailrequest = new Mailrequest();
+                mailrequest.ToEmail = account.Email;
+                mailrequest.Subject = "Yêu Cầu Xác Nhận Phiếu Tính Giá";
+                mailrequest.Body =
+                    $"<h5>THÔNG BÁO YÊU CẦU XÁC NHẬN PHIẾU TÍNH GIÁ</h5>" +
+                    $"<div>Kính gửi quý khách {contract.Customer.FullName}</div>" +
+                    $"<div>Quý khách vui lòng kiểm tra và xác nhận thông tin Phiếu tính giá.</div>" +
+                    $"<div>Đường link xem Phiếu tính giá</div>" +
+                    $"<a href='{contract.PriceSheetFile}'>{contract.PriceSheetFile}</a>";
+
+                _emailService.SendEmailAsync(mailrequest);
+
 
                 return Ok(new
                 {
@@ -410,6 +439,85 @@ namespace RealEstateProjectSale.Controllers.ContractController
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        [HttpGet("step-four")]
+        [SwaggerOperation(Summary = "Show thông tin khách hàng ở bước 4 của Contract")]
+        public IActionResult ShowInformationCustomer(Guid contractid)
+        {
+
+            var contract = _contractServices.GetContractByID(contractid);
+            if (contract == null)
+            {
+                return NotFound(new
+                {
+                    message = "Hợp đồng không tồn tại."
+                });
+            }
+
+            var customer = _customerServices.GetCustomerByID(contract.CustomerID);
+            if (customer == null)
+            {
+                return NotFound(new
+                {
+                    message = "Khách hàng không tồn tại."
+                });
+            }
+            var responese = _mapper.Map<CustomerVM>(customer);
+
+            return Ok(responese);
+
+        }
+
+        [HttpPut("check-step-four")]
+        [SwaggerOperation(Summary = "Khách hàng nhấn nút Xác nhận Phiếu tính giá ở bước 4")]
+        public IActionResult CustomerConfirmPriceList(Guid contractid)
+        {
+            var contract = _contractServices.GetContractByID(contractid);
+            if (contract == null)
+            {
+                return NotFound(new
+                {
+                    message = "Hợp đồng không tồn tại."
+                });
+            }
+            var customer = _customerServices.GetCustomerByID(contract.CustomerID);
+            if (customer == null)
+            {
+                return NotFound(new
+                {
+                    message = "Khách hàng không tồn tại."
+                });
+            }
+
+            var account = _accountService.GetAccountByID(customer.AccountID);
+            if (account == null || string.IsNullOrEmpty(account.Email) || !IsValidEmail(account.Email))
+            {
+                return BadRequest(new { message = "Địa chỉ Email không hợp lệ." });
+            }
+
+            contract.Status = ContractStatus.DaXacNhanPhieuTinhGia.GetEnumDescription();
+            _contractServices.UpdateContract(contract);
+
+            //Gửi mail thư mời thanh toán tiền
+            Mailrequest mailrequest = new Mailrequest();
+            mailrequest.ToEmail = account.Email;
+            mailrequest.Subject = "Thư mời thanh toán tiền";
+            mailrequest.Body =
+                $"<h5>THƯ MỜI THANH TOÁN TIỀN</h5>" +
+                $"<div>Kính gửi quý khách {contract.Customer.FullName}</div>" +
+                $"<div>Quý khách đã xác nhận Phiếu tính giá thành công trên Thủ tục JustHome. Quý khách vui lòng thanh toán tiền Đợt 1 Hợp đồng mua bán theo thông tin trên Phiếu tính giá và upload ảnh chụp Ủy nhiệm chi.</div>" +
+                $"<div>Đường link xem Phiếu tính giá</div>" +
+                $"<a href='{contract.PriceSheetFile}'>{contract.PriceSheetFile}</a>";
+
+            _emailService.SendEmailAsync(mailrequest);
+
+
+            return Ok(new
+            {
+                message = "Chọn phương thức thanh toán và chính sách ưu đãi thành công."
+            });
+
         }
 
         [HttpPost]

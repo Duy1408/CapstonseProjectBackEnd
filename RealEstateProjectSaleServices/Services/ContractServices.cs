@@ -116,6 +116,8 @@ namespace RealEstateProjectSaleServices.Services
                                         ? contract.UpdatedTime.Value.ToString("yyyy/MM/dd HH:mm")
                                         : "";
 
+            property.PriceSold = totalPrice;
+            _propertyService.UpdateProperty(property);
             var paymentProcessTableHtml = GeneratePaymentProcessTable(contract.PaymentProcessID, totalPrice);
 
             var htmlContent = documentTemplate.DocumentFile;
