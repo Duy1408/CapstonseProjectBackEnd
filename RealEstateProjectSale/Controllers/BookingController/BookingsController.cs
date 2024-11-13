@@ -99,20 +99,20 @@ namespace RealEstateProjectSale.Controllers.BookingController
             }
         }
 
-        [HttpGet("checked-in")]
+        [HttpGet("checked-in/{openId}")]
         [SwaggerOperation(Summary = "Get bookings by status 'Checked In'")]
-        public IActionResult GetBookingByCheckedIn()
+        public IActionResult GetBookingByCheckedIn(Guid openId)
         {
             try
             {
-                if (_book.GetBookingByCheckedIn() == null)
+                if (_book.GetBookingByCheckedIn(openId) == null)
                 {
                     return NotFound(new
                     {
                         message = "Booking không tồn tại."
                     });
                 }
-                var books = _book.GetBookingByCheckedIn();
+                var books = _book.GetBookingByCheckedIn(openId);
                 var response = _mapper.Map<List<BookingVM>>(books);
 
                 return Ok(response);

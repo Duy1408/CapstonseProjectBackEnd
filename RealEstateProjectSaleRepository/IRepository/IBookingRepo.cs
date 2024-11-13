@@ -25,7 +25,7 @@ namespace RealEstateProjectSaleRepository.IRepository
         Booking? GetBookingByCustomerSelect(Guid id);
 
         List<Booking> GetBookingByBooked();
-        List<Booking> GetBookingByCheckedIn();
+        List<Booking> GetBookingByCheckedIn(Guid openId);
         List<Booking> GetBookingByDocumentID(Guid id);
         List<Booking> GetBookingByCustomerID(Guid id);
         List<Booking> GetBookingByStaffID(Guid id);
