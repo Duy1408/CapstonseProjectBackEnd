@@ -9,7 +9,7 @@ namespace RealEstateProjectSaleBusinessObject.Enums
 {
     public enum ContractStatus
     {
-        [EnumDescription("Chờ xác nhận thông tin giao dịch")]
+        [EnumDescription("Chờ xác nhận TTDG")]
         ChoXacNhanTTGD = 1,
 
         [EnumDescription("Chờ xác nhận TTĐC")]

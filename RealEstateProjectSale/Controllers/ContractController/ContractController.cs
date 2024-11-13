@@ -292,6 +292,20 @@ namespace RealEstateProjectSale.Controllers.ContractController
                         contract.Status = ContractStatus.DaXacNhanTTDC.GetEnumDescription();
                         _contractServices.UpdateContract(contract);
 
+                        var booking = _bookServices.GetBookingById(contract.BookingID);
+                        booking.Status = BookingStatus.DaKyTTDC.GetEnumDescription();
+                        _bookServices.UpdateBooking(booking);
+
+                        var propertyId = booking.PropertyID.GetValueOrDefault(Guid.Empty);
+
+                        if (propertyId == Guid.Empty)
+                        {
+                            throw new ArgumentException("Booking không có căn hộ.");
+                        }
+                        var property = _propertyServices.GetPropertyById(propertyId);
+                        property.Status = PropertyStatus.DatCoc.GetEnumDescription();
+                        _propertyServices.UpdateProperty(property);
+
                         //Gửi mail thông báo xán nhận TTDC thành công
                         Mailrequest mailrequest = new Mailrequest();
                         mailrequest.ToEmail = account.Email;
