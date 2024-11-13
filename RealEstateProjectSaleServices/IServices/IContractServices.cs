@@ -20,5 +20,6 @@ namespace RealEstateProjectSaleServices.IServices
         string GenerateDocumentDeposit(Guid bookingId);
         string GeneratePaymentProcessTable(Guid? paymentprocessId, double? totalPrice);
         string GenerateDocumentPriceSheet(Guid contractId);
+        void CreateContractPaymentDetail(Guid contractId);
     }
 }
