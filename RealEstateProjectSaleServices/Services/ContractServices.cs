@@ -1,17 +1,22 @@
-﻿using Humanizer;
+﻿using AutoMapper;
+using Humanizer;
 using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
+using Org.BouncyCastle.Crypto;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
+using RealEstateProjectSaleBusinessObject.DTO.Create;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleRepository.IRepository;
 using RealEstateProjectSaleServices.IServices;
 using Stripe;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Globalization;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
+using Contract = RealEstateProjectSaleBusinessObject.BusinessObject.Contract;
 
 namespace RealEstateProjectSaleServices.Services
 {
@@ -29,12 +34,14 @@ namespace RealEstateProjectSaleServices.Services
         private readonly IPaymentProcessDetailServices _pmtDetailService;
         private readonly IOpenForSaleDetailServices _openDetailService;
         private readonly IPromotionDetailServices _promotionDetailService;
+        private readonly IContractPaymentDetailServices _contractDetailService;
+        private readonly IMapper _mapper;
 
         public ContractServices(IContractRepo contractRepo, IDocumentTemplateService documentService,
             ICustomerServices customerService, IProjectServices projectService, IBookingServices bookingService,
             IProjectCategoryDetailServices detailService, IPropertyServices propertyService, IUnitTypeServices unitTypeService,
             IPropertyTypeServices propertyTypeService, IPaymentProcessDetailServices pmtDetailService, IOpenForSaleDetailServices openDetailService,
-            IPromotionDetailServices promotionDetailService)
+            IPromotionDetailServices promotionDetailService, IContractPaymentDetailServices contractDetailService, IMapper mapper)
         {
             _contractRepo = contractRepo;
             _documentService = documentService;
@@ -48,6 +55,8 @@ namespace RealEstateProjectSaleServices.Services
             _pmtDetailService = pmtDetailService;
             _openDetailService = openDetailService;
             _promotionDetailService = promotionDetailService;
+            _contractDetailService = contractDetailService;
+            _mapper = mapper;
         }
 
         public string GenerateDocumentDeposit(Guid contractId)
@@ -194,6 +203,68 @@ namespace RealEstateProjectSaleServices.Services
 
         }
 
+        public void CreateContractPaymentDetail(Guid contractId)
+        {
+            var contract = _contractRepo.GetContractByID(contractId);
+            var pmtId = contract.PaymentProcessID.GetValueOrDefault(Guid.Empty);
+            if (pmtId == Guid.Empty)
+            {
+                throw new ArgumentException("Booking không có căn hộ.");
+            }
+            var paymentDetails = _pmtDetailService.GetPaymentProcessDetailByPaymentProcessID(pmtId)
+                                  .OrderBy(detail => detail.PaymentStage)
+                                  .ToList();
+            var booking = _bookingService.GetBookingById(contract.BookingID);
+            var propertyId = booking.PropertyID.GetValueOrDefault(Guid.Empty);
+            if (pmtId == Guid.Empty)
+            {
+                throw new ArgumentException("Booking không có căn hộ.");
+            }
+            var property = _propertyService.GetPropertyById(propertyId);
+
+            double? totalAmount = property.PriceSold;
+            double? firstAmount = paymentDetails.FirstOrDefault()?.Amount;
+
+            for (int i = 0; i < paymentDetails.Count; i++)
+            {
+                var detail = paymentDetails[i];
+                double? amountValue;
+
+                // Kiểm tra nếu là dòng cuối cùng
+                if (i == paymentDetails.Count - 1)
+                {
+                    // Nếu là dòng cuối cùng, tính amount theo công thức điều chỉnh với dòng đầu tiên
+                    amountValue = (totalAmount * (detail.Percentage ?? 0)) - (firstAmount ?? 0);
+                }
+                else
+                {
+                    // Tính amount bình thường nếu không phải là dòng cuối
+                    amountValue = detail.Amount ?? (totalAmount * (detail.Percentage ?? 0));
+                }
+
+                amountValue = amountValue.HasValue ? Math.Round(amountValue.Value) : (double?)null;
+
+                // Tạo đối tượng chi tiết thanh toán và lưu vào cơ sở dữ liệu
+                var contractDetail = new ContractPaymentDetailCreateDTO
+                {
+                    ContractPaymentDetailID = Guid.NewGuid(),
+                    PaymentRate = detail.PaymentStage,
+                    Description = detail.Description,
+                    Period = detail.Period,
+                    PaidValue = amountValue,
+                    PaidValueLate = null,
+                    RemittanceOrder = null,
+                    Status = false,
+                    ContractID = contractId
+                };
+
+                var _detail = _mapper.Map<ContractPaymentDetail>(contractDetail);
+
+                _contractDetailService.AddNewContractPaymentDetail(_detail);
+            }
+
+        }
+
         public void AddNewContract(Contract contract) => _contractRepo.AddNewContract(contract);
 
         public bool ChangeStatusContract(Contract contract) => _contractRepo.ChangeStatusContract(contract);
@@ -207,6 +278,7 @@ namespace RealEstateProjectSaleServices.Services
         public Contract GetLastContract() => _contractRepo.GetLastContract();
 
         public void UpdateContract(Contract contract) => _contractRepo.UpdateContract(contract);
+
 
     }
 }

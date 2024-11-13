@@ -38,13 +38,15 @@ namespace RealEstateProjectSale.Controllers.ContractController
         private readonly IDocumentTemplateService _documentTemplateService;
         private readonly IEmailService _emailService;
         private readonly IAccountServices _accountService;
+        private readonly IContractPaymentDetailServices _contractDetailService;
 
         private static Dictionary<string, (string Otp, DateTime Expiration)> otpStorage = new Dictionary<string, (string, DateTime)>();
 
         public ContractController(IContractServices contractServices, IBookingServices bookServices,
                 IFileUploadToBlobService fileService, IMapper mapper, IPromotionDetailServices promotiondetail, IPaymentProcessServices paymentprocess,
                 ICustomerServices customerServices, IPropertyServices propertyServices,
-                IDocumentTemplateService documentTemplateService, IEmailService emailService, IAccountServices accountService
+                IDocumentTemplateService documentTemplateService, IEmailService emailService, IAccountServices accountService,
+                IContractPaymentDetailServices contractDetailService
                 )
         {
             _contractServices = contractServices;
@@ -58,6 +60,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
             _documentTemplateService = documentTemplateService;
             _emailService = emailService;
             _accountService = accountService;
+            _contractDetailService = contractDetailService;
         }
 
         [HttpGet]
@@ -512,10 +515,11 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
             _emailService.SendEmailAsync(mailrequest);
 
+            _contractServices.CreateContractPaymentDetail(contractid);
 
             return Ok(new
             {
-                message = "Chọn phương thức thanh toán và chính sách ưu đãi thành công."
+                message = "Xác nhận Phiếu tính giá thành công."
             });
 
         }
