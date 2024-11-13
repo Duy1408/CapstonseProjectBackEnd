@@ -21,11 +21,13 @@ namespace RealEstateProjectSale.Controllers.SalespolicyController
     public class SalespoliciesController : ControllerBase
     {
         private readonly ISalespolicyServices _sale;
+        private readonly IProjectServices _projectService;
         private readonly IMapper _mapper;
 
-        public SalespoliciesController(ISalespolicyServices sale, IMapper mapper)
+        public SalespoliciesController(ISalespolicyServices sale, IMapper mapper, IProjectServices projectService)
         {
             _sale = sale;
+            _projectService = projectService;
             _mapper = mapper;
         }
 
@@ -155,6 +157,23 @@ namespace RealEstateProjectSale.Controllers.SalespolicyController
         {
             try
             {
+                var existingProject = _projectService.GetProjectById(sale.ProjectID);
+                if (existingProject == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Dự án không tồn tại."
+                    });
+                }
+
+                var existingSale = _sale.FindByProjectIdAndStatus(sale.ProjectID);
+                if (existingSale != null)
+                {
+                    return BadRequest(new
+                    {
+                        message = "Chính sách bán hàng của dự án này đã tồn tại."
+                    });
+                }
 
                 var newSale = new SalepolicyCreateDTO
                 {

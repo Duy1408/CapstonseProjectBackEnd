@@ -26,6 +26,11 @@ namespace RealEstateProjectSaleRepository.Repository
             return _dao.ChangeStatus(p);
         }
 
+        public Salespolicy FindByProjectIdAndStatus(Guid projectId)
+        {
+            return _dao.FindByProjectIdAndStatus(projectId);
+        }
+
         public Salespolicy GetSalespolicyById(Guid id)
         {
             return _dao.GetSalespolicyByID(id);

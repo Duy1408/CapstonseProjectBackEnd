@@ -102,5 +102,12 @@ namespace RealEstateProjectSaleDAO.DAOs
                                          .ToList();
         }
 
+        public Salespolicy FindByProjectIdAndStatus(Guid projectId)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            return _context.Salespolicies.Include(o => o.Project)
+                                           .SingleOrDefault(a => a.ProjectID == projectId && a.Status == true);
+        }
+
     }
 }
