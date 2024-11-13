@@ -37,13 +37,25 @@ namespace RealEstateProjectSale.Controllers.ContractController
         private readonly IDocumentTemplateService _documentTemplateService;
         private readonly IEmailService _emailService;
         private readonly IAccountServices _accountService;
+        private readonly IProjectCategoryDetailServices _projectCategoryDetailServices;
+        private readonly IProjectServices _projectServices;
+        private readonly ISalespolicyServices _salespolicyServices;
+        private readonly IUnitTypeServices _unitTypeServices;
+        private readonly IPropertyTypeServices _propertyTypeServices;
+        private readonly IPromotionServices _promotionServices;
+
+
+
 
         private static Dictionary<string, (string Otp, DateTime Expiration)> otpStorage = new Dictionary<string, (string, DateTime)>();
 
         public ContractController(IContractServices contractServices, IBookingServices bookServices,
                 IFileUploadToBlobService fileService, IMapper mapper, IPromotionDetailServices promotiondetail, IPaymentProcessServices paymentprocess,
                 ICustomerServices customerServices, IPropertyServices propertyServices,
-                IDocumentTemplateService documentTemplateService, IEmailService emailService, IAccountServices accountService
+                IDocumentTemplateService documentTemplateService, IEmailService emailService, IAccountServices accountService,
+            IProjectCategoryDetailServices projectCategoryDetailServices, IProjectServices projectServices,
+             ISalespolicyServices salespolicyServices, IUnitTypeServices unitTypeServices,
+             IPropertyTypeServices propertyTypeServices, IPromotionServices promotionServices
                 )
         {
             _contractServices = contractServices;
@@ -57,6 +69,12 @@ namespace RealEstateProjectSale.Controllers.ContractController
             _documentTemplateService = documentTemplateService;
             _emailService = emailService;
             _accountService = accountService;
+            _projectCategoryDetailServices = projectCategoryDetailServices;
+            _projectServices = projectServices;
+            _salespolicyServices = salespolicyServices;
+            _unitTypeServices = unitTypeServices;
+            _propertyTypeServices = propertyTypeServices;
+            _promotionServices = promotionServices;
         }
 
         [HttpGet]
@@ -338,6 +356,123 @@ namespace RealEstateProjectSale.Controllers.ContractController
                 return BadRequest(new { error = e.Message });
             }
 
+        }
+
+
+
+        [HttpGet("step-three")]
+        [SwaggerOperation(Summary = "Show đợt thanh toán và gói khuyến mãi")]
+        public IActionResult showPaymentProcessandPromotionDetail(Guid contractid)
+        {
+
+            var contract = _contractServices.GetContractByID(contractid);
+            if (contract == null)
+            {
+                return NotFound(new
+                {
+                    message = "Hợp đồng không tồn tại."
+                });
+            }
+            var book = _bookServices.GetBookingById(contract.BookingID);
+            if (book == null)
+            {
+                return NotFound(new
+                {
+                    message = "Booking không tồn tại."
+                });
+            }
+            var projectcategory = _projectCategoryDetailServices.GetProjectCategoryDetailByID(book.ProjectCategoryDetailID);
+            if (projectcategory == null)
+            {
+                return NotFound(new
+                {
+                    message = "Loại căn hộ không tồn tại."
+                });
+            }
+            //paymentprocess
+            var project = _projectServices.GetProjectById(projectcategory.ProjectID);
+            if (project == null)
+            {
+                return NotFound(new
+                {
+                    message = "Dự án không tồn tại."
+                });
+            }
+            var salepolicy = _salespolicyServices.FindByProjectIdAndStatus(project.ProjectID);
+            if (salepolicy == null)
+            {
+                return NotFound(new
+                {
+                    message = "Chính sách bán hàng không tồn tại."
+                });
+            }
+            var paymentprocess = _paymentprocess.GetPaymentProcessBySalesPolicyID(salepolicy.SalesPolicyID);
+            if (paymentprocess == null)
+            {
+                return NotFound(new
+                {
+                    message = "Thanh toán theo đợt không tồn tại."
+                });
+            }
+            var paymentprocessresponese = _mapper.Map<List<PaymentProcessVM>>(paymentprocess);
+            //promtotiondetail
+            var propertyId = book.PropertyID.GetValueOrDefault(Guid.Empty);
+
+            if (propertyId == Guid.Empty)
+            {
+                throw new ArgumentException("Booking không có căn hộ.");
+            }
+
+            var property = _propertyServices.GetPropertyById(propertyId);
+            if (property == null)
+            {
+                return NotFound(new
+                {
+                    message = "Căn hộ không tồn tại."
+                });
+            }
+            var unittypeId = property.UnitTypeID.GetValueOrDefault(Guid.Empty);
+            if (unittypeId == Guid.Empty)
+            {
+                throw new ArgumentException("Property không có unittype");
+            }
+
+            var unittype = _unitTypeServices.GetUnitTypeByID(unittypeId);
+            if (unittype == null)
+            {
+                return NotFound(new
+                {
+                    message = "Unittype không tồn tại."
+                });
+            }
+            var propertytypeId = unittype.PropertyTypeID.GetValueOrDefault(Guid.Empty);
+            if (propertytypeId == Guid.Empty)
+            {
+                throw new ArgumentException("unittype không có propertytype");
+            }
+            var propertytype = _propertyTypeServices.GetPropertyTypeByID(propertytypeId);
+            if (propertytype == null)
+            {
+                return NotFound(new
+                {
+                    message = "propertytype không tồn tại."
+                });
+            }
+            var promotion = _promotionServices.FindBySalesPolicyIdAndStatus(salepolicy.SalesPolicyID);
+            if (promotion == null)
+            {
+                return NotFound(new
+                {
+                    message = "Khuyến mãi không tồn tại."
+                });
+            }
+            var promotiondetail = _promotiondetail.GetDetailByPromotionIDPropertyTypeID(promotion.PromotionID, propertytypeId);
+            var promotiondetailresponese = _mapper.Map<List<PromotionDetailVM>>(promotiondetail);
+            return Ok(new
+            {
+                promotiondetail = promotiondetailresponese,
+                paymentprocess = paymentprocessresponese,
+            });
         }
 
         [HttpPut("check-step-three")]
