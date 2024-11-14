@@ -247,7 +247,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
         [HttpPost("step-two-send-otp")]
         [SwaggerOperation(Summary = "Gửi mã OTP qua mail cho khách hàng ở bước 2")]
-        public async Task<IActionResult> SendEmail(Guid contractid)
+        public async Task<IActionResult> SendEmailDeposit(Guid contractid)
         {
             try
             {
@@ -286,7 +286,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
         [HttpPost("step-two-verify-otp")]
         [SwaggerOperation(Summary = "Khách hàng xác nhận mã OTP ở bước 2")]
-        public IActionResult VerifyOtp(Guid contractid, string otp)
+        public IActionResult VerifyOtpDeposit(Guid contractid, string otp)
         {
             try
             {
@@ -335,12 +335,11 @@ namespace RealEstateProjectSale.Controllers.ContractController
                         //Gửi mail thông báo xán nhận TTDC thành công
                         Mailrequest mailrequest = new Mailrequest();
                         mailrequest.ToEmail = account.Email;
-                        mailrequest.Subject = "Xác nhận thảo thuận đặt cọc";
+                        mailrequest.Subject = "Xác nhận Thỏa thuận đặt cọc";
                         mailrequest.Body =
                             $"<h5>THÔNG BÁO XÁC NHẬN THÀNH CÔNG THỎA THUẬN ĐẶT CỌC</h5>" +
                             $"<div>Kính gửi quý khách {contract.Customer.FullName}</div>" +
                             $"<div>Thảo thuận đặt cọc của Quý khách đã được xác nhận. Quý khách có thể xem lại thông tin Thỏa thuận đặt cọc, đề nghị thanh toán. Quý khách vui lòng thực hiện chọn Phương án thanh toán, chính sách bán hàng</div>" +
-                            $"<div>Hợp đồng mua bán:</div>" +
                             $"<div>Đường link xem Thỏa thuận đặt cọc</div>" +
                             $"<a href='{contract.ContractDepositFile}'>{contract.ContractDepositFile}</a>";
 
@@ -368,8 +367,6 @@ namespace RealEstateProjectSale.Controllers.ContractController
             }
 
         }
-
-
 
         [HttpGet("step-three")]
         [SwaggerOperation(Summary = "Show đợt thanh toán và gói khuyến mãi")]
@@ -759,6 +756,210 @@ namespace RealEstateProjectSale.Controllers.ContractController
             return Ok(new
             {
                 message = "Thanh toán tiến độ lần 1 Hợp đồng mua bán thành công."
+            });
+
+        }
+
+        [HttpPost("step-six-send-otp")]
+        [SwaggerOperation(Summary = "Gửi mã OTP qua mail cho khách hàng ở bước 6 khi bấm xác nhận Hợp đồng mua bán")]
+        public async Task<IActionResult> SendEmailSale(Guid contractid)
+        {
+            try
+            {
+                var contract = _contractServices.GetContractByID(contractid);
+                if (contract == null)
+                {
+                    return NotFound(new { message = "Hợp đồng không tồn tại." });
+                }
+                var customer = _customerServices.GetCustomerByID(contract.CustomerID);
+                if (customer == null)
+                {
+                    return NotFound(new { message = "Khách hàng không tồn tại." });
+                }
+                var account = _accountService.GetAccountByID(customer.AccountID);
+
+                if (account == null || string.IsNullOrEmpty(account.Email) || !IsValidEmail(account.Email))
+                {
+                    return BadRequest(new { message = "Lỗi email." });
+                }
+
+                string otp = GenerateOTP();
+                DateTime expirationTime = DateTime.UtcNow.AddMinutes(3);
+                otpStorage[account.Email] = (otp, expirationTime);
+                Mailrequest mailrequest = new Mailrequest();
+                mailrequest.ToEmail = account.Email;
+                mailrequest.Subject = "OTP Verification Code";
+                mailrequest.Body = $"Hello, your OTP code is: {otp}";
+                await _emailService.SendEmailAsync(mailrequest);
+                return Ok(new { message = "OTP has been sent to your email. " });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { error = e.Message });
+            }
+        }
+
+        [HttpPost("step-six-verify-otp")]
+        [SwaggerOperation(Summary = "Khách hàng xác nhận mã OTP ở bước 6 cho Hợp đồng mua bán")]
+        public IActionResult VerifyOtpSale(Guid contractid, string otp)
+        {
+            try
+            {
+                var contract = _contractServices.GetContractByID(contractid);
+                if (contract == null)
+                {
+                    return NotFound(new { message = "Hợp đồng không tồn tại." });
+                }
+                var customer = _customerServices.GetCustomerByID(contract.CustomerID);
+                if (customer == null)
+                {
+                    return NotFound(new { message = "Khách hàng không tồn tại." });
+                }
+                var account = _accountService.GetAccountByID(customer.AccountID);
+
+                if (account == null || string.IsNullOrEmpty(account.Email) || !IsValidEmail(account.Email))
+                {
+                    return BadRequest(new { message = "Địa chỉ Email không hợp lệ." });
+                }
+                if (string.IsNullOrEmpty(account.Email) || string.IsNullOrEmpty(otp))
+                {
+                    return BadRequest(new { message = "Email and OTP là bắt buộc." });
+                }
+                if (otpStorage.TryGetValue(account.Email, out var otpEntry))
+                {
+
+                    if (otpEntry.Otp == otp && otpEntry.Expiration > DateTime.UtcNow)
+                    {
+
+                        otpStorage.Remove(account.Email);
+
+                        var booking = _bookServices.GetBookingById(contract.BookingID);
+
+                        var propertyId = booking.PropertyID.GetValueOrDefault(Guid.Empty);
+
+                        if (propertyId == Guid.Empty)
+                        {
+                            throw new ArgumentException("Booking không có căn hộ.");
+                        }
+                        var property = _propertyServices.GetPropertyById(propertyId);
+                        property.Status = PropertyStatus.DaBan.GetEnumDescription();
+                        _propertyServices.UpdateProperty(property);
+
+                        //Gửi mail thông báo xán nhận TTDC thành công
+                        Mailrequest mailrequest = new Mailrequest();
+                        mailrequest.ToEmail = account.Email;
+                        mailrequest.Subject = "Xác nhận Hợp đồng mua bán";
+                        mailrequest.Body =
+                            $"<h5>THÔNG BÁO XÁC NHẬN THÀNH CÔNG HỢP ĐỒNG MUA BÁN</h5>" +
+                            $"<div>Kính gửi quý khách {contract.Customer.FullName}</div>" +
+                            $"<div>Hợp đồng mua bán của Quý khách đã được xác nhận. Quý khách có thể xem lại thông tin Hợp đồng mua bán</div>" +
+                            $"<div>Đường link xem Hợp đồng mua bán</div>" +
+                            $"<a href='{contract.ContractSaleFile}'>{contract.ContractSaleFile}</a>";
+
+                        _emailService.SendEmailAsync(mailrequest);
+
+                        contract.Status = ContractStatus.DaXacNhanHDMB.GetEnumDescription();
+                        contract.UpdatedTime = DateTime.Now;
+                        _contractServices.UpdateContract(contract);
+
+                        return Ok(new { message = "Xác minh OTP thành công." });
+                    }
+                    else
+                    {
+                        return BadRequest(new { message = "OTP không hợp lệ hoặc đã hết hạn." });
+                    }
+                }
+                else
+                {
+                    return BadRequest(new { message = "Không tìm thấy OTP cho email này." });
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { error = e.Message });
+            }
+
+        }
+
+        [HttpGet("step-seven")]
+        [SwaggerOperation(Summary = "Show thông tin lịch lên kí hợp đồng mua bán ở bước 7")]
+        public IActionResult TimeReceiveSaleContract(Guid contractid)
+        {
+            var contract = _contractServices.GetContractByID(contractid);
+            if (contract == null)
+            {
+                return NotFound(new
+                {
+                    message = "Hợp đồng không tồn tại."
+                });
+            }
+
+            var contractDetails = _contractDetailService.GetContractPaymentDetailByContractID(contractid);
+            if (contractDetails == null)
+            {
+                return NotFound(new
+                {
+                    message = "Chi tiết hợp đồng không tồn tại."
+                });
+            }
+
+            var secondContractDetail = contractDetails.Skip(1).FirstOrDefault();
+            var DateContractSale = secondContractDetail!.Period;
+
+            return Ok(new
+            {
+                message = "Quý khách chỉ có thể nhận HĐMB trong khoảng thời gian từ ngày "
+                        + DateTime.Now.ToString("yyyy/MM/dd") + " tới ngày "
+                        + DateContractSale!.Value.ToString("yyyy/MM/dd")
+            });
+
+        }
+
+        [HttpGet("title-contract")]
+        [SwaggerOperation(Summary = "Show title Dự án và Căn hộ ở tất cả các bước")]
+        public IActionResult TitleProjectProperty(Guid contractid)
+        {
+            var contract = _contractServices.GetContractByID(contractid);
+            if (contract == null)
+            {
+                return NotFound(new
+                {
+                    message = "Hợp đồng không tồn tại."
+                });
+            }
+
+            var booking = _bookServices.GetBookingById(contract.BookingID);
+            if (booking == null)
+            {
+                return NotFound(new
+                {
+                    message = "Booking không tồn tại."
+                });
+            }
+
+            var propertyId = booking.PropertyID.GetValueOrDefault(Guid.Empty);
+
+            if (propertyId == Guid.Empty)
+            {
+                throw new ArgumentException("Booking không có căn hộ.");
+            }
+
+            var property = _propertyServices.GetPropertyById(propertyId);
+            if (property == null)
+            {
+                return NotFound(new
+                {
+                    message = "Căn hộ không tồn tại."
+                });
+            }
+
+            var categoryDetail = _projectCategoryDetailServices.GetProjectCategoryDetailByID(booking.ProjectCategoryDetailID);
+            var project = _projectServices.GetProjectById(categoryDetail.ProjectID);
+
+            return Ok(new
+            {
+                property = property.PropertyCode,
+                project = project.ProjectName
             });
 
         }
