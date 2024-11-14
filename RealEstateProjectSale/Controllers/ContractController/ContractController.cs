@@ -200,14 +200,42 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     message = "Căn hộ không tồn tại."
                 });
             }
+
+            var projectdetailId = property.ProjectCategoryDetailID.GetValueOrDefault(Guid.Empty);
+
+            if (projectdetailId == Guid.Empty)
+            {
+                throw new ArgumentException("Căn hộ không tồn tại.");
+            }
+            var projectdetail = _projectCategoryDetailServices.GetProjectCategoryDetailByID(projectdetailId);
+            if (projectdetail == null)
+            {
+                return NotFound(new
+                {
+                    message = "Loại căn hộ không tồn tại."
+                });
+            }
+
+            var project = _projectServices.GetProjectById(projectdetail.ProjectID);
+            if (project == null)
+            {
+                return NotFound(new
+                {
+                    message = "Dự án không tồn tại."
+                });
+            }
+
             var customerresponese = _mapper.Map<CustomerVM>(customer);
             var propertyresponese = _mapper.Map<PropertyVM>(property);
+            var projectresponese = _mapper.Map<ProjectVM>(project);
+
 
 
             return Ok(new
             {
                 customer = customerresponese,
                 property = propertyresponese,
+                project = projectresponese,
             });
 
 
