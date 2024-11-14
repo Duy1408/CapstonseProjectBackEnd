@@ -247,7 +247,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
         [HttpPost("step-two-send-otp")]
         [SwaggerOperation(Summary = "Gửi mã OTP qua mail cho khách hàng ở bước 2")]
-        public async Task<IActionResult> sendEmail(Guid contractid)
+        public async Task<IActionResult> SendEmail(Guid contractid)
         {
 
             try
@@ -288,7 +288,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
         [HttpPost("step-two-verify-otp")]
         [SwaggerOperation(Summary = "Khách hàng xác nhận mã OTP ở bước 2")]
-        public IActionResult verifyOtp(Guid contractid, string otp)
+        public IActionResult VerifyOtp(Guid contractid, string otp)
         {
             try
             {
@@ -540,7 +540,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
                 string? blobUrl = null;
                 using (MemoryStream pdfStream = new MemoryStream(pdfBytes))
                 {
-                    blobUrl = _fileService.UploadSingleFile(pdfStream, contract.DocumentTemplate!.DocumentName, "contractdepositfile");
+                    blobUrl = _fileService.UploadSingleFile(pdfStream, contract.DocumentTemplate!.DocumentName, "pricefile");
                 }
 
                 contract.PriceSheetFile = blobUrl;
@@ -665,6 +665,49 @@ namespace RealEstateProjectSale.Controllers.ContractController
             return Ok(new
             {
                 message = "Xác nhận Phiếu tính giá thành công."
+            });
+
+        }
+
+        [HttpPut("check-step-five")]
+        [SwaggerOperation(Summary = "Khách hàng nhấn nút Tôi đã thanh toán tiến độ lần 1 ở bước 5")]
+        public IActionResult CustomerConfirmUploadPaymentOrder([FromForm] UploadPaymentOrder paymentOrder)
+        {
+            var contract = _contractServices.GetContractByID(paymentOrder.contractId);
+            if (contract == null)
+            {
+                return NotFound(new
+                {
+                    message = "Hợp đồng không tồn tại."
+                });
+            }
+
+            var contractDetails = _contractDetailService.GetContractPaymentDetailByContractID(contract.ContractID);
+            if (contractDetails == null)
+            {
+                return NotFound(new
+                {
+                    message = "Chi tiết hợp đồng không tồn tại."
+                });
+            }
+
+            var fistContractDetail = contractDetails.FirstOrDefault();
+
+            string? blobUrl = null;
+            if (paymentOrder.RemittanceOrder != null)
+            {
+                blobUrl = _fileService.UploadSingleImage(paymentOrder.RemittanceOrder, "remittanceorderimage");
+            }
+
+            fistContractDetail.RemittanceOrder = blobUrl;
+            _contractDetailService.UpdateContractPaymentDetail(fistContractDetail);
+
+            contract.Status = ContractStatus.DaThanhToanDotMotHDMB.GetEnumDescription();
+            _contractServices.UpdateContract(contract);
+
+            return Ok(new
+            {
+                message = "Thanh toán tiến độ lần 1 Hợp đồng mua bán thành công."
             });
 
         }

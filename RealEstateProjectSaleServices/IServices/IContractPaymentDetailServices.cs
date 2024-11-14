@@ -14,5 +14,6 @@ namespace RealEstateProjectSaleServices.IServices
         ContractPaymentDetail GetContractPaymentDetailByID(Guid id);
         void UpdateContractPaymentDetail(ContractPaymentDetail detail);
         void DeleteContractPaymentDetailByID(Guid id);
+        List<ContractPaymentDetail> GetContractPaymentDetailByContractID(Guid contractId);
     }
 }
