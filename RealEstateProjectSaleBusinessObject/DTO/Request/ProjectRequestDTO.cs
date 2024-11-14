@@ -22,5 +22,6 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Request
         public string? HandOver { get; set; }
         public string? Convenience { get; set; }
         public IFormFileCollection Images { get; set; }
+        public Guid? PaymentPolicyID { get; set; }
     }
 }

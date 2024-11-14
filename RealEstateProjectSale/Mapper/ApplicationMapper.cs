@@ -44,7 +44,8 @@ namespace RealEstateProjectSale.Mapper
             CreateMap<PromotionDetailCreateDTO, PromotionDetail>().ReverseMap();
             CreateMap<PromotionDetailUpdateDTO, PromotionDetail>().ReverseMap();
 
-            CreateMap<ProjectVM, Project>().ReverseMap();
+            CreateMap<ProjectVM, Project>().ReverseMap().ForMember(dest => dest.PaymentPolicyName,
+                                      opt => opt.MapFrom(src => src.PaymentPolicy!.PaymentPolicyName));
             CreateMap<ProjectCreateDTO, Project>().ReverseMap();
             CreateMap<ProjectUpdateDTO, Project>().ReverseMap();
 

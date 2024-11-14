@@ -23,7 +23,7 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Update
         public string? Convenience { get; set; }
         public IFormFileCollection? Images { get; set; }
         public string? Status { get; set; }
-
+        public Guid? PaymentPolicyID { get; set; }
 
 
     }

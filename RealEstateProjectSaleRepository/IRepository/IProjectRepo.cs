@@ -15,5 +15,6 @@ namespace RealEstateProjectSaleRepository.IRepository
         Project GetProjectById(Guid id);
         void UpdateProject(Project p);
         IQueryable<Project> SearchProject(string name);
+        List<Project> GetProjectByPaymentPolicyID(Guid paymentPolicyId);
     }
 }
