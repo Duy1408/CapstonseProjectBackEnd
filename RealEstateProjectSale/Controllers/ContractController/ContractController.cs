@@ -236,6 +236,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
             contract.ContractDepositFile = blobUrl;
             contract.Status = ContractStatus.ChoXacNhanTTDC.GetEnumDescription();
+            contract.UpdatedTime = DateTime.Now;
             _contractServices.UpdateContract(contract);
             return Ok(new
             {
@@ -248,10 +249,8 @@ namespace RealEstateProjectSale.Controllers.ContractController
         [SwaggerOperation(Summary = "Gửi mã OTP qua mail cho khách hàng ở bước 2")]
         public async Task<IActionResult> SendEmail(Guid contractid)
         {
-
             try
             {
-
                 var contract = _contractServices.GetContractByID(contractid);
                 if (contract == null)
                 {
@@ -319,9 +318,6 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
                         otpStorage.Remove(account.Email);
 
-                        contract.Status = ContractStatus.DaXacNhanTTDC.GetEnumDescription();
-                        _contractServices.UpdateContract(contract);
-
                         var booking = _bookServices.GetBookingById(contract.BookingID);
                         booking.Status = BookingStatus.DaKyTTDC.GetEnumDescription();
                         _bookServices.UpdateBooking(booking);
@@ -350,6 +346,9 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
                         _emailService.SendEmailAsync(mailrequest);
 
+                        contract.Status = ContractStatus.DaXacNhanTTDC.GetEnumDescription();
+                        contract.UpdatedTime = DateTime.Now;
+                        _contractServices.UpdateContract(contract);
 
                         return Ok(new { message = "Xác minh OTP thành công." });
                     }
@@ -544,6 +543,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
                 contract.PriceSheetFile = blobUrl;
                 contract.Status = ContractStatus.DaXacNhanCSBH.GetEnumDescription();
+                contract.UpdatedTime = DateTime.Now;
                 _contractServices.UpdateContract(contract);
 
                 var customer = _customerServices.GetCustomerByID(contract.CustomerID);
@@ -643,6 +643,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
             }
 
             contract.Status = ContractStatus.DaXacNhanPhieuTinhGia.GetEnumDescription();
+            contract.UpdatedTime = DateTime.Now;
             _contractServices.UpdateContract(contract);
 
             //Gửi mail thư mời thanh toán tiền
@@ -737,6 +738,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
             }
 
             contract.ContractSaleFile = blobUrl1;
+            contract.ContractType = ContractType.MuaBan.GetEnumDescription();
             contract.Status = ContractStatus.DaThanhToanDotMotHDMB.GetEnumDescription();
             _contractServices.UpdateContract(contract);
 
