@@ -9,17 +9,18 @@ namespace RealEstateProjectSaleServices.IServices
 {
     public interface IProjectServices
     {
-         bool ChangeStatus(Project p);
+        bool ChangeStatus(Project p);
 
 
-         List<Project> GetProjects();
-         void AddNew(Project p);
+        List<Project> GetProjects();
+        void AddNew(Project p);
 
 
-         Project GetProjectById(Guid id);
+        Project GetProjectById(Guid id);
 
         void UpdateProject(Project p);
 
-       IQueryable<Project> SearchProject(string name);
+        IQueryable<Project> SearchProject(string name);
+        List<Project> GetProjectByPaymentPolicyID(Guid paymentPolicyId);
     }
 }

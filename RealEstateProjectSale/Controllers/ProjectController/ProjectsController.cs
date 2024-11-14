@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.Contracts;
 using System.Drawing.Printing;
 using System.Linq;
 using System.Linq.Expressions;
@@ -20,6 +21,7 @@ using RealEstateProjectSaleBusinessObject.DTO.Request;
 using RealEstateProjectSaleBusinessObject.DTO.Update;
 using RealEstateProjectSaleBusinessObject.Enums;
 using RealEstateProjectSaleBusinessObject.Enums.EnumHelpers;
+using RealEstateProjectSaleBusinessObject.Model;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 using RealEstateProjectSaleServices.Services;
@@ -96,6 +98,8 @@ namespace RealEstateProjectSale.Controllers
                     Convenience = project.Convenience,
                     Images = project.Image?.Split(',').ToList() ?? new List<string>(),
                     Status = project.Status,
+                    PaymentPolicyID = project.PaymentPolicyID,
+                    PaymentPolicyName = project.PaymentPolicy?.PaymentPolicyName
                 }).ToList();
 
                 return Ok(new
@@ -146,6 +150,8 @@ namespace RealEstateProjectSale.Controllers
                     Convenience = project.Convenience,
                     Images = project.Image?.Split(',').ToList() ?? new List<string>(),
                     Status = project.Status,
+                    PaymentPolicyID = project.PaymentPolicyID,
+                    PaymentPolicyName = project.PaymentPolicy?.PaymentPolicyName
                 };
 
                 return Ok(response);
@@ -155,6 +161,45 @@ namespace RealEstateProjectSale.Controllers
                 return BadRequest(ex.Message);
             }
 
+
+        }
+
+        [HttpGet("payment-policy/{paymentPolicyId}")]
+        [SwaggerOperation(Summary = "Get Project By PaymentPolicyID")]
+        public IActionResult GetProjectByPaymentPolicyID(Guid paymentPolicyId)
+        {
+            var project = _project.GetProjectByPaymentPolicyID(paymentPolicyId);
+
+            if (project != null)
+            {
+                var response = project.Select(project => new ProjectVM
+                {
+                    ProjectID = project.ProjectID,
+                    ProjectName = project.ProjectName,
+                    Location = project.Location,
+                    Investor = project.Investor,
+                    GeneralContractor = project.GeneralContractor,
+                    DesignUnit = project.DesignUnit,
+                    TotalArea = project.TotalArea,
+                    Scale = project.Scale,
+                    BuildingDensity = project.BuildingDensity,
+                    TotalNumberOfApartment = project.TotalNumberOfApartment,
+                    LegalStatus = project.LegalStatus,
+                    HandOver = project.HandOver,
+                    Convenience = project.Convenience,
+                    Images = project.Image?.Split(',').ToList() ?? new List<string>(),
+                    Status = project.Status,
+                    PaymentPolicyID = project.PaymentPolicyID,
+                    PaymentPolicyName = project.PaymentPolicy?.PaymentPolicyName
+                }).ToList();
+
+                return Ok(response);
+            }
+
+            return NotFound(new
+            {
+                message = "Chính sách bán hàng không tồn tại."
+            });
 
         }
 
@@ -219,7 +264,6 @@ namespace RealEstateProjectSale.Controllers
                     {
                         existingProject.Convenience = project.Convenience;
                     }
-
                     if (imageUrls.Count > 0)
                     {
                         existingProject.Image = string.Join(",", imageUrls);
@@ -233,8 +277,10 @@ namespace RealEstateProjectSale.Controllers
                             existingProject.Status = statusDescription;
                         }
                     }
-
-
+                    if (project.PaymentPolicyID.HasValue)
+                    {
+                        existingProject.PaymentPolicyID = project.PaymentPolicyID.Value;
+                    }
 
                     _project.UpdateProject(existingProject);
 
@@ -281,6 +327,7 @@ namespace RealEstateProjectSale.Controllers
                     HandOver = pro.HandOver,
                     Convenience = pro.Convenience,
                     Status = ProjectStatus.SapMoBan.GetEnumDescription(),
+                    PaymentPolicyID = pro.PaymentPolicyID,
                     Images = pro.Images.Count > 0 ? pro.Images.First() : null, // Store first image for reference
                 };
 

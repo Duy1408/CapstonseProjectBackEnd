@@ -23,7 +23,8 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public string? Convenience { get; set; }
         public List<string>? Images { get; set; }
         public string Status { get; set; }
-
+        public Guid? PaymentPolicyID { get; set; }
+        public string PaymentPolicyName { get; set; }
 
     }
 }

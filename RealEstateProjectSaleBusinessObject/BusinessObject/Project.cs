@@ -26,9 +26,7 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public string Status { get; set; }
         public Guid? PaymentPolicyID { get; set; }
         public PaymentPolicy? PaymentPolicy { get; set; }
-
         public List<Zone> Zones { get; set; }
-        //public List<PaymentPolicy>? PaymentPolicies { get; set; }
         public List<Salespolicy>? Salespolicies { get; set; }
         public List<ProjectCategoryDetail>? ProjectCategoryDetails { get; set; }
         public List<UnitType>? UnitTypes { get; set; }

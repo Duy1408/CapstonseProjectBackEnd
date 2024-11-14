@@ -29,7 +29,7 @@ namespace RealEstateProjectSaleDAO.DAOs
         public List<Project> GetAllProject()
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.Projects.ToList();
+            return _context.Projects.Include(p => p.PaymentPolicy).ToList();
         }
 
         public bool AddNew(Project p)
@@ -90,13 +90,21 @@ namespace RealEstateProjectSaleDAO.DAOs
         public Project GetProjectByID(Guid id)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.Projects.SingleOrDefault(a => a.ProjectID == id);
+            return _context.Projects.Include(p => p.PaymentPolicy).SingleOrDefault(a => a.ProjectID == id);
         }
         public IQueryable<Project> SearchProjectByName(string searchvalue)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            var a = _context.Projects.Where(a => a.ProjectName.ToUpper().Contains(searchvalue.Trim().ToUpper()));
+            var a = _context.Projects.Include(p => p.PaymentPolicy).Where(a => a.ProjectName.ToUpper().Contains(searchvalue.Trim().ToUpper()));
             return a;
+        }
+
+        public List<Project> GetProjectByPaymentPolicyID(Guid paymentPolicyId)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            return _context.Projects.Include(c => c.PaymentPolicy)
+                                         .Where(a => a.PaymentPolicyID == paymentPolicyId)
+                                         .ToList();
         }
     }
 }

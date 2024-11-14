@@ -25,6 +25,7 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
         public string? Convenience { get; set; }
         public IFormFile? Images { get; set; }
         public string Status { get; set; }
+        public Guid? PaymentPolicyID { get; set; }
 
     }
 }

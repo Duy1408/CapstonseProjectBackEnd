@@ -23,12 +23,17 @@ namespace RealEstateProjectSaleRepository.Repository
 
         public bool ChangeStatus(Project p)
         {
-          return  _pro.ChangeStatus(p);
+            return _pro.ChangeStatus(p);
         }
 
         public Project GetProjectById(Guid id)
         {
             return _pro.GetProjectByID(id);
+        }
+
+        public List<Project> GetProjectByPaymentPolicyID(Guid paymentPolicyId)
+        {
+            return _pro.GetProjectByPaymentPolicyID(paymentPolicyId);
         }
 
         public List<Project> GetProjects()
@@ -43,7 +48,7 @@ namespace RealEstateProjectSaleRepository.Repository
 
         public void UpdateProject(Project p)
         {
-             _pro.Update(p);
+            _pro.Update(p);
         }
     }
 }

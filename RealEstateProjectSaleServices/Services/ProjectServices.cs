@@ -28,7 +28,12 @@ namespace RealEstateProjectSaleServices.Services
 
         public Project GetProjectById(Guid id)
         {
-           return _pro.GetProjectById(id);
+            return _pro.GetProjectById(id);
+        }
+
+        public List<Project> GetProjectByPaymentPolicyID(Guid paymentPolicyId)
+        {
+            return _pro.GetProjectByPaymentPolicyID(paymentPolicyId);
         }
 
         public List<Project> GetProjects()
@@ -38,7 +43,7 @@ namespace RealEstateProjectSaleServices.Services
 
         public IQueryable<Project> SearchProject(string name)
         {
-           return _pro.SearchProject(name);
+            return _pro.SearchProject(name);
         }
 
         public void UpdateProject(Project p)
