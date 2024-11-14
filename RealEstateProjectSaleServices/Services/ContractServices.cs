@@ -169,7 +169,7 @@ namespace RealEstateProjectSaleServices.Services
 
             property.PriceSold = totalPrice;
             _propertyService.UpdateProperty(property);
-            var paymentProcessTableHtml = GeneratePaymentProcessTable(contract.PaymentProcessID, totalPrice);
+            var paymentProcessTableHtml = GeneratePaymentProcessTable(contractId, contract.PaymentProcessID, totalPrice);
 
             var htmlContent = documentTemplate.DocumentFile;
             htmlContent = htmlContent.Replace("{PropertyCode}", property.PropertyCode)
@@ -188,8 +188,11 @@ namespace RealEstateProjectSaleServices.Services
 
         }
 
-        public string GeneratePaymentProcessTable(Guid? paymentprocessId, double? totalPrice)
+        public string GeneratePaymentProcessTable(Guid contractId, Guid? paymentprocessId, double? totalPrice)
         {
+            var contract = _contractRepo.GetContractByID(contractId);
+            var booking = _bookingService.GetBookingById(contract.BookingID);
+
             var pmtId = paymentprocessId.GetValueOrDefault(Guid.Empty);
             if (pmtId == Guid.Empty)
             {
@@ -215,8 +218,8 @@ namespace RealEstateProjectSaleServices.Services
                 // Kiểm tra nếu là dòng cuối cùng
                 if (i == paymentDetails.Count - 1)
                 {
-                    // Nếu là dòng cuối cùng, tính amount theo công thức điều chỉnh với dòng đầu tiên
-                    amountValue = (totalAmount * (detail.Percentage ?? 0)) - (firstAmount ?? 0);
+                    // Nếu là dòng cuối cùng, tính amount theo công thức trừ tiền đợt 1 và giữ chỗ booking
+                    amountValue = (totalAmount * (detail.Percentage ?? 0)) - (firstAmount ?? 0) - (booking.DepositedPrice ?? 0);
                 }
                 else
                 {
@@ -275,8 +278,8 @@ namespace RealEstateProjectSaleServices.Services
                 // Kiểm tra nếu là dòng cuối cùng
                 if (i == paymentDetails.Count - 1)
                 {
-                    // Nếu là dòng cuối cùng, tính amount theo công thức điều chỉnh với dòng đầu tiên
-                    amountValue = (totalAmount * (detail.Percentage ?? 0)) - (firstAmount ?? 0);
+                    // Nếu là dòng cuối cùng, tính amount theo công thức trừ tiền đợt 1 và giữ chỗ booking
+                    amountValue = (totalAmount * (detail.Percentage ?? 0)) - (firstAmount ?? 0) - (booking.DepositedPrice ?? 0);
                 }
                 else
                 {
