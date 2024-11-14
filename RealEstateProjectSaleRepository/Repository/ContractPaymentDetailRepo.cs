@@ -19,6 +19,8 @@ namespace RealEstateProjectSaleRepository.Repository
 
         public List<ContractPaymentDetail> GetAllContractPaymentDetail() => dao.GetAllContractPaymentDetail();
 
+        public List<ContractPaymentDetail> GetContractPaymentDetailByContractID(Guid contractId) => dao.GetContractPaymentDetailByContractID(contractId);
+
         public ContractPaymentDetail GetContractPaymentDetailByID(Guid id) => dao.GetContractPaymentDetailByID(id);
 
         public void UpdateContractPaymentDetail(ContractPaymentDetail detail) => dao.UpdateContractPaymentDetail(detail);

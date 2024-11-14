@@ -21,6 +21,7 @@ namespace RealEstateProjectSaleDAO.DAOs
             try
             {
                 return _context.ContractPaymentDetails!.Include(c => c.Contract)
+                                                       .Include(a => a.PaymentPolicy)
                                                        .ToList();
             }
             catch (Exception ex)
@@ -47,8 +48,26 @@ namespace RealEstateProjectSaleDAO.DAOs
             try
             {
                 var detail = _context.ContractPaymentDetails!.Include(a => a.Contract)
-                                                               .SingleOrDefault(c => c.ContractPaymentDetailID == id);
+                                                             .Include(a => a.PaymentPolicy)
+                                                             .SingleOrDefault(c => c.ContractPaymentDetailID == id);
                 return detail;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public List<ContractPaymentDetail> GetContractPaymentDetailByContractID(Guid contractId)
+        {
+            try
+            {
+                var details = _context.ContractPaymentDetails!.Include(a => a.Contract)
+                                                                .Include(a => a.PaymentPolicy)
+                                                                .Where(c => c.ContractID == contractId)
+                                                                .OrderBy(c => c.PaymentRate)
+                                                                .ToList();
+                return details;
             }
             catch (Exception ex)
             {

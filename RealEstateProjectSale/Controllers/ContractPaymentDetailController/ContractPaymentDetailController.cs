@@ -7,6 +7,7 @@ using RealEstateProjectSaleBusinessObject.DTO.Create;
 using RealEstateProjectSaleBusinessObject.DTO.Update;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
+using RealEstateProjectSaleServices.Services;
 using Stripe;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -72,6 +73,26 @@ namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
 
         }
 
+        [HttpGet("contract/{contractId}")]
+        [SwaggerOperation(Summary = "Get ContractPaymentDetail By ContractID")]
+        public IActionResult GetContractPaymentDetailByContractID(Guid contractId)
+        {
+            var details = _detailService.GetContractPaymentDetailByContractID(contractId);
+
+            if (details != null)
+            {
+                var responese = details.Select(details => _mapper.Map<ContractPaymentDetailVM>(details)).ToList();
+
+                return Ok(responese);
+            }
+
+            return NotFound(new
+            {
+                message = "Chi tiết hợp đồng không tồn tại."
+            });
+
+        }
+
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new ContractPaymentDetail")]
         public IActionResult AddNewContractPaymentDetail(ContractPaymentDetailCreateDTO detail)
@@ -82,10 +103,10 @@ namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
                 var newDetail = new ContractPaymentDetailCreateDTO
                 {
                     ContractPaymentDetailID = Guid.NewGuid(),
-                    PaymentRate = detail.PaymentRate,              
+                    PaymentRate = detail.PaymentRate,
                     Description = detail.Description,
-                    Period=detail.Period,
-                    PaidValue = detail.PaidValue,                 
+                    Period = detail.Period,
+                    PaidValue = detail.PaidValue,
                     PaidValueLate = detail.PaidValue,
                     RemittanceOrder = null,
                     Status = false,
@@ -126,7 +147,7 @@ namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
                     {
                         existingDetail.PaymentRate = detail.PaymentRate.Value;
                     }
-               
+
                     if (!string.IsNullOrEmpty(detail.Description))
                     {
                         existingDetail.Description = detail.Description;

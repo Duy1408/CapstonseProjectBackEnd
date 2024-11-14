@@ -23,6 +23,8 @@ namespace RealEstateProjectSaleServices.Services
 
         public List<ContractPaymentDetail> GetAllContractPaymentDetail() => _detail.GetAllContractPaymentDetail();
 
+        public List<ContractPaymentDetail> GetContractPaymentDetailByContractID(Guid contractId) => _detail.GetContractPaymentDetailByContractID(contractId);
+
         public ContractPaymentDetail GetContractPaymentDetailByID(Guid id) => _detail.GetContractPaymentDetailByID(id);
 
         public void UpdateContractPaymentDetail(ContractPaymentDetail detail) => _detail.UpdateContractPaymentDetail(detail);

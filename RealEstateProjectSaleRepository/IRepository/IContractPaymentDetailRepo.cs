@@ -15,5 +15,7 @@ namespace RealEstateProjectSaleRepository.IRepository
         void UpdateContractPaymentDetail(ContractPaymentDetail detail);
         void DeleteContractPaymentDetailByID(Guid id);
 
+        List<ContractPaymentDetail> GetContractPaymentDetailByContractID(Guid contractId);
+
     }
 }
