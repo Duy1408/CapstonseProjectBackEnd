@@ -16,12 +16,11 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
             builder.ToTable("PaymentPolicy");
             builder.Property(x => x.PaymentPolicyID);
             builder.Property(x => x.PaymentPolicyName).IsRequired();
-            builder.Property(x => x.PercentEarly);
-            builder.Property(x => x.EarlyDate);
             builder.Property(x => x.LateDate);
             builder.Property(x => x.PercentLate);
             builder.Property(x => x.Status);
             builder.HasMany(x => x.ContractPaymentDetails).WithOne(x => x.PaymentPolicy).OnDelete(DeleteBehavior.NoAction);
+            builder.HasMany(x => x.Projects).WithOne(x => x.PaymentPolicy).OnDelete(DeleteBehavior.NoAction);
 
         }
     }
