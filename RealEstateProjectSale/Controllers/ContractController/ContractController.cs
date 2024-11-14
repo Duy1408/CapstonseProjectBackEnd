@@ -480,7 +480,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
                 });
             }
             var promotiondetail = _promotiondetail.GetDetailByPromotionIDPropertyTypeID(promotion.PromotionID, propertytypeId);
-            var promotiondetailresponese = _mapper.Map<List<PromotionDetailVM>>(promotiondetail);
+            var promotiondetailresponese = _mapper.Map<PromotionDetailVM>(promotiondetail);
             return Ok(new
             {
                 promotiondetail = promotiondetailresponese,
@@ -658,7 +658,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
                 $"<a href='{contract.PriceSheetFile}'>{contract.PriceSheetFile}</a>";
 
             _emailService.SendEmailAsync(mailrequest);
-        
+
 
             _contractServices.CreateContractPaymentDetail(contractid);
 
