@@ -17,7 +17,8 @@ namespace RealEstateProjectSaleServices.IServices
         void UpdateContract(Contract contract);
         bool ChangeStatusContract(Contract contract);
         Contract GetLastContract();
-        string GenerateDocumentDeposit(Guid bookingId);
+        string GenerateDocumentDeposit(Guid contractId);
+        string GenerateDocumentSale(Guid contractId);
         string GeneratePaymentProcessTable(Guid? paymentprocessId, double? totalPrice);
         string GenerateDocumentPriceSheet(Guid contractId);
         void CreateContractPaymentDetail(Guid contractId);

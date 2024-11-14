@@ -19,6 +19,7 @@ using Stripe.FinancialConnections;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Diagnostics.Contracts;
 using System.Drawing;
+using System.Security.Principal;
 using System.Text;
 
 namespace RealEstateProjectSale.Controllers.ContractController
@@ -224,8 +225,6 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     message = "Hợp đồng không tồn tại."
                 });
             }
-
-
 
             var htmlContent = _contractServices.GenerateDocumentDeposit(contract.ContractID);
             var pdfBytes = _documentTemplateService.GeneratePdfFromTemplate(htmlContent);
@@ -682,6 +681,21 @@ namespace RealEstateProjectSale.Controllers.ContractController
                 });
             }
 
+            var customer = _customerServices.GetCustomerByID(contract.CustomerID);
+            if (customer == null)
+            {
+                return NotFound(new
+                {
+                    message = "Khách hàng không tồn tại."
+                });
+            }
+
+            var account = _accountService.GetAccountByID(customer.AccountID);
+            if (account == null || string.IsNullOrEmpty(account.Email) || !IsValidEmail(account.Email))
+            {
+                return BadRequest(new { message = "Địa chỉ Email không hợp lệ." });
+            }
+
             var contractDetails = _contractDetailService.GetContractPaymentDetailByContractID(contract.ContractID);
             if (contractDetails == null)
             {
@@ -702,8 +716,43 @@ namespace RealEstateProjectSale.Controllers.ContractController
             fistContractDetail.RemittanceOrder = blobUrl;
             _contractDetailService.UpdateContractPaymentDetail(fistContractDetail);
 
+            var documentReservation = _documentTemplateService.GetDocumentByDocumentName("Hợp đồng mua bán");
+            if (documentReservation == null)
+            {
+                return NotFound(new
+                {
+                    message = "Hợp đồng không tồn tại"
+                });
+            }
+
+            contract.DocumentTemplateID = documentReservation.DocumentTemplateID;
+            _contractServices.UpdateContract(contract);
+
+            var htmlContent = _contractServices.GenerateDocumentSale(contract.ContractID);
+            var pdfBytes = _documentTemplateService.GeneratePdfFromTemplate(htmlContent);
+            string? blobUrl1 = null;
+            using (MemoryStream pdfStream = new MemoryStream(pdfBytes))
+            {
+                blobUrl1 = _fileService.UploadSingleFile(pdfStream, contract.DocumentTemplate!.DocumentName, "contractsalefile");
+            }
+
+            contract.ContractSaleFile = blobUrl1;
             contract.Status = ContractStatus.DaThanhToanDotMotHDMB.GetEnumDescription();
             _contractServices.UpdateContract(contract);
+
+            //Gửi mail thư mời thanh toán tiền
+            Mailrequest mailrequest = new Mailrequest();
+            mailrequest.ToEmail = account.Email;
+            mailrequest.Subject = "Thông báo mời ký Hợp đồng mua bán";
+            mailrequest.Body =
+                $"<h5>THÔNG BÁO MỜI KÝ HỢP ĐỒNG MUA BÁN</h5>" +
+                $"<div>Kính gửi quý khách {contract.Customer.FullName}</div>" +
+                $"<div>Hợp đồng mua bán căn hộ đã được xác lập căn cứ theo lực chọn chính sách bán hàng và phương án thanh toán của Quý khách.</div>" +
+                $"<div>Quý khách vui lòng kiểm tra thông tin Hợp đồng mua bán theo đường dẫn dưới đây và ký kết hợp đồng mua bán online.</div>" +
+                $"<div>Đường link xem Hợp đồng mua bán</div>" +
+                $"<a href='{contract.ContractSaleFile}'>{contract.ContractSaleFile}</a>";
+
+            _emailService.SendEmailAsync(mailrequest);
 
             return Ok(new
             {

@@ -31,6 +31,7 @@ namespace RealEstateProjectSaleServices.Services
         private readonly IPropertyServices _propertyService;
         private readonly IUnitTypeServices _unitTypeService;
         private readonly IPropertyTypeServices _propertyTypeService;
+        private readonly IPaymentProcessServices _pmtService;
         private readonly IPaymentProcessDetailServices _pmtDetailService;
         private readonly IOpenForSaleDetailServices _openDetailService;
         private readonly IPromotionDetailServices _promotionDetailService;
@@ -41,7 +42,8 @@ namespace RealEstateProjectSaleServices.Services
             ICustomerServices customerService, IProjectServices projectService, IBookingServices bookingService,
             IProjectCategoryDetailServices detailService, IPropertyServices propertyService, IUnitTypeServices unitTypeService,
             IPropertyTypeServices propertyTypeService, IPaymentProcessDetailServices pmtDetailService, IOpenForSaleDetailServices openDetailService,
-            IPromotionDetailServices promotionDetailService, IContractPaymentDetailServices contractDetailService, IMapper mapper)
+            IPromotionDetailServices promotionDetailService, IContractPaymentDetailServices contractDetailService, IMapper mapper,
+            IPaymentProcessServices pmtService)
         {
             _contractRepo = contractRepo;
             _documentService = documentService;
@@ -56,7 +58,47 @@ namespace RealEstateProjectSaleServices.Services
             _openDetailService = openDetailService;
             _promotionDetailService = promotionDetailService;
             _contractDetailService = contractDetailService;
+            _pmtService = pmtService;
             _mapper = mapper;
+        }
+
+        public string GenerateDocumentSale(Guid contractId)
+        {
+            var contract = _contractRepo.GetContractByID(contractId);
+            var documentTemplate = _documentService.GetDocumentById(contract.DocumentTemplateID);
+            if (documentTemplate == null)
+            {
+                throw new Exception("Document template not found");
+            }
+            var paymentProcess = _pmtService.GetPaymentProcessById(contract.PaymentProcessID!.Value);
+            var customer = _customerService.GetCustomerByID(contract.CustomerID);
+            var booking = _bookingService.GetBookingById(contract.BookingID);
+            var categoryDetail = _detailService.GetProjectCategoryDetailByID(booking.ProjectCategoryDetailID);
+            var project = _projectService.GetProjectById(categoryDetail.ProjectID);
+            var property = _propertyService.GetPropertyById(booking.PropertyID!.Value);
+            var unitType = _unitTypeService.GetUnitTypeByID(property.UnitTypeID!.Value);
+            var propertyType = _propertyTypeService.GetPropertyTypeByID(unitType.PropertyTypeID!.Value);
+
+
+            var htmlContent = documentTemplate.DocumentFile;
+            htmlContent = htmlContent.Replace("{FullName}", customer.FullName)
+                                     .Replace("{DateOfBirth}", customer.DateOfBirth.ToString("yyyy/MM/dd"))
+                                     .Replace("{IdentityCardNumber}", customer.IdentityCardNumber)
+                                     .Replace("{Address}", customer.Address)
+                                     .Replace("{PhoneNumber}", "0" + customer.PhoneNumber)
+                                     .Replace("{ProjectName}", project.ProjectName)
+                                     .Replace("{PropertyCode}", property.PropertyCode)
+                                     .Replace("{PropertyType}", propertyType.PropertyTypeName)
+                                     .Replace("{NetFloorArea}", unitType.NetFloorArea.ToString())
+                                     .Replace("{Location}", project.Location)
+                                     .Replace("{TotalPrice}", property.PriceSold.ToString())
+                                     .Replace("{MoneyText}", property.PriceSold.HasValue
+                                        ? char.ToUpper(((long)Math.Round(property.PriceSold.Value)).ToWords(new CultureInfo("vi"))[0]) +
+                                        ((long)Math.Round(property.PriceSold.Value)).ToWords(new CultureInfo("vi")).Substring(1) +
+                                        " đồng chẵn." : "N/A")
+                                     .Replace("{PaymentProcessName}", paymentProcess.PaymentProcessName);
+
+            return htmlContent;
         }
 
         public string GenerateDocumentDeposit(Guid contractId)
@@ -256,6 +298,7 @@ namespace RealEstateProjectSaleServices.Services
                     RemittanceOrder = null,
                     Status = false,
                     ContractID = contractId
+
                 };
 
                 var _detail = _mapper.Map<ContractPaymentDetail>(contractDetail);

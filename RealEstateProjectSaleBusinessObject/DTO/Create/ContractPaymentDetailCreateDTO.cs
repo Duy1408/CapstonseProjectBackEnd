@@ -21,5 +21,6 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
         public string? RemittanceOrder { get; set; }//upload chung nhan
         public bool Status { get; set; }
         public Guid ContractID { get; set; }
+        public Guid? PaymentPolicyID { get; set; }
     }
 }
