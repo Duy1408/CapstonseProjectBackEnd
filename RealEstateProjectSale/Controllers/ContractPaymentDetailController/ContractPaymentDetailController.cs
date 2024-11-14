@@ -111,6 +111,7 @@ namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
                     RemittanceOrder = null,
                     Status = false,
                     ContractID = detail.ContractID,
+                    PaymentPolicyID = detail.PaymentPolicyID,
                 };
 
                 var _detail = _mapper.Map<ContractPaymentDetail>(newDetail);
@@ -167,6 +168,14 @@ namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
                     if (detail.Status.HasValue)
                     {
                         existingDetail.Status = detail.Status.Value;
+                    }
+                    if (detail.ContractID.HasValue)
+                    {
+                        existingDetail.ContractID = detail.ContractID.Value;
+                    }
+                    if (detail.PaymentPolicyID.HasValue)
+                    {
+                        existingDetail.PaymentPolicyID = detail.PaymentPolicyID.Value;
                     }
                     if (blobUrl != null)
                     {
