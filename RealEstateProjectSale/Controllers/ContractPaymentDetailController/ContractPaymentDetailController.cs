@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
 using RealEstateProjectSaleBusinessObject.DTO.Create;
 using RealEstateProjectSaleBusinessObject.DTO.Update;
+using RealEstateProjectSaleBusinessObject.Model;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 using RealEstateProjectSaleServices.Services;
@@ -186,14 +187,104 @@ namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
 
                     return Ok(new
                     {
-                        message = "Update ContractPaymentDetail Successfully"
+                        message = "Cập nhật Chi tiết hợp đồng thành công."
                     });
 
                 }
 
                 return NotFound(new
                 {
-                    message = "Cập nhật chi tiết hợp đồng thành công."
+                    message = "Chi tiết hợp đồng không tồn tại."
+                });
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("confirm/{id}")]
+        [SwaggerOperation(Summary = "Staff Confirm PaymentOrder By ContractPaymentDetailID")]
+        public IActionResult StaffConfirmPaymentOrder(Guid id)
+        {
+            try
+            {
+                var contractDetail = _detailService.GetContractPaymentDetailByID(id);
+                if (contractDetail == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Chi tiết hợp đồng không tồn tại."
+                    });
+                }
+
+                if (contractDetail.RemittanceOrder == null)
+                {
+                    return BadRequest(new
+                    {
+                        message = "Khách hàng chưa upload Ủy nhiệm chi cho đợt thanh toán này."
+                    });
+                }
+
+                contractDetail.Status = true;
+                _detailService.UpdateContractPaymentDetail(contractDetail);
+
+                return Ok(new
+                {
+                    message = "Staff xác nhận Ủy nhiệm chi thành công."
+                });
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("upload-payment-order/{id}")]
+        [SwaggerOperation(Summary = "Customer Upload PaymentOrder By ContractPaymentDetailID")]
+        public IActionResult CustomerUploadPaymentOrder([FromForm] UploadPaymentOrder paymentOrder, Guid id)
+        {
+            try
+            {
+                if (paymentOrder.RemittanceOrder == null)
+                {
+                    return BadRequest(new
+                    {
+                        message = "Khách hàng chưa upload Ủy nhiệm chi cho đợt thanh toán này."
+                    });
+                }
+
+                var contractDetail = _detailService.GetContractPaymentDetailByID(id);
+                if (contractDetail == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Chi tiết hợp đồng không tồn tại."
+                    });
+                }
+
+                if (contractDetail.Status == true)
+                {
+                    return BadRequest(new
+                    {
+                        message = "Staff đã xác nhận Ủy nhiệm chi của đợt thanh toán này."
+                    });
+                }
+
+                string? blobUrl = null;
+                if (paymentOrder.RemittanceOrder != null)
+                {
+                    blobUrl = _fileService.UploadSingleImage(paymentOrder.RemittanceOrder, "remittanceorderimage");
+                }
+
+                contractDetail.RemittanceOrder = blobUrl;
+                _detailService.UpdateContractPaymentDetail(contractDetail);
+
+                return Ok(new
+                {
+                    message = "Customer tải lên Ủy nhiệm chi thành công."
                 });
 
             }

@@ -694,11 +694,19 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
         }
 
-        [HttpPut("check-step-five")]
+        [HttpPut("check-step-five/{contractId}")]
         [SwaggerOperation(Summary = "Khách hàng nhấn nút Tôi đã thanh toán tiến độ lần 1 ở bước 5")]
-        public IActionResult CustomerConfirmUploadPaymentOrder([FromForm] UploadPaymentOrder paymentOrder)
+        public IActionResult CustomerConfirmUploadPaymentOrder([FromForm] UploadPaymentOrder paymentOrder, Guid contractId)
         {
-            var contract = _contractServices.GetContractByID(paymentOrder.contractId);
+            if (paymentOrder.RemittanceOrder == null)
+            {
+                return BadRequest(new
+                {
+                    message = "Khách hàng chưa upload Ủy nhiệm chi cho đợt thanh toán này."
+                });
+            }
+
+            var contract = _contractServices.GetContractByID(contractId);
             if (contract == null)
             {
                 return NotFound(new

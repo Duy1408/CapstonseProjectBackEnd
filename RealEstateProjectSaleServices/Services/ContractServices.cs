@@ -267,6 +267,9 @@ namespace RealEstateProjectSaleServices.Services
             }
             var property = _propertyService.GetPropertyById(propertyId);
 
+            var categoryDetail = _detailService.GetProjectCategoryDetailByID(booking.ProjectCategoryDetailID);
+            var project = _projectService.GetProjectById(categoryDetail.ProjectID);
+
             double? totalAmount = property.PriceSold;
             double? firstAmount = paymentDetails.FirstOrDefault()?.Amount;
 
@@ -300,8 +303,8 @@ namespace RealEstateProjectSaleServices.Services
                     PaidValueLate = null,
                     RemittanceOrder = null,
                     Status = false,
-                    ContractID = contractId
-
+                    ContractID = contractId,
+                    PaymentPolicyID = project.PaymentPolicyID
                 };
 
                 var _detail = _mapper.Map<ContractPaymentDetail>(contractDetail);
