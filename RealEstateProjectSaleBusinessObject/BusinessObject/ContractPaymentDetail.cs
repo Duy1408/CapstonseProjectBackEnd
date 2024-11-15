@@ -9,7 +9,6 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
 {
     public class ContractPaymentDetail
     {
-
         public Guid ContractPaymentDetailID { get; set; }
         public int PaymentRate { get; set; }//dot may
         public string? Description { get; set; }
@@ -23,7 +22,6 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public Contract? Contract { get; set; }
         public Guid? PaymentPolicyID { get; set; }
         public PaymentPolicy? PaymentPolicy { get; set; }
-
 
     }
 }
