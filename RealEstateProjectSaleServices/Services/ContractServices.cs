@@ -337,8 +337,8 @@ namespace RealEstateProjectSaleServices.Services
             for (int month = 1; month <= 12; month++)
             {
                 double? totalPriceBookingOfMonth = _bookingService.GetBookings()
-              .Where(book => book.CreatedTime.Year == currentYear
-              && book.CreatedTime.Month == month 
+              .Where(book => book.DepositedTimed?.Year == currentYear
+              && book.DepositedTimed?.Month == month 
               && book.Status.Equals( BookingStatus.DaDatCho))
               .Sum(book => book.DepositedPrice);
 
