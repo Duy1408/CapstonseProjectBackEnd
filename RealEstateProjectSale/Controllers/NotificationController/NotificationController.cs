@@ -18,17 +18,17 @@ namespace RealEstateProjectSale.Controllers.NotificationController
     public class NotificationController : ControllerBase
     {
         private readonly INotificationServices _notiServices;
+        private readonly IBookingServices _bookServices;
         private readonly ICustomerServices _customerServices;
-        private readonly IOpeningForSaleServices _openServices;
         private readonly IMapper _mapper;
         private readonly ILogger<NotificationController> _logger;
 
         public NotificationController(INotificationServices notiServices, IMapper mapper, ICustomerServices customerServices,
-            IOpeningForSaleServices openServices, ILogger<NotificationController> logger)
+             IBookingServices bookServices, ILogger<NotificationController> logger)
         {
             _notiServices = notiServices;
             _customerServices = customerServices;
-            _openServices = openServices;
+            _bookServices = bookServices;
             _mapper = mapper;
             _logger = logger;
         }
@@ -80,7 +80,13 @@ namespace RealEstateProjectSale.Controllers.NotificationController
         [HttpPost("send-ios")]
         public async Task<IActionResult> SendNotification([FromBody] NotificationRequest request)
         {
-            var customer = _customerServices.GetCustomerByID(request.CustomerID);
+            var booking = _bookServices.GetBookingById(request.BookingID);
+            if (booking == null)
+            {
+                return NotFound(new { message = "Booking không tồn tại" });
+            }
+
+            var customer = _customerServices.GetCustomerByID(booking.CustomerID);
             if (customer == null)
             {
                 return NotFound(new { message = "Khách hàng không tồn tại" });
@@ -89,27 +95,6 @@ namespace RealEstateProjectSale.Controllers.NotificationController
             {
                 return BadRequest(new { message = "Customer does not have a valid device token." });
             }
-
-            var open = _openServices.GetOpeningForSaleById(request.OpeningForSaleID);
-            if (open == null)
-            {
-                return NotFound(new { message = "Đợt mở bán không tồn tại" });
-            }
-
-            //while (true)
-            //{
-            //    DateTime checkinDate = open.CheckinDate;
-            //    DateTime currentTime = DateTime.Now;
-
-            //    if (checkinDate <= currentTime)
-            //    {
-            //        break; // Thời điểm đã đến hoặc trễ, thoát vòng lặp để gửi thông báo
-            //    }
-
-            //    // Nếu CheckinDate còn ở tương lai, tính toán thời gian đợi và chờ
-            //    TimeSpan delay = checkinDate - currentTime;
-            //    await Task.Delay(delay);
-            //}
 
             var message = new Message()
             {
@@ -147,8 +132,7 @@ namespace RealEstateProjectSale.Controllers.NotificationController
                     Subtiltle = request.Subtiltle,
                     Body = request.Body,
                     DeepLink = request.DeepLink,
-                    CustomerID = request.CustomerID,
-                    OpeningForSaleID = request.OpeningForSaleID,
+                    BookingID = request.BookingID
                 };
                 var _noti = _mapper.Map<RealEstateProjectSaleBusinessObject.BusinessObject.Notification>(newNoti);
                 _notiServices.AddNewNotification(_noti);
