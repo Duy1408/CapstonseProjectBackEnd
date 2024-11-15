@@ -143,5 +143,10 @@ namespace RealEstateProjectSaleServices.Services
         {
             return _book.ChangeStatusBooking(booking);
         }
+
+        public List<Booking> GetBookingByOpeningForSaleID(Guid id)
+        {
+            return _book.GetBookingByOpeningForSaleID(id);
+        }
     }
 }

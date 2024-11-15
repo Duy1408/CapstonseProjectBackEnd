@@ -220,6 +220,22 @@ namespace RealEstateProjectSaleDAO.DAOs
                                     .ToList();
         }
 
+        public List<Booking> GetBookingByOpeningForSaleID(Guid id)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            return _context.Bookings.Include(c => c.OpeningForSale)
+                                    .Include(c => c.Customer)
+                                    .Include(c => c.Staff)
+                                    .Include(c => c.Property)
+                                    .Include(c => c.DocumentTemplate)
+                                    .Include(o => o.ProjectCategoryDetail)
+                                        .ThenInclude(pc => pc.Project)
+                                    .Include(o => o.ProjectCategoryDetail)
+                                        .ThenInclude(pc => pc.PropertyCategory)
+                                    .Where(a => a.OpeningForSaleID == id)
+                                    .ToList();
+        }
+
         public List<Booking> GetBookingByStaffID(Guid id)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();

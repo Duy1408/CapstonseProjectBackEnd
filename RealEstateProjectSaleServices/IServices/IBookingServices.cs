@@ -28,6 +28,8 @@ namespace RealEstateProjectSaleServices.IServices
         List<Booking> GetBookingByDocumentID(Guid id);
         List<Booking> GetBookingByCustomerID(Guid id);
         List<Booking> GetBookingByStaffID(Guid id);
+        List<Booking> GetBookingByOpeningForSaleID(Guid id);
+
         Booking CheckExistingBooking(Guid openForSaleID, Guid categoryDetailID, Guid customerID);
         string GenerateDocumentContent(Guid bookingId);
 
