@@ -1224,6 +1224,15 @@ namespace RealEstateProjectSale.Controllers.ContractController
             return nextContractCode;
         }
 
+
+        [HttpGet("/GetMonthlyTotalPrices")]
+        public ActionResult<object> GetMonthlyTotalPrices()
+        {
+            var monthlyTotalPrices = _contractServices.GetMonthlyTotalPrices();
+            return Ok(monthlyTotalPrices);
+        }
+
+
         private bool IsValidEmail(string email)
         {
             try

@@ -8,6 +8,7 @@ using RealEstateProjectSaleBusinessObject.Enums;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleRepository.IRepository;
 using RealEstateProjectSaleServices.IServices;
+using RealEstateProjectSaleBusinessObject.Enums.EnumHelpers;
 using Stripe;
 using System;
 using System.Collections.Generic;
@@ -337,7 +338,8 @@ namespace RealEstateProjectSaleServices.Services
             {
                 double? totalPriceBookingOfMonth = _bookingService.GetBookings()
               .Where(book => book.CreatedTime.Year == currentYear
-              && book.CreatedTime.Month == month )
+              && book.CreatedTime.Month == month 
+              && book.Status.Equals( BookingStatus.DaDatCho))
               .Sum(book => book.DepositedPrice);
 
                 double? totalPaidValueOfMonth = _contractDetailService.GetAllContractPaymentDetail()
