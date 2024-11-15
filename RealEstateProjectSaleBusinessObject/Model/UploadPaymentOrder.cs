@@ -9,7 +9,6 @@ namespace RealEstateProjectSaleBusinessObject.Model
 {
     public class UploadPaymentOrder
     {
-        public Guid contractId { get; set; }
         public IFormFile RemittanceOrder { get; set; }
     }
 }
