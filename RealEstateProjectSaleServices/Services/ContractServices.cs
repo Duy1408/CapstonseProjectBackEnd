@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
 using Org.BouncyCastle.Crypto;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
 using RealEstateProjectSaleBusinessObject.DTO.Create;
+using RealEstateProjectSaleBusinessObject.Enums;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleRepository.IRepository;
 using RealEstateProjectSaleServices.IServices;
@@ -328,6 +329,39 @@ namespace RealEstateProjectSaleServices.Services
 
         public void UpdateContract(Contract contract) => _contractRepo.UpdateContract(contract);
 
+        public List<object> GetMonthlyTotalPrices()
+        {
+            int currentYear = DateTime.Now.Year;
+            List<object> monthlyTotalPrices = new List<object>();
+            for (int month = 1; month <= 12; month++)
+            {
+                double? totalPriceBookingOfMonth = _bookingService.GetBookings()
+              .Where(book => book.CreatedTime.Year == currentYear
+              && book.CreatedTime.Month == month )
+              .Sum(book => book.DepositedPrice);
 
+                double? totalPaidValueOfMonth = _contractDetailService.GetAllContractPaymentDetail()
+        .Where(contractdetail => contractdetail.Period?.Year == currentYear
+        && contractdetail.Period?.Month == month && contractdetail.Status == true)
+        .Sum(contractdetail => contractdetail.PaidValue);
+
+                double? totalPaidValueLateOfMonth = _contractDetailService.GetAllContractPaymentDetail()
+           .Where(contractdetail => contractdetail.Period?.Year == currentYear
+          && contractdetail.Period?.Month == month && contractdetail.Status==true)
+              .Sum(contractdetail => contractdetail.PaidValueLate);
+
+                var monthlyTotalPrice = new
+                {
+                    Month = month,
+                    TotalPrice = totalPriceBookingOfMonth + totalPaidValueOfMonth + totalPaidValueLateOfMonth
+                };
+
+                monthlyTotalPrices.Add(monthlyTotalPrice);
+
+            }
+            return monthlyTotalPrices;
+
+
+        }
     }
 }

@@ -22,5 +22,9 @@ namespace RealEstateProjectSaleServices.IServices
         string GeneratePaymentProcessTable(Guid contractId, Guid? paymentprocessId, double? totalPrice);
         string GenerateDocumentPriceSheet(Guid contractId);
         void CreateContractPaymentDetail(Guid contractId);
+
+        List<object> GetMonthlyTotalPrices();
+
+
     }
 }
