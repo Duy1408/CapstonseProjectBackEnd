@@ -21,6 +21,8 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public string? RemittanceOrder { get; set; }//upload chung nhan
         public bool Status { get; set; }
         public Guid ContractID { get; set; }
-       
+        public string ContractCode { get; set; }
+        public Guid? PaymentPolicyID { get; set; }
+        public string PaymentPolicyName { get; set; }
     }
 }

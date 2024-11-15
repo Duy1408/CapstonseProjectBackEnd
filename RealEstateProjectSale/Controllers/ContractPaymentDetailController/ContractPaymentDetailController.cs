@@ -10,6 +10,7 @@ using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 using RealEstateProjectSaleServices.Services;
 using Stripe;
+using Stripe.Issuing;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
@@ -78,11 +79,29 @@ namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
         [SwaggerOperation(Summary = "Get ContractPaymentDetail By ContractID")]
         public IActionResult GetContractPaymentDetailByContractID(Guid contractId)
         {
-            var details = _detailService.GetContractPaymentDetailByContractID(contractId);
+            var detail = _detailService.GetContractPaymentDetailByContractID(contractId);
 
-            if (details != null)
+            if (detail != null)
             {
-                var responese = details.Select(details => _mapper.Map<ContractPaymentDetailVM>(details)).ToList();
+                //var responese = details.Select(details => _mapper.Map<ContractPaymentDetailVM>(details)).ToList();
+
+                var details = _mapper.Map<List<ContractPaymentDetailVM>>(detail);
+
+                var responese = details.Select(detailContract => new ContractPaymentDetailVM
+                {
+                    ContractPaymentDetailID = detailContract.ContractPaymentDetailID,
+                    PaymentRate = detailContract.PaymentRate,
+                    Description = detailContract.Description,
+                    Period = detailContract.Period,
+                    PaidValue = detailContract.PaidValue,
+                    RemittanceOrder = detailContract.RemittanceOrder,
+                    Status = detailContract.Status,
+                    ContractID = detailContract.ContractID,
+                    ContractCode = detailContract.ContractCode,
+                    PaymentPolicyID = detailContract.PaymentPolicyID,
+                    PaymentPolicyName = detailContract.PaymentPolicyName,
+                    PaidValueLate = _detailService.CalculateLatePaymentInterest(detailContract.ContractPaymentDetailID)
+                }).ToList();
 
                 return Ok(responese);
             }
