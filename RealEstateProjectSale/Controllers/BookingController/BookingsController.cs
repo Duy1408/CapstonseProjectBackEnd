@@ -187,6 +187,26 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
         }
 
+        [HttpGet("open-for-sale/{openId}")]
+        [SwaggerOperation(Summary = "Get Booking By OpeningForSaleID")]
+        public IActionResult GetBookingByOpeningForSaleID(Guid openId)
+        {
+            var book = _book.GetBookingByOpeningForSaleID(openId);
+
+            if (book != null)
+            {
+                var responese = book.Select(book => _mapper.Map<BookingVM>(book)).ToList();
+
+                return Ok(responese);
+            }
+
+            return NotFound(new
+            {
+                message = "Booking không tồn tại."
+            });
+
+        }
+
         [HttpGet("staff/{staffId}")]
         [SwaggerOperation(Summary = "Get Booking by staff ID")]
         public IActionResult GetBookingByStaffID(Guid staffId)

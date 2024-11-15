@@ -18,10 +18,9 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public string SaleType { get; set; }
         public bool Status { get; set; }
         public List<Booking>? Bookings { get; set; }
-        public List<Notification>? Notifications { get; set; }
         public List<OpenForSaleDetail>? OpenForSaleDetails { get; set; }
         public Guid ProjectCategoryDetailID { get; set; }
-         public ProjectCategoryDetail? ProjectCategoryDetail { get; set; }
+        public ProjectCategoryDetail? ProjectCategoryDetail { get; set; }
 
 
 

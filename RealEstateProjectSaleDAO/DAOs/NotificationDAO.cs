@@ -20,8 +20,7 @@ namespace RealEstateProjectSaleDAO.DAOs
         {
             try
             {
-                return _context.Notifications!.Include(a => a.Customer)
-                                              .Include(a => a.OpeningForSale)
+                return _context.Notifications!.Include(a => a.Booking)
                                               .ToList();
             }
             catch (Exception ex)
@@ -34,8 +33,7 @@ namespace RealEstateProjectSaleDAO.DAOs
         {
             try
             {
-                var notification = _context.Notifications!.Include(a => a.Customer)
-                                                     .Include(a => a.OpeningForSale)
+                var notification = _context.Notifications!.Include(a => a.Booking)
                                                      .SingleOrDefault(c => c.NotificationID == id);
                 return notification;
             }

@@ -15,9 +15,7 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public string Body { get; set; }
         public string DeepLink { get; set; }
         public bool Status { get; set; }
-        public Guid? CustomerID { get; set; }
-        public string FullName { get; set; }
-        public Guid? OpeningForSaleID { get; set; }
-        public string DecisionName { get; set; }
+        public Guid BookingID { get; set; }
+        public Guid OpeningForSaleID { get; set; }
     }
 }
