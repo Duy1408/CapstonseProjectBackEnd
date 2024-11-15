@@ -338,8 +338,7 @@ namespace RealEstateProjectSaleServices.Services
             {
                 double? totalPriceBookingOfMonth = _bookingService.GetBookings()
               .Where(book => book.DepositedTimed?.Year == currentYear
-              && book.DepositedTimed?.Month == month 
-              && book.Status.Equals( BookingStatus.DaDatCho))
+              && book.DepositedTimed?.Month == month )
               .Sum(book => book.DepositedPrice);
 
                 double? totalPaidValueOfMonth = _contractDetailService.GetAllContractPaymentDetail()
