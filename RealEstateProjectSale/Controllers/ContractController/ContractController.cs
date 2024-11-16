@@ -4,6 +4,7 @@ using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using RealEstateProjectSale.SwaggerResponses;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
 using RealEstateProjectSaleBusinessObject.DTO.Create;
 using RealEstateProjectSaleBusinessObject.DTO.Request;
@@ -93,6 +94,8 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
         [HttpGet]
         [SwaggerOperation(Summary = "Get All Contract")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách hợp đồng.", typeof(List<ContractVM>))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Hợp đồng không tồn tại.")]
         public IActionResult GetAllContract()
         {
             try
@@ -117,6 +120,8 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get Contract By ID")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Trả về thông tin hợp đồng.", typeof(ContractVM))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Hợp đồng không tồn tại.")]
         public IActionResult GetContractByID(Guid id)
         {
             var contract = _contractServices.GetContractByID(id);
@@ -137,6 +142,8 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
         [HttpGet("customer/{customerId}")]
         [SwaggerOperation(Summary = "Get Contract by customer ID")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách hợp đồng của khách hàng.", typeof(List<ContractVM>))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Hợp đồng không tồn tại.")]
         public IActionResult GetContractByCustomerID(Guid customerId)
         {
             var contract = _contractServices.GetContractByCustomerID(customerId);
@@ -157,6 +164,8 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
         [HttpGet("step-one")]
         [SwaggerOperation(Summary = "Show thông tin giao dịch ở bước 1 của Contract")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Trả về thông tin khách hàng, căn hộ và dự án.", typeof(ContractStepOneResponse))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Không tìm thấy dữ liệu liên quan đến hợp đồng.")]
         public IActionResult CustomerCheckInformation(Guid contractid)
         {
 
@@ -243,6 +252,8 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
         [HttpPut("check-step-one")]
         [SwaggerOperation(Summary = "Khách hàng nhấn nút Xác nhận ở bước 1")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Xác nhận thông tin giao dịch thành công.")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Hợp đồng không tồn tại.")]
         public IActionResult ShowCustomerDepositDocument(Guid contractid)
         {
             var contract = _contractServices.GetContractByID(contractid);
@@ -275,6 +286,8 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
         [HttpPost("step-two-send-otp")]
         [SwaggerOperation(Summary = "Gửi mã OTP qua mail cho khách hàng ở bước 2")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Mã OTP đã được gửi thành công qua email.")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Hợp đồng không tồn tại.")]
         public async Task<IActionResult> SendEmailDeposit(Guid contractid)
         {
             try
@@ -304,7 +317,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
                 mailrequest.Subject = "OTP Verification Code";
                 mailrequest.Body = $"Hello, your OTP code is: {otp}";
                 await _emailService.SendEmailAsync(mailrequest);
-                return Ok(new { message = "OTP has been sent to your email. " });
+                return Ok(new { message = "Mã OTP đã được gửi thành công qua email." });
             }
             catch (Exception e)
             {
@@ -314,6 +327,8 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
         [HttpPost("step-two-verify-otp")]
         [SwaggerOperation(Summary = "Khách hàng xác nhận mã OTP ở bước 2")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Xác minh OTP thành công.")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Hợp đồng không tồn tại.")]
         public IActionResult VerifyOtpDeposit(Guid contractid, string otp)
         {
             try
@@ -398,6 +413,9 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
         [HttpGet("step-three")]
         [SwaggerOperation(Summary = "Show đợt thanh toán và gói khuyến mãi")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách PaymentProcess và PromotionDetail", typeof(PaymentPromotionResponse))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Nếu không tìm thấy dữ liệu hoặc có lỗi liên quan")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Nếu có lỗi đầu vào hoặc logic")]
         public IActionResult showPaymentProcessandPromotionDetail(Guid contractid)
         {
 
@@ -513,6 +531,8 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
         [HttpPut("check-step-three")]
         [SwaggerOperation(Summary = "Khách hàng nhấn nút Xác nhận ở bước 3")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Chọn phương thức thanh toán và chính sách ưu đãi thành công.")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Không tìm thấy hợp đồng, gói khuyến mãi hoặc phương thức thanh toán.")]
         public IActionResult CustomerChoosePromotion(Guid contractid, Guid promotiondetailid, Guid paymentprocessid)
         {
             try
@@ -614,6 +634,8 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
         [HttpGet("step-four")]
         [SwaggerOperation(Summary = "Show thông tin khách hàng ở bước 4 của Contract")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Thông tin khách hàng đã được lấy thành công.", typeof(CustomerVM))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Không tìm thấy hợp đồng hoặc khách hàng.")]
         public IActionResult ShowInformationCustomer(Guid contractid)
         {
 
@@ -642,6 +664,8 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
         [HttpPut("check-step-four")]
         [SwaggerOperation(Summary = "Khách hàng nhấn nút Xác nhận Phiếu tính giá ở bước 4")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Xác nhận Phiếu tính giá thành công.")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Không tìm thấy hợp đồng hoặc khách hàng.")]
         public IActionResult CustomerConfirmPriceList(Guid contractid)
         {
             var contract = _contractServices.GetContractByID(contractid);
@@ -696,6 +720,9 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
         [HttpPut("check-step-five/{contractId}")]
         [SwaggerOperation(Summary = "Khách hàng nhấn nút Tôi đã thanh toán tiến độ lần 1 ở bước 5")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Thanh toán tiến độ lần 1 Hợp đồng mua bán thành công.")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Khách hàng chưa upload Ủy nhiệm chi hoặc email không hợp lệ.")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Không tìm thấy hợp đồng, khách hàng, hoặc chi tiết hợp đồng.")]
         public IActionResult CustomerConfirmUploadPaymentOrder([FromForm] UploadPaymentOrder paymentOrder, Guid contractId)
         {
             if (paymentOrder.RemittanceOrder == null)
@@ -798,6 +825,9 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
         [HttpPost("step-six-send-otp")]
         [SwaggerOperation(Summary = "Gửi mã OTP qua mail cho khách hàng ở bước 6 khi bấm xác nhận Hợp đồng mua bán")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Mã OTP đã được gửi thành công qua email.")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Không tìm thấy hợp đồng hoặc khách hàng.")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Email không hợp lệ hoặc xảy ra lỗi xử lý.")]
         public async Task<IActionResult> SendEmailSale(Guid contractid)
         {
             try
@@ -827,7 +857,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
                 mailrequest.Subject = "OTP Verification Code";
                 mailrequest.Body = $"Hello, your OTP code is: {otp}";
                 await _emailService.SendEmailAsync(mailrequest);
-                return Ok(new { message = "OTP has been sent to your email. " });
+                return Ok(new { message = "Mã OTP đã được gửi thành công qua email." });
             }
             catch (Exception e)
             {
@@ -837,6 +867,9 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
         [HttpPost("step-six-verify-otp")]
         [SwaggerOperation(Summary = "Khách hàng xác nhận mã OTP ở bước 6 cho Hợp đồng mua bán")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Xác minh OTP thành công.")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Không tìm thấy hợp đồng hoặc khách hàng.")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "OTP không hợp lệ, đã hết hạn hoặc xảy ra lỗi xử lý.")]
         public IActionResult VerifyOtpSale(Guid contractid, string otp)
         {
             try
@@ -919,6 +952,8 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
         [HttpGet("step-seven")]
         [SwaggerOperation(Summary = "Show thông tin lịch lên kí hợp đồng mua bán ở bước 7")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Thông tin lịch ký hợp đồng mua bán đã được trả về.")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Không tìm thấy hợp đồng hoặc chi tiết hợp đồng.")]
         public IActionResult TimeReceiveSaleContract(Guid contractid)
         {
             var contract = _contractServices.GetContractByID(contractid);
@@ -953,6 +988,9 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
         [HttpGet("title-contract")]
         [SwaggerOperation(Summary = "Show title Dự án và Căn hộ ở tất cả các bước")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Thông tin tiêu đề Dự án và Căn hộ đã được trả về.", typeof(ContractTitleResponse))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Không tìm thấy hợp đồng, booking, hoặc căn hộ.")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Yêu cầu không hợp lệ.")]
         public IActionResult TitleProjectProperty(Guid contractid)
         {
             var contract = _contractServices.GetContractByID(contractid);
@@ -1002,6 +1040,8 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new Contract")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Hợp đồng đã được tạo thành công.")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Yêu cầu không hợp lệ hoặc xảy ra lỗi xử lý.")]
         public IActionResult AddNewContract([FromForm] ContractRequestDTO contract)
         {
             try
@@ -1047,7 +1087,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
                 return Ok(new
                 {
-                    message = "Tạo hợp đồng thành công"
+                    message = "Tạo hợp đồng thành công."
                 });
             }
             catch (Exception ex)
@@ -1058,6 +1098,8 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Update Contract by ID")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Cập nhật hợp đồng thành công.")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Không tìm thấy hợp đồng.")]
         public IActionResult UpdateContract([FromForm] ContractUpdateDTO contract, Guid id)
         {
             try
@@ -1182,6 +1224,8 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Delete Contract by ID")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Xóa hợp đồng thành công.")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Hợp đồng không tồn tại.")]
         public IActionResult DeleteContract(Guid id)
         {
 
