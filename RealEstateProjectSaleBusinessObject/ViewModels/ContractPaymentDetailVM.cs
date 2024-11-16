@@ -15,6 +15,7 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public int PaymentRate { get; set; }//dot may
         public string? Description { get; set; }
         [Column(TypeName = "date")]
+        [JsonConverter(typeof(DateOnlyConverter))]
         public DateTime? Period { get; set; }//Thời hạn
         public double? PaidValue { get; set; }
         public double? PaidValueLate { get; set; }

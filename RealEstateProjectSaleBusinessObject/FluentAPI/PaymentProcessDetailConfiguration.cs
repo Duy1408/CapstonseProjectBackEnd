@@ -17,7 +17,7 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
             builder.HasKey(x => x.PaymentProcessDetailID);
             builder.Property(x => x.PaymentStage).IsRequired();
             builder.Property(x => x.Description);
-            builder.Property(x => x.Durationdate);
+            builder.Property(x => x.DurationDate);
             builder.Property(x => x.Percentage);
             builder.Property(x => x.Amount);
 

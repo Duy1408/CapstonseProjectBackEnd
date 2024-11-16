@@ -208,11 +208,31 @@ namespace RealEstateProjectSaleServices.Services
             double? firstAmount = paymentDetails.FirstOrDefault()?.Amount;
             var tableHtml = new StringBuilder();
 
+            //Ngày đợt 1
+            DateTime periodFirst = DateTime.Now;
+
             for (int i = 0; i < paymentDetails.Count; i++)
             {
                 var detail = paymentDetails[i];
                 string paymentStage = detail.PaymentStage > 0 ? $"Đợt {detail.PaymentStage}" : "Đợt 1: Ký TTĐC";
-                //string period = detail.Period.HasValue ? detail.Period.Value.ToString("dd-MM-yyyy") : "";
+
+                //Tính Period ở ContractPaymentDetail
+                string period;
+                if (detail.PaymentStage == 1)
+                {
+                    period = periodFirst.ToString("dd-MM-yyyy");
+                }
+                else if (detail.DurationDate.HasValue)
+                {
+                    // Cộng ngày từ đợt 1
+                    DateTime calculatedDate = periodFirst.AddDays(detail.DurationDate.Value);
+                    period = calculatedDate.ToString("dd-MM-yyyy");
+                }
+                else
+                {
+                    period = "";
+                }
+
                 string percentage = detail.Percentage.HasValue ? $"{(detail.Percentage.Value * 100):N0}%" : "0%";
 
                 double? amountValue;
@@ -234,7 +254,7 @@ namespace RealEstateProjectSaleServices.Services
                 tableHtml.Append($@"
                 <tr>
                     <td>{paymentStage}: {detail.Description}</td>
-
+                    <td>{period}</td>
                     <td style='text-align:center'>{percentage}</td>
                     <td style='text-align:right'>{amount}</td>
                 </tr>");
@@ -275,6 +295,9 @@ namespace RealEstateProjectSaleServices.Services
             double? totalAmount = property.PriceSold;
             double? firstAmount = paymentDetails.FirstOrDefault()?.Amount;
 
+            //Ngày đợt 1
+            DateTime periodFirst = DateTime.Now;
+
             for (int i = 0; i < paymentDetails.Count; i++)
             {
                 var detail = paymentDetails[i];
@@ -294,13 +317,25 @@ namespace RealEstateProjectSaleServices.Services
 
                 amountValue = amountValue.HasValue ? Math.Round(amountValue.Value) : (double?)null;
 
+                // Tính toán Period
+                DateTime? period = null;
+                if (detail.PaymentStage == 1)
+                {
+                    period = periodFirst; // Ngày hiện tại cho đợt 1
+                }
+                else if (detail.DurationDate.HasValue)
+                {
+                    // Cộng ngày từ đợt 1
+                    period = periodFirst.AddDays(detail.DurationDate.Value);
+                }
+
                 // Tạo đối tượng chi tiết thanh toán và lưu vào cơ sở dữ liệu
                 var contractDetail = new ContractPaymentDetailCreateDTO
                 {
                     ContractPaymentDetailID = Guid.NewGuid(),
                     PaymentRate = detail.PaymentStage,
                     Description = detail.Description,
-                    //Period = detail.Period,
+                    Period = period.HasValue ? period.Value : throw new InvalidOperationException("Không tính được Period"),
                     PaidValue = amountValue,
                     PaidValueLate = null,
                     RemittanceOrder = null,
