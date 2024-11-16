@@ -14,11 +14,7 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
         public Guid PaymentProcessDetailID { get; set; }
         public int PaymentStage { get; set; }
         public string? Description { get; set; }
-
-        [Column(TypeName = "date")]
-        public DateTime? Period { get; set; }
         public int? Durationdate { get; set; }
-
         public float? Percentage { get; set; }
         public double? Amount { get; set; }
         public Guid PaymentProcessID { get; set; }

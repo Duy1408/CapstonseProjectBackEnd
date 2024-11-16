@@ -12,8 +12,6 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public Guid PaymentProcessDetailID { get; set; }
         public int PaymentStage { get; set; }//dot1
         public string? Description { get; set; }
-        [Column(TypeName = "date")]
-        public DateTime? Period { get; set; }//Thời hạn
         public int? Durationdate { get; set; }
         public float? Percentage { get; set; }
         public double? Amount { get; set; }
