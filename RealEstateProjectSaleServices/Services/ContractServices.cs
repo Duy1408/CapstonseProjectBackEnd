@@ -212,7 +212,7 @@ namespace RealEstateProjectSaleServices.Services
             {
                 var detail = paymentDetails[i];
                 string paymentStage = detail.PaymentStage > 0 ? $"Đợt {detail.PaymentStage}" : "Đợt 1: Ký TTĐC";
-                string period = detail.Period.HasValue ? detail.Period.Value.ToString("dd-MM-yyyy") : "";
+                //string period = detail.Period.HasValue ? detail.Period.Value.ToString("dd-MM-yyyy") : "";
                 string percentage = detail.Percentage.HasValue ? $"{(detail.Percentage.Value * 100):N0}%" : "0%";
 
                 double? amountValue;
@@ -234,7 +234,7 @@ namespace RealEstateProjectSaleServices.Services
                 tableHtml.Append($@"
                 <tr>
                     <td>{paymentStage}: {detail.Description}</td>
-                    <td>{period}</td>
+
                     <td style='text-align:center'>{percentage}</td>
                     <td style='text-align:right'>{amount}</td>
                 </tr>");
@@ -300,7 +300,7 @@ namespace RealEstateProjectSaleServices.Services
                     ContractPaymentDetailID = Guid.NewGuid(),
                     PaymentRate = detail.PaymentStage,
                     Description = detail.Description,
-                    Period = detail.Period,
+                    //Period = detail.Period,
                     PaidValue = amountValue,
                     PaidValueLate = null,
                     RemittanceOrder = null,
@@ -338,7 +338,7 @@ namespace RealEstateProjectSaleServices.Services
             {
                 double? totalPriceBookingOfMonth = _bookingService.GetBookings()
               .Where(book => book.DepositedTimed?.Year == currentYear
-              && book.DepositedTimed?.Month == month )
+              && book.DepositedTimed?.Month == month)
               .Sum(book => book.DepositedPrice);
 
                 double? totalPaidValueOfMonth = _contractDetailService.GetAllContractPaymentDetail()
@@ -348,7 +348,7 @@ namespace RealEstateProjectSaleServices.Services
 
                 double? totalPaidValueLateOfMonth = _contractDetailService.GetAllContractPaymentDetail()
            .Where(contractdetail => contractdetail.Period?.Year == currentYear
-          && contractdetail.Period?.Month == month && contractdetail.Status==true)
+          && contractdetail.Period?.Month == month && contractdetail.Status == true)
               .Sum(contractdetail => contractdetail.PaidValueLate);
 
                 var monthlyTotalPrice = new

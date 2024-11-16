@@ -101,7 +101,6 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessDetailController
                 {
                     PaymentProcessDetailID = Guid.NewGuid(),
                     PaymentStage = detail.PaymentStage,
-                    Period = detail.Period,
                     Percentage = detail.Percentage,
                     Amount = detail.Amount,
                     PaymentProcessID = detail.PaymentProcessID,
@@ -135,10 +134,6 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessDetailController
                     if (detail.PaymentStage.HasValue)
                     {
                         existingDetail.PaymentStage = detail.PaymentStage.Value;
-                    }
-                    if (detail.Period.HasValue)
-                    {
-                        existingDetail.Period = detail.Period.Value;
                     }
                     if (detail.Percentage.HasValue)
                     {
