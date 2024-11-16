@@ -11,6 +11,7 @@ using RealEstateProjectSaleBusinessObject.DTO.Create;
 using RealEstateProjectSaleBusinessObject.DTO.Update;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
+using Stripe;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace RealEstateProjectSale.Controllers.PaymentProcessDetailController
@@ -101,9 +102,11 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessDetailController
                 {
                     PaymentProcessDetailID = Guid.NewGuid(),
                     PaymentStage = detail.PaymentStage,
+                    Description = detail.Description,
+                    DurationDate = detail.DurationDate,
                     Percentage = detail.Percentage,
                     Amount = detail.Amount,
-                    PaymentProcessID = detail.PaymentProcessID,
+                    PaymentProcessID = detail.PaymentProcessID
                 };
 
                 var _detail = _mapper.Map<PaymentProcessDetail>(newDetail);
@@ -130,14 +133,21 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessDetailController
                 var existingDetail = _detailService.GetPaymentProcessDetailById(id);
                 if (existingDetail != null)
                 {
-
                     if (detail.PaymentStage.HasValue)
                     {
                         existingDetail.PaymentStage = detail.PaymentStage.Value;
                     }
+                    if (!string.IsNullOrEmpty(detail.Description))
+                    {
+                        existingDetail.Description = detail.Description;
+                    }
                     if (detail.Percentage.HasValue)
                     {
                         existingDetail.Percentage = detail.Percentage.Value;
+                    }
+                    if (detail.DurationDate.HasValue)
+                    {
+                        existingDetail.DurationDate = detail.DurationDate.Value;
                     }
                     if (detail.Amount.HasValue)
                     {
