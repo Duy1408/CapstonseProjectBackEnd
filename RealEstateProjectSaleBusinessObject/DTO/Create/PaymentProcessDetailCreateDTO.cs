@@ -17,6 +17,8 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
 
         [Column(TypeName = "date")]
         public DateTime? Period { get; set; }
+        public int? Durationdate { get; set; }
+
         public float? Percentage { get; set; }
         public double? Amount { get; set; }
         public Guid PaymentProcessID { get; set; }
