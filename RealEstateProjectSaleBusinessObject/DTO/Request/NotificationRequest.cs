@@ -12,7 +12,6 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Request
         public string Subtiltle { get; set; }
         public string Body { get; set; }
         public string DeepLink { get; set; }
-        public DateTime? ScheduledTime { get; set; }
         public Guid BookingID { get; set; }
     }
 }

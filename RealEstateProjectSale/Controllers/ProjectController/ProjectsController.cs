@@ -50,9 +50,54 @@ namespace RealEstateProjectSale.Controllers
             _fileService = fileService;
         }
 
+        [HttpGet("all-project")]
+        [SwaggerOperation(Summary = "Get All Project")]
+        public IActionResult GetAllProject()
+        {
+            try
+            {
+                var projects = _project.GetProjects();
+
+                if (projects == null || !projects.Any())
+                {
+                    return NotFound(new
+                    {
+                        message = "Dự án không tồn tại."
+                    });
+                }
+
+                var response = projects.Select(project => new ProjectVM
+                {
+                    ProjectID = project.ProjectID,
+                    ProjectName = project.ProjectName,
+                    Location = project.Location,
+                    Investor = project.Investor,
+                    GeneralContractor = project.GeneralContractor,
+                    DesignUnit = project.DesignUnit,
+                    TotalArea = project.TotalArea,
+                    Scale = project.Scale,
+                    BuildingDensity = project.BuildingDensity,
+                    TotalNumberOfApartment = project.TotalNumberOfApartment,
+                    LegalStatus = project.LegalStatus,
+                    HandOver = project.HandOver,
+                    Convenience = project.Convenience,
+                    Images = project.Image?.Split(',').ToList() ?? new List<string>(),
+                    Status = project.Status,
+                    PaymentPolicyID = project.PaymentPolicyID,
+                    PaymentPolicyName = project.PaymentPolicy?.PaymentPolicyName
+                }).ToList();
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
         [HttpGet]
-        [SwaggerOperation(Summary = "Get All Project")]
+        [SwaggerOperation(Summary = "Get All Project Have Paging")]
         public IActionResult GetAllProject([FromQuery] string? projectName, [FromQuery] int page = 1)
         {
             try
@@ -113,8 +158,6 @@ namespace RealEstateProjectSale.Controllers
             {
                 return BadRequest(ex.Message);
             }
-
-
         }
 
         [HttpGet("{id}")]
