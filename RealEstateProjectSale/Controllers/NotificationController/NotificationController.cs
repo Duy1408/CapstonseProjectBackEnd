@@ -107,7 +107,7 @@ namespace RealEstateProjectSale.Controllers.NotificationController
 
                 Data = new Dictionary<string, string>
                 {
-                    { "deepLink", "justhome://realtime?projectCategoryDetail=" + booking.ProjectCategoryDetailID },  // Truyền DeepLink vào payload của thông báo\
+                    { "link", "justhome://realtime?projectCategoryDetail=" + booking.ProjectCategoryDetailID },  // Truyền DeepLink vào payload của thông báo\
                     { "subtitle", request.Subtiltle }
                 },
 
