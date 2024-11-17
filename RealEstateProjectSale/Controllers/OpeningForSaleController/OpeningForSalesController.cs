@@ -62,6 +62,46 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
             }
         }
 
+        [HttpGet("check-in")]
+        [SwaggerOperation(Summary = "Get All OpeningForSale")]
+        public IActionResult GetAllOpeningForSaleCheckIn()
+        {
+            try
+            {
+                var openings = _open.GetOpeningForSales();
+                if (openings == null || !openings.Any())
+                {
+                    return NotFound(new
+                    {
+                        message = "Đợt mở bán không tồn tại."
+                    });
+                }
+
+                var filteredOpenings = openings
+                    .Where(opening =>
+                        opening.Status == true &&
+                        DateTime.Now >= opening.CheckinDate &&
+                        DateTime.Now < opening.CheckinDate.AddDays(1))
+                    .ToList();
+
+                if (!filteredOpenings.Any())
+                {
+                    return NotFound(new
+                    {
+                        message = "Không có đợt mở bán nào đang trong thời gian CheckIn."
+                    });
+                }
+
+                var response = _mapper.Map<List<OpeningForSaleVM>>(filteredOpenings);
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get OpeningForSale By ID")]
         public IActionResult GetOpeningForSaleByID(Guid id)
