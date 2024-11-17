@@ -1056,29 +1056,45 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     }
                 }
 
+                var booking = _bookServices.GetBookingById(contract.BookingID);
+                if (booking == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Booking không tồn tại."
+                    });
+                }
+
                 string nextContractCode = GenerateNextContractCode();
+
+                var documentReservation = _documentTemplateService.GetDocumentByDocumentName("Thỏa thuận đặt cọc");
+                if (documentReservation == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Hợp đồng không tồn tại"
+                    });
+                }
 
                 var newContract = new ContractCreateDTO
                 {
                     ContractID = Guid.NewGuid(),
                     ContractCode = nextContractCode,
-                    ContractType = contract.ContractType,
+                    ContractType = ContractType.DatCoc.GetEnumDescription(),
                     CreatedTime = DateTime.Now,
                     UpdatedTime = null,
-
-                    ExpiredTime = contract.ExpiredTime,
+                    ExpiredTime = DateTime.Now.AddDays(1),
                     TotalPrice = contract.TotalPrice,
                     Description = contract.Description,
                     ContractDepositFile = contract.ContractDepositFile,
                     ContractSaleFile = null,
                     PriceSheetFile = null,
                     Status = ContractStatus.ChoXacNhanTTGD.GetEnumDescription(),
-                    DocumentTemplateID = contract.DocumentTemplateID,
+                    DocumentTemplateID = documentReservation.DocumentTemplateID,
                     BookingID = contract.BookingID,
-                    CustomerID = contract.CustomerID,
-                    PaymentProcessID = contract.PaymentProcessID,
-                    PromotionDetailID = contract.PromotionDetailID
-
+                    CustomerID = booking.CustomerID,
+                    PaymentProcessID = null,
+                    PromotionDetailID = null
                 };
 
                 var _contract = _mapper.Map<RealEstateProjectSaleBusinessObject.BusinessObject.Contract>(newContract);
@@ -1137,7 +1153,6 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     {
                         existingContract.ContractCode = contract.ContractCode;
                     }
-
                     if (!string.IsNullOrEmpty(contract.ContractType))
                     {
                         existingContract.ContractType = contract.ContractType;
@@ -1150,7 +1165,6 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     {
                         existingContract.UpdatedTime = contract.UpdatedTime.Value;
                     }
-
                     if (contract.ExpiredTime.HasValue)
                     {
                         existingContract.ExpiredTime = contract.ExpiredTime.Value;
