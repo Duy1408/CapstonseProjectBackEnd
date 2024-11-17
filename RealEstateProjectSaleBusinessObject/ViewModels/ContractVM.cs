@@ -25,7 +25,7 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public string? Description { get; set; }
         public string? ContractDepositFile { get; set; }
         public string? ContractSaleFile { get; set; }
-        public string? PriceSheetFile { get; set; }//phieu tam tinh
+        public string? PriceSheetFile { get; set; }
         public string Status { get; set; }
         public Guid? DocumentTemplateID { get; set; }
         public string DocumentName { get; set; }
@@ -35,7 +35,7 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public Guid? PaymentProcessID { get; set; }
         public string PaymentProcessName { get; set; }
         public Guid? PromotionDetailID { get; set; }
-     
+        public string DescriptionPromotion { get; set; }
 
 
     }

@@ -29,6 +29,8 @@ namespace RealEstateProjectSale.Mapper
 
             CreateMap<ContractVM, Contract>().ReverseMap().ForMember(dest => dest.PaymentProcessName,
                                        opt => opt.MapFrom(src => src.PaymentProcess!.PaymentProcessName))
+                                                          .ForMember(dest => dest.DescriptionPromotion,
+                                       opt => opt.MapFrom(src => src.PromotionDetail!.Description))
                                                           .ForMember(dest => dest.DocumentName,
                                        opt => opt.MapFrom(src => src.DocumentTemplate!.DocumentName))
                                                           .ForMember(dest => dest.FullName,
