@@ -134,11 +134,19 @@ builder.Services.AddScoped<IPagingServices, PagingServices>();
 
 //Firebase Cloud Messages
 // Thêm SecretClient vào Dependency Injection container
-builder.Services.AddSingleton<SecretClient>(provider =>
+//builder.Services.AddSingleton<SecretClient>(provider =>
+//{
+//    return new SecretClient(new Uri("https://real-estate-key.vault.azure.net/"), new DefaultAzureCredential());
+//});
+var secretClient = new SecretClient(new Uri("https://real-estate-key.vault.azure.net/"), new DefaultAzureCredential());
+KeyVaultSecret secret = secretClient.GetSecret("FirebaseServiceAccountKey");
+string tempFilePath = Path.Combine(Path.GetTempPath(), "firebase-key.json");
+System.IO.File.WriteAllText(tempFilePath, secret.Value);
+FirebaseApp.Create(new AppOptions
 {
-    return new SecretClient(new Uri("https://real-estate-key.vault.azure.net/"), new DefaultAzureCredential());
+    Credential = GoogleCredential.FromFile(tempFilePath)
 });
-
+System.IO.File.Delete(tempFilePath);
 
 
 //Jwt
@@ -216,28 +224,28 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-app.Lifetime.ApplicationStarted.Register(() =>
-{
-    // Lấy Secret từ Key Vault
-    var secretClient = app.Services.GetRequiredService<SecretClient>();
-    KeyVaultSecret secret = secretClient.GetSecret("FirebaseServiceAccountKey");
-    string firebaseJsonKey = secret.Value;
+//app.Lifetime.ApplicationStarted.Register(() =>
+//{
+//    // Lấy Secret từ Key Vault
+//    var secretClient = app.Services.GetRequiredService<SecretClient>();
+//    KeyVaultSecret secret = secretClient.GetSecret("FirebaseServiceAccountKey");
+//    string firebaseJsonKey = secret.Value;
 
-    // Lưu JSON key vào file tạm để sử dụng với Firebase SDK
-    string tempFilePath = Path.Combine(Path.GetTempPath(), "firebase-key.json");
-    System.IO.File.WriteAllText(tempFilePath, firebaseJsonKey);
+//    // Lưu JSON key vào file tạm để sử dụng với Firebase SDK
+//    string tempFilePath = Path.Combine(Path.GetTempPath(), "firebase-key.json");
+//    System.IO.File.WriteAllText(tempFilePath, firebaseJsonKey);
 
-    // Khởi tạo Firebase Admin SDK
-    FirebaseApp.Create(new AppOptions
-    {
-        Credential = GoogleCredential.FromFile(tempFilePath)
-    });
+//    // Khởi tạo Firebase Admin SDK
+//    FirebaseApp.Create(new AppOptions
+//    {
+//        Credential = GoogleCredential.FromFile(tempFilePath)
+//    });
 
-    // Xóa file JSON key sau khi khởi tạo Firebase (nếu cần)
-    System.IO.File.Delete(tempFilePath);
+//    // Xóa file JSON key sau khi khởi tạo Firebase (nếu cần)
+//    System.IO.File.Delete(tempFilePath);
 
-    Console.WriteLine("Firebase App initialized successfully!");
-});
+//    Console.WriteLine("Firebase App initialized successfully!");
+//});
 
 app.UseRouting();
 if (app.Environment.IsDevelopment())
