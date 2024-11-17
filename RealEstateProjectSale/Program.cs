@@ -20,6 +20,8 @@ using RealEstateProjectSaleServices.Services;
 using Stripe;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSignalR(options =>
@@ -131,10 +133,13 @@ builder.Services.AddMemoryCache();
 builder.Services.AddScoped<IPagingServices, PagingServices>();
 
 //Firebase Cloud Messages
-FirebaseApp.Create(new AppOptions
+// Thêm SecretClient vào Dependency Injection container
+builder.Services.AddSingleton<SecretClient>(provider =>
 {
-    Credential = GoogleCredential.FromFile("Resources/realestateprojectsale-70f048ac7e0d.json")
+    return new SecretClient(new Uri("https://real-estate-key.vault.azure.net/"), new DefaultAzureCredential());
 });
+
+
 
 //Jwt
 builder.Services.AddScoped<IJWTTokenService, JWTTokenService>();
@@ -210,6 +215,30 @@ builder.Services.AddCors(options =>
 
 
 var app = builder.Build();
+
+app.Lifetime.ApplicationStarted.Register(() =>
+{
+    // Lấy Secret từ Key Vault
+    var secretClient = app.Services.GetRequiredService<SecretClient>();
+    KeyVaultSecret secret = secretClient.GetSecret("FirebaseServiceAccountKey");
+    string firebaseJsonKey = secret.Value;
+
+    // Lưu JSON key vào file tạm để sử dụng với Firebase SDK
+    string tempFilePath = Path.Combine(Path.GetTempPath(), "firebase-key.json");
+    System.IO.File.WriteAllText(tempFilePath, firebaseJsonKey);
+
+    // Khởi tạo Firebase Admin SDK
+    FirebaseApp.Create(new AppOptions
+    {
+        Credential = GoogleCredential.FromFile(tempFilePath)
+    });
+
+    // Xóa file JSON key sau khi khởi tạo Firebase (nếu cần)
+    System.IO.File.Delete(tempFilePath);
+
+    Console.WriteLine("Firebase App initialized successfully!");
+});
+
 app.UseRouting();
 if (app.Environment.IsDevelopment())
 {

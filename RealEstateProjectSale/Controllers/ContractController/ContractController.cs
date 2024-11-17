@@ -390,6 +390,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
                         contract.Status = ContractStatus.DaXacNhanTTDC.GetEnumDescription();
                         contract.UpdatedTime = DateTime.Now;
+                        contract.ExpiredTime = DateTime.Now.AddDays(1);
                         _contractServices.UpdateContract(contract);
 
                         return Ok(new { message = "Xác minh OTP thành công." });
@@ -929,6 +930,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
                         contract.Status = ContractStatus.DaXacNhanHDMB.GetEnumDescription();
                         contract.UpdatedTime = DateTime.Now;
+                        contract.ExpiredTime = DateTime.Now.AddDays(15);
                         _contractServices.UpdateContract(contract);
 
                         return Ok(new { message = "Xác minh OTP thành công." });
@@ -1277,7 +1279,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
             }
 
             // Định dạng mã hợp đồng, số có 4 chữ số kèm phần định danh "/TTĐC"
-            string nextContractCode = nextNumber.ToString() + "/TTĐC";
+            string nextContractCode = nextNumber.ToString() + "/HD";
 
             return nextContractCode;
         }
