@@ -207,6 +207,10 @@ namespace RealEstateProjectSale.Mapper
             CreateMap<NotificationCreateDTO, Notification>().ReverseMap();
 
 
+            CreateMap<PaymentPolicyVM, PaymentPolicy>().ReverseMap();
+            CreateMap<PaymentPolicyCreateDTO, PaymentPolicy>().ReverseMap();
+            CreateMap<PaymentPolicyUpdateDTO, PaymentPolicy>().ReverseMap();
+
         }
     }
 }

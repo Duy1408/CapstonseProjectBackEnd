@@ -107,7 +107,7 @@ namespace RealEstateProjectSale.Controllers.NotificationController
 
                 Data = new Dictionary<string, string>
                 {
-                    { "deepLink", request.DeepLink },  // Truyền DeepLink vào payload của thông báo\
+                    { "deepLink", "justhome://realtime?projectCategoryDetail=" + booking.ProjectCategoryDetailID },  // Truyền DeepLink vào payload của thông báo\
                     { "subtitle", request.Subtiltle }
                 },
 
@@ -131,7 +131,7 @@ namespace RealEstateProjectSale.Controllers.NotificationController
                     Title = request.Title,
                     Subtiltle = request.Subtiltle,
                     Body = request.Body,
-                    DeepLink = request.DeepLink,
+                    //DeepLink = request.DeepLink,
                     BookingID = request.BookingID
                 };
                 var _noti = _mapper.Map<RealEstateProjectSaleBusinessObject.BusinessObject.Notification>(newNoti);
