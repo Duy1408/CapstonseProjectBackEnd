@@ -49,5 +49,11 @@
 		<PackageReference Include="MimeKit" Version="4.8.0" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Content Update="Resources\realestateprojectsale-70f048ac7e0d.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
+
 
 </Project>

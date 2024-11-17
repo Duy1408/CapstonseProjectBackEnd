@@ -131,7 +131,7 @@ namespace RealEstateProjectSale.Controllers.NotificationController
                     Title = request.Title,
                     Subtiltle = request.Subtiltle,
                     Body = request.Body,
-                    //DeepLink = request.DeepLink,
+                    DeepLink = "justhome://realtime?projectCategoryDetail=" + booking.ProjectCategoryDetailID,
                     BookingID = request.BookingID
                 };
                 var _noti = _mapper.Map<RealEstateProjectSaleBusinessObject.BusinessObject.Notification>(newNoti);
