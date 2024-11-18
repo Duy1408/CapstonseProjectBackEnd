@@ -105,6 +105,8 @@ builder.Services.AddScoped<IPanoramaImageRepo, PanoramaImageRepo>();
 builder.Services.AddScoped<IPanoramaImageServices, PanoramaImageServices>();
 builder.Services.AddScoped<IPaymentPolicyRepo, PaymentPolicyRepo>();
 builder.Services.AddScoped<IPaymentPolicyService, PaymentPolicyService>();
+builder.Services.AddScoped<IDashboardService, DashboardService>();
+
 
 //send email
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
