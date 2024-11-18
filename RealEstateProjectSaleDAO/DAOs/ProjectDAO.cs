@@ -1,7 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
+using RealEstateProjectSaleBusinessObject.Enums;
+using RealEstateProjectSaleBusinessObject.Enums.EnumHelpers;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -79,6 +82,7 @@ namespace RealEstateProjectSaleDAO.DAOs
             }
             else
             {
+                a.Status = ProjectStatus.DaHuy.GetEnumDescription();
                 _context.Entry(a).State = EntityState.Modified;
                 _context.SaveChanges();
                 return true;

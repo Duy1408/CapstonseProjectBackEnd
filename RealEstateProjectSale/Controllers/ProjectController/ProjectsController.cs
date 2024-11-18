@@ -397,13 +397,6 @@ namespace RealEstateProjectSale.Controllers
         [SwaggerOperation(Summary = "DeleteProject")]
         public IActionResult DeleteProject(Guid id)
         {
-            if (_project.GetProjectById(id) == null)
-            {
-                return NotFound(new
-                {
-                    message = "Dự án không tồn tại."
-                });
-            }
             var project = _project.GetProjectById(id);
             if (project == null)
             {

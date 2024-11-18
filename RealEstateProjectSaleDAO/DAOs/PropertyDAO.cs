@@ -224,5 +224,24 @@ namespace RealEstateProjectSaleDAO.DAOs
                                       .Count(p => p.Status == status);
         }
 
+        public bool ChangeStatusProperty(Property property)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            var _property = _context.Properties!.FirstOrDefault(c => c.PropertyID.Equals(property.PropertyID));
+
+
+            if (_property == null)
+            {
+                return false;
+            }
+            else
+            {
+                _property.Status = PropertyStatus.DaHuy.GetEnumDescription();
+                _context.Entry(_property).State = EntityState.Modified;
+                _context.SaveChanges();
+                return true;
+            }
+        }
+
     }
 }
