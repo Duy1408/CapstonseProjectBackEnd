@@ -508,6 +508,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                 _contractServices.AddNewContract(_contract);
 
                 existingProperty.Status = PropertyStatus.GiuCho.GetEnumDescription();
+                existingProperty.PriceSold = openDetail.Price;
                 _pro.UpdateProperty(existingProperty);
 
                 await _hubContext.Clients.All.SendAsync("ReceivePropertyStatus", propertyId.ToString(), existingProperty.Status);

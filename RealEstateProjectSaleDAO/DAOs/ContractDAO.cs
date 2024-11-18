@@ -71,6 +71,10 @@ namespace RealEstateProjectSaleDAO.DAOs
             try
             {
                 var contracts = _context.Contracts!.Include(a => a.Booking)
+                                                   .ThenInclude(a => a.ProjectCategoryDetail)
+                                                   .ThenInclude(a => a.Project)
+                                                   .Include(b => b.Booking)
+                                                    .ThenInclude(b => b.Property)
                                                    .Include(a => a.DocumentTemplate)
                                                    .Include(a => a.PaymentProcess)
                                                    .Include(c => c.PromotionDetail)
