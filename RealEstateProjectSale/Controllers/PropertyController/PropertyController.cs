@@ -41,10 +41,6 @@ namespace RealEstateProjectSale.Controllers.PropertyController
         private readonly IOpenForSaleDetailServices _openDetailService;
         private readonly IDocumentTemplateService _documentService;
 
-
-
-
-
         public static int PAGE_SIZE { get; set; } = 5;
 
         public PropertyController(IHubContext<PropertyHub> hubContext, IPropertyServices pro,
@@ -334,8 +330,6 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                     BlockID = property.BlockID,
                     ZoneID = property.ZoneID,
                     ProjectCategoryDetailID = property.ProjectCategoryDetailID,
-
-
                 };
 
                 var _property = _mapper.Map<Property>(newProperty);

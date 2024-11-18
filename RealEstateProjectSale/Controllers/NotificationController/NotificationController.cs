@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
 using RealEstateProjectSaleBusinessObject.DTO.Create;
 using RealEstateProjectSaleBusinessObject.DTO.Request;
+using RealEstateProjectSaleBusinessObject.DTO.Update;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 using RealEstateProjectSaleServices.Services;
@@ -20,17 +21,17 @@ namespace RealEstateProjectSale.Controllers.NotificationController
         private readonly INotificationServices _notiServices;
         private readonly IBookingServices _bookServices;
         private readonly ICustomerServices _customerServices;
+        private readonly IProjectCategoryDetailServices _categoryDetailServices;
         private readonly IMapper _mapper;
-        private readonly ILogger<NotificationController> _logger;
 
         public NotificationController(INotificationServices notiServices, IMapper mapper, ICustomerServices customerServices,
-             IBookingServices bookServices, ILogger<NotificationController> logger)
+             IBookingServices bookServices, IProjectCategoryDetailServices categoryDetailServices)
         {
             _notiServices = notiServices;
             _customerServices = customerServices;
             _bookServices = bookServices;
+            _categoryDetailServices = categoryDetailServices;
             _mapper = mapper;
-            _logger = logger;
         }
 
         [HttpGet]
@@ -77,10 +78,42 @@ namespace RealEstateProjectSale.Controllers.NotificationController
 
         }
 
-        [HttpPost("send-ios")]
-        public async Task<IActionResult> SendNotification([FromBody] NotificationRequest request)
+        [HttpPost]
+        [SwaggerOperation(Summary = "Create a new comment")]
+        public IActionResult AddNewNotification(NotificationCreateDTO noti)
         {
-            var booking = _bookServices.GetBookingById(request.BookingID);
+            try
+            {
+
+                var newNoti = new NotificationCreateDTO
+                {
+                    NotificationID = Guid.NewGuid(),
+                    Title = noti.Title,
+                    Subtiltle = noti.Subtiltle,
+                    Body = noti.Body,
+                    CreatedTime = DateTime.Now,
+                    Status = true,
+                    BookingID = noti.BookingID
+                };
+
+                var notification = _mapper.Map<RealEstateProjectSaleBusinessObject.BusinessObject.Notification>(newNoti);
+                _notiServices.AddNewNotification(notification);
+
+                return Ok(new
+                {
+                    message = "Tạo thông báo thành công"
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("send-ios/{bookingId}")]
+        public async Task<IActionResult> SendNotification(Guid bookingId)
+        {
+            var booking = _bookServices.GetBookingById(bookingId);
             if (booking == null)
             {
                 return NotFound(new { message = "Booking không tồn tại" });
@@ -96,19 +129,25 @@ namespace RealEstateProjectSale.Controllers.NotificationController
                 return BadRequest(new { message = "Customer does not have a valid device token." });
             }
 
+            var categoryDetail = _categoryDetailServices.GetProjectCategoryDetailByID(booking.ProjectCategoryDetailID);
+            string title = "⏰ Đã tới thời gian Check-in";
+            string body = "🏘️ Hãy check-in đúng giờ để nhận ưu đãi đặc biệt và thông tin chi tiết dự án " + categoryDetail.Project!.ProjectName;
+            string subtitle = "Hãy sẵn sàng khám phá cơ hội đầu tư tốt nhất của quý khách "
+                + customer.FullName + "về loại dự án " + categoryDetail.PropertyCategory!.PropertyCategoryName + " !";
+
             var message = new Message()
             {
                 Token = customer.DeviceToken,
                 Notification = new FirebaseAdmin.Messaging.Notification
                 {
-                    Title = request.Title,
-                    Body = request.Body
+                    Title = title,
+                    Body = body
                 },
 
                 Data = new Dictionary<string, string>
                 {
                     { "link", "justhome://realtime?projectCategoryDetail=" + booking.ProjectCategoryDetailID },  // Truyền DeepLink vào payload của thông báo\
-                    { "subtitle", request.Subtiltle }
+                    { "subtitle", subtitle }
                 },
 
                 Apns = new ApnsConfig
@@ -128,32 +167,97 @@ namespace RealEstateProjectSale.Controllers.NotificationController
                 var newNoti = new NotificationCreateDTO
                 {
                     NotificationID = Guid.NewGuid(),
-                    Title = request.Title,
-                    Subtiltle = request.Subtiltle,
-                    Body = request.Body,
-                    DeepLink = "justhome://realtime?projectCategoryDetail=" + booking.ProjectCategoryDetailID,
-                    BookingID = request.BookingID
+                    Title = title,
+                    Subtiltle = subtitle,
+                    Body = body,
+                    CreatedTime = DateTime.Now,
+                    Status = true,
+                    BookingID = bookingId
                 };
                 var _noti = _mapper.Map<RealEstateProjectSaleBusinessObject.BusinessObject.Notification>(newNoti);
                 _notiServices.AddNewNotification(_noti);
 
-                return Ok(new { message = "Gửi thông báo thành công.", response });
-            }
-            catch (FirebaseMessagingException fme)
-            {
-                // Log lỗi chi tiết của FirebaseMessaging
-                _logger.LogError(fme, "FirebaseMessagingException: {Message}", fme.Message);
-                return BadRequest(new { message = "Error sending notification", error = fme.Message });
+                return Ok(new { message = "Gửi thông báo thành công." });
             }
             catch (Exception ex)
             {
-                // Log lỗi chung
-                _logger.LogError(ex, "General Exception: {Message}", ex.Message);
-                return BadRequest(new { message = "Error sending notification", error = ex.Message });
+                return BadRequest(ex.Message);
             }
         }
 
+        [HttpPut("{id}")]
+        [SwaggerOperation(Summary = "Update Notification by ID")]
+        public IActionResult UpdateNotification([FromForm] NotificationUpdateDTO noti, Guid id)
+        {
+            try
+            {
+                var existingNoti = _notiServices.GetNotificationByID(id);
+                if (existingNoti != null)
+                {
 
+                    if (!string.IsNullOrEmpty(noti.Title))
+                    {
+                        existingNoti.Title = noti.Title;
+                    }
+                    if (!string.IsNullOrEmpty(noti.Subtiltle))
+                    {
+                        existingNoti.Subtiltle = noti.Subtiltle;
+                    }
+                    if (!string.IsNullOrEmpty(noti.Body))
+                    {
+                        existingNoti.Body = noti.Body;
+                    }
+                    if (noti.Status.HasValue)
+                    {
+                        existingNoti.Status = noti.Status.Value;
+                    }
+                    if (noti.BookingID.HasValue)
+                    {
+                        existingNoti.BookingID = noti.BookingID.Value;
+                    }
+
+                    _notiServices.UpdateNotification(existingNoti);
+
+                    return Ok(new
+                    {
+                        message = "Cập nhật thông báo thành công."
+                    });
+
+                }
+
+                return NotFound(new
+                {
+                    message = "Thông báo không tồn tại."
+                });
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        [SwaggerOperation(Summary = "Delete Notification")]
+        public IActionResult DeleteNotification(Guid id)
+        {
+
+            var noti = _notiServices.GetNotificationByID(id);
+            if (noti == null)
+            {
+                return NotFound(new
+                {
+                    message = "Thông báo không tồn tại."
+                });
+            }
+
+            _notiServices.ChangeStatusNotification(noti);
+
+            return Ok(new
+            {
+                message = "Xóa thông báo thành công"
+            });
+        }
 
     }
 }

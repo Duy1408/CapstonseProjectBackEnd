@@ -205,6 +205,7 @@ namespace RealEstateProjectSale.Mapper
             CreateMap<NotificationVM, Notification>().ReverseMap().ForMember(dest => dest.OpeningForSaleID,
                                  opt => opt.MapFrom(src => src.Booking!.OpeningForSaleID));
             CreateMap<NotificationCreateDTO, Notification>().ReverseMap();
+            CreateMap<NotificationUpdateDTO, Notification>().ReverseMap();
 
 
             CreateMap<PaymentPolicyVM, PaymentPolicy>().ReverseMap();
