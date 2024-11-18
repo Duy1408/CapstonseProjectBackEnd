@@ -199,13 +199,6 @@ namespace RealEstateProjectSale.Controllers.CommentController
         [SwaggerOperation(Summary = "Delete comment by ID")]
         public IActionResult DeleteComment(Guid id)
         {
-            if (_cmt.GetCommentById(id) == null)
-            {
-                return NotFound(new
-                {
-                    message = "Comment không tồn tại."
-                });
-            }
             var cmt = _cmt.GetCommentById(id);
             if (cmt == null)
             {

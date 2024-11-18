@@ -14,7 +14,10 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
         public string Title { get; set; }
         public string Subtiltle { get; set; }
         public string Body { get; set; }
-        public string DeepLink { get; set; }
+        [JsonIgnore]
+        public DateTime CreatedTime { get; set; }
+        [JsonIgnore]
+        public bool Status { get; set; }
         public Guid BookingID { get; set; }
     }
 }

@@ -18,7 +18,7 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
             builder.Property(x => x.Title).IsRequired();
             builder.Property(x => x.Subtiltle).IsRequired();
             builder.Property(x => x.Body).IsRequired();
-            builder.Property(x => x.DeepLink).IsRequired();
+            builder.Property(x => x.CreatedTime).IsRequired();
             builder.Property(x => x.Status).IsRequired();
 
 
