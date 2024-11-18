@@ -21,6 +21,12 @@ namespace RealEstateProjectSaleRepository.Repository
         {
             _pro.AddNew(p);
         }
+
+        public bool ChangeStatusProperty(Property property)
+        {
+            return _pro.ChangeStatusProperty(property);
+        }
+
         public List<Property> GetProperty()
         {
             return _pro.GetAllProperty();

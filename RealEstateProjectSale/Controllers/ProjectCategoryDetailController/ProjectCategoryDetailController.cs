@@ -87,6 +87,26 @@ namespace RealEstateProjectSale.Controllers.ProjectCategoryDetailController
 
         }
 
+        [HttpGet("property")]
+        [SwaggerOperation(Summary = "Get ProjectCategoryDetail By ZoneID And UnitTypeID")]
+        public IActionResult GetProjectCategoryDetailByZoneIDUnitTypeID(Guid id)
+        {
+            var detail = _detailServices.GetProjectCategoryDetailByID(id);
+
+            if (detail != null)
+            {
+                var responese = _mapper.Map<ProjectCategoryDetailVM>(detail);
+
+                return Ok(responese);
+            }
+
+            return NotFound(new
+            {
+                message = "Loại hình dự án không tồn tại."
+            });
+
+        }
+
         [HttpGet("{projectID}/{propertyCategoryID}")]
         [SwaggerOperation(Summary = "Get ProjectCategoryDetail By ProjectID and PropertyCategoryID")]
         public IActionResult GetPropertyCategoryByID(Guid projectID, Guid propertyCategoryID)

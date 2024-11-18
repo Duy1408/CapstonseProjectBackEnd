@@ -25,6 +25,9 @@ namespace RealEstateProjectSaleBusinessObject.Enums
         DaBan = 5,
 
         [EnumDescription("Bàn giao")]
-        BanGiao = 6
+        BanGiao = 6,
+
+        [EnumDescription("Đã hủy")]
+        DaHuy = 7
     }
 }

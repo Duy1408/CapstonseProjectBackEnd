@@ -525,6 +525,28 @@ namespace RealEstateProjectSale.Controllers.PropertyController
             }
         }
 
+        [HttpDelete("{id}")]
+        [SwaggerOperation(Summary = "Delete Property by ID")]
+        public IActionResult DeleteProperty(Guid id)
+        {
+
+            var property = _pro.GetPropertyById(id);
+            if (property == null)
+            {
+                return NotFound(new
+                {
+                    message = "Căn hộ không tồn tại."
+                });
+            }
+
+            _pro.ChangeStatusProperty(property);
+
+
+            return Ok(new
+            {
+                message = "Xóa hợp đồng thành công"
+            });
+        }
 
         private string GenerateNextContractCode()
         {
