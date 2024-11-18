@@ -22,7 +22,7 @@ namespace RealEstateProjectSaleRepository.IRepository
 
         Booking? GetBookingByRandom(Guid id);
         Booking? GetBookingByPropertyID(Guid propertyid);
-        Booking? GetBookingByCustomerSelect(Guid id);
+        Booking? GetBookingByCustomerSelect(Guid customerId, Guid categoryDetailId);
 
         List<Booking> GetBookingByBooked();
         List<Booking> GetBookingByCheckedIn(Guid openId);

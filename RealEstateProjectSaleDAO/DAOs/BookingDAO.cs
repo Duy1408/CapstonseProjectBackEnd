@@ -252,7 +252,7 @@ namespace RealEstateProjectSaleDAO.DAOs
                                     .ToList();
         }
 
-        public Booking? GetBookingByCustomerSelect(Guid id)
+        public Booking? GetBookingByCustomerSelect(Guid customerId, Guid categoryDetailId)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
             return _context.Bookings!.Include(c => c.OpeningForSale)
@@ -264,7 +264,8 @@ namespace RealEstateProjectSaleDAO.DAOs
                                         .ThenInclude(pc => pc.Project)
                                     .Include(o => o.ProjectCategoryDetail)
                                         .ThenInclude(pc => pc.PropertyCategory)
-                                    .Where(b => b.CustomerID == id
+                                    .Where(b => b.CustomerID == customerId
+                                     && b.ProjectCategoryDetailID == categoryDetailId
                                      && b.Status == BookingStatus.DaCheckIn.GetEnumDescription())
                                                                     .FirstOrDefault();
         }
