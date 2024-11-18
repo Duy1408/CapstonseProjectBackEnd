@@ -10,7 +10,7 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
     public class PromotionDetailCreateDTO
     {
         [JsonIgnore]
-        public Guid PromotionDetaiID { get; set; }
+        public Guid PromotionDetailID { get; set; }
         public string Description { get; set; }
         public double? Amount { get; set; }
         public Guid PromotionID { get; set; }
