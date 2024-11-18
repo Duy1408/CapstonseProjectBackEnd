@@ -77,7 +77,7 @@ namespace RealEstateProjectSale.Controllers.PromotionDetailController
 
                 var newPro = new PromotionDetailCreateDTO
                 {
-                    PromotionDetaiID = Guid.NewGuid(),
+                    PromotionDetailID = Guid.NewGuid(),
                     Description = pro.Description,
                     Amount = pro.Amount,
                     PromotionID = pro.PromotionID,
