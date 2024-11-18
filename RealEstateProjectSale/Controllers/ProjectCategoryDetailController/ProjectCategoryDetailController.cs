@@ -165,6 +165,14 @@ namespace RealEstateProjectSale.Controllers.ProjectCategoryDetailController
         {
             try
             {
+                var categoryDetail = _detailServices.GetDetailByProjectIDCategoryID(detail.ProjectID, detail.PropertyCategoryID);
+                if (categoryDetail != null)
+                {
+                    return BadRequest(new
+                    {
+                        message = "Dự án đã có loại căn hộ."
+                    });
+                }
 
                 var newDetail = new ProjectCategoryDetailCreateDTO
                 {
