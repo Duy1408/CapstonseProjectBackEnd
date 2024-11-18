@@ -20,7 +20,7 @@ namespace RealEstateProjectSaleServices.IServices
 
         Booking? GetBookingByDepositedTimed(Guid id);
         Booking? GetBookingByPropertyID(Guid propertyid);
-        Booking? GetBookingByCustomerSelect(Guid id);
+        Booking? GetBookingByCustomerSelect(Guid customerId, Guid categoryDetailId);
         Booking? GetBookingByRandom(Guid id);
 
         List<Booking> GetBookingByBooked();

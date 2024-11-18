@@ -452,7 +452,14 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                     });
                 }
 
-                var booking = _booking.GetBookingByCustomerSelect(customerID);
+                var categoryDetailId = existingProperty.ProjectCategoryDetailID.GetValueOrDefault(Guid.Empty);
+
+                if (categoryDetailId == Guid.Empty)
+                {
+                    throw new ArgumentException("Căn hộ không có Chi tiết dự án.");
+                }
+
+                var booking = _booking.GetBookingByCustomerSelect(customerID, categoryDetailId);
                 if (booking == null)
                 {
                     return NotFound(new

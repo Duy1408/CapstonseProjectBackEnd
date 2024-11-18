@@ -129,9 +129,9 @@ namespace RealEstateProjectSaleServices.Services
             return _book.GetBookingByPropertyID(propertyid);
         }
 
-        public Booking? GetBookingByCustomerSelect(Guid id)
+        public Booking? GetBookingByCustomerSelect(Guid customerId, Guid categoryDetailId)
         {
-            return _book.GetBookingByCustomerSelect(id);
+            return _book.GetBookingByCustomerSelect(customerId, categoryDetailId);
         }
 
         public List<Booking> GetBookingByStaffID(Guid id)
