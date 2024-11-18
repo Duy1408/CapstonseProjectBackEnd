@@ -23,7 +23,7 @@ namespace RealEstateProjectSaleServices.IServices
         string GenerateDocumentPriceSheet(Guid contractId);
         void CreateContractPaymentDetail(Guid contractId);
 
-        List<object> GetMonthlyTotalPrices();
+
 
 
     }

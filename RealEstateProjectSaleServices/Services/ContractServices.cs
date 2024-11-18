@@ -365,39 +365,6 @@ namespace RealEstateProjectSaleServices.Services
 
         public void UpdateContract(Contract contract) => _contractRepo.UpdateContract(contract);
 
-        public List<object> GetMonthlyTotalPrices()
-        {
-            int currentYear = DateTime.Now.Year;
-            List<object> monthlyTotalPrices = new List<object>();
-            for (int month = 1; month <= 12; month++)
-            {
-                double? totalPriceBookingOfMonth = _bookingService.GetBookings()
-              .Where(book => book.DepositedTimed?.Year == currentYear
-              && book.DepositedTimed?.Month == month)
-              .Sum(book => book.DepositedPrice);
-
-                double? totalPaidValueOfMonth = _contractDetailService.GetAllContractPaymentDetail()
-        .Where(contractdetail => contractdetail.Period?.Year == currentYear
-        && contractdetail.Period?.Month == month && contractdetail.Status == true)
-        .Sum(contractdetail => contractdetail.PaidValue);
-
-                double? totalPaidValueLateOfMonth = _contractDetailService.GetAllContractPaymentDetail()
-           .Where(contractdetail => contractdetail.Period?.Year == currentYear
-          && contractdetail.Period?.Month == month && contractdetail.Status == true)
-              .Sum(contractdetail => contractdetail.PaidValueLate);
-
-                var monthlyTotalPrice = new
-                {
-                    Month = month,
-                    TotalPrice = totalPriceBookingOfMonth + totalPaidValueOfMonth + totalPaidValueLateOfMonth
-                };
-
-                monthlyTotalPrices.Add(monthlyTotalPrice);
-
-            }
-            return monthlyTotalPrices;
-
-
-        }
+        
     }
 }
