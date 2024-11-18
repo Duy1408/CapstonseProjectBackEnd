@@ -178,6 +178,23 @@ namespace RealEstateProjectSaleDAO.DAOs
             return a;
         }
 
+        public List<Property> GetPropertyByCategoryDetailID(Guid id)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            var a = _context.Properties!.Include(c => c.UnitType)
+                                      .Include(c => c.Floor)
+                                      .Include(c => c.Block)
+                                      .Include(c => c.Zone)
+                                      .Include(o => o.ProjectCategoryDetail)
+                                         .ThenInclude(pc => pc.Project)
+                                      .Include(o => o.ProjectCategoryDetail)
+                                         .ThenInclude(pc => pc.PropertyCategory)
+                                      .Where(c => c.ProjectCategoryDetailID == id)
+                                      .ToList();
+
+            return a;
+        }
+
         public IQueryable<Property> SearchPropertyByName(string searchvalue)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
