@@ -480,7 +480,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                 }
 
                 booking.PropertyID = propertyId;
-                booking.Status = BookingStatus.DaDatCho.GetEnumDescription();
+                booking.Status = BookingStatus.DaChonSanPham.GetEnumDescription();
                 _booking.UpdateBooking(booking);
 
                 string nextContractCode = GenerateNextContractCode();
