@@ -22,5 +22,6 @@ namespace RealEstateProjectSaleServices.IServices
         IQueryable<Property> GetPropertyByZoneID(Guid id);
         IQueryable<Property> GetPropertyByProjectCategoryDetailID(Guid id);
         IQueryable<Property> SearchPropertyByName(string searchvalue);
+        List<Property> GetPropertyByCategoryDetailID(Guid id);
     }
 }

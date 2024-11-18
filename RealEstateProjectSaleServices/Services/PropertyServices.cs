@@ -32,6 +32,11 @@ namespace RealEstateProjectSaleServices.Services
             return _pro.GetPropertyByBlockID(id);
         }
 
+        public List<Property> GetPropertyByCategoryDetailID(Guid id)
+        {
+            return _pro.GetPropertyByCategoryDetailID(id);
+        }
+
         public IQueryable<Property> GetPropertyByFloorID(Guid id)
         {
             return _pro.GetPropertyByFloorID(id);

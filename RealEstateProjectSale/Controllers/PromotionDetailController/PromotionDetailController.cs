@@ -68,12 +68,21 @@ namespace RealEstateProjectSale.Controllers.PromotionDetailController
             });
 
         }
+
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new PromotionDetail")]
         public IActionResult AddNew(PromotionDetailCreateDTO pro)
         {
             try
             {
+                var detail = _detailServices.GetDetailByPromotionIDPropertyTypeID(pro.PromotionID, pro.PropertyTypeID);
+                if (detail != null)
+                {
+                    return BadRequest(new
+                    {
+                        message = "Loại căn hộ này đã có khuyến mãi chi tiết."
+                    });
+                }
 
                 var newPro = new PromotionDetailCreateDTO
                 {

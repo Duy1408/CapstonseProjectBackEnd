@@ -148,5 +148,10 @@ namespace RealEstateProjectSaleServices.Services
         {
             return _book.GetBookingByOpeningForSaleID(id);
         }
+
+        public List<Booking> GetBookingByCategoryDetailID(Guid id)
+        {
+            return _book.GetBookingByCategoryDetailID(id);
+        }
     }
 }

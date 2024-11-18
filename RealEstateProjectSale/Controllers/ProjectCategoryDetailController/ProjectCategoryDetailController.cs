@@ -17,14 +17,19 @@ namespace RealEstateProjectSale.Controllers.ProjectCategoryDetailController
     public class ProjectCategoryDetailController : ControllerBase
     {
         private readonly IProjectCategoryDetailServices _detailServices;
+        private readonly IBookingServices _bookServices;
         private readonly IOpeningForSaleServices _openService;
+        private readonly IPropertyServices _propertyService;
         private readonly IMapper _mapper;
 
         public ProjectCategoryDetailController(IProjectCategoryDetailServices detailServices,
-            IOpeningForSaleServices openService, IMapper mapper)
+            IOpeningForSaleServices openService, IBookingServices bookServices, IMapper mapper,
+            IPropertyServices propertyService)
         {
             _detailServices = detailServices;
+            _bookServices = bookServices;
             _openService = openService;
+            _propertyService = propertyService;
             _mapper = mapper;
         }
 
@@ -211,6 +216,33 @@ namespace RealEstateProjectSale.Controllers.ProjectCategoryDetailController
                 var detail = _detailServices.GetProjectCategoryDetailByID(id);
                 if (detail != null)
                 {
+                    var booking = _bookServices.GetBookingByCategoryDetailID(id);
+                    if (booking != null && booking.Any())
+                    {
+                        return BadRequest(new
+                        {
+                            message = "Booking đã có loại hình dự án này."
+                        });
+                    }
+
+                    var openForSale = _openService.GetOpeningForSaleByProjectCategoryDetailID(id);
+                    if (openForSale != null && openForSale.Any())
+                    {
+                        return BadRequest(new
+                        {
+                            message = "Đợt mở bán đã có loại hình dự án này."
+                        });
+                    }
+
+                    var property = _propertyService.GetPropertyByCategoryDetailID(id);
+                    if (property != null && property.Any())
+                    {
+                        return BadRequest(new
+                        {
+                            message = "Căn hộ đã có loại hình dự án này."
+                        });
+                    }
+
                     _detailServices.DeleteProjectCategoryDetailByID(id);
                     return Ok(new
                     {
