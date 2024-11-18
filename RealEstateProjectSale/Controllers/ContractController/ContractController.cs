@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Azure;
 using Azure.Storage.Blobs;
+using Google.Api.Gax.ResourceNames;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.IdentityModel.Tokens;
 using RealEstateProjectSale.SwaggerResponses;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
@@ -142,15 +144,23 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
         [HttpGet("customer/{customerId}")]
         [SwaggerOperation(Summary = "Get Contract by customer ID")]
-        [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách hợp đồng của khách hàng.", typeof(List<ContractVM>))]
+        [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách hợp đồng của khách hàng.", typeof(List<ContractResponse>))]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Hợp đồng không tồn tại.")]
         public IActionResult GetContractByCustomerID(Guid customerId)
         {
-            var contract = _contractServices.GetContractByCustomerID(customerId);
+            var contracts = _contractServices.GetContractByCustomerID(customerId);
 
-            if (contract != null)
+            if (contracts != null)
             {
-                var responese = contract.Select(contract => _mapper.Map<ContractVM>(contract)).ToList();
+                //var responese = contract.Select(contract => _mapper.Map<ContractVM>(contract)).ToList();
+
+                var responese = contracts.Select(contract => new ContractResponse
+                {
+                    ProjectName = contract.Booking!.ProjectCategoryDetail!.Project!.ProjectName,
+                    PropertyCode = contract!.Booking!.Property!.PropertyCode,
+                    PriceSold = contract.Booking.Property.PriceSold,
+                    Status = contract.Status
+                }).ToList();
 
                 return Ok(responese);
             }
