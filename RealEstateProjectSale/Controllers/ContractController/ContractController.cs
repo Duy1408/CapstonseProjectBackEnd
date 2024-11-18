@@ -156,6 +156,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
                 var responese = contracts.Select(contract => new ContractResponse
                 {
+                    ContractID = contract.ContractID,
                     ProjectName = contract.Booking!.ProjectCategoryDetail!.Project!.ProjectName,
                     PropertyCode = contract!.Booking!.Property!.PropertyCode,
                     PriceSold = contract.Booking.Property.PriceSold,
