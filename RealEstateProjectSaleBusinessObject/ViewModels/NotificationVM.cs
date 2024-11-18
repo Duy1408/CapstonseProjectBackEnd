@@ -19,6 +19,5 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public DateTime CreatedTime { get; set; }
         public bool Status { get; set; }
         public Guid BookingID { get; set; }
-        public Guid OpeningForSaleID { get; set; }
     }
 }

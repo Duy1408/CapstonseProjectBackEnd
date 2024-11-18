@@ -11,6 +11,8 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public Guid ZoneID { get; set; }
         public string ZoneName { get; set; }
         public string? ImageZone { get; set; }
-        
+        public Guid ProjectID { get; set; }
+        public string ProjectName { get; set; }
+
     }
 }

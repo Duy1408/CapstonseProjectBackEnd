@@ -158,11 +158,13 @@ namespace RealEstateProjectSale.Mapper
 
             CreateMap<ZoneCreateDTO, Zone>().ReverseMap();
             CreateMap<ZoneUpdateDTO, Zone>().ReverseMap();
-            CreateMap<ZoneVM, Zone>().ReverseMap();
+            CreateMap<ZoneVM, Zone>().ReverseMap().ForMember(dest => dest.ProjectName,
+                                 opt => opt.MapFrom(src => src.Project!.ProjectName));
 
             CreateMap<BlockCreateDTO, Block>().ReverseMap();
             CreateMap<BlockUpdateDTO, Block>().ReverseMap();
-            CreateMap<BlockVM, Block>().ReverseMap();
+            CreateMap<BlockVM, Block>().ReverseMap().ForMember(dest => dest.ZoneName,
+                                 opt => opt.MapFrom(src => src.Zone!.ZoneName));
 
             CreateMap<PanoramaImageCreateDTO, PanoramaImage>().ReverseMap();
             CreateMap<PanadoraImageUpdateDTO, PanoramaImage>().ReverseMap();
@@ -170,7 +172,8 @@ namespace RealEstateProjectSale.Mapper
 
             CreateMap<FloorCreateDTO, Floor>().ReverseMap();
             CreateMap<FloorUpdateDTO, Floor>().ReverseMap();
-            CreateMap<FloorVM, Floor>().ReverseMap();
+            CreateMap<FloorVM, Floor>().ReverseMap().ForMember(dest => dest.BlockName,
+                                 opt => opt.MapFrom(src => src.Block!.BlockName));
 
             CreateMap<DocumentTemplateCreateDTO, DocumentTemplate>().ReverseMap();
             CreateMap<DocumentTemplateCreateDTO, DocumentTemplate>().ReverseMap();
@@ -202,8 +205,7 @@ namespace RealEstateProjectSale.Mapper
             CreateMap<PaymentUpdateDTO, Payment>().ReverseMap();
 
 
-            CreateMap<NotificationVM, Notification>().ReverseMap().ForMember(dest => dest.OpeningForSaleID,
-                                 opt => opt.MapFrom(src => src.Booking!.OpeningForSaleID));
+            CreateMap<NotificationVM, Notification>().ReverseMap();
             CreateMap<NotificationCreateDTO, Notification>().ReverseMap();
             CreateMap<NotificationUpdateDTO, Notification>().ReverseMap();
 
