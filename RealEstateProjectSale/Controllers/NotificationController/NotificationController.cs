@@ -78,6 +78,26 @@ namespace RealEstateProjectSale.Controllers.NotificationController
 
         }
 
+        [HttpGet("customer/{customerId}")]
+        [SwaggerOperation(Summary = "Get Notification By CustomerID")]
+        public IActionResult GetNotificationByCustomerID(Guid customerId)
+        {
+            var noti = _notiServices.GetNotificationByCustomerID(customerId);
+
+            if (noti != null)
+            {
+                var responese = _mapper.Map<List<NotificationVM>>(noti);
+
+                return Ok(responese);
+            }
+
+            return NotFound(new
+            {
+                message = "Thông báo không tồn tại."
+            });
+
+        }
+
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new comment")]
         public IActionResult AddNewNotification(NotificationCreateDTO noti)

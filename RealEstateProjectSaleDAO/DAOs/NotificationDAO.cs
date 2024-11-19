@@ -45,6 +45,15 @@ namespace RealEstateProjectSaleDAO.DAOs
             }
         }
 
+        public List<Notification> GetNotificationByCustomerID(Guid customerId)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            return _context.Notifications.Include(a => a.Booking)
+                                         .Include(a => a.Customer)
+                                         .Where(a => a.CustomerID == customerId)
+                                         .ToList();
+        }
+
         public void AddNewNotification(Notification noti)
         {
             try

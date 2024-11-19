@@ -19,6 +19,8 @@ namespace RealEstateProjectSaleRepository.Repository
 
         public List<Notification> GetAllNotification() => dao.GetAllNotification();
 
+        public List<Notification> GetNotificationByCustomerID(Guid customerId) => dao.GetNotificationByCustomerID(customerId);
+
         public Notification GetNotificationByID(Guid id) => dao.GetNotificationByID(id);
 
         public void UpdateNotification(Notification noti) => dao.UpdateNotification(noti);

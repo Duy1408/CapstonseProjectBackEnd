@@ -14,6 +14,6 @@ namespace RealEstateProjectSaleRepository.IRepository
         void AddNewNotification(Notification noti);
         void UpdateNotification(Notification noti);
         bool ChangeStatusNotification(Notification noti);
-
+        List<Notification> GetNotificationByCustomerID(Guid customerId);
     }
 }
