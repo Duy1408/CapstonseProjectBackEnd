@@ -247,8 +247,26 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
             var customerresponese = _mapper.Map<CustomerVM>(customer);
             var propertyresponese = _mapper.Map<PropertyVM>(property);
-            var projectresponese = _mapper.Map<ProjectVM>(project);
-
+            var projectresponese = new ProjectVM
+            {
+                ProjectID = project.ProjectID,
+                ProjectName = project.ProjectName,
+                Location = project.Location,
+                Investor = project.Investor,
+                GeneralContractor = project.GeneralContractor,
+                DesignUnit = project.DesignUnit,
+                TotalArea = project.TotalArea,
+                Scale = project.Scale,
+                BuildingDensity = project.BuildingDensity,
+                TotalNumberOfApartment = project.TotalNumberOfApartment,
+                LegalStatus = project.LegalStatus,
+                HandOver = project.HandOver,
+                Convenience = project.Convenience,
+                Images = new List<string> { project.Image?.Split(',').FirstOrDefault() ?? string.Empty },
+                Status = project.Status,
+                PaymentPolicyID = project.PaymentPolicyID,
+                PaymentPolicyName = project.PaymentPolicy?.PaymentPolicyName
+            };
 
 
             return Ok(new
