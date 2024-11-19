@@ -84,6 +84,14 @@ namespace RealEstateProjectSale.Controllers.NotificationController
         {
             try
             {
+                var booking = _bookServices.GetBookingById(noti.BookingID);
+                if (booking == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Booking không tồn tại."
+                    });
+                }
 
                 var newNoti = new NotificationCreateDTO
                 {
@@ -93,7 +101,8 @@ namespace RealEstateProjectSale.Controllers.NotificationController
                     Body = noti.Body,
                     CreatedTime = DateTime.Now,
                     Status = true,
-                    BookingID = noti.BookingID
+                    BookingID = noti.BookingID,
+                    CustomerID = booking.CustomerID
                 };
 
                 var notification = _mapper.Map<RealEstateProjectSaleBusinessObject.BusinessObject.Notification>(newNoti);
@@ -172,7 +181,8 @@ namespace RealEstateProjectSale.Controllers.NotificationController
                     Body = body,
                     CreatedTime = DateTime.Now,
                     Status = true,
-                    BookingID = bookingId
+                    BookingID = bookingId,
+                    CustomerID = booking.CustomerID
                 };
                 var _noti = _mapper.Map<RealEstateProjectSaleBusinessObject.BusinessObject.Notification>(newNoti);
                 _notiServices.AddNewNotification(_noti);
@@ -214,6 +224,10 @@ namespace RealEstateProjectSale.Controllers.NotificationController
                     if (noti.BookingID.HasValue)
                     {
                         existingNoti.BookingID = noti.BookingID.Value;
+                    }
+                    if (noti.CustomerID.HasValue)
+                    {
+                        existingNoti.CustomerID = noti.CustomerID.Value;
                     }
 
                     _notiServices.UpdateNotification(existingNoti);

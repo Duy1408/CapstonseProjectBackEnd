@@ -19,5 +19,8 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
         [JsonIgnore]
         public bool Status { get; set; }
         public Guid BookingID { get; set; }
+        [JsonIgnore]
+        public Guid CustomerID { get; set; }
+
     }
 }

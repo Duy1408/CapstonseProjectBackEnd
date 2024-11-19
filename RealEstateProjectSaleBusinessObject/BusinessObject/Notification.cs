@@ -16,6 +16,8 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public bool Status { get; set; }
         public Guid BookingID { get; set; }
         public Booking? Booking { get; set; }
+        public Guid CustomerID { get; set; }
+        public Customer? Customer { get; set; }
 
     }
 }
