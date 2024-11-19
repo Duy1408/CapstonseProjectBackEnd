@@ -22,6 +22,8 @@ namespace RealEstateProjectSaleServices.Services
 
         public List<Notification> GetAllNotification() => _notiRepo.GetAllNotification();
 
+        public List<Notification> GetNotificationByCustomerID(Guid customerId) => _notiRepo.GetNotificationByCustomerID(customerId);
+
         public Notification GetNotificationByID(Guid id) => _notiRepo.GetNotificationByID(id);
 
         public void UpdateNotification(Notification noti) => _notiRepo.UpdateNotification(noti);
