@@ -46,13 +46,10 @@ namespace RealEstateProjectSaleServices.Services
                 {
                     pricebooking += booking.DepositedPrice.Value;
                 }
-              
-
-
             }
 
             total = pricebooking + pricecontract;
-            return (double)total;
+            return total;
         }
 
         public List<object> GetMonthlyTotalPrices()
