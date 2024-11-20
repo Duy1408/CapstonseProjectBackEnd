@@ -16,7 +16,7 @@ namespace RealEstateProjectSaleServices.Services
 
         public async Task NotifyBookingUpdated(Guid bookingId, string bookingstatus)
         {
-            await Clients.All.SendAsync("ReceiveBookingUpdate", bookingId, bookingstatus);
+            await Clients.All.SendAsync("ReceivePropertyUpdate", bookingId, bookingstatus);
         }
     }
 }
