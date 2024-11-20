@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using RealEstateProjectSaleServices.IServices;
 using RealEstateProjectSaleServices.Services;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace RealEstateProjectSale.Controllers.DashboardController
 {
@@ -17,11 +18,21 @@ namespace RealEstateProjectSale.Controllers.DashboardController
 
 
 
-        [HttpGet("/GetMonthlyTotalPrices")]
+        [HttpGet("mothlytotalprice")]
+        [SwaggerOperation(Summary = "Get monthly total prices")]
+
         public ActionResult<object> GetMonthlyTotalPrices()
         {
             var monthlyTotalPrices = _dashboardService.GetMonthlyTotalPrices();
             return Ok(monthlyTotalPrices);
+        }
+
+        [HttpGet("totalprice")]
+        [SwaggerOperation(Summary = "Calculate total price")]
+        public ActionResult<object> CalculateTotalPrice()
+        {
+            var totalprices = _dashboardService.CalculateTotalPrice();
+            return Ok(totalprices);
         }
     }
 

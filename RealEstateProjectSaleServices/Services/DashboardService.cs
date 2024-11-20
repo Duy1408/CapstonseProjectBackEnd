@@ -11,6 +11,8 @@ namespace RealEstateProjectSaleServices.Services
     {
         private readonly IBookingServices _bookingServices;
         private readonly IContractPaymentDetailServices _contractDetailService;
+     
+
 
 
         public DashboardService(IBookingServices bookingServices, IContractPaymentDetailServices contractDetailService)
@@ -18,6 +20,41 @@ namespace RealEstateProjectSaleServices.Services
             _bookingServices = bookingServices;
             _contractDetailService = contractDetailService;
         }
+
+     
+   
+
+        public double CalculateTotalPrice()
+        {
+            double total = 0;
+            double pricecontract = 0;
+            double pricebooking = 0;
+
+            var orderdetails = _contractDetailService.GetAllContractPaymentDetail();
+            foreach (var orderdetail in orderdetails)
+            {
+                if (orderdetail.Status == true && orderdetail.PaidValue.HasValue)
+                {
+                    pricecontract += orderdetail.PaidValue.Value;
+                }
+            }
+
+            var bookings = _bookingServices.GetBookings();
+            foreach (var booking in bookings)
+            {
+                if (booking.DepositedPrice.HasValue)
+                {
+                    pricebooking += booking.DepositedPrice.Value;
+                }
+              
+
+
+            }
+
+            total = pricebooking + pricecontract;
+            return (double)total;
+        }
+
         public List<object> GetMonthlyTotalPrices()
         {
             int currentYear = DateTime.Now.Year;
