@@ -26,6 +26,7 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public string? ContractDepositFile { get; set; }
         public string? ContractSaleFile { get; set; }
         public string? PriceSheetFile { get; set; }
+        public string? ContractTransferFile { get; set; }
         public string Status { get; set; }
         public Guid? DocumentTemplateID { get; set; }
         public string DocumentName { get; set; }

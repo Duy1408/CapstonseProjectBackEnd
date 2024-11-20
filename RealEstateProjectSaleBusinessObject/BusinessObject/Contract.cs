@@ -21,6 +21,7 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public string? ContractDepositFile { get; set; }//file thoa thuan dat coc
         public string? ContractSaleFile { get; set; }//hop dong mua ban
         public string? PriceSheetFile { get; set; }//phieu tam tinh
+        public string? ContractTransferFile { get; set; }//phieu tam tinh
         public string Status { get; set; }
         public Guid DocumentTemplateID { get; set; }
         public DocumentTemplate? DocumentTemplate { get; set; }
@@ -36,7 +37,7 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public PromotionDetail? PromotionDetail { get; set; }
         public Guid CustomerID { get; set; }
         public Customer? Customer { get; set; }
- 
+
 
     }
 }

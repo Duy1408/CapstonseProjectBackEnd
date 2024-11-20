@@ -19,6 +19,5 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Request
         public int? Basement { get; set; }
         public IFormFileCollection? Image { get; set; }
         public Guid? PropertyTypeID { get; set; }
-        public Guid ProjectID { get; set; }
     }
 }

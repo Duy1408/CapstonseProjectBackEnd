@@ -22,8 +22,6 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public Guid? PropertyTypeID { get; set; }
         public PropertyType? PropertyType { get; set; }
         public List<Property>? Properties { get; set; }
-        public Guid ProjectID { get; set; }
-        public Project Project { get; set; }
-   
+
     }
 }

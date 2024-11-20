@@ -134,6 +134,45 @@ namespace RealEstateProjectSaleServices.Services
             return htmlContent;
         }
 
+        public string GenerateDocumentTransfer(Guid contractId, Guid customerTwoId)
+        {
+            var contract = _contractRepo.GetContractByID(contractId);
+            var documentTemplate = _documentService.GetDocumentById(contract.DocumentTemplateID);
+            if (documentTemplate == null)
+            {
+                throw new Exception("Document template not found");
+            }
+            var customerOne = _customerService.GetCustomerByID(contract.CustomerID);
+            var customerTwo = _customerService.GetCustomerByID(customerTwoId);
+            var booking = _bookingService.GetBookingById(contract.BookingID);
+            var categoryDetail = _detailService.GetProjectCategoryDetailByID(booking.ProjectCategoryDetailID);
+            var project = _projectService.GetProjectById(categoryDetail.ProjectID);
+            var property = _propertyService.GetPropertyById(booking.PropertyID!.Value);
+            var unitType = _unitTypeService.GetUnitTypeByID(property.UnitTypeID!.Value);
+            var propertyType = _propertyTypeService.GetPropertyTypeByID(unitType.PropertyTypeID!.Value);
+
+            var htmlContent = documentTemplate.DocumentFile;
+            htmlContent = htmlContent.Replace("{FullNameOne}", customerOne.FullName)
+                                     .Replace("{FullNameTwo}", customerTwo.FullName)
+                                     .Replace("{DateOfBirthOne}", customerOne.DateOfBirth.ToString("yyyy/MM/dd"))
+                                     .Replace("{DateOfBirthTwo}", customerTwo.DateOfBirth.ToString("yyyy/MM/dd"))
+                                     .Replace("{IdentityCardNumberOne}", customerOne.IdentityCardNumber)
+                                     .Replace("{IdentityCardNumberTwo}", customerTwo.IdentityCardNumber)
+                                     .Replace("{AddressOne}", customerOne.Address)
+                                     .Replace("{AddressTwo}", customerTwo.Address)
+                                     .Replace("{PhoneNumberOne}", "0" + customerOne.PhoneNumber)
+                                     .Replace("{PhoneNumberTwo}", "0" + customerTwo.PhoneNumber)
+                                     .Replace("{ProjectName}", project.ProjectName)
+                                     .Replace("{PropertyCode}", property.PropertyCode)
+                                     .Replace("{PropertyType}", propertyType.PropertyTypeName)
+                                     .Replace("{NetFloorArea}", unitType.NetFloorArea.ToString())
+                                     .Replace("{Location}", project.Location);
+
+
+            return htmlContent;
+
+        }
+
         public string GenerateDocumentPriceSheet(Guid contractId)
         {
             var contract = _contractRepo.GetContractByID(contractId);
@@ -365,6 +404,5 @@ namespace RealEstateProjectSaleServices.Services
 
         public void UpdateContract(Contract contract) => _contractRepo.UpdateContract(contract);
 
-        
     }
 }

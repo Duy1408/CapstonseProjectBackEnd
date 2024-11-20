@@ -14,6 +14,8 @@ using RealEstateProjectSaleBusinessObject.BusinessObject;
 using RealEstateProjectSaleBusinessObject.DTO.Create;
 using RealEstateProjectSaleBusinessObject.DTO.Request;
 using RealEstateProjectSaleBusinessObject.DTO.Update;
+using RealEstateProjectSaleBusinessObject.Enums;
+using RealEstateProjectSaleBusinessObject.Enums.EnumHelpers;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 using Swashbuckle.AspNetCore.Annotations;
@@ -198,15 +200,14 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
                     });
                 }
 
-                //var existingProject = _open.FindByProjectIdAndStatus(existingDetail.ProjectID);
-                //if (existingProject != null)
-                //{
-                //    return NotFound(new
-                //    {
-                //        message = "An OpeningForSale with the same Project already exists."
-                //    });
-                //}
-
+                var project = _projectService.GetProjectById(existingDetail.ProjectID);
+                if (project.Status == ProjectStatus.DaHuy.GetEnumDescription())
+                {
+                    return BadRequest(new
+                    {
+                        message = "Dự án này đã bị xóa."
+                    });
+                }
 
                 var existingOpen = _open.FindByDetailIdAndStatus(detailID);
                 if (existingOpen != null)

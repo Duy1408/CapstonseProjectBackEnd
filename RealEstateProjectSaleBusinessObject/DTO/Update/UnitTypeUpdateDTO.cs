@@ -20,6 +20,5 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Update
         public int? Basement { get; set; }
         public bool? Status { get; set; }
         public Guid? PropertyTypeID { get; set; }
-        public Guid? ProjectID { get; set; }
     }
 }
