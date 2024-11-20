@@ -22,6 +22,7 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Update
         public IFormFile? ContractDepositFile { get; set; }
         public IFormFile? ContractSaleFile { get; set; }
         public IFormFile? PriceSheetFile { get; set; }
+        public IFormFile? ContractTransferFile { get; set; }
         public string? Status { get; set; }
         public Guid? DocumentTemplateID { get; set; }
         public Guid? BookingID { get; set; }

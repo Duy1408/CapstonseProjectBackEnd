@@ -19,6 +19,7 @@ namespace RealEstateProjectSaleServices.IServices
         Contract GetLastContract();
         string GenerateDocumentDeposit(Guid contractId);
         string GenerateDocumentSale(Guid contractId);
+        string GenerateDocumentTransfer(Guid contractId, Guid customerTwoId);
         string GeneratePaymentProcessTable(Guid contractId, Guid? paymentprocessId, double? totalPrice);
         string GenerateDocumentPriceSheet(Guid contractId);
         void CreateContractPaymentDetail(Guid contractId);

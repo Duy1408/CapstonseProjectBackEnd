@@ -24,6 +24,5 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
         [JsonIgnore]
         public bool Status { get; set; }
         public Guid? PropertyTypeID { get; set; }
-        public Guid ProjectID { get; set; }
     }
 }

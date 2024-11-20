@@ -29,7 +29,6 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public List<Zone> Zones { get; set; }
         public List<Salespolicy>? Salespolicies { get; set; }
         public List<ProjectCategoryDetail>? ProjectCategoryDetails { get; set; }
-        public List<UnitType>? UnitTypes { get; set; }
         public List<PanoramaImage>? PanoramaImages { get; set; }
 
 

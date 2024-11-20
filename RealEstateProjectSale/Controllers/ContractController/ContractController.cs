@@ -1069,6 +1069,137 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
         }
 
+        [HttpGet("customer-transferred/{contractId}")]
+        [SwaggerOperation(Summary = "Hiển thị những Khách hàng được nhận chuyển nhượng")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách khách hàng.", typeof(CustomerVM))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Hợp đồng không tồn tại.")]
+        public IActionResult ShowCustomerTransferred(Guid contractId)
+        {
+            try
+            {
+                var contract = _contractServices.GetContractByID(contractId);
+
+                if (contract == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Hợp đồng không tồn tại."
+                    });
+                }
+
+                var customers = _customerServices.GetAllCustomer();
+
+                var filteredCustomers = customers
+                            .Where(c => c.CustomerID != contract.CustomerID)
+                            .ToList();
+
+                var response = _mapper.Map<List<CustomerVM>>(filteredCustomers);
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("check-customer-transferred")]
+        [SwaggerOperation(Summary = "Khách hàng nhấn nút Xác nhận khách hàng nhận chuyển nhượng")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Xác nhận thông tin khách hàng nhận chuyển nhượng thành công.")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Hợp đồng không tồn tại.")]
+        public IActionResult ShowContractTransfer(Guid contractId, Guid customerId)
+        {
+            try
+            {
+                var contract = _contractServices.GetContractByID(contractId);
+                if (contract == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Hợp đồng không tồn tại."
+                    });
+                }
+
+                var customerOne = _customerServices.GetCustomerByID(contract.CustomerID);
+                if (customerOne == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Khách hàng chuyển nhượng không tồn tại."
+                    });
+                }
+
+                var customerTwo = _customerServices.GetCustomerByID(customerId);
+                if (customerTwo == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Khách hàng nhận chuyển nhượng không tồn tại."
+                    });
+                }
+
+                var documentReservation = _documentTemplateService.GetDocumentByDocumentName("Thỏa thuận chuyển nhượng");
+                if (documentReservation == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Hợp đồng không tồn tại"
+                    });
+                }
+
+                contract.DocumentTemplateID = documentReservation.DocumentTemplateID;
+                contract.Status = ContractStatus.ChoXacNhanChuyenNhuong.GetEnumDescription();
+                _contractServices.UpdateContract(contract);
+
+                var htmlContent = _contractServices.GenerateDocumentTransfer(contract.ContractID, customerId);
+                var pdfBytes = _documentTemplateService.GeneratePdfFromTemplate(htmlContent);
+                string? blobUrl = null;
+                using (MemoryStream pdfStream = new MemoryStream(pdfBytes))
+                {
+                    blobUrl = _fileService.UploadSingleFile(pdfStream, contract.DocumentTemplate!.DocumentName, "contractdepositfile");
+                }
+
+                string nextContractCode = GenerateNextContractCode();
+
+                var newContract = new ContractCreateDTO
+                {
+                    ContractID = Guid.NewGuid(),
+                    ContractCode = nextContractCode,
+                    ContractType = ContractType.DatCoc.GetEnumDescription(),
+                    CreatedTime = DateTime.Now,
+                    UpdatedTime = null,
+                    ExpiredTime = DateTime.Now.AddDays(1),
+                    TotalPrice = contract.TotalPrice,
+                    Description = "Đây là hợp đồng của khách hàng nhận chuyển nhượng",
+                    ContractDepositFile = null,
+                    ContractSaleFile = null,
+                    PriceSheetFile = null,
+                    ContractTransferFile = null,
+                    Status = ContractStatus.DaXacNhanTTDC.GetEnumDescription(),
+                    DocumentTemplateID = documentReservation.DocumentTemplateID,
+                    BookingID = contract.BookingID,
+                    CustomerID = customerId,
+                    PaymentProcessID = null,
+                    PromotionDetailID = null
+                };
+
+                var _contract = _mapper.Map<RealEstateProjectSaleBusinessObject.BusinessObject.Contract>(newContract);
+                _contract.ContractDepositFile = blobUrl;
+                _contractServices.AddNewContract(_contract);
+
+                return Ok(new
+                {
+                    message = "Xác nhận thông tin khách hàng nhận chuyển nhượng thành công."
+                });
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new Contract")]
         [SwaggerResponse(StatusCodes.Status200OK, "Hợp đồng đã được tạo thành công.")]
@@ -1120,6 +1251,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     ContractDepositFile = contract.ContractDepositFile,
                     ContractSaleFile = null,
                     PriceSheetFile = null,
+                    ContractTransferFile = null,
                     Status = ContractStatus.ChoXacNhanTTGD.GetEnumDescription(),
                     DocumentTemplateID = documentReservation.DocumentTemplateID,
                     BookingID = contract.BookingID,
@@ -1151,10 +1283,11 @@ namespace RealEstateProjectSale.Controllers.ContractController
         {
             try
             {
-                string? blobUrl1 = null, blobUrl2 = null, blobUrl3 = null;
+                string? blobUrl1 = null, blobUrl2 = null, blobUrl3 = null, blobUrl4 = null;
                 var depositFile = contract.ContractDepositFile;
                 var saleFile = contract.ContractSaleFile;
                 var priceFile = contract.PriceSheetFile;
+                var transferFile = contract.ContractTransferFile;
                 if (depositFile != null)
                 {
                     using (var pdfDepositStream = depositFile.OpenReadStream())
@@ -1171,9 +1304,16 @@ namespace RealEstateProjectSale.Controllers.ContractController
                 }
                 if (priceFile != null)
                 {
-                    using (var pdfSaleStream = priceFile.OpenReadStream())
+                    using (var pdfPriceStream = priceFile.OpenReadStream())
                     {
-                        blobUrl3 = _fileService.UploadSingleFile(pdfSaleStream, priceFile.FileName, "pricefile");
+                        blobUrl3 = _fileService.UploadSingleFile(pdfPriceStream, priceFile.FileName, "pricefile");
+                    }
+                }
+                if (transferFile != null)
+                {
+                    using (var pdfTransferStream = transferFile.OpenReadStream())
+                    {
+                        blobUrl4 = _fileService.UploadSingleFile(pdfTransferStream, transferFile.FileName, "contracttransferfile");
                     }
                 }
 
@@ -1243,6 +1383,10 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     if (blobUrl3 != null)
                     {
                         existingContract.PriceSheetFile = blobUrl3;
+                    }
+                    if (blobUrl4 != null)
+                    {
+                        existingContract.ContractTransferFile = blobUrl4;
                     }
 
                     existingContract.UpdatedTime = DateTime.Now;

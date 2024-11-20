@@ -191,9 +191,7 @@ namespace RealEstateProjectSale.Mapper
             CreateMap<ProjectCategoryDetailUpdateDTO, ProjectCategoryDetail>().ReverseMap();
 
             CreateMap<UnitTypeVM, UnitType>().ReverseMap().ForMember(dest => dest.PropertyTypeName,
-                                 opt => opt.MapFrom(src => src.PropertyType!.PropertyTypeName))
-                                                           .ForMember(dest => dest.ProjectName,
-                                 opt => opt.MapFrom(src => src.Project!.ProjectName));
+                                 opt => opt.MapFrom(src => src.PropertyType!.PropertyTypeName));
             CreateMap<UnitTypeCreateDTO, UnitType>().ReverseMap();
             CreateMap<UnitTypeUpdateDTO, UnitType>().ReverseMap();
 
