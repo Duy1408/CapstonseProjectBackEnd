@@ -9,5 +9,8 @@ namespace RealEstateProjectSaleServices.IServices
     public interface IDashboardService
     {
         List<object> GetMonthlyTotalPrices();
+        double CalculateTotalPrice();
+      
+
     }
 }
