@@ -9,6 +9,7 @@ using Azure.Storage.Blobs.Models;
 using iText.Kernel.Pdf;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
 using RealEstateProjectSaleBusinessObject.DTO.Create;
@@ -36,10 +37,13 @@ namespace RealEstateProjectSale.Controllers.BookingController
         private readonly IProjectServices _projectService;
         private readonly IProjectCategoryDetailServices _detailServices;
         private readonly IMapper _mapper;
+        private readonly IHubContext<PropertyHub> _hubContext;
+
 
         public BookingsController(IBookingServices book, IFileUploadToBlobService fileService,
                     IMapper mapper, IDocumentTemplateService documentService, IOpeningForSaleServices openService,
-                    ICustomerServices customerServices, IProjectServices projectService, IProjectCategoryDetailServices detailServices)
+                    ICustomerServices customerServices, IProjectServices projectService, IProjectCategoryDetailServices detailServices,
+                    IHubContext<PropertyHub> hubContext)
         {
             _book = book;
             _fileService = fileService;
@@ -49,6 +53,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
             _customerServices = customerServices;
             _projectService = projectService;
             _detailServices = detailServices;
+            _hubContext = hubContext;
         }
 
         [HttpGet]
@@ -529,7 +534,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Delete Booking by ID")]
-        public IActionResult DeleteContract(Guid id)
+        public async Task<IActionResult> DeleteContract(Guid id)
         {
 
             var booking = _book.GetBookingById(id);
@@ -543,12 +548,33 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
             _book.ChangeStatusBooking(booking);
 
-
+            await _hubContext.Clients.All.SendAsync("ReceiveBookingStatus", booking.BookingID.ToString(), booking.Status);
             return Ok(new
             {
                 message = "Xóa Booking thành công"
             });
         }
 
+
+        //public async Task<IActionResult> DeleteContract(Guid id)
+        //{
+
+        //    var booking = _book.GetBookingById(id);
+        //    if (booking == null)
+        //    {
+        //        return NotFound(new
+        //        {
+        //            message = "Booking không tồn tại."
+        //        });
+        //    }
+
+        //    _book.ChangeStatusBooking(booking);
+        //    await _hubContext.Clients.All.SendAsync("ReceiveBookingStatus", booking.BookingID.ToString(), booking.Status);
+
+        //    return Ok(new
+        //    {
+        //        message = "Xóa Booking thành công"
+        //    });
+        //}
     }
 }
