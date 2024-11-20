@@ -554,8 +554,8 @@ namespace RealEstateProjectSale.Controllers.ContractController
             var promotiondetailresponese = _mapper.Map<PromotionDetailVM>(promotiondetail);
             return Ok(new
             {
-                promotiondetail = promotiondetailresponese,
-                paymentprocess = paymentprocessresponese,
+                promotionDetail = promotiondetailresponese,
+                paymentProcess = paymentprocessresponese,
             });
         }
 
