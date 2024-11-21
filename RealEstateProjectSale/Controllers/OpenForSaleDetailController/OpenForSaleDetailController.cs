@@ -107,7 +107,14 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
                 {
                     return NotFound(new
                     {
-                        message = "Căn  không tồn tại."
+                        message = "Căn không tồn tại."
+                    });
+                }
+                if (existingProperty.Status != PropertyStatus.ChuaBan.GetEnumDescription())
+                {
+                    return BadRequest(new
+                    {
+                        message = "Căn này phải có trạng thái Chưa bán."
                     });
                 }
 
