@@ -10,7 +10,7 @@ namespace RealEstateProjectSaleRepository.IRepository
     public interface IOpeningForSaleRepo
     {
         public bool ChangeStatus(OpeningForSale o);
-
+        bool GetExistOpenStatusByProjectCategoryDetailID(Guid id);
 
         public List<OpeningForSale> GetOpeningForSales();
         public void AddNew(OpeningForSale o);

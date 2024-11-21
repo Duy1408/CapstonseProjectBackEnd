@@ -10,7 +10,7 @@ namespace RealEstateProjectSaleServices.IServices
     public interface IOpeningForSaleServices
     {
         bool ChangeStatus(OpeningForSale o);
-
+        bool GetExistOpenStatusByProjectCategoryDetailID(Guid id);
 
         List<OpeningForSale> GetOpeningForSales();
         void AddNew(OpeningForSale o);

@@ -61,5 +61,10 @@ namespace RealEstateProjectSaleRepository.Repository
         {
             return _open.FindByProjectIdAndStatus(projectId);
         }
+
+        public bool GetExistOpenStatusByProjectCategoryDetailID(Guid id)
+        {
+            return _open.GetExistOpenStatusByProjectCategoryDetailID(id);
+        }
     }
 }

@@ -14,5 +14,6 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public Guid PropertyCategoryID { get; set; }
         public string PropertyCategoryName { get; set; }
         public string OpenForSale { get; set; }
+        public bool ExistOpen { get; set; }
     }
 }
