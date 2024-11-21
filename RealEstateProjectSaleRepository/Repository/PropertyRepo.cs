@@ -67,6 +67,11 @@ namespace RealEstateProjectSaleRepository.Repository
             return _pro.GetPropertyByZoneID(id);
         }
 
+        public List<Property> GetPropertyNotSaleByCategoryDetailID(Guid id)
+        {
+            return _pro.GetPropertyNotSaleByCategoryDetailID(id);
+        }
+
         public IQueryable<Property> SearchPropertyByName(string searchvalue)
         {
             return _pro.SearchPropertyByName(searchvalue);

@@ -287,6 +287,26 @@ namespace RealEstateProjectSale.Controllers.PropertyController
 
         }
 
+        [HttpGet("property-not-sale/{categoryDetailID}")]
+        [SwaggerOperation(Summary = "Get Property Not Sale By CategoryDetailID")]
+        public IActionResult GetPropertyNotSaleByCategoryDetailID(Guid categoryDetailID)
+        {
+            var property = _pro.GetPropertyNotSaleByCategoryDetailID(categoryDetailID);
+
+            if (property != null)
+            {
+                var responese = _mapper.Map<List<PropertyVM>>(property);
+
+                return Ok(responese);
+            }
+
+            return NotFound(new
+            {
+                message = "Căn này không tồn tại."
+            });
+
+        }
+
         [HttpGet("search")]
         [SwaggerOperation(Summary = "Search Property By Name")]
         public ActionResult<Property> SearchPropertyByName(string searchValue)

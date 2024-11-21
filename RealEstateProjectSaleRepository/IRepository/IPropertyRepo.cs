@@ -24,6 +24,7 @@ namespace RealEstateProjectSaleRepository.IRepository
         IQueryable<Property> GetPropertyByProjectCategoryDetailID(Guid id);
         IQueryable<Property> SearchPropertyByName(string searchvalue);
         List<Property> GetPropertyByCategoryDetailID(Guid id);
+        List<Property> GetPropertyNotSaleByCategoryDetailID(Guid id);
         bool ChangeStatusProperty(Property property);
     }
 }

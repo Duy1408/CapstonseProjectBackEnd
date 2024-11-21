@@ -117,11 +117,10 @@ namespace RealEstateProjectSaleDAO.DAOs
                                       .Include(c => c.Floor)
                                       .Include(c => c.Block)
                                       .Include(c => c.Zone)
-.Include(o => o.ProjectCategoryDetail)
-    .ThenInclude(pc => pc.Project)
-.Include(o => o.ProjectCategoryDetail)
-    .ThenInclude(pc => pc.PropertyCategory)
-
+                                      .Include(o => o.ProjectCategoryDetail)
+                                        .ThenInclude(pc => pc.Project)
+                                      .Include(o => o.ProjectCategoryDetail)
+                                         .ThenInclude(pc => pc.PropertyCategory)
                                       .Where(c => c.FloorID == id);
 
             return a;
@@ -138,7 +137,6 @@ namespace RealEstateProjectSaleDAO.DAOs
                                         .ThenInclude(pc => pc.Project)
                                         .Include(o => o.ProjectCategoryDetail)
                                          .ThenInclude(pc => pc.PropertyCategory)
-
                                       .Where(c => c.BlockID == id);
 
             return a;
@@ -155,7 +153,6 @@ namespace RealEstateProjectSaleDAO.DAOs
                                          .ThenInclude(pc => pc.Project)
                                            .Include(o => o.ProjectCategoryDetail)
                                             .ThenInclude(pc => pc.PropertyCategory)
-
                                       .Where(c => c.ZoneID == id);
 
             return a;
@@ -190,6 +187,23 @@ namespace RealEstateProjectSaleDAO.DAOs
                                       .Include(o => o.ProjectCategoryDetail)
                                          .ThenInclude(pc => pc.PropertyCategory)
                                       .Where(c => c.ProjectCategoryDetailID == id)
+                                      .ToList();
+
+            return a;
+        }
+
+        public List<Property> GetPropertyNotSaleByCategoryDetailID(Guid id)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            var a = _context.Properties!.Include(c => c.UnitType)
+                                      .Include(c => c.Floor)
+                                      .Include(c => c.Block)
+                                      .Include(c => c.Zone)
+                                      .Include(o => o.ProjectCategoryDetail)
+                                         .ThenInclude(pc => pc.Project)
+                                      .Include(o => o.ProjectCategoryDetail)
+                                         .ThenInclude(pc => pc.PropertyCategory)
+                                      .Where(c => c.ProjectCategoryDetailID == id && c.Status == PropertyStatus.ChuaBan.GetEnumDescription())
                                       .ToList();
 
             return a;
