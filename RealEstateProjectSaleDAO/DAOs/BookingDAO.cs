@@ -294,6 +294,15 @@ namespace RealEstateProjectSaleDAO.DAOs
                                   && b.CustomerID == customerID);
         }
 
+        public List<Booking> CheckCustomerBooking(Guid openForSaleID, Guid categoryDetailID, Guid customerID)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            return _context.Bookings.Where(b => b.OpeningForSaleID == openForSaleID
+                                    && b.ProjectCategoryDetailID == categoryDetailID
+                                    && b.CustomerID != customerID)
+                                    .ToList();
+        }
+
         public bool ChangeStatusBooking(Booking booking)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();

@@ -210,6 +210,8 @@ namespace RealEstateProjectSaleServices.Services
 
             property.PriceSold = totalPrice;
             _propertyService.UpdateProperty(property);
+            contract.TotalPrice = totalPrice;
+            _contractRepo.UpdateContract(contract);
             var paymentProcessTableHtml = GeneratePaymentProcessTable(contractId, contract.PaymentProcessID, totalPrice);
 
             var htmlContent = documentTemplate.DocumentFile;

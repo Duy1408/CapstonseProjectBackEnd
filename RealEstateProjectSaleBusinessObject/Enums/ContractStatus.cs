@@ -39,7 +39,10 @@ namespace RealEstateProjectSaleBusinessObject.Enums
         [EnumDescription("Đã xác nhận chuyển nhượng")]
         DaXacNhanChuyenNhuong = 10,
 
+        [EnumDescription("Chờ xác nhận TTCNTTDC")]
+        ChoXacNhanTTCNTTDC = 11,
+
         [EnumDescription("Đã hủy")]
-        DaHuy = 11
+        DaHuy = 12
     }
 }

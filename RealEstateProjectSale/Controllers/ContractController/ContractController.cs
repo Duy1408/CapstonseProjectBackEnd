@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.IdentityModel.Tokens;
+using RealEstateProjectSale.Helpers;
 using RealEstateProjectSale.SwaggerResponses;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
 using RealEstateProjectSaleBusinessObject.DTO.Create;
@@ -152,8 +153,6 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
             if (contracts != null)
             {
-                //var responese = contract.Select(contract => _mapper.Map<ContractVM>(contract)).ToList();
-
                 var responese = contracts.Select(contract => new ContractResponse
                 {
                     ContractID = contract.ContractID,
@@ -1078,7 +1077,6 @@ namespace RealEstateProjectSale.Controllers.ContractController
             try
             {
                 var contract = _contractServices.GetContractByID(contractId);
-
                 if (contract == null)
                 {
                     return NotFound(new
@@ -1088,10 +1086,21 @@ namespace RealEstateProjectSale.Controllers.ContractController
                 }
 
                 var customers = _customerServices.GetAllCustomer();
+                var booking = _bookServices.GetBookingById(contract.BookingID);
+                if (booking == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Booking không tồn tại."
+                    });
+                }
 
-                var filteredCustomers = customers
-                            .Where(c => c.CustomerID != contract.CustomerID)
-                            .ToList();
+                var bookings = _bookServices.CheckCustomerBooking(booking.OpeningForSaleID, booking.ProjectCategoryDetailID, contract.CustomerID);
+                var excludedCustomerIds = bookings.Select(b => b.CustomerID).ToHashSet();
+
+                var filteredCustomers = customers.Where(c => !excludedCustomerIds.Contains(c.CustomerID))
+                                                 .Where(c => c.CustomerID != contract.CustomerID)
+                                                 .ToList();
 
                 var response = _mapper.Map<List<CustomerVM>>(filteredCustomers);
 
@@ -1107,7 +1116,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
         [SwaggerOperation(Summary = "Khách hàng nhấn nút Xác nhận khách hàng nhận chuyển nhượng")]
         [SwaggerResponse(StatusCodes.Status200OK, "Xác nhận thông tin khách hàng nhận chuyển nhượng thành công.")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Hợp đồng không tồn tại.")]
-        public IActionResult ShowContractTransfer(Guid contractId, Guid customerId)
+        public IActionResult ShowContractTransfer(Guid contractId, Guid customerTransfereeId)
         {
             try
             {
@@ -1129,7 +1138,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     });
                 }
 
-                var customerTwo = _customerServices.GetCustomerByID(customerId);
+                var customerTwo = _customerServices.GetCustomerByID(customerTransfereeId);
                 if (customerTwo == null)
                 {
                     return NotFound(new
@@ -1149,43 +1158,19 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
                 contract.DocumentTemplateID = documentReservation.DocumentTemplateID;
                 contract.Status = ContractStatus.ChoXacNhanChuyenNhuong.GetEnumDescription();
+                contract.UpdatedTime = DateTime.Now;
                 _contractServices.UpdateContract(contract);
 
-                var htmlContent = _contractServices.GenerateDocumentTransfer(contract.ContractID, customerId);
+                var htmlContent = _contractServices.GenerateDocumentTransfer(contract.ContractID, customerTransfereeId);
                 var pdfBytes = _documentTemplateService.GeneratePdfFromTemplate(htmlContent);
                 string? blobUrl = null;
                 using (MemoryStream pdfStream = new MemoryStream(pdfBytes))
                 {
-                    blobUrl = _fileService.UploadSingleFile(pdfStream, contract.DocumentTemplate!.DocumentName, "contractdepositfile");
+                    blobUrl = _fileService.UploadSingleFile(pdfStream, customerTransfereeId.ToString(), "contractdepositfile");
                 }
 
-                string nextContractCode = GenerateNextContractCode();
-
-                var newContract = new ContractCreateDTO
-                {
-                    ContractID = Guid.NewGuid(),
-                    ContractCode = nextContractCode,
-                    ContractType = ContractType.DatCoc.GetEnumDescription(),
-                    CreatedTime = DateTime.Now,
-                    UpdatedTime = null,
-                    ExpiredTime = DateTime.Now.AddDays(1),
-                    TotalPrice = contract.TotalPrice,
-                    Description = "Đây là hợp đồng của khách hàng nhận chuyển nhượng",
-                    ContractDepositFile = null,
-                    ContractSaleFile = null,
-                    PriceSheetFile = null,
-                    ContractTransferFile = null,
-                    Status = ContractStatus.DaXacNhanTTDC.GetEnumDescription(),
-                    DocumentTemplateID = documentReservation.DocumentTemplateID,
-                    BookingID = contract.BookingID,
-                    CustomerID = customerId,
-                    PaymentProcessID = null,
-                    PromotionDetailID = null
-                };
-
-                var _contract = _mapper.Map<RealEstateProjectSaleBusinessObject.BusinessObject.Contract>(newContract);
-                _contract.ContractDepositFile = blobUrl;
-                _contractServices.AddNewContract(_contract);
+                contract.ContractTransferFile = blobUrl;
+                _contractServices.UpdateContract(contract);
 
                 return Ok(new
                 {
@@ -1199,6 +1184,186 @@ namespace RealEstateProjectSale.Controllers.ContractController
             }
         }
 
+        [HttpPost("check-transfer-send-otp")]
+        [SwaggerOperation(Summary = "Gửi mã OTP qua mail cho khách hàng xác nhận TTCN")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Mã OTP đã được gửi thành công qua email.")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Hợp đồng không tồn tại.")]
+        public async Task<IActionResult> SendEmailTransfer(Guid contractid)
+        {
+            try
+            {
+                var contract = _contractServices.GetContractByID(contractid);
+                if (contract == null)
+                {
+                    return NotFound(new { message = "Hợp đồng không tồn tại." });
+                }
+                var customer = _customerServices.GetCustomerByID(contract.CustomerID);
+                if (customer == null)
+                {
+                    return NotFound(new { message = "Khách hàng không tồn tại." });
+                }
+                var account = _accountService.GetAccountByID(customer.AccountID);
+
+                if (account == null || string.IsNullOrEmpty(account.Email) || !IsValidEmail(account.Email))
+                {
+                    return BadRequest(new { message = "Lỗi email." });
+                }
+
+                string otp = GenerateOTP();
+                DateTime expirationTime = DateTime.UtcNow.AddMinutes(3);
+                otpStorage[account.Email] = (otp, expirationTime);
+                Mailrequest mailrequest = new Mailrequest();
+                mailrequest.ToEmail = account.Email;
+                mailrequest.Subject = "OTP Verification Code";
+                mailrequest.Body = $"Hello, your OTP code is: {otp}";
+                await _emailService.SendEmailAsync(mailrequest);
+                return Ok(new { message = "Mã OTP đã được gửi thành công qua email." });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { error = e.Message });
+            }
+        }
+
+        [HttpPost("check-transfer-verify-otp")]
+        [SwaggerOperation(Summary = "Khách hàng xác nhận mã OTP ở bước xác nhận TTCN")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Xác minh OTP thành công.")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Hợp đồng không tồn tại.")]
+        public IActionResult VerifyOtpTransfer(Guid contractid, string otp)
+        {
+            try
+            {
+                var contract = _contractServices.GetContractByID(contractid);
+                if (contract == null)
+                {
+                    return NotFound(new { message = "Hợp đồng không tồn tại." });
+                }
+                var customerOne = _customerServices.GetCustomerByID(contract.CustomerID);
+                if (customerOne == null)
+                {
+                    return NotFound(new { message = "Khách hàng không tồn tại." });
+                }
+                var accountOne = _accountService.GetAccountByID(customerOne.AccountID);
+
+                if (accountOne == null || string.IsNullOrEmpty(accountOne.Email) || !IsValidEmail(accountOne.Email))
+                {
+                    return BadRequest(new { message = "Địa chỉ Email không hợp lệ." });
+                }
+                if (string.IsNullOrEmpty(accountOne.Email) || string.IsNullOrEmpty(otp))
+                {
+                    return BadRequest(new { message = "Email and OTP là bắt buộc." });
+                }
+                if (otpStorage.TryGetValue(accountOne.Email, out var otpEntry))
+                {
+
+                    if (otpEntry.Otp == otp && otpEntry.Expiration > DateTime.UtcNow)
+                    {
+
+                        otpStorage.Remove(accountOne.Email);
+
+                        if (contract.ContractTransferFile == null)
+                        {
+                            return BadRequest(new { message = "Hợp đồng không có thỏa thuận chuyển nhượng." });
+                        }
+
+                        var extraction = new CustomerIdExtraction();
+
+                        string customerTransfereeStringId = extraction.ExtractCustomerIdFromUrl(contract.ContractTransferFile);
+                        Guid customerTransfereeId = Guid.Parse(customerTransfereeStringId);
+
+                        var customerTwo = _customerServices.GetCustomerByID(customerTransfereeId);
+                        if (customerTwo == null)
+                        {
+                            return NotFound(new
+                            {
+                                message = "Khách hàng nhận chuyển nhượng không tồn tại."
+                            });
+                        }
+                        var accountTwo = _accountService.GetAccountByID(customerTwo.AccountID);
+
+                        if (accountTwo == null || string.IsNullOrEmpty(accountTwo.Email) || !IsValidEmail(accountTwo.Email))
+                        {
+                            return BadRequest(new { message = "Địa chỉ Email không hợp lệ." });
+                        }
+
+                        //Gửi mail thông báo xán nhận TTCN thành công cho KH chuyển nhượng
+                        Mailrequest mailrequestOne = new Mailrequest();
+                        mailrequestOne.ToEmail = accountOne.Email;
+                        mailrequestOne.Subject = "Xác nhận Thỏa thuận chuyển nhượng";
+                        mailrequestOne.Body =
+                            $"<h5>THÔNG BÁO XÁC NHẬN CHUYỂN NHƯỢNG THỎA THUẬN ĐẶT CỌC THÀNH CÔNG</h5>" +
+                            $"<div>Kính gửi quý khách {customerOne.FullName}</div>" +
+                            $"<div>Thảo thuận chuyển nhượng của Quý khách đã được xác nhận. Quý khách có thể xem lại thông tin Thỏa thuận chuyển nhượng.</div>" +
+                            $"<div>Đường link xem Thỏa thuận chuyển nhượng</div>" +
+                            $"<a href='{contract.ContractTransferFile}'>{contract.ContractTransferFile}</a>";
+
+                        _emailService.SendEmailAsync(mailrequestOne);
+
+                        //Gửi mail thông báo xán nhận TTCN thành công cho KH nhận chuyển nhượng
+                        Mailrequest mailrequestTwo = new Mailrequest();
+                        mailrequestTwo.ToEmail = accountTwo.Email;
+                        mailrequestTwo.Subject = "Yêu Cầu Xác Nhận Thỏa Thuận Chuyển Nhượng";
+                        mailrequestTwo.Body =
+                            $"<h5>THÔNG BÁO YÊU CẦU XÁC NHẬN CHUYỂN NHƯỢNG THỎA THUẬN ĐẶT CỌC</h5>" +
+                            $"<div>Kính gửi quý khách {customerTwo.FullName}</div>" +
+                            $"<div>Quý khách vui lòng kiểm tra và xác nhận Thỏa thuận chuyển nhượng thỏa thuận đặt cọc.</div>" +
+                            $"<div>Đường link xem Thỏa thuận chuyển nhượng</div>" +
+                            $"<a href='{contract.ContractTransferFile}'>{contract.ContractTransferFile}</a>";
+
+                        _emailService.SendEmailAsync(mailrequestTwo);
+
+                        contract.Status = ContractStatus.DaXacNhanChuyenNhuong.GetEnumDescription();
+                        contract.ContractType = ContractType.ChuyenNhuong.GetEnumDescription();
+                        contract.UpdatedTime = DateTime.Now;
+                        contract.ExpiredTime = DateTime.Now.AddDays(1);
+                        _contractServices.UpdateContract(contract);
+
+                        string nextContractCode = GenerateNextContractCode();
+
+                        var newContract = new ContractCreateDTO
+                        {
+                            ContractID = Guid.NewGuid(),
+                            ContractCode = nextContractCode,
+                            ContractType = ContractType.DatCoc.GetEnumDescription(),
+                            CreatedTime = DateTime.Now,
+                            UpdatedTime = null,
+                            ExpiredTime = DateTime.Now.AddDays(1),
+                            TotalPrice = contract.TotalPrice,
+                            Description = "Đây là hợp đồng của khách hàng nhận chuyển nhượng",
+                            ContractDepositFile = null,
+                            ContractSaleFile = null,
+                            PriceSheetFile = null,
+                            ContractTransferFile = null,
+                            Status = ContractStatus.ChoXacNhanTTCNTTDC.GetEnumDescription(),
+                            DocumentTemplateID = contract.DocumentTemplateID,
+                            BookingID = contract.BookingID,
+                            CustomerID = customerTransfereeId,
+                            PaymentProcessID = null,
+                            PromotionDetailID = null
+                        };
+
+                        var _contract = _mapper.Map<RealEstateProjectSaleBusinessObject.BusinessObject.Contract>(newContract);
+                        _contract.ContractDepositFile = contract.ContractTransferFile;
+                        _contractServices.AddNewContract(_contract);
+
+                        return Ok(new { message = "Xác minh OTP thành công." });
+                    }
+                    else
+                    {
+                        return BadRequest(new { message = "OTP không hợp lệ hoặc đã hết hạn." });
+                    }
+                }
+                else
+                {
+                    return BadRequest(new { message = "Không tìm thấy OTP cho email này." });
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { error = e.Message });
+            }
+
+        }
 
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new Contract")]

@@ -26,6 +26,11 @@ namespace RealEstateProjectSaleRepository.Repository
             return dao.ChangeStatusBooking(booking);
         }
 
+        public List<Booking> CheckCustomerBooking(Guid openForSaleID, Guid categoryDetailID, Guid customerID)
+        {
+            return dao.CheckCustomerBooking(openForSaleID, categoryDetailID, customerID);
+        }
+
         public Booking CheckExistingBooking(Guid openForSaleID, Guid categoryDetailID, Guid customerID)
         {
             return dao.CheckExistingBooking(openForSaleID, categoryDetailID, customerID);
