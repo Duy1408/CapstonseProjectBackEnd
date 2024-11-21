@@ -1,4 +1,5 @@
-﻿using RealEstateProjectSaleServices.IServices;
+﻿using RealEstateProjectSaleBusinessObject.Enums;
+using RealEstateProjectSaleServices.IServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,18 +12,45 @@ namespace RealEstateProjectSaleServices.Services
     {
         private readonly IBookingServices _bookingServices;
         private readonly IContractPaymentDetailServices _contractDetailService;
-     
+        private readonly IPropertyServices _propertyServices;
 
 
 
-        public DashboardService(IBookingServices bookingServices, IContractPaymentDetailServices contractDetailService)
+
+
+        public DashboardService(IBookingServices bookingServices, IContractPaymentDetailServices contractDetailService,
+           IPropertyServices propertyServices)
         {
             _bookingServices = bookingServices;
             _contractDetailService = contractDetailService;
+            _propertyServices = propertyServices;
         }
 
-     
-   
+        public int CalculateProperty()
+        {
+            int total = 0;
+            var properties = _propertyServices.GetProperty();
+          
+
+            foreach ( var property in properties)
+            {
+                if (property.Status=="DaBan")
+                {
+                    total++;
+                }
+            }
+            return total ;
+        }
+
+        public int SumProperty()
+        {
+           
+            var sumproperties = _propertyServices.GetProperty().Count();
+            return sumproperties;
+        }
+
+
+
 
         public double CalculateTotalPrice()
         {
@@ -86,5 +114,7 @@ namespace RealEstateProjectSaleServices.Services
 
 
         }
+
+    
     }
 }
