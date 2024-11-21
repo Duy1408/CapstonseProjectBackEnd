@@ -10,7 +10,11 @@ namespace RealEstateProjectSaleServices.IServices
     {
         List<object> GetMonthlyTotalPrices();
         double CalculateTotalPrice();
-      
+        int CalculateProperty();
+        int SumProperty();
+
+
+
 
     }
 }
