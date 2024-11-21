@@ -56,7 +56,8 @@ namespace RealEstateProjectSale.Controllers.ProjectCategoryDetailController
                     ProjectName = detailOpen.ProjectName,
                     PropertyCategoryID = detailOpen.PropertyCategoryID,
                     PropertyCategoryName = detailOpen.PropertyCategoryName,
-                    OpenForSale = _openService.GetOpenForSaleStatusByProjectCategoryDetailID(detailOpen.ProjectCategoryDetailID)
+                    OpenForSale = _openService.GetOpenForSaleStatusByProjectCategoryDetailID(detailOpen.ProjectCategoryDetailID),
+                    ExistOpen = _openService.GetExistOpenStatusByProjectCategoryDetailID(detailOpen.ProjectCategoryDetailID)
                 }).ToList();
 
                 return Ok(responese);

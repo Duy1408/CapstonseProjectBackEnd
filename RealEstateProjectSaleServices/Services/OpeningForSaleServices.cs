@@ -89,5 +89,10 @@ namespace RealEstateProjectSaleServices.Services
             return OpeningForSaleStatus.ChuaMoBan.GetEnumDescription();
 
         }
+
+        public bool GetExistOpenStatusByProjectCategoryDetailID(Guid id)
+        {
+            return _open.GetExistOpenStatusByProjectCategoryDetailID(id);
+        }
     }
 }
