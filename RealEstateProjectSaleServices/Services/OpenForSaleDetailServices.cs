@@ -27,6 +27,8 @@ namespace RealEstateProjectSaleServices.Services
 
         public OpenForSaleDetail GetOpenForSaleDetailByID(Guid id) => _detailRepo.GetOpenForSaleDetailByID(id);
 
+        public List<OpenForSaleDetail> GetOpenForSaleDetailByOpeningForSaleID(Guid id) => _detailRepo.GetOpenForSaleDetailByOpeningForSaleID(id);
+
         public void UpdateOpenForSaleDetail(OpenForSaleDetail detail) => _detailRepo.UpdateOpenForSaleDetail(detail);
 
     }

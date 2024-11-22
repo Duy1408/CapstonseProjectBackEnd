@@ -76,6 +76,26 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
 
         }
 
+        [HttpGet("open-for-sale/{openId}")]
+        [SwaggerOperation(Summary = "Get OpenForSaleDetail By OpeningForSaleID")]
+        public IActionResult GetOpenForSaleDetailByOpeningForSaleID(Guid openId)
+        {
+            var details = _detailServices.GetOpenForSaleDetailByOpeningForSaleID(openId);
+
+            if (details != null)
+            {
+                var responese = _mapper.Map<List<OpenForSaleDetailVM>>(details);
+
+                return Ok(responese);
+            }
+
+            return NotFound(new
+            {
+                message = "Chi tiết đợt mở bán không tồn tại."
+            });
+
+        }
+
         [HttpGet("{propertyId}/{openId}")]
         [SwaggerOperation(Summary = "Get OpenForSaleDetail By PropertyID and OpeningForSaleID")]
         public IActionResult GetDetailByPropertyIdOpenId(Guid propertyId, Guid openId)
