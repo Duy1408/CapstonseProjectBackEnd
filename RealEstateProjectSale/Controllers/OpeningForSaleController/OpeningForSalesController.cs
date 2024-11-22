@@ -304,6 +304,10 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
                     {
                         existingOpen.Status = open.Status.Value;
                     }
+                    if (open.ProjectCategoryDetailID.HasValue)
+                    {
+                        existingOpen.ProjectCategoryDetailID = open.ProjectCategoryDetailID.Value;
+                    }
 
                     _open.UpdateOpeningForSale(existingOpen);
 

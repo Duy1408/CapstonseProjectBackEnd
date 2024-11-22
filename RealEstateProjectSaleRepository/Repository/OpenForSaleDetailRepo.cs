@@ -15,13 +15,11 @@ namespace RealEstateProjectSaleRepository.Repository
 
         public void AddNewOpenForSaleDetail(OpenForSaleDetail detail) => dao.AddNewOpenForSaleDetail(detail);
 
-        public void DeleteOpenForSaleDetailByID(Guid id) => dao.DeleteOpenForSaleDetailByID(id);
+        public void DeleteOpenForSaleDetailByID(Guid propertyId, Guid openId) => dao.DeleteOpenForSaleDetailByID(propertyId, openId);
 
         public List<OpenForSaleDetail> GetAllOpenForSaleDetail() => dao.GetAllOpenForSaleDetail();
 
         public OpenForSaleDetail GetDetailByPropertyIdOpenId(Guid propertyId, Guid openId) => dao.GetDetailByPropertyIdOpenId(propertyId, openId);
-
-        public OpenForSaleDetail GetOpenForSaleDetailByID(Guid id) => dao.GetOpenForSaleDetailByID(id);
 
         public List<OpenForSaleDetail> GetOpenForSaleDetailByOpeningForSaleID(Guid id) => dao.GetOpenForSaleDetailByOpeningForSaleID(id);
 

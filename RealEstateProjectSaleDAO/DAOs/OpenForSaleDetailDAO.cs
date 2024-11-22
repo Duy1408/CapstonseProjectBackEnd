@@ -43,21 +43,6 @@ namespace RealEstateProjectSaleDAO.DAOs
             }
         }
 
-        public OpenForSaleDetail GetOpenForSaleDetailByID(Guid id)
-        {
-            try
-            {
-                var detail = _context.OpenForSaleDetails!.Include(c => c.OpeningForSale)
-                                                         .Include(c => c.Property)
-                                                         .SingleOrDefault(c => c.OpeningForSaleID == id);
-                return detail;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
         public OpenForSaleDetail GetDetailByPropertyIdOpenId(Guid propertyId, Guid openId)
         {
             try
@@ -105,9 +90,9 @@ namespace RealEstateProjectSaleDAO.DAOs
             }
         }
 
-        public void DeleteOpenForSaleDetailByID(Guid id)
+        public void DeleteOpenForSaleDetailByID(Guid propertyId, Guid openId)
         {
-            var _detail = _context.OpenForSaleDetails!.SingleOrDefault(lo => lo.OpeningForSaleID == id);
+            var _detail = _context.OpenForSaleDetails!.SingleOrDefault(lo => lo.OpeningForSaleID == openId && lo.PropertyID == propertyId);
             if (_detail != null)
             {
                 _context.Remove(_detail);
