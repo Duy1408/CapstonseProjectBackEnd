@@ -15,42 +15,42 @@ namespace RealEstateProjectSale.Validations.Request
         public OpeningForSaleRequestDTOValidator()
         {
             RuleFor(x => x.DecisionName)
-                .NotEmpty().WithMessage("Decision Name is required.")
-                .Length(2, 50).WithMessage("Decision Name must be between 2 and 50 characters.");
+                .NotEmpty().WithMessage("Tên quyết định là bắt buộc.")
+                .Length(2, 50).WithMessage("Tên quyết định phải có độ dài từ 2 đến 50 ký tự.");
 
             RuleFor(x => x.SaleType)
-                .NotEmpty().WithMessage("Sale Type is required.")
+                .NotEmpty().WithMessage("Loại hình bán hàng là bắt buộc.")
                 .Must(value => value == "Online" || value == "Offline")
-                .WithMessage("Sale Type must be either 'Online' or 'Offline'.");
+                .WithMessage("Loại hình bán hàng phải là 'Online' hoặc 'Offline'.");
 
             RuleFor(x => x.ReservationPrice)
-                .NotNull().WithMessage("Reservation Price is required.")
-                .GreaterThanOrEqualTo(20000000).WithMessage("Reservation Price must be between 20.000.000 and 50.000.000.")
-                .LessThanOrEqualTo(50000000).WithMessage("Reservation Price must be between 20.000.000 and 50.000.000.");
+                .NotNull().WithMessage("Giá giữ chỗ là bắt buộc.")
+                .GreaterThanOrEqualTo(20000000).WithMessage("Giá giữ chỗ phải từ 20.000.000 đến 50.000.000.")
+                .LessThanOrEqualTo(50000000).WithMessage("Giá giữ chỗ phải từ 20.000.000 đến 50.000.000.");
 
             RuleFor(x => x.Description)
-                .MaximumLength(500).WithMessage("Description must not exceed 500 characters.")
+                .MaximumLength(500).WithMessage("Mô tả không được vượt quá 500 ký tự.")
                 .When(x => x.Description != null);
 
             RuleFor(x => x.StartDate)
-                .NotEmpty().WithMessage("StartDate is required.")
-                .Must(BeValidDateFormat).WithMessage("StartDate must follow the format yyyy-MM-dd HH:mm:ss.");
+                .NotEmpty().WithMessage("Ngày bắt đầu là bắt buộc.")
+                .Must(BeValidDateFormat).WithMessage("Ngày bắt đầu phải theo định dạng yyyy-MM-dd HH:mm:ss.");
 
             RuleFor(x => x.EndDate)
-                .NotEmpty().WithMessage("EndDate is required.")
-                .Must(BeValidDateFormat).WithMessage("EndDate must follow the format yyyy-MM-dd HH:mm:ss.");
+                .NotEmpty().WithMessage("Ngày kết thúc là bắt buộc.")
+                .Must(BeValidDateFormat).WithMessage("Ngày kết thúc phải theo định dạng yyyy-MM-dd HH:mm:ss.");
 
             RuleFor(x => x.CheckinDate)
-                .NotEmpty().WithMessage("CheckinDate is required.")
-                .Must(BeValidDateFormat).WithMessage("CheckinDate must follow the format yyyy-MM-dd HH:mm:ss.");
+                .NotEmpty().WithMessage("Ngày checkin là bắt buộc.")
+                .Must(BeValidDateFormat).WithMessage("Ngày checkin phải theo định dạng yyyy-MM-dd HH:mm:ss.");
 
             RuleFor(x => x)
                 .Must(x => BeValidDateRange(x.StartDate, x.CheckinDate, x.EndDate))
-                .WithMessage("Request: StartDate < CheckinDate < EndDate.");
+                .WithMessage("Yêu cầu: Ngày bắt đầu < Ngày checkin < Ngày kết thúc.");
 
             RuleFor(x => x.ProjectCategoryDetailID)
-                .NotEmpty().WithMessage("ProjectCategoryDetail ID is required.")
-                .Must(id => id != Guid.Empty).WithMessage("ProjectCategoryDetail ID must be a valid GUID.");
+                .NotEmpty().WithMessage("ProjectCategoryDetailID là bắt buộc.")
+                .Must(id => id != Guid.Empty).WithMessage("ProjectCategoryDetailID phải là GUID hợp lệ.");
         }
 
         private bool BeValidDateFormat(string date)

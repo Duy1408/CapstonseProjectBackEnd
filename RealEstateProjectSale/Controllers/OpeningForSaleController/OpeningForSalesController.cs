@@ -230,7 +230,7 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
                     EndDate = parsedEndDate,
                     CheckinDate = parsedCheckinDate,
                     SaleType = open.SaleType,
-                    ReservationPrice = open.ReservationPrice,
+                    ReservationPrice = open.ReservationPrice!.Value,
                     Description = open.Description,
                     Status = true,
                     ProjectCategoryDetailID = detailID

@@ -122,7 +122,7 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
         {
             try
             {
-                var existingProperty = _propertyService.GetPropertyById(detail.PropertyID);
+                var existingProperty = _propertyService.GetPropertyById(detail.PropertyID!.Value);
                 if (existingProperty == null)
                 {
                     return NotFound(new
@@ -138,7 +138,7 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
                     });
                 }
 
-                var existingOpen = _openServices.GetOpeningForSaleById(detail.OpeningForSaleID);
+                var existingOpen = _openServices.GetOpeningForSaleById(detail.OpeningForSaleID!.Value);
                 if (existingOpen == null)
                 {
                     return NotFound(new
@@ -166,7 +166,7 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
                 var _detail = _mapper.Map<OpenForSaleDetail>(newDetail);
                 _detailServices.AddNewOpenForSaleDetail(_detail);
 
-                var property = _propertyService.GetPropertyById(newDetail.PropertyID);
+                var property = _propertyService.GetPropertyById(newDetail.PropertyID!.Value);
                 property.Status = PropertyStatus.GiuCho.GetEnumDescription();
                 _propertyService.UpdateProperty(property);
 
@@ -181,13 +181,13 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
             }
         }
 
-        [HttpPut("{id}")]
+        [HttpPut]
         [SwaggerOperation(Summary = "Update OpenForSaleDetail by ID")]
-        public IActionResult UpdateOpenForSaleDetail([FromForm] OpenForSaleDetailUpdateDTO detail, Guid id)
+        public IActionResult UpdateOpenForSaleDetail([FromForm] OpenForSaleDetailUpdateDTO detail, Guid propertyId, Guid openId)
         {
             try
             {
-                var existingDetail = _detailServices.GetOpenForSaleDetailByID(id);
+                var existingDetail = _detailServices.GetDetailByPropertyIdOpenId(propertyId, openId);
                 if (existingDetail != null)
                 {
                     if (detail.Price.HasValue)
@@ -197,6 +197,14 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
                     if (!string.IsNullOrEmpty(detail.Note))
                     {
                         existingDetail.Note = detail.Note;
+                    }
+                    if (detail.PropertyID.HasValue)
+                    {
+                        existingDetail.PropertyID = detail.PropertyID.Value;
+                    }
+                    if (detail.OpeningForSaleID.HasValue)
+                    {
+                        existingDetail.OpeningForSaleID = detail.OpeningForSaleID.Value;
                     }
 
                     _detailServices.UpdateOpenForSaleDetail(existingDetail);

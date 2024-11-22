@@ -262,6 +262,21 @@ namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
                     });
                 }
 
+                //đợt hiện tại của id
+                var currentPaymentRate = contractDetail.PaymentRate;
+
+                //đợt thanh toán trước
+                var previousPaymentDetail = paymentDetails.FirstOrDefault(d => d.PaymentRate == currentPaymentRate - 1);
+                if (previousPaymentDetail != null && previousPaymentDetail.Status == false)
+                {
+                    return BadRequest(new
+                    {
+                        message = "Khách hàng chưa thanh toán đợt thanh toán trước đó."
+                    });
+                }
+
+
+                //đợt thanh toán cuối cùng
                 var lastPaymentDetail = paymentDetails.OrderByDescending(d => d.PaymentRate)
                                                       .FirstOrDefault();
                 if (lastPaymentDetail == null)
@@ -356,6 +371,28 @@ namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
                     return NotFound(new
                     {
                         message = "Chi tiết hợp đồng không tồn tại."
+                    });
+                }
+
+                var paymentDetails = _detailService.GetContractPaymentDetailByContractID(contractDetail.ContractID);
+                if (paymentDetails == null || !paymentDetails.Any())
+                {
+                    return NotFound(new
+                    {
+                        message = "Chi tiết hợp đồng không tồn tại."
+                    });
+                }
+
+                //đợt hiện tại của id
+                var currentPaymentRate = contractDetail.PaymentRate;
+
+                //đợt thanh toán trước
+                var previousPaymentDetail = paymentDetails.FirstOrDefault(d => d.PaymentRate == currentPaymentRate - 1);
+                if (previousPaymentDetail != null && previousPaymentDetail.Status == false)
+                {
+                    return BadRequest(new
+                    {
+                        message = "Khách hàng chưa thanh toán đợt thanh toán trước đó."
                     });
                 }
 
