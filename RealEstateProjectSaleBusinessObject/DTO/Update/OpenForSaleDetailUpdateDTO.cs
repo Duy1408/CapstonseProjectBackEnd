@@ -11,5 +11,7 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Update
     {
         public double? Price { get; set; }
         public string? Note { get; set; }
+        public Guid? OpeningForSaleID { get; set; }
+        public Guid? PropertyID { get; set; }
     }
 }
