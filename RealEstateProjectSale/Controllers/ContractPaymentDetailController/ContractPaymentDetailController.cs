@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
 using RealEstateProjectSaleBusinessObject.DTO.Create;
 using RealEstateProjectSaleBusinessObject.DTO.Update;
+using RealEstateProjectSaleBusinessObject.Enums;
+using RealEstateProjectSaleBusinessObject.Enums.EnumHelpers;
 using RealEstateProjectSaleBusinessObject.Model;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
@@ -20,13 +22,20 @@ namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
     public class ContractPaymentDetailController : ControllerBase
     {
         private readonly IContractPaymentDetailServices _detailService;
+        private readonly IContractServices _contractService;
+        private readonly IBookingServices _bookingService;
+        private readonly IPropertyServices _propertyService;
         private readonly IFileUploadToBlobService _fileService;
         private readonly IMapper _mapper;
 
         public ContractPaymentDetailController(IContractPaymentDetailServices detailService,
-                    IFileUploadToBlobService fileService, IMapper mapper)
+                    IFileUploadToBlobService fileService, IMapper mapper, IContractServices contractService,
+                    IBookingServices bookingService, IPropertyServices propertyService)
         {
             _detailService = detailService;
+            _contractService = contractService;
+            _bookingService = bookingService;
+            _propertyService = propertyService;
             _fileService = fileService;
             _mapper = mapper;
         }
@@ -83,8 +92,6 @@ namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
 
             if (detail != null)
             {
-                //var responese = details.Select(details => _mapper.Map<ContractPaymentDetailVM>(details)).ToList();
-
                 var details = _mapper.Map<List<ContractPaymentDetailVM>>(detail);
 
                 var responese = details.Select(detailContract => new ContractPaymentDetailVM
@@ -244,6 +251,74 @@ namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
                     {
                         message = "Khách hàng chưa upload Ủy nhiệm chi cho đợt thanh toán này."
                     });
+                }
+
+                var paymentDetails = _detailService.GetContractPaymentDetailByContractID(contractDetail.ContractID);
+                if (paymentDetails == null || !paymentDetails.Any())
+                {
+                    return NotFound(new
+                    {
+                        message = "Chi tiết hợp đồng không tồn tại."
+                    });
+                }
+
+                var lastPaymentDetail = paymentDetails.OrderByDescending(d => d.PaymentRate)
+                                                      .FirstOrDefault();
+                if (lastPaymentDetail == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Chi tiết hợp đồng cuối cùng không tồn tại."
+                    });
+                }
+                if (lastPaymentDetail.ContractPaymentDetailID == id)
+                {
+                    contractDetail.Status = true;
+                    _detailService.UpdateContractPaymentDetail(contractDetail);
+
+                    var contract = _contractService.GetContractByID(contractDetail.ContractID);
+                    if (contract == null)
+                    {
+                        return NotFound(new
+                        {
+                            message = "Hợp đồng không tồn tại."
+                        });
+                    }
+                    contract.Status = ContractStatus.DaBanGiaoQSHD.GetEnumDescription();
+                    contract.UpdatedTime = DateTime.Now;
+                    contract.ExpiredTime = DateTime.Now;
+                    _contractService.UpdateContract(contract);
+
+                    var booking = _bookingService.GetBookingById(contract.BookingID);
+                    if (booking == null)
+                    {
+                        return NotFound(new
+                        {
+                            message = "Booking không tồn tại."
+                        });
+                    }
+                    var propertyId = booking.PropertyID.GetValueOrDefault(Guid.Empty);
+
+                    if (propertyId == Guid.Empty)
+                    {
+                        throw new ArgumentException("Booking không có căn hộ.");
+                    }
+                    var property = _propertyService.GetPropertyById(propertyId);
+                    if (booking == null)
+                    {
+                        return NotFound(new
+                        {
+                            message = "Booking không tồn tại."
+                        });
+                    }
+                    property.Status = PropertyStatus.BanGiao.GetEnumDescription();
+                    _propertyService.UpdateProperty(property);
+
+                    return Ok(new
+                    {
+                        message = "Staff xác nhận Ủy nhiệm chi thành công."
+                    });
+
                 }
 
                 contractDetail.Status = true;

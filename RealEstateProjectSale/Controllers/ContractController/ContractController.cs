@@ -1100,6 +1100,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
                 var filteredCustomers = customers.Where(c => !excludedCustomerIds.Contains(c.CustomerID))
                                                  .Where(c => c.CustomerID != contract.CustomerID)
+                                                 .Where(c => c.IdentityCardNumber != null)
                                                  .ToList();
 
                 var response = _mapper.Map<List<CustomerVM>>(filteredCustomers);
