@@ -19,13 +19,11 @@ namespace RealEstateProjectSaleServices.Services
 
         public void AddNewOpenForSaleDetail(OpenForSaleDetail detail) => _detailRepo.AddNewOpenForSaleDetail(detail);
 
-        public void DeleteOpenForSaleDetailByID(Guid id) => _detailRepo.DeleteOpenForSaleDetailByID(id);
+        public void DeleteOpenForSaleDetailByID(Guid propertyId, Guid openId) => _detailRepo.DeleteOpenForSaleDetailByID(propertyId, openId);
 
         public List<OpenForSaleDetail> GetAllOpenForSaleDetail() => _detailRepo.GetAllOpenForSaleDetail();
 
         public OpenForSaleDetail GetDetailByPropertyIdOpenId(Guid propertyId, Guid openId) => _detailRepo.GetDetailByPropertyIdOpenId(propertyId, openId);
-
-        public OpenForSaleDetail GetOpenForSaleDetailByID(Guid id) => _detailRepo.GetOpenForSaleDetailByID(id);
 
         public List<OpenForSaleDetail> GetOpenForSaleDetailByOpeningForSaleID(Guid id) => _detailRepo.GetOpenForSaleDetailByOpeningForSaleID(id);
 

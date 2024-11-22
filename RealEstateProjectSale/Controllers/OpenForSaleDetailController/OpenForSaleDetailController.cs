@@ -56,26 +56,6 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
             }
         }
 
-        [HttpGet("{id}")]
-        [SwaggerOperation(Summary = "Get OpenForSaleDetail By ID")]
-        public IActionResult GetOpenForSaleDetailByID(Guid id)
-        {
-            var detail = _detailServices.GetOpenForSaleDetailByID(id);
-
-            if (detail != null)
-            {
-                var responese = _mapper.Map<OpenForSaleDetailVM>(detail);
-
-                return Ok(responese);
-            }
-
-            return NotFound(new
-            {
-                message = "Chi tiết đợt mở bán không tồn tại."
-            });
-
-        }
-
         [HttpGet("open-for-sale/{openId}")]
         [SwaggerOperation(Summary = "Get OpenForSaleDetail By OpeningForSaleID")]
         public IActionResult GetOpenForSaleDetailByOpeningForSaleID(Guid openId)
@@ -181,7 +161,7 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
             }
         }
 
-        [HttpPut]
+        [HttpPut("{propertyId}/{openId}")]
         [SwaggerOperation(Summary = "Update OpenForSaleDetail by ID")]
         public IActionResult UpdateOpenForSaleDetail([FromForm] OpenForSaleDetailUpdateDTO detail, Guid propertyId, Guid openId)
         {
@@ -228,16 +208,16 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
             }
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{propertyId}/{openId}")]
         [SwaggerOperation(Summary = "Delete OpenForSaleDetail by ID")]
-        public IActionResult DeleteOpenForSaleDetail(Guid id)
+        public IActionResult DeleteOpenForSaleDetail(Guid propertyId, Guid openId)
         {
             try
             {
-                var detail = _detailServices.GetOpenForSaleDetailByID(id);
+                var detail = _detailServices.GetDetailByPropertyIdOpenId(propertyId, openId);
                 if (detail != null)
                 {
-                    _detailServices.DeleteOpenForSaleDetailByID(id);
+                    _detailServices.DeleteOpenForSaleDetailByID(propertyId, openId);
                     return Ok(new
                     {
                         message = "Xóa chi tiết đợt mở bán thành công."

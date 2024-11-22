@@ -30,7 +30,7 @@ namespace RealEstateProjectSale.Validations.Request
 
             RuleFor(x => x.Description)
                 .MaximumLength(500).WithMessage("Mô tả không được vượt quá 500 ký tự.")
-                .When(x => x.Description != null);
+                .When(x => !string.IsNullOrEmpty(x.Description));
 
             RuleFor(x => x.StartDate)
                 .NotEmpty().WithMessage("Ngày bắt đầu là bắt buộc.")
