@@ -23,6 +23,8 @@ namespace RealEstateProjectSaleRepository.Repository
 
         public OpenForSaleDetail GetOpenForSaleDetailByID(Guid id) => dao.GetOpenForSaleDetailByID(id);
 
+        public List<OpenForSaleDetail> GetOpenForSaleDetailByOpeningForSaleID(Guid id) => dao.GetOpenForSaleDetailByOpeningForSaleID(id);
+
         public void UpdateOpenForSaleDetail(OpenForSaleDetail detail) => dao.UpdateOpenForSaleDetail(detail);
 
     }

@@ -1365,6 +1365,61 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
         }
 
+        [HttpPut("check-receive-transfer")]
+        [SwaggerOperation(Summary = "Khách hàng nhận chuyển nhượng nhấn nút Xác nhận TTCNTTDC")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Xác nhận thỏa thuận chuyển nhượng thành công.")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Hợp đồng không tồn tại.")]
+        public IActionResult CustomerConfirmContractTransfer(Guid contractid)
+        {
+            var contract = _contractServices.GetContractByID(contractid);
+            if (contract == null)
+            {
+                return NotFound(new
+                {
+                    message = "Hợp đồng không tồn tại."
+                });
+            }
+
+            var customer = _customerServices.GetCustomerByID(contract.CustomerID);
+            if (customer == null)
+            {
+                return NotFound(new
+                {
+                    message = "Khách hàng không tồn tại."
+                });
+            }
+
+            var account = _accountService.GetAccountByID(customer.AccountID);
+            if (account == null || string.IsNullOrEmpty(account.Email) || !IsValidEmail(account.Email))
+            {
+                return BadRequest(new { message = "Địa chỉ Email không hợp lệ." });
+            }
+
+            contract.Status = ContractStatus.DaXacNhanTTDC.GetEnumDescription();
+            contract.UpdatedTime = DateTime.Now;
+            contract.ExpiredTime = DateTime.Now.AddDays(1);
+            _contractServices.UpdateContract(contract);
+
+            //Gửi mail thư mời thanh toán tiền
+            Mailrequest mailrequest = new Mailrequest();
+            mailrequest.ToEmail = account.Email;
+            mailrequest.Subject = "Xác nhận Thỏa thuận chuyển nhượng";
+            mailrequest.Body =
+                $"<h5>THÔNG BÁO XÁC NHẬN CHUYỂN NHƯỢNG THỎA THUẬN ĐẶT CỌC THÀNH CÔNG</h5>" +
+                $"<div>Kính gửi quý khách {contract.Customer.FullName}</div>" +
+                $"<div>Thảo thuận chuyển nhượng của Quý khách đã được xác nhận. Quý khách có thể xem lại thông tin Thỏa thuận chuyển nhượng.</div>" +
+                $"<div>Đường link xem Thỏa thuận chuyển nhượng</div>" +
+                $"<a href='{contract.ContractDepositFile}'>{contract.ContractDepositFile}</a>";
+
+            _emailService.SendEmailAsync(mailrequest);
+
+            return Ok(new
+            {
+                message = "Xác nhận thỏa thuận chuyển nhượng thành công."
+            });
+
+        }
+
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new Contract")]
         [SwaggerResponse(StatusCodes.Status200OK, "Hợp đồng đã được tạo thành công.")]
