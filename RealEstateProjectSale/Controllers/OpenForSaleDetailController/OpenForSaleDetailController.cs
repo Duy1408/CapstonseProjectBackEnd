@@ -148,6 +148,7 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
 
                 var property = _propertyService.GetPropertyById(newDetail.PropertyID!.Value);
                 property.Status = PropertyStatus.GiuCho.GetEnumDescription();
+                property.PriceSold = newDetail.Price;
                 _propertyService.UpdateProperty(property);
 
                 return Ok(new
