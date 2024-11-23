@@ -120,7 +120,7 @@ namespace RealEstateProjectSale.Controllers.ZoneController
 
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new Zone")]
-        public IActionResult AddNewZone([FromForm] ZoneRequestDTO zone, Guid projectId)
+        public IActionResult AddNewZone([FromForm] ZoneRequestDTO zone)
         {
             try
             {
@@ -133,7 +133,7 @@ namespace RealEstateProjectSale.Controllers.ZoneController
                     ZoneName = zone.ZoneName,
                     ImageZone = zone.ImageZone.Count > 0 ? zone.ImageZone.First() : null, // Store first image for reference
                     Status = true,
-                    ProjectID = projectId,
+                    ProjectID = zone.ProjectID
 
                 };
 
