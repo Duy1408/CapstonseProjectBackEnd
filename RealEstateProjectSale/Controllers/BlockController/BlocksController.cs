@@ -120,7 +120,7 @@ namespace RealEstateProjectSale.Controllers.BlockController
 
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new Block")]
-        public IActionResult AddNewBlock([FromForm] BlockRequestDTO block, Guid zoneId)
+        public IActionResult AddNewBlock([FromForm] BlockRequestDTO block)
         {
             try
             {
@@ -132,7 +132,7 @@ namespace RealEstateProjectSale.Controllers.BlockController
                     BlockName = block.BlockName,
                     ImageBlock = block.ImageBlock.Count > 0 ? block.ImageBlock.First() : null, // Store first image for reference
                     Status = true,
-                    ZoneID = zoneId,
+                    ZoneID = block.ZoneID,
                 };
 
                 var b = _mapper.Map<Block>(newBlock);

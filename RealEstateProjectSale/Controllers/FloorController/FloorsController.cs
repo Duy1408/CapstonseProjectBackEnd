@@ -87,7 +87,7 @@ namespace RealEstateProjectSale.Controllers.FloorController
 
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new Floor")]
-        public IActionResult AddNewFloor([FromForm] FloorRequestDTO floor, Guid blockId)
+        public IActionResult AddNewFloor([FromForm] FloorRequestDTO floor)
         {
             try
             {
@@ -100,7 +100,7 @@ namespace RealEstateProjectSale.Controllers.FloorController
                     NumFloor = floor.NumFloor,
                     ImageFloor = floor.ImageFloor.Count > 0 ? floor.ImageFloor.First() : null, // Store first image for reference
                     Status = true,
-                    BlockID = blockId,
+                    BlockID = floor.BlockID
                 };
 
                 var b = _mapper.Map<Floor>(newFloor);

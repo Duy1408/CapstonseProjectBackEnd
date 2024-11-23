@@ -11,6 +11,6 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Request
     {
         public string ZoneName { get; set; }
         public IFormFileCollection? ImageZone { get; set; }
-        public bool Status { get; set; }
+        public Guid ProjectID { get; set; }
     }
 }

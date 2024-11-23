@@ -11,6 +11,6 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Request
     {
         public int NumFloor { get; set; }
         public IFormFileCollection? ImageFloor { get; set; }
-        public bool Status { get; set; }
+        public Guid BlockID { get; set; }
     }
 }
