@@ -271,7 +271,7 @@ namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
                 {
                     return BadRequest(new
                     {
-                        message = "Khách hàng chưa thanh toán đợt thanh toán trước đó."
+                        message = "Đợt thanh toán trước đó chưa được xác nhận bởi Staff."
                     });
                 }
 
@@ -392,7 +392,7 @@ namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
                 {
                     return BadRequest(new
                     {
-                        message = "Khách hàng chưa thanh toán đợt thanh toán trước đó."
+                        message = "Đợt thanh toán trước đó chưa được xác nhận bởi Staff."
                     });
                 }
 
