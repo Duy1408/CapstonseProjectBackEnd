@@ -147,7 +147,7 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
                 _detailServices.AddNewOpenForSaleDetail(_detail);
 
                 var property = _propertyService.GetPropertyById(newDetail.PropertyID);
-                property.Status = PropertyStatus.GiuCho.GetEnumDescription();
+                property.Status = PropertyStatus.MoBan.GetEnumDescription();
                 property.PriceSold = newDetail.Price;
                 _propertyService.UpdateProperty(property);
 
