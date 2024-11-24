@@ -48,9 +48,6 @@ namespace RealEstateProjectSale.Validations.Request
                 .Must(x => BeValidDateRange(x.StartDate, x.CheckinDate, x.EndDate))
                 .WithMessage("Yêu cầu: Ngày bắt đầu < Ngày checkin < Ngày kết thúc.");
 
-            RuleFor(x => x.ProjectCategoryDetailID)
-                .NotEmpty().WithMessage("ProjectCategoryDetailID là bắt buộc.")
-                .Must(id => id != Guid.Empty).WithMessage("ProjectCategoryDetailID phải là GUID hợp lệ.");
         }
 
         private bool BeValidDateFormat(string date)

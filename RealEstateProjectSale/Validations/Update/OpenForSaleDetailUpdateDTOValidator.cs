@@ -15,14 +15,6 @@ namespace RealEstateProjectSale.Validations.Update
             RuleFor(x => x.Note)
                 .MaximumLength(500).WithMessage("Ghi chú không được vượt quá 500 ký tự.")
                 .When(x => !string.IsNullOrEmpty(x.Note));
-
-            RuleFor(x => x.OpeningForSaleID)
-                .Must(id => id != Guid.Empty).WithMessage("OpeningForSaleID phải là GUID hợp lệ.")
-                .When(x => x.OpeningForSaleID.HasValue);
-
-            RuleFor(x => x.PropertyID)
-                .Must(id => id != Guid.Empty).WithMessage("PropertyID phải là GUID hợp lệ.")
-                .When(x => x.PropertyID.HasValue);
         }
     }
 }

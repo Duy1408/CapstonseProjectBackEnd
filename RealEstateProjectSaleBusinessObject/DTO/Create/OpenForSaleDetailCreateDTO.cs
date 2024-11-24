@@ -9,8 +9,8 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
 {
     public class OpenForSaleDetailCreateDTO
     {
-        public Guid? OpeningForSaleID { get; set; }
-        public Guid? PropertyID { get; set; }
+        public Guid OpeningForSaleID { get; set; }
+        public Guid PropertyID { get; set; }
         public double? Price { get; set; }
         public string? Note { get; set; }
 

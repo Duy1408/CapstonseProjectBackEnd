@@ -16,6 +16,5 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public List<ContractPaymentDetail>? ContractPaymentDetails { get; set; }
         public List<Project>? Projects { get; set; }
 
-
     }
 }

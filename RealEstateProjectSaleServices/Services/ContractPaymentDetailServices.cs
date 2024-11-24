@@ -60,7 +60,7 @@ namespace RealEstateProjectSaleServices.Services
                 }
             }
 
-            return null;
+            return contractDetail.PaidValueLate;
 
         }
 

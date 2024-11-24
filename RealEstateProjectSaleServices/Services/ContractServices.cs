@@ -38,6 +38,7 @@ namespace RealEstateProjectSaleServices.Services
         private readonly IOpenForSaleDetailServices _openDetailService;
         private readonly IPromotionDetailServices _promotionDetailService;
         private readonly IContractPaymentDetailServices _contractDetailService;
+        private readonly IPaymentPolicyService _paymentPolicyService;
         private readonly IMapper _mapper;
 
         public ContractServices(IContractRepo contractRepo, IDocumentTemplateService documentService,
@@ -45,7 +46,7 @@ namespace RealEstateProjectSaleServices.Services
             IProjectCategoryDetailServices detailService, IPropertyServices propertyService, IUnitTypeServices unitTypeService,
             IPropertyTypeServices propertyTypeService, IPaymentProcessDetailServices pmtDetailService, IOpenForSaleDetailServices openDetailService,
             IPromotionDetailServices promotionDetailService, IContractPaymentDetailServices contractDetailService, IMapper mapper,
-            IPaymentProcessServices pmtService)
+            IPaymentProcessServices pmtService, IPaymentPolicyService paymentPolicyService)
         {
             _contractRepo = contractRepo;
             _documentService = documentService;
@@ -61,6 +62,7 @@ namespace RealEstateProjectSaleServices.Services
             _promotionDetailService = promotionDetailService;
             _contractDetailService = contractDetailService;
             _pmtService = pmtService;
+            _paymentPolicyService = paymentPolicyService;
             _mapper = mapper;
         }
 
@@ -77,6 +79,7 @@ namespace RealEstateProjectSaleServices.Services
             var booking = _bookingService.GetBookingById(contract.BookingID);
             var categoryDetail = _detailService.GetProjectCategoryDetailByID(booking.ProjectCategoryDetailID);
             var project = _projectService.GetProjectById(categoryDetail.ProjectID);
+            var paymentPolicy = _paymentPolicyService.GetPaymentPolicyByID(project.PaymentPolicyID!.Value);
             var property = _propertyService.GetPropertyById(booking.PropertyID!.Value);
             var unitType = _unitTypeService.GetUnitTypeByID(property.UnitTypeID!.Value);
             var propertyType = _propertyTypeService.GetPropertyTypeByID(unitType.PropertyTypeID!.Value);
@@ -98,7 +101,9 @@ namespace RealEstateProjectSaleServices.Services
                                         ? char.ToUpper(((long)Math.Round(property.PriceSold.Value)).ToWords(new CultureInfo("vi"))[0]) +
                                         ((long)Math.Round(property.PriceSold.Value)).ToWords(new CultureInfo("vi")).Substring(1) +
                                         " đồng chẵn." : "N/A")
-                                     .Replace("{PaymentProcessName}", paymentProcess.PaymentProcessName);
+                                     .Replace("{PaymentProcessName}", paymentProcess.PaymentProcessName)
+                                     .Replace("{LateDate}", paymentPolicy.LateDate.ToString())
+                                     .Replace("{PercentLate}", paymentPolicy.PercentLate.ToString());
 
             return htmlContent;
         }

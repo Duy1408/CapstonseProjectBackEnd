@@ -31,6 +31,11 @@ namespace RealEstateProjectSaleServices.Services
             return _block.GetBlockById(id);
         }
 
+        public List<Block> GetBlockByZoneID(Guid id)
+        {
+            return _block.GetBlockByZoneID(id);
+        }
+
         public List<Block> GetBlocks()
         {
             return _block.GetBlocks();
