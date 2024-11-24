@@ -16,7 +16,7 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
         public string? View { get; set; }
         public double? PriceSold { get; set; }
         [JsonIgnore]
-        public string Status { get; set; }
+        public string? Status { get; set; }
         public Guid? UnitTypeID { get; set; }
         public Guid? FloorID { get; set; }
         public Guid? BlockID { get; set; }
