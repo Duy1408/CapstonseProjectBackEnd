@@ -58,6 +58,8 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
         [HttpGet]
         [SwaggerOperation(Summary = "GetAllBooking")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách Booking.", typeof(List<BookingVM>))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Booking không tồn tại.")]
         public IActionResult GetAllBooking()
         {
             try
@@ -82,6 +84,8 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
         [HttpGet("booked")]
         [SwaggerOperation(Summary = "Get bookings by status 'Booked'")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách Booking.", typeof(List<BookingVM>))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Booking không tồn tại.")]
         public IActionResult GetBookingByBooked()
         {
             try
@@ -106,6 +110,8 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
         [HttpGet("checked-in/{openId}")]
         [SwaggerOperation(Summary = "Get bookings by status 'Checked In'")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách Booking.", typeof(List<BookingVM>))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Booking không tồn tại.")]
         public IActionResult GetBookingByCheckedIn(Guid openId)
         {
             try
@@ -130,6 +136,8 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
         [HttpGet("property/{propertyid}")]
         [SwaggerOperation(Summary = "Get bookings by propertyid")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách Booking.", typeof(BookingVM))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Booking không tồn tại.")]
         public IActionResult GetBookingPropertyID(Guid propertyid)
         {
             try
@@ -154,6 +162,8 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get Booking By ID")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách Booking.", typeof(BookingVM))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Booking không tồn tại.")]
         public IActionResult GetBookingByID(Guid id)
         {
             var book = _book.GetBookingById(id);
@@ -174,6 +184,8 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
         [HttpGet("customer/{customerId}")]
         [SwaggerOperation(Summary = "Get Booking by customer ID")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách Booking.", typeof(List<BookingVM>))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Booking không tồn tại.")]
         public IActionResult GetBookingByCustomerID(Guid customerId)
         {
             var book = _book.GetBookingByCustomerID(customerId);
@@ -194,6 +206,8 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
         [HttpGet("open-for-sale/{openId}")]
         [SwaggerOperation(Summary = "Get Booking By OpeningForSaleID")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách Booking.", typeof(List<BookingVM>))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Booking không tồn tại.")]
         public IActionResult GetBookingByOpeningForSaleID(Guid openId)
         {
             var book = _book.GetBookingByOpeningForSaleID(openId);
@@ -214,6 +228,8 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
         [HttpGet("staff/{staffId}")]
         [SwaggerOperation(Summary = "Get Booking by staff ID")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách Booking.", typeof(List<BookingVM>))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Booking không tồn tại.")]
         public IActionResult GetBookingByStaffID(Guid staffId)
         {
             var book = _book.GetBookingByStaffID(staffId);
@@ -234,6 +250,8 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
         [HttpGet("deposits/{projectCategoryDetailId}")]
         [SwaggerOperation(Summary = "Get booking by deposit times By ProjectCategoryDetailID")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách Booking.", typeof(BookingVM))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Booking không tồn tại.")]
         public ActionResult<Booking> GetBookingByDepositedTimed(Guid projectCategoryDetailId)
         {
             var booking = _book.GetBookingByDepositedTimed(projectCategoryDetailId);
@@ -254,6 +272,8 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
         [HttpGet("random/{projectCategoryDetailId}")]
         [SwaggerOperation(Summary = "Get random bookings By ProjectCategoryDetailID")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách Booking.", typeof(BookingVM))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Booking không tồn tại.")]
         public ActionResult<Booking> GetBookingByRandom(Guid projectCategoryDetailId)
         {
             var booking = _book.GetBookingByRandom(projectCategoryDetailId);
@@ -272,9 +292,10 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
         }
 
-
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Update booking by ID")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Cập nhật Booking thành công.")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Booking không tồn tại.")]
         public IActionResult UpdateBooking([FromForm] BookingUpdateDTO book, Guid id)
         {
             try
@@ -354,6 +375,8 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
         [HttpPut("{id}/check-in")]
         [SwaggerOperation(Summary = "Mark customer as checked in")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Customer đã check-in thành công.")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Booking không tồn tại.")]
         public IActionResult CustomerCheckedInBooking(Guid id)
         {
             try
@@ -394,6 +417,8 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new booking")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Tạo Booking thành công")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Thông tin cần thiết đã tồn tại.")]
         public ActionResult<Booking> AddNew(Guid categoryDetailID, Guid customerID)
         {
             try
@@ -494,7 +519,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
                     return Ok(new
                     {
-                        message = "Tạo Booking thành công"
+                        message = "Tạo Booking thành công."
                     });
 
                 }
@@ -534,6 +559,8 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Delete Booking by ID")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Xóa Booking thành công.")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Booking không tồn tại.")]
         public async Task<IActionResult> DeleteContract(Guid id)
         {
 
@@ -551,7 +578,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
             await _hubContext.Clients.All.SendAsync("ReceiveBookingStatus", booking.BookingID.ToString(), booking.Status);
             return Ok(new
             {
-                message = "Xóa Booking thành công"
+                message = "Xóa Booking thành công."
             });
         }
 

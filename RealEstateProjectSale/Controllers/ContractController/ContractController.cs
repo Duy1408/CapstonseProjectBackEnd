@@ -1541,21 +1541,9 @@ namespace RealEstateProjectSale.Controllers.ContractController
                 var existingContract = _contractServices.GetContractByID(id);
                 if (existingContract != null)
                 {
-                    if (!string.IsNullOrEmpty(contract.ContractCode))
-                    {
-                        existingContract.ContractCode = contract.ContractCode;
-                    }
                     if (!string.IsNullOrEmpty(contract.ContractType))
                     {
                         existingContract.ContractType = contract.ContractType;
-                    }
-                    if (contract.CreatedTime.HasValue)
-                    {
-                        existingContract.CreatedTime = contract.CreatedTime.Value;
-                    }
-                    if (contract.UpdatedTime.HasValue)
-                    {
-                        existingContract.UpdatedTime = contract.UpdatedTime.Value;
                     }
                     if (contract.ExpiredTime.HasValue)
                     {
@@ -1569,9 +1557,14 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     {
                         existingContract.Description = contract.Description;
                     }
-                    if (!string.IsNullOrEmpty(contract.Status))
+                    if (!string.IsNullOrEmpty(contract.Status) && int.TryParse(contract.Status, out int statusValue))
                     {
-                        existingContract.Status = contract.Status;
+                        if (Enum.IsDefined(typeof(ContractStatus), statusValue))
+                        {
+                            var statusEnum = (ContractStatus)statusValue;
+                            var statusDescription = statusEnum.GetEnumDescription();
+                            existingContract.Status = statusDescription;
+                        }
                     }
                     if (contract.DocumentTemplateID.HasValue)
                     {

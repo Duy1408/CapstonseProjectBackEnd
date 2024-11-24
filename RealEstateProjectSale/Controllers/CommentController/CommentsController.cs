@@ -32,8 +32,8 @@ namespace RealEstateProjectSale.Controllers.CommentController
 
         [HttpGet]
         [SwaggerOperation(Summary = "Get All Comment", Description = "API này lấy tất cả các bình luận từ cơ sở dữ liệu.")]
-        [SwaggerResponse(200, "Trả về danh sách các bình luận", typeof(List<CommentVM>))]
-        [SwaggerResponse(500, "Nếu có lỗi từ phía máy chủ")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách Comment.", typeof(List<CommentVM>))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Comment không tồn tại.")]
         public IActionResult GetAllComment()
         {
             try
@@ -58,6 +58,8 @@ namespace RealEstateProjectSale.Controllers.CommentController
 
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get comment by ID")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Trả về thông tin Comment.", typeof(CommentVM))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Comment không tồn tại.")]
         public IActionResult GetCommentByID(Guid id)
         {
             var cmt = _cmt.GetCommentById(id);
@@ -78,6 +80,8 @@ namespace RealEstateProjectSale.Controllers.CommentController
 
         [HttpGet("property/{propertyId}")]
         [SwaggerOperation(Summary = "Get comments by property ID")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách Comment.", typeof(List<CommentVM>))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Comment không tồn tại.")]
         public IActionResult GetCommentByPropertyID(Guid propertyId)
         {
             var cmt = _cmt.GetCommentByPropertyID(propertyId);
@@ -98,6 +102,8 @@ namespace RealEstateProjectSale.Controllers.CommentController
 
         [HttpGet("search")]
         [SwaggerOperation(Summary = "Search comments by content")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách Comment.", typeof(List<CommentVM>))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Comment không tồn tại.")]
         public ActionResult<Comment> SearchCommentByContent(string searchValue)
         {
             if (_cmt.GetComments() == null)
@@ -124,6 +130,8 @@ namespace RealEstateProjectSale.Controllers.CommentController
 
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new comment")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Tạo Comment thành công.")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Yêu cầu không hợp lệ hoặc xảy ra lỗi xử lý.")]
         public IActionResult AddNew(CommentCreateDTO cmt)
         {
             try
@@ -156,6 +164,8 @@ namespace RealEstateProjectSale.Controllers.CommentController
 
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Update comment by ID")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Cập nhật Comment thành công.")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Comment không tồn tại.")]
         public IActionResult UpdateComment([FromForm] CommentUpdateDTO cmt, Guid id)
         {
             try
@@ -197,6 +207,8 @@ namespace RealEstateProjectSale.Controllers.CommentController
 
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Delete comment by ID")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Xóa Comment thành công.")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Comment không tồn tại.")]
         public IActionResult DeleteComment(Guid id)
         {
             var cmt = _cmt.GetCommentById(id);
@@ -212,7 +224,7 @@ namespace RealEstateProjectSale.Controllers.CommentController
 
             return Ok(new
             {
-                message = "Xóa Comment thành công"
+                message = "Xóa Comment thành công."
             });
         }
 
