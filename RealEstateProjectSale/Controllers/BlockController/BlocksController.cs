@@ -2,6 +2,7 @@
 using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using RealEstateProjectSale.SwaggerResponses;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
 using RealEstateProjectSaleBusinessObject.DTO.Create;
 using RealEstateProjectSaleBusinessObject.DTO.Request;
@@ -30,7 +31,8 @@ namespace RealEstateProjectSale.Controllers.BlockController
 
         [HttpGet]
         [SwaggerOperation(Summary = "Get all Block")]
-
+        [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách Block.", typeof(List<BlockVM>))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Block không tồn tại.")]
         public IActionResult GetAllBlock()
         {
             try
@@ -53,7 +55,10 @@ namespace RealEstateProjectSale.Controllers.BlockController
             }
         }
 
-        [HttpGet("GetBlockbyID/{id}")]
+        [HttpGet("{id}")]
+        [SwaggerOperation(Summary = "Get Block By ID")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Trả về thông tin Block.", typeof(BlockVM))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Block không tồn tại.")]
         public IActionResult GetBlockByID(Guid id)
         {
             var block = _block.GetBlockById(id);
@@ -69,8 +74,32 @@ namespace RealEstateProjectSale.Controllers.BlockController
             });
         }
 
+        [HttpGet("zone/{zoneId}")]
+        [SwaggerOperation(Summary = "Get Block By ZoneID")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách block.", typeof(List<BlockVM>))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Block không tồn tại.")]
+        public IActionResult GetBlockByZoneID(Guid zoneId)
+        {
+            var block = _block.GetBlockByZoneID(zoneId);
+
+            if (block != null)
+            {
+                var responese = _mapper.Map<List<BlockVM>>(block);
+
+                return Ok(responese);
+            }
+
+            return NotFound(new
+            {
+                message = "Block không tồn tại."
+            });
+
+        }
+
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "UpdateBlock")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Cập nhật Block thành công.")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Block không tồn tại.")]
         public IActionResult UpdateBlock([FromForm] BlockUpdateDTO block, Guid id)
         {
             try
@@ -101,7 +130,7 @@ namespace RealEstateProjectSale.Controllers.BlockController
 
                     return Ok(new
                     {
-                        message = "Cập nhật Block thành công"
+                        message = "Cập nhật Block thành công."
                     });
 
                 }
@@ -120,6 +149,8 @@ namespace RealEstateProjectSale.Controllers.BlockController
 
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new Block")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Tạo Block thành công.")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Yêu cầu không hợp lệ hoặc xảy ra lỗi xử lý.")]
         public IActionResult AddNewBlock([FromForm] BlockRequestDTO block)
         {
             try
@@ -132,7 +163,7 @@ namespace RealEstateProjectSale.Controllers.BlockController
                     BlockName = block.BlockName,
                     ImageBlock = block.ImageBlock.Count > 0 ? block.ImageBlock.First() : null, // Store first image for reference
                     Status = true,
-                    ZoneID = block.ZoneID,
+                    ZoneID = block.ZoneID
                 };
 
                 var b = _mapper.Map<Block>(newBlock);
@@ -141,7 +172,7 @@ namespace RealEstateProjectSale.Controllers.BlockController
                 _block.AddNew(b);
                 return Ok(new
                 {
-                    message = "Tạo Block thành công"
+                    message = "Tạo Block thành công."
                 });
             }
             catch (Exception ex)
@@ -153,6 +184,8 @@ namespace RealEstateProjectSale.Controllers.BlockController
 
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Delete Block")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Xóa Block thành công.")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Block không tồn tại.")]
         public IActionResult DeleteAccount(Guid id)
         {
 
@@ -169,7 +202,7 @@ namespace RealEstateProjectSale.Controllers.BlockController
 
             return Ok(new
             {
-                message = "Xóa Block thành công"
+                message = "Xóa Block thành công."
             });
         }
 

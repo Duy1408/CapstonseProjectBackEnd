@@ -13,15 +13,13 @@ namespace RealEstateProjectSale.Validations.Create
         public AccountCreateDTOValidator()
         {
             RuleFor(x => x.Email)
-            .NotEmpty().WithMessage("Email is required.")
-            .EmailAddress().WithMessage("Invalid Email format.");
+                .NotEmpty().WithMessage("Email là bắt buộc.")
+                .EmailAddress().WithMessage("Định dạng Email không hợp lệ.");
 
             RuleFor(x => x.Password)
-            .NotEmpty().WithMessage("Password is required.")
-            .MinimumLength(6).WithMessage("Password must be at least 6 characters long.");
+                .NotEmpty().WithMessage("Mật khẩu là bắt buộc.")
+                .MinimumLength(6).WithMessage("Mật khẩu phải có ít nhất 6 ký tự.");
 
-            RuleFor(x => x.RoleID)
-            .NotEmpty().WithMessage("RoleID is required.");
         }
     }
 }

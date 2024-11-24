@@ -28,6 +28,8 @@ namespace RealEstateProjectSale.Controllers.AccountController
 
         [HttpGet]
         [SwaggerOperation(Summary = "Get All Account")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách tài khoản.", typeof(List<AccountVM>))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Tài khoản không tồn tại.")]
         public IActionResult GetAllAccount()
         {
             try
@@ -52,6 +54,8 @@ namespace RealEstateProjectSale.Controllers.AccountController
 
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get Account By ID")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Trả về thông tin tài khoản.", typeof(AccountVM))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Tài khoản không tồn tại.")]
         public IActionResult GetAccountByID(Guid id)
         {
             var account = _accountServices.GetAccountByID(id);
@@ -72,6 +76,8 @@ namespace RealEstateProjectSale.Controllers.AccountController
 
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new Account")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Tạo tài khoản thành công.")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Tài khoản đã tồn tại.")]
         public IActionResult AddNewAccount(AccountCreateDTO account)
         {
             try
@@ -82,7 +88,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
                 {
                     return BadRequest(new
                     {
-                        message = "Tài khoản đã tồn tại"
+                        message = "Tài khoản đã tồn tại."
                     });
                 }
                 var newAccount = new AccountCreateDTO
@@ -99,7 +105,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
 
                 return Ok(new
                 {
-                    message = "Tạo tài khoản thành công"
+                    message = "Tạo tài khoản thành công."
                 });
             }
             catch (Exception ex)
@@ -110,6 +116,8 @@ namespace RealEstateProjectSale.Controllers.AccountController
 
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Update Account")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Cập nhật tài khoản thành công.")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Tài khoản không tồn tại.")]
         public IActionResult UpdateAccount([FromForm] AccountUpdateDTO account, Guid id)
         {
             try
@@ -157,6 +165,8 @@ namespace RealEstateProjectSale.Controllers.AccountController
 
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Delete Account")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Xóa tài khoản thành công.")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Tài khoản không tồn tại.")]
         public IActionResult DeleteAccount(Guid id)
         {
 
@@ -173,7 +183,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
 
             return Ok(new
             {
-                message = "Xóa tài khoản thành công"
+                message = "Xóa tài khoản thành công."
             });
         }
 

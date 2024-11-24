@@ -31,6 +31,11 @@ namespace RealEstateProjectSaleRepository.Repository
             return _dao.GetBlockByID(id);
         }
 
+        public List<Block> GetBlockByZoneID(Guid id)
+        {
+            return _dao.GetBlockByZoneID(id);
+        }
+
         public List<Block> GetBlocks()
         {
             return _dao.GetAllBlock();

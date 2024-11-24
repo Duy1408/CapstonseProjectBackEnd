@@ -184,14 +184,8 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
         {
             try
             {
-                var detailID = open.ProjectCategoryDetailID.GetValueOrDefault(Guid.Empty);
 
-                if (detailID == Guid.Empty)
-                {
-                    throw new ArgumentException("ProjectCategoryDetailID là bắt buộc.");
-                }
-
-                var existingDetail = _detailService.GetProjectCategoryDetailByID(detailID);
+                var existingDetail = _detailService.GetProjectCategoryDetailByID(open.ProjectCategoryDetailID);
                 if (existingDetail == null)
                 {
                     return NotFound(new
@@ -209,7 +203,7 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
                     });
                 }
 
-                var existingOpen = _open.FindByDetailIdAndStatus(detailID);
+                var existingOpen = _open.FindByDetailIdAndStatus(open.ProjectCategoryDetailID);
                 if (existingOpen != null)
                 {
                     return BadRequest(new
@@ -233,7 +227,7 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
                     ReservationPrice = open.ReservationPrice!.Value,
                     Description = open.Description,
                     Status = true,
-                    ProjectCategoryDetailID = detailID
+                    ProjectCategoryDetailID = open.ProjectCategoryDetailID
                 };
 
                 var opening = _mapper.Map<OpeningForSale>(newOpen);

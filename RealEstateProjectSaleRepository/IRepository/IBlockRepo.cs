@@ -9,15 +9,15 @@ namespace RealEstateProjectSaleRepository.IRepository
 {
     public interface IBlockRepo
     {
-         bool ChangeStatus(Block p);
+        bool ChangeStatus(Block p);
 
 
-         List<Block> GetBlocks();
-         void AddNew(Block p);
+        List<Block> GetBlocks();
+        void AddNew(Block p);
 
 
-         Block GetBlockById(Guid id);
-
-         void UpdateBlock(Block p);
+        Block GetBlockById(Guid id);
+        List<Block> GetBlockByZoneID(Guid id);
+        void UpdateBlock(Block p);
     }
 }

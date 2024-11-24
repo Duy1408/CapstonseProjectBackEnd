@@ -43,9 +43,10 @@ namespace RealEstateProjectSale.Validations.Update
                 .WithMessage("Yêu cầu: Ngày bắt đầu < Ngày checkin < Ngày kết thúc.")
                 .When(x => !string.IsNullOrEmpty(x.StartDate) && !string.IsNullOrEmpty(x.CheckinDate) && !string.IsNullOrEmpty(x.EndDate));
 
-            RuleFor(x => x.ProjectCategoryDetailID)
-                .Must(id => id != Guid.Empty).WithMessage("ProjectCategoryDetailID phải là GUID hợp lệ.")
-                .When(x => x.ProjectCategoryDetailID.HasValue);
+            RuleFor(x => x.Status)
+                .NotNull().WithMessage("Status không được để trống.")
+                .When(x => x.Status.HasValue);
+
         }
 
         private bool BeValidDateFormat(string date)

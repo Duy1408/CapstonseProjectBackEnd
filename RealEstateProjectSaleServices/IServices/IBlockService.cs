@@ -17,7 +17,7 @@ namespace RealEstateProjectSaleServices.IServices
 
 
         Block GetBlockById(Guid id);
-
+        List<Block> GetBlockByZoneID(Guid id);
         void UpdateBlock(Block p);
     }
 }

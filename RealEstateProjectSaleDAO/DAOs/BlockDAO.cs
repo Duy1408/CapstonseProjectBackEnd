@@ -60,6 +60,14 @@ namespace RealEstateProjectSaleDAO.DAOs
             return _context.Blocks.Include(c => c.Zone).SingleOrDefault(a => a.BlockID == id);
         }
 
+        public List<Block> GetBlockByZoneID(Guid id)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            return _context.Blocks.Include(c => c.Zone)
+                                         .Where(a => a.ZoneID == id)
+                                         .ToList();
+        }
+
         public bool UpdateBlock(Block b)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();

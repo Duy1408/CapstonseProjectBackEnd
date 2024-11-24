@@ -78,11 +78,11 @@ namespace RealEstateProjectSale.Controllers.SalespolicyController
 
         }
 
-        [HttpGet("project/{projectid}")]
+        [HttpGet("project/{projectId}")]
         [SwaggerOperation(Summary = "Get SalePolicy by project ID")]
-        public IActionResult GetSalePolicyByProjectID(Guid projectid)
+        public IActionResult GetSalePolicyByProjectID(Guid projectId)
         {
-            var sale = _sale.GetSalespolicyByProjectID(projectid);
+            var sale = _sale.GetSalespolicyByProjectID(projectId);
 
             if (sale != null)
             {

@@ -102,7 +102,7 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
         {
             try
             {
-                var existingProperty = _propertyService.GetPropertyById(detail.PropertyID!.Value);
+                var existingProperty = _propertyService.GetPropertyById(detail.PropertyID);
                 if (existingProperty == null)
                 {
                     return NotFound(new
@@ -118,7 +118,7 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
                     });
                 }
 
-                var existingOpen = _openServices.GetOpeningForSaleById(detail.OpeningForSaleID!.Value);
+                var existingOpen = _openServices.GetOpeningForSaleById(detail.OpeningForSaleID);
                 if (existingOpen == null)
                 {
                     return NotFound(new
@@ -146,7 +146,7 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
                 var _detail = _mapper.Map<OpenForSaleDetail>(newDetail);
                 _detailServices.AddNewOpenForSaleDetail(_detail);
 
-                var property = _propertyService.GetPropertyById(newDetail.PropertyID!.Value);
+                var property = _propertyService.GetPropertyById(newDetail.PropertyID);
                 property.Status = PropertyStatus.GiuCho.GetEnumDescription();
                 property.PriceSold = newDetail.Price;
                 _propertyService.UpdateProperty(property);

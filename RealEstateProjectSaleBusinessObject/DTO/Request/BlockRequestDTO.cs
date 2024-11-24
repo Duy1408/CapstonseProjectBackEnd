@@ -9,7 +9,7 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Request
 {
     public class BlockRequestDTO
     {
-        public string BlockName { get; set; }
+        public string? BlockName { get; set; }
         public IFormFileCollection? ImageBlock { get; set; }
         public Guid ZoneID { get; set; }
     }

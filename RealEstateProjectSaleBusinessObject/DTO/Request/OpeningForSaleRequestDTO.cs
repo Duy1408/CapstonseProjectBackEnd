@@ -16,6 +16,6 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Request
         public string? SaleType { get; set; }
         public double? ReservationPrice { get; set; }
         public string? Description { get; set; }
-        public Guid? ProjectCategoryDetailID { get; set; }
+        public Guid ProjectCategoryDetailID { get; set; }
     }
 }
