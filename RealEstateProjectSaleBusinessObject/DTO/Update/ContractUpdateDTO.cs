@@ -11,10 +11,7 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Update
 {
     public class ContractUpdateDTO
     {
-        public string? ContractCode { get; set; }
         public string? ContractType { get; set; }
-        public DateTime? CreatedTime { get; set; }
-        public DateTime? UpdatedTime { get; set; }
         [Column(TypeName = "date")]
         public DateTime? ExpiredTime { get; set; }
         public double? TotalPrice { get; set; }
