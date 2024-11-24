@@ -42,6 +42,8 @@ namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
 
         [HttpGet]
         [SwaggerOperation(Summary = "Get All ContractPaymentDetail")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách Chi tiết hợp đồng.", typeof(List<ContractPaymentDetailVM>))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Chi tiết hợp đồng không tồn tại.")]
         public IActionResult GetAllContractPaymentDetail()
         {
             try
@@ -66,6 +68,8 @@ namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
 
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get ContractPaymentDetail By ID")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Trả về thông tin Chi tiết hợp đồng.", typeof(ContractPaymentDetailVM))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Chi tiết hợp đồng không tồn tại.")]
         public IActionResult GetContractPaymentDetailByID(Guid id)
         {
             var detail = _detailService.GetContractPaymentDetailByID(id);
@@ -86,6 +90,8 @@ namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
 
         [HttpGet("contract/{contractId}")]
         [SwaggerOperation(Summary = "Get ContractPaymentDetail By ContractID")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách Chi tiết hợp đồng.", typeof(List<ContractPaymentDetailVM>))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Chi tiết hợp đồng không tồn tại.")]
         public IActionResult GetContractPaymentDetailByContractID(Guid contractId)
         {
             var detail = _detailService.GetContractPaymentDetailByContractID(contractId);
@@ -122,6 +128,8 @@ namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
 
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new ContractPaymentDetail")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Tạo chi tiết hợp đồng thành công.")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Yêu cầu không hợp lệ hoặc xảy ra lỗi xử lý.")]
         public IActionResult AddNewContractPaymentDetail(ContractPaymentDetailCreateDTO detail)
         {
             try
@@ -157,6 +165,8 @@ namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
 
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Update ContractPaymentDetail by ID")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Cập nhật Chi tiết hợp đồng thành công.")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Chi tiết hợp đồng không tồn tại.")]
         public IActionResult UpdateContractPaymentDetail([FromForm] ContractPaymentDetailUpdateDTO detail, Guid id)
         {
             try
@@ -175,7 +185,6 @@ namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
                     {
                         existingDetail.PaymentRate = detail.PaymentRate.Value;
                     }
-
                     if (!string.IsNullOrEmpty(detail.Description))
                     {
                         existingDetail.Description = detail.Description;
@@ -232,6 +241,8 @@ namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
 
         [HttpPut("confirm/{id}")]
         [SwaggerOperation(Summary = "Staff Confirm PaymentOrder By ContractPaymentDetailID")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Staff xác nhận Ủy nhiệm chi thành công.")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Chi tiết hợp đồng không tồn tại.")]
         public IActionResult StaffConfirmPaymentOrder(Guid id)
         {
             try
@@ -353,6 +364,8 @@ namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
 
         [HttpPut("upload-payment-order/{id}")]
         [SwaggerOperation(Summary = "Customer Upload PaymentOrder By ContractPaymentDetailID")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Customer tải lên Ủy nhiệm chi thành công.")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Chi tiết hợp đồng không tồn tại.")]
         public IActionResult CustomerUploadPaymentOrder([FromForm] UploadPaymentOrder paymentOrder, Guid id)
         {
             try
@@ -427,6 +440,8 @@ namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
 
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Delete ContractPaymentDetail by ID")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Xóa chi tiết hợp đồng thành công.")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Chi tiết hợp đồng không tồn tại.")]
         public IActionResult DeleteContractPaymentDetailByID(Guid id)
         {
             try

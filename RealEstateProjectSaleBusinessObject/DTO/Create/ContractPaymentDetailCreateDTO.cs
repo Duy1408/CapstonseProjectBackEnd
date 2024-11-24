@@ -18,7 +18,9 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
         public DateTime? Period { get; set; }//Thời hạn
         public double? PaidValue { get; set; }
         public double? PaidValueLate { get; set; }
+        [JsonIgnore]
         public string? RemittanceOrder { get; set; }//upload chung nhan
+        [JsonIgnore]
         public bool Status { get; set; }
         public Guid ContractID { get; set; }
         public Guid? PaymentPolicyID { get; set; }
