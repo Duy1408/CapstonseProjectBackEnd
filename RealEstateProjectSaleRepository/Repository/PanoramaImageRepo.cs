@@ -36,6 +36,11 @@ namespace RealEstateProjectSaleRepository.Repository
             return _dao.GetPanoramaImageByID(id);
         }
 
+        public List<PanoramaImage> GetPanoramaImageByProjectId(Guid id)
+        {
+            return _dao.GetPanoramaByProjectID(id);
+        }
+
         public void UpdatePanoramaImage(PanoramaImage p)
         {
             _dao.UpdatePanoramaImage(p);

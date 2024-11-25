@@ -13,6 +13,8 @@ namespace RealEstateProjectSaleRepository.IRepository
 
 
         List<PanoramaImage> GetPanoramaImage();
+        List<PanoramaImage> GetPanoramaImageByProjectId(Guid id);
+
         void AddNew(PanoramaImage p);
 
 

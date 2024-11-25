@@ -37,6 +37,11 @@ namespace RealEstateProjectSaleServices.Services
             return _repo.GetPanoramaImageById(id);
         }
 
+        public List<PanoramaImage> GetPanoramaImageByProjectId(Guid id)
+        {
+            return _repo.GetPanoramaImageByProjectId(id);
+        }
+
         public void UpdatePanoramaImage(PanoramaImage p)
         {
             _repo.UpdatePanoramaImage(p);
