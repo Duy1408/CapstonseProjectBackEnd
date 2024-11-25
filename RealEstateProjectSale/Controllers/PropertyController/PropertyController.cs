@@ -585,7 +585,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
             }
 
             // Định dạng mã hợp đồng, số có 4 chữ số kèm phần định danh "/TTĐC"
-            string nextContractCode = nextNumber.ToString() + "/TTĐC";
+            string nextContractCode = nextNumber.ToString() + "/HD";
 
             return nextContractCode;
         }
