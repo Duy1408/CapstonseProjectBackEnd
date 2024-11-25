@@ -12,6 +12,8 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public Guid PanoramaImageID { get; set; }
         public string Title { get; set; }
         public string? Image { get; set; }
-    
+        public Guid ProjectID { get; set; }
+
+
     }
 }

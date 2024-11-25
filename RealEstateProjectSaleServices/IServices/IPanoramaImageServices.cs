@@ -19,5 +19,7 @@ namespace RealEstateProjectSaleServices.IServices
         PanoramaImage GetPanoramaImageById(Guid id);
 
         void UpdatePanoramaImage(PanoramaImage p);
+        List<PanoramaImage> GetPanoramaImageByProjectId(Guid id);
+
     }
 }

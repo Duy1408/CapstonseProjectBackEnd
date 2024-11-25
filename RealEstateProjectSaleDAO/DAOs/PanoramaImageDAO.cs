@@ -76,6 +76,14 @@ namespace RealEstateProjectSaleDAO.DAOs
             }
         }
 
+        public List<PanoramaImage> GetPanoramaByProjectID(Guid id)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            return _context.PanoramaImages.Include(c => c.Project).Where(a=>a.ProjectID==id)
+                          
+                                    .ToList();
+        }
+
         public bool DeletePanoramaImage(PanoramaImage p)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();

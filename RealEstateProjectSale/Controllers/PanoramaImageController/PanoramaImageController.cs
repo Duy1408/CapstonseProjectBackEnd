@@ -18,12 +18,14 @@ namespace RealEstateProjectSale.Controllers.PanoramaImageController
         private readonly IPanoramaImageServices _panorama;
         private readonly IMapper _mapper;
         private readonly IFileUploadToBlobService _fileService;
+        private readonly IProjectServices _projectServices;
 
-        public PanoramaImageController(IPanoramaImageServices panorama, IMapper mapper, IFileUploadToBlobService fileService)
+        public PanoramaImageController(IPanoramaImageServices panorama, IMapper mapper, IFileUploadToBlobService fileService, IProjectServices projectServices)
         {
             _panorama = panorama;
             _fileService = fileService;
             _mapper = mapper;
+            _projectServices = projectServices;
         }
 
 
@@ -164,6 +166,37 @@ namespace RealEstateProjectSale.Controllers.PanoramaImageController
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        [HttpGet("getpanoramabyprojectid/{projectid}")]
+        [SwaggerOperation(Summary = "Get panorama by projectid")]
+    
+        public IActionResult GetPanoramabyProjectID(Guid projectid)
+        {
+
+            var project = _projectServices.GetProjectById(projectid);
+            if (project == null) {
+                return NotFound(new
+                {
+                    message = "Project không tồn tại."
+                });
+
+            }
+
+            var panorama = _panorama.GetPanoramaImageByProjectId(projectid);
+
+            if (panorama != null)
+            {
+                var responese = panorama.Select(panorama => _mapper.Map<PanoramaImageVM>(panorama)).ToList();
+
+                return Ok(responese);
+            }
+
+            return NotFound(new
+            {
+                message = "Panorama không tồn tại."
+            });
+
         }
 
 
