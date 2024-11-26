@@ -211,7 +211,7 @@ namespace RealEstateProjectSale.Controllers.NotificationController
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = "Customer không đăng nhập app trong 1 thời gian dài" });
             }
         }
 

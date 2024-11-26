@@ -132,7 +132,7 @@ namespace RealEstateProjectSale.Controllers.CustomerController
                 {
                     CustomerID = Guid.NewGuid(),
                     FullName = accountCustomer.FullName,
-                    DateOfBirth = accountCustomer.DateOfBirth,
+                    DateOfBirth = accountCustomer.DateOfBirth!.Value,
                     PhoneNumber = accountCustomer.PhoneNumber,
                     IdentityCardNumber = accountCustomer.IdentityCardNumber,
                     Nationality = accountCustomer.Nationality,
