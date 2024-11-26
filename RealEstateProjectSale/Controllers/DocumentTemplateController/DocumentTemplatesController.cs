@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure;
 using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -71,6 +72,23 @@ namespace RealEstateProjectSale.Controllers.DocumentTemplateController
             });
         }
 
+        [HttpGet("file/{id}")]
+        [SwaggerOperation(Summary = "Get Document File By ID")]
+        public IActionResult GetDocumentFileByID(Guid id)
+        {
+            var doc = _doc.GetDocumentById(id);
+
+            if (doc != null)
+            {
+                return Content(doc.DocumentFile, "text/plain");
+            }
+
+            return NotFound(new
+            {
+                message = "Mẫu tài liệu không tồn tại."
+            });
+        }
+
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Delete DocumentTemplate By ID")]
         public IActionResult DeleteDocumentTemplate(Guid id)
@@ -100,8 +118,6 @@ namespace RealEstateProjectSale.Controllers.DocumentTemplateController
             });
         }
 
-
-
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new document")]
         public IActionResult AddNew(DocumentTemplateCreateDTO doc)
@@ -112,14 +128,14 @@ namespace RealEstateProjectSale.Controllers.DocumentTemplateController
                 var newDoc = new DocumentTemplateCreateDTO
                 {
                     DocumentTemplateID = Guid.NewGuid(),
-                     DocumentName = doc.DocumentName,
+                    DocumentName = doc.DocumentName,
                     DocumentFile = doc.DocumentFile,
                     Status = true,
                 };
 
                 var document = _mapper.Map<DocumentTemplate>(newDoc);
                 _doc.AddNew(document);
-               
+
 
                 return Ok(new
                 {
@@ -144,9 +160,9 @@ namespace RealEstateProjectSale.Controllers.DocumentTemplateController
 
                     if (!string.IsNullOrEmpty(doc.DocumentName))
                     {
-                        existingDoc.DocumentName =doc.DocumentName;
+                        existingDoc.DocumentName = doc.DocumentName;
                     }
-                    if (!string.IsNullOrEmpty(doc.DocumentFile)) 
+                    if (!string.IsNullOrEmpty(doc.DocumentFile))
                     {
                         existingDoc.DocumentFile = doc.DocumentFile;
                     }
