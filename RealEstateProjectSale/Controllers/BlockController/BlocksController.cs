@@ -80,11 +80,11 @@ namespace RealEstateProjectSale.Controllers.BlockController
         [SwaggerResponse(StatusCodes.Status404NotFound, "Block không tồn tại.")]
         public IActionResult GetBlockByZoneID(Guid zoneId)
         {
-            var block = _block.GetBlockByZoneID(zoneId);
+            var blocks = _block.GetBlockByZoneID(zoneId);
 
-            if (block != null)
+            if (blocks != null)
             {
-                var responese = _mapper.Map<List<BlockVM>>(block);
+                var responese = _mapper.Map<List<BlockVM>>(blocks);
 
                 return Ok(responese);
             }

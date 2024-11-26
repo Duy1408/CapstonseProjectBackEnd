@@ -27,18 +27,18 @@ namespace RealEstateProjectSale.Controllers.FloorController
             _fileService = fileService;
         }
 
-
-
         [HttpGet]
         [SwaggerOperation(Summary = "Get all Floor")]
-
         public IActionResult GetAllFloor()
         {
             try
             {
                 if (_floor.GetFloors() == null)
                 {
-                    return NotFound();
+                    return NotFound(new
+                    {
+                        message = "Tầng không tồn tại."
+                    });
                 }
                 var floors = _floor.GetFloors();
                 var response = _mapper.Map<List<FloorVM>>(floors);
@@ -51,8 +51,8 @@ namespace RealEstateProjectSale.Controllers.FloorController
             }
         }
 
-
-        [HttpGet("GetFloorbyID/{id}")]
+        [HttpGet("{id}")]
+        [SwaggerOperation(Summary = "Get Floor By ID")]
         public IActionResult GetFloorByID(Guid id)
         {
             var floor = _floor.GetFloorById(id);
@@ -62,28 +62,59 @@ namespace RealEstateProjectSale.Controllers.FloorController
                 var responese = _mapper.Map<FloorVM>(floor);
                 return Ok(responese);
             }
-            return NotFound();
+
+            return NotFound(new
+            {
+                message = "Tầng không tồn tại."
+            });
         }
 
+        [HttpGet("block/{blockId}")]
+        [SwaggerOperation(Summary = "Get Floor By BlockID")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách block.", typeof(List<FloorVM>))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Block không tồn tại.")]
+        public IActionResult GetFloorByBlockID(Guid blockId)
+        {
+            var floors = _floor.GetFloorByBlockID(blockId);
 
-        [HttpDelete("DeleteFloor/{id}")]
+            if (floors != null)
+            {
+                var responese = _mapper.Map<List<FloorVM>>(floors);
+
+                return Ok(responese);
+            }
+
+            return NotFound(new
+            {
+                message = "Tầng không tồn tại."
+            });
+
+        }
+
+        [HttpDelete("{id}")]
+        [SwaggerOperation(Summary = "Delete Floor")]
         public IActionResult DeleteFloor(Guid id)
         {
             if (_floor.GetFloors() == null)
             {
-                return NotFound();
+                return NotFound(new
+                {
+                    message = "Tầng không tồn tại."
+                });
             }
             var floor = _floor.GetFloorById(id);
             if (floor == null)
             {
-                return NotFound();
+                return NotFound(new
+                {
+                    message = "Tầng không tồn tại."
+                });
             }
 
             _floor.ChangeStatus(floor);
 
             return Ok("Xóa tầng thành công");
         }
-
 
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new Floor")]

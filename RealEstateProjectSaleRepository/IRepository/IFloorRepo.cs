@@ -13,6 +13,7 @@ namespace RealEstateProjectSaleRepository.IRepository
         List<Floor> GetFloors();
         void AddNew(Floor p);
         Floor GetFloorById(Guid id);
+        List<Floor> GetFloorByBlockID(Guid id);
         void UpdateFloor(Floor p);
     }
 }
