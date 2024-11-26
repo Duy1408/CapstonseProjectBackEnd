@@ -159,8 +159,10 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     ProjectName = contract.Booking!.ProjectCategoryDetail!.Project!.ProjectName,
                     PropertyCode = contract!.Booking!.Property!.PropertyCode,
                     PriceSold = contract.Booking.Property.PriceSold,
+                    ExpiredTime = contract.ExpiredTime,
                     Status = contract.Status
-                }).ToList();
+                }).OrderBy(contract => contract.ExpiredTime)
+                  .ToList();
 
                 return Ok(responese);
             }
