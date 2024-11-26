@@ -465,14 +465,14 @@ namespace RealEstateProjectSale.Controllers.BookingController
                 {
                     return BadRequest(new
                     {
-                        message = "ProjectCategoryDetail chưa cho giữ chỗ."
+                        message = "Loại dự án chưa cho giữ chỗ."
                     });
                 }
                 if (openStatus == OpeningForSaleStatus.CheckIn.GetEnumDescription())
                 {
                     return BadRequest(new
                     {
-                        message = "ProjectCategoryDetail đang trong thời gian check in để chọn căn."
+                        message = "Loại dự án đang trong thời gian check in để chọn căn."
                     });
                 }
 
@@ -481,7 +481,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
                 {
                     return BadRequest(new
                     {
-                        message = "Customer đã đặt chỗ cho ProjectCategoryDetail này."
+                        message = "Customer đã đặt chỗ cho Loại dự án này."
                     });
                 }
 

@@ -34,6 +34,7 @@ namespace RealEstateProjectSale.Controllers
     public class ProjectsController : ControllerBase
     {
         private readonly IProjectServices _project;
+        private readonly IProjectCategoryDetailServices _categoryDetailService;
         private readonly IPagingServices _pagingServices;
         private readonly IMapper _mapper;
         private readonly IFileUploadToBlobService _fileService;
@@ -42,12 +43,13 @@ namespace RealEstateProjectSale.Controllers
 
 
         public ProjectsController(IProjectServices project, IPagingServices pagingServices,
-                    IFileUploadToBlobService fileService, IMapper mapper)
+                    IFileUploadToBlobService fileService, IMapper mapper, IProjectCategoryDetailServices categoryDetailService)
         {
             _project = project;
             _pagingServices = pagingServices;
             _mapper = mapper;
             _fileService = fileService;
+            _categoryDetailService = categoryDetailService;
         }
 
         [HttpGet("all-project")]
