@@ -392,6 +392,15 @@ namespace RealEstateProjectSale.Controllers.BookingController
                         });
                     }
 
+                    var openStatus = _openService.GetOpenForSaleStatusByProjectCategoryDetailID(book.ProjectCategoryDetailID);
+                    if (openStatus != OpeningForSaleStatus.CheckIn.GetEnumDescription())
+                    {
+                        return BadRequest(new
+                        {
+                            message = "Loại dự án chưa tới thời gian check in."
+                        });
+                    }
+
                     book.Status = BookingStatus.DaCheckIn.GetEnumDescription();
 
                     _book.UpdateBooking(book);

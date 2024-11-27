@@ -99,7 +99,7 @@ namespace RealEstateProjectSale.Controllers.NotificationController
         }
 
         [HttpPost]
-        [SwaggerOperation(Summary = "Create a new comment")]
+        [SwaggerOperation(Summary = "Create a new Notification")]
         public IActionResult AddNewNotification(NotificationCreateDTO noti)
         {
             try
