@@ -45,6 +45,14 @@ namespace RealEstateProjectSaleDAO.DAOs
             }
         }
 
+        public List<PropertyType> GetPropertyTypeByPropertyCategoryID(Guid id)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            return _context.PropertiesTypes!.Include(c => c.PropertyCategory)
+                                         .Where(a => a.PropertyCategoryID == id)
+                                         .ToList();
+        }
+
         public bool AddNew(PropertyType type)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();

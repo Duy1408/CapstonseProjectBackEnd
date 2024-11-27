@@ -73,6 +73,26 @@ namespace RealEstateProjectSale.Controllers.PropertyTypeController
 
         }
 
+        [HttpGet("property-category/{categoryId}")]
+        [SwaggerOperation(Summary = "Get Property Type By PropertyCategoryID")]
+        public IActionResult GetPropertyTypeByPropertyCategoryID(Guid categoryId)
+        {
+            var type = _type.GetPropertyTypeByPropertyCategoryID(categoryId);
+
+            if (type != null)
+            {
+                var responese = _mapper.Map<List<PropertyTypeVM>>(type);
+
+                return Ok(responese);
+            }
+
+            return NotFound(new
+            {
+                message = "Loại căn không tồn tại."
+            });
+
+        }
+
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new PropertyType")]
         public IActionResult AddNew(PropertyTypeCreateDTO type)

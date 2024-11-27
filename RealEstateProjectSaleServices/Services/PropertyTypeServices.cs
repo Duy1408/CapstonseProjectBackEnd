@@ -37,6 +37,11 @@ namespace RealEstateProjectSaleServices.Services
             return _type.GetPropertyTypeByID(id);
         }
 
+        public List<PropertyType> GetPropertyTypeByPropertyCategoryID(Guid id)
+        {
+            return _type.GetPropertyTypeByPropertyCategoryID(id);
+        }
+
         public bool UpdatePropertyType(PropertyType type)
         {
             return _type.UpdatePropertyType(type);
