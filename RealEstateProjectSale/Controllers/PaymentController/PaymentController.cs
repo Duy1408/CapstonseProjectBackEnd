@@ -29,6 +29,7 @@ namespace RealEstateProjectSale.Controllers.PaymentController
 
         private readonly IPaymentServices _paymentServices;
         private readonly IBookingServices _bookServices;
+        private readonly ICustomerServices _customerServices;
         private readonly IDocumentTemplateService _documentService;
         private readonly IFileUploadToBlobService _fileService;
         private readonly IConfiguration _configuration;
@@ -37,7 +38,7 @@ namespace RealEstateProjectSale.Controllers.PaymentController
 
         public PaymentController(IPaymentServices paymentServices, IBookingServices bookServices,
             IFileUploadToBlobService fileService, IDocumentTemplateService documentService, IMapper mapper,
-            IConfiguration configuration)
+            IConfiguration configuration, ICustomerServices customerServices)
         {
             _paymentServices = paymentServices;
             _bookServices = bookServices;
@@ -45,6 +46,7 @@ namespace RealEstateProjectSale.Controllers.PaymentController
             _fileService = fileService;
             _configuration = configuration;
             _mapper = mapper;
+            _customerServices = customerServices;
         }
 
         [HttpPost]
@@ -162,59 +164,6 @@ namespace RealEstateProjectSale.Controllers.PaymentController
             }
         }
 
-
-        //[HttpGet("success/{sessionId}")]
-        //public IActionResult CheckoutSuccess(string sessionId, [FromQuery] Guid customerID)
-        //{
-        //    var session = _paymentServices.CheckoutSuccess(sessionId);
-
-        //    var customerIDCache = Guid.Parse(HttpContext.Request.Query["customerID"]);
-        //    var model = _paymentServices.GetPaymentModelFromCache(customerIDCache);
-
-        //    var newPayment = new PaymentCreateDTO
-        //    {
-        //        PaymentID = model.PaymentID,
-        //        Amount = session.AmountTotal.Value,
-        //        Content = session.LineItems?.Data?.FirstOrDefault()?.Description ?? "No Content",
-        //        CreatedTime = model.CreatedTime,
-        //        PaymentTime = DateTime.Now,
-        //        Status = true,
-        //        BookingID = model.BookingID,
-        //        CustomerID = customerIDCache
-        //    };
-
-        //    var payment = _mapper.Map<Payment>(newPayment);
-        //    _paymentServices.AddNewPayment(payment);
-
-        //    var book = _bookServices.GetBookingById(newPayment.BookingID);
-        //    if (book != null)
-        //    {
-        //        book.DepositedTimed = newPayment.PaymentTime;
-        //        book.DepositedPrice = newPayment.Amount;
-        //        book.UpdatedTime = DateTime.Now;
-        //        book.Status = BookingStatus.DaDatCho.GetEnumDescription();
-        //        book.Note = newPayment.Content;
-        //        _bookServices.UpdateBooking(book);
-
-        //        var htmlContent = _bookServices.GenerateDocumentContent(book.BookingID);
-        //        var pdfBytes = _documentService.GeneratePdfFromTemplate(htmlContent);
-        //        string? blobUrl = null;
-        //        using (MemoryStream pdfStream = new MemoryStream(pdfBytes))
-        //        {
-        //            blobUrl = _fileService.UploadSingleFile(pdfStream, book.DocumentTemplate!.DocumentName, "bookingfile");
-        //        }
-
-        //        book.BookingFile = blobUrl;
-        //        _bookServices.UpdateBooking(book);
-
-        //    }
-
-        //    return Ok(new
-        //    {
-        //        message = "Payment completed successfully."
-        //    });
-        //}
-
         [HttpGet]
         [SwaggerOperation(Summary = "Get All Payment")]
         public IActionResult GetAllPayment()
@@ -258,47 +207,6 @@ namespace RealEstateProjectSale.Controllers.PaymentController
             });
 
         }
-
-        //[HttpPost]
-        //[SwaggerOperation(Summary = "Add New Payment")]
-        //public IActionResult AddNewPayment(PaymentCreateDTO payment)
-        //{
-        //    try
-        //    {
-        //        var booking = _bookServices.GetBookingById(payment.BookingID);
-        //        if (booking == null)
-        //        {
-        //            return NotFound(new
-        //            {
-        //                message = "Booking không tồn tại."
-        //            });
-        //        }
-
-        //        var newNoti = new PaymentCreateDTO
-        //        {
-        //            NotificationID = Guid.NewGuid(),
-        //            Title = noti.Title,
-        //            Subtiltle = noti.Subtiltle,
-        //            Body = noti.Body,
-        //            CreatedTime = DateTime.Now,
-        //            Status = true,
-        //            BookingID = noti.BookingID,
-        //            CustomerID = booking.CustomerID
-        //        };
-
-        //        var notification = _mapper.Map<RealEstateProjectSaleBusinessObject.BusinessObject.Notification>(newNoti);
-        //        _notiServices.AddNewNotification(notification);
-
-        //        return Ok(new
-        //        {
-        //            message = "Tạo thông báo thành công"
-        //        });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
 
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Update Payment By ID")]
