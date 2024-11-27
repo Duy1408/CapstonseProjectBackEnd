@@ -22,6 +22,7 @@ using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 using RealEstateProjectSaleServices.Services;
 using Swashbuckle.AspNetCore.Annotations;
+using Contract = RealEstateProjectSaleBusinessObject.BusinessObject.Contract;
 
 namespace RealEstateProjectSale.Controllers.PropertyController
 {
@@ -526,7 +527,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                     PromotionDetailID = null
                 };
 
-                var _contract = _mapper.Map<RealEstateProjectSaleBusinessObject.BusinessObject.Contract>(newContract);
+                var _contract = _mapper.Map<Contract>(newContract);
                 _contractServices.AddNewContract(_contract);
 
                 existingProperty.Status = PropertyStatus.GiuCho.GetEnumDescription();
