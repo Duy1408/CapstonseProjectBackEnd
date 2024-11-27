@@ -9,7 +9,7 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Request
 {
     public class FloorRequestDTO
     {
-        public int NumFloor { get; set; }
+        public int? NumFloor { get; set; }
         public IFormFileCollection? ImageFloor { get; set; }
         public Guid BlockID { get; set; }
     }

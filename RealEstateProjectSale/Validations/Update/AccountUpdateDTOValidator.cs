@@ -16,8 +16,7 @@ namespace RealEstateProjectSale.Validations.Update
                 .When(x => !string.IsNullOrEmpty(x.Password));
 
             RuleFor(x => x.Status)
-                .NotNull().WithMessage("Status không được để trống.")
-                .When(x => x.Status.HasValue);
+                .Must(status => status == null || status == true || status == false).WithMessage("Trạng thái không hợp lệ nếu có.");
 
         }
     }
