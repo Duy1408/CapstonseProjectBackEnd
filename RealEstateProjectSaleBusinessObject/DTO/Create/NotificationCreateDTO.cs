@@ -11,9 +11,9 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
     {
         [JsonIgnore]
         public Guid NotificationID { get; set; }
-        public string Title { get; set; }
-        public string Subtiltle { get; set; }
-        public string Body { get; set; }
+        public string? Title { get; set; }
+        public string? Subtiltle { get; set; }
+        public string? Body { get; set; }
         [JsonIgnore]
         public DateTime CreatedTime { get; set; }
         [JsonIgnore]
