@@ -12,14 +12,10 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
     {
         [JsonIgnore]
         public Guid AccountID { get; set; }
-
         public string? Email { get; set; }
-
         public string? Password { get; set; }
-
         [JsonIgnore]
         public bool Status { get; set; }
-
         public Guid RoleID { get; set; }
     }
 }
