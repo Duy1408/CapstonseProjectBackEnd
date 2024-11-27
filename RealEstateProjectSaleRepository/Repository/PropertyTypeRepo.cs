@@ -21,6 +21,8 @@ namespace RealEstateProjectSaleRepository.Repository
 
         public PropertyType GetPropertyTypeByID(Guid id) => dao.GetPropertyTypeByID(id);
 
+        public List<PropertyType> GetPropertyTypeByPropertyCategoryID(Guid id) => dao.GetPropertyTypeByPropertyCategoryID(id);
+
         public bool UpdatePropertyType(PropertyType type) => dao.UpdatePropertyType(type);
 
     }
