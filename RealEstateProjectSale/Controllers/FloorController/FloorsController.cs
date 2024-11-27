@@ -128,7 +128,7 @@ namespace RealEstateProjectSale.Controllers.FloorController
                 var newFloor = new FloorCreateDTO
                 {
                     FloorID = Guid.NewGuid(),
-                    NumFloor = floor.NumFloor,
+                    NumFloor = floor.NumFloor!.Value,
                     ImageFloor = floor.ImageFloor.Count > 0 ? floor.ImageFloor.First() : null, // Store first image for reference
                     Status = true,
                     BlockID = floor.BlockID

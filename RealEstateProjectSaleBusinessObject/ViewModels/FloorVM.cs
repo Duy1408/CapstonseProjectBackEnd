@@ -11,6 +11,7 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public Guid FloorID { get; set; }
         public int NumFloor { get; set; }
         public string? ImageFloor { get; set; }
+        public bool Status { get; set; }
         public Guid BlockID { get; set; }
         public string BlockName { get; set; }
     }
