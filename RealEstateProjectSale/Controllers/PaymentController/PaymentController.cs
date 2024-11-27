@@ -259,6 +259,47 @@ namespace RealEstateProjectSale.Controllers.PaymentController
 
         }
 
+        //[HttpPost]
+        //[SwaggerOperation(Summary = "Add New Payment")]
+        //public IActionResult AddNewPayment(PaymentCreateDTO payment)
+        //{
+        //    try
+        //    {
+        //        var booking = _bookServices.GetBookingById(payment.BookingID);
+        //        if (booking == null)
+        //        {
+        //            return NotFound(new
+        //            {
+        //                message = "Booking không tồn tại."
+        //            });
+        //        }
+
+        //        var newNoti = new PaymentCreateDTO
+        //        {
+        //            NotificationID = Guid.NewGuid(),
+        //            Title = noti.Title,
+        //            Subtiltle = noti.Subtiltle,
+        //            Body = noti.Body,
+        //            CreatedTime = DateTime.Now,
+        //            Status = true,
+        //            BookingID = noti.BookingID,
+        //            CustomerID = booking.CustomerID
+        //        };
+
+        //        var notification = _mapper.Map<RealEstateProjectSaleBusinessObject.BusinessObject.Notification>(newNoti);
+        //        _notiServices.AddNewNotification(notification);
+
+        //        return Ok(new
+        //        {
+        //            message = "Tạo thông báo thành công"
+        //        });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Update Payment By ID")]
         public IActionResult UpdatePayment([FromForm] PaymentUpdateDTO payment, Guid id)
