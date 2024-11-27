@@ -219,6 +219,11 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
                 if (detail != null)
                 {
                     _detailServices.DeleteOpenForSaleDetailByID(propertyId, openId);
+
+                    var property = _propertyService.GetPropertyById(propertyId);
+                    property.Status = PropertyStatus.ChuaBan.GetEnumDescription();
+                    _propertyService.UpdateProperty(property);
+
                     return Ok(new
                     {
                         message = "Xóa chi tiết đợt mở bán thành công."
