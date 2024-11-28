@@ -68,15 +68,15 @@ namespace RealEstateProjectSaleServices.Services
                 }
             }
 
-            //var contractpaymentdetails = _contractPaymentDetailServices.GetAllContractPaymentDetail();
-            //foreach(var contractpaymentdetail in contractpaymentdetails)
-            //{
-            //    if(contractpaymentdetail.Status == false)
-            //    {
-            //        pricecontractdetail += contractpaymentdetail.PaidValue.Value + contractpaymentdetail.PaidValueLate.Value;
-            //    }
-            //}
-            return total =  pricebooking;
+            var contractpaymentdetails = _contractPaymentDetailServices.GetAllContractPaymentDetail();
+            foreach (var contractpaymentdetail in contractpaymentdetails)
+            {
+                if (contractpaymentdetail.Status == false)
+                {
+                    pricecontractdetail += contractpaymentdetail.PaidValue.Value ;
+                }
+            }
+            return total =  pricebooking + pricecontractdetail;
         }
 
 
