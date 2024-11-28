@@ -11,7 +11,7 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
     {
         [JsonIgnore]
         public Guid PaymentPolicyID { get; set; }
-        public string PaymentPolicyName { get; set; }
+        public string? PaymentPolicyName { get; set; }
         public int? LateDate { get; set; }
         [JsonIgnore]
         public bool Status { get; set; }

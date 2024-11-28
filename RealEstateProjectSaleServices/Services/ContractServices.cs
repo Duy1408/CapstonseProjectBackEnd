@@ -291,8 +291,10 @@ namespace RealEstateProjectSaleServices.Services
                 }
                 else
                 {
+                    var amountStage = (detail.Amount == 0) ? null : detail.Amount;
+
                     // Tính amount bình thường nếu không phải là dòng cuối
-                    amountValue = detail.Amount ?? (totalAmount * (detail.Percentage ?? 0));
+                    amountValue = amountStage ?? (totalAmount * (detail.Percentage ?? 0));
                 }
 
                 string amount = $"{amountValue:N0} VND";
@@ -357,8 +359,10 @@ namespace RealEstateProjectSaleServices.Services
                 }
                 else
                 {
+                    var amountStage = (detail.Amount == 0) ? null : detail.Amount;
+
                     // Tính amount bình thường nếu không phải là dòng cuối
-                    amountValue = detail.Amount ?? (totalAmount * (detail.Percentage ?? 0));
+                    amountValue = amountStage ?? (totalAmount * (detail.Percentage ?? 0));
                 }
 
                 amountValue = amountValue.HasValue ? Math.Round(amountValue.Value) : (double?)null;
