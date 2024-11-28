@@ -54,14 +54,6 @@ namespace RealEstateProjectSale.Controllers.DashboardController
         }
 
 
-        [HttpGet("outstandingamount")]
-        [SwaggerOperation(Summary = "outstanding amount")]
-        public ActionResult<object> CalculateOutstandingAmount()
-        {
-            var outstandingamount = _dashboardService.CalculateOutstandingAmount();
-
-            return Ok("-"+ outstandingamount);
-        }
     }
 
 
