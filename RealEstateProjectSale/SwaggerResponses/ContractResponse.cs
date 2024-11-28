@@ -11,8 +11,7 @@ namespace RealEstateProjectSale.SwaggerResponses
         public string PropertyCode { get; set; }
         public double? PriceSold { get; set; }
         [Column(TypeName = "date")]
-
-        [JsonConverter (typeof(DateOnlyConverter))]
+        [JsonConverter(typeof(DateOnlyConverter))]
         public DateTime? ExpiredTime { get; set; }
         public string Status { get; set; }
     }

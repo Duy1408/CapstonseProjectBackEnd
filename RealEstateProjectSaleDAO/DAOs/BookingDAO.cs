@@ -93,7 +93,6 @@ namespace RealEstateProjectSaleDAO.DAOs
                                      .Include(o => o.ProjectCategoryDetail)
                                         .ThenInclude(pc => pc.PropertyCategory)
                                      .Where(b => b.DepositedTimed != null
-                                     //&& b.DepositedPrice != null do mua trực tiếp ko có
                                      && b.Status == BookingStatus.DaCheckIn.GetEnumDescription()
                                      && b.ProjectCategoryDetailID == id)
                                      .OrderBy(b => b.DepositedTimed)
