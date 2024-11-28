@@ -1,5 +1,6 @@
 ﻿using RealEstateProjectSaleBusinessObject.JsonConverters;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace RealEstateProjectSale.SwaggerResponses
 {
@@ -10,7 +11,8 @@ namespace RealEstateProjectSale.SwaggerResponses
         public string PropertyCode { get; set; }
         public double? PriceSold { get; set; }
         [Column(TypeName = "date")]
-        [JsonConverter(typeof(DateOnlyConverter))]
+
+        [JsonConverter (typeof(DateOnlyConverter))]
         public DateTime? ExpiredTime { get; set; }
         public string Status { get; set; }
     }

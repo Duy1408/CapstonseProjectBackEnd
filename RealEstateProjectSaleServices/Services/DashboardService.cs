@@ -38,7 +38,7 @@ namespace RealEstateProjectSaleServices.Services
 
             foreach ( var property in properties)
             {
-                if (property.Status=="DaBan")
+                if (property.Status== "Đã bán")
                 {
                     total++;
                 }
@@ -62,7 +62,7 @@ namespace RealEstateProjectSaleServices.Services
             var bookings = _bookingServices.GetBookings();
             foreach (var booking in bookings)
             {
-                if (booking.DepositedPrice.HasValue && booking.Status== "ChuaThanhToanTienGiuCho")
+                if (booking.DepositedPrice.HasValue && booking.Status== "Chưa thanh toán tiền giữ chỗ")
                 {
                     pricebooking += booking.DepositedPrice.Value;
                 }
