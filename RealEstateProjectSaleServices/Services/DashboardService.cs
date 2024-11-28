@@ -58,6 +58,8 @@ namespace RealEstateProjectSaleServices.Services
             double total = 0;
             double pricecontractdetail = 0;
             double pricebooking = 0;
+            double pricecontractdetaillate = 0;
+
 
             var bookings = _bookingServices.GetBookings();
             foreach (var booking in bookings)
@@ -76,7 +78,17 @@ namespace RealEstateProjectSaleServices.Services
                     pricecontractdetail += contractpaymentdetail.PaidValue.Value ;
                 }
             }
-            return total =  pricebooking + pricecontractdetail;
+
+            foreach (var contractpaymentdetail in contractpaymentdetails)
+            {
+                if (contractpaymentdetail.Status == false)
+                {
+                    pricecontractdetaillate += contractpaymentdetail.PaidValueLate.Value;
+                }
+            }
+
+
+            return total =  pricebooking + pricecontractdetail + pricecontractdetaillate;
         }
 
 
