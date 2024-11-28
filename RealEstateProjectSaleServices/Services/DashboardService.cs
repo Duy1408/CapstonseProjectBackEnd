@@ -14,18 +14,20 @@ namespace RealEstateProjectSaleServices.Services
         private readonly IContractPaymentDetailServices _contractDetailService;
         private readonly IPropertyServices _propertyServices;
         private readonly ICustomerServices _customerServices;
+        private readonly IContractPaymentDetailServices _contractPaymentDetailServices;
 
 
 
 
 
         public DashboardService(IBookingServices bookingServices, IContractPaymentDetailServices contractDetailService,
-           IPropertyServices propertyServices, ICustomerServices customerServices)
+           IPropertyServices propertyServices, ICustomerServices customerServices, IContractPaymentDetailServices contractPaymentDetailServices)
         {
             _bookingServices = bookingServices;
             _contractDetailService = contractDetailService;
             _propertyServices = propertyServices;
             _customerServices = customerServices;
+            _contractPaymentDetailServices = contractPaymentDetailServices;
         }
 
         public int CalculateProperty()
@@ -49,6 +51,32 @@ namespace RealEstateProjectSaleServices.Services
            
             var sumproperties = _propertyServices.GetProperty().Count();
             return sumproperties;
+        }
+
+        public double CalculateOutstandingAmount()
+        {
+            double total = 0;
+            double pricecontractdetail = 0;
+            double pricebooking = 0;
+
+            var bookings = _bookingServices.GetBookings();
+            foreach (var booking in bookings)
+            {
+                if (booking.DepositedPrice.HasValue && booking.Status== "ChuaThanhToanTienGiuCho")
+                {
+                    pricebooking += booking.DepositedPrice.Value;
+                }
+            }
+
+            var contractpaymentdetails = _contractPaymentDetailServices.GetAllContractPaymentDetail();
+            foreach(var contractpaymentdetail in contractpaymentdetails)
+            {
+                if(contractpaymentdetail.Status == false)
+                {
+                    pricecontractdetail += contractpaymentdetail.PaidValue.Value + contractpaymentdetail.PaidValueLate.Value;
+                }
+            }
+            return total = pricecontractdetail + pricebooking;
         }
 
 
@@ -130,6 +158,6 @@ namespace RealEstateProjectSaleServices.Services
 
         }
 
-      
+     
     }
 }
