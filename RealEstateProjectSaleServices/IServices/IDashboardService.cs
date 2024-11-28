@@ -12,6 +12,7 @@ namespace RealEstateProjectSaleServices.IServices
         double CalculateTotalPrice();
         int CalculateProperty();
         int SumProperty();
+        int CalculateCustomer();
 
 
 

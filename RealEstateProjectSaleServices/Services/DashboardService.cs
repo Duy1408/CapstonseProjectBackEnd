@@ -13,17 +13,19 @@ namespace RealEstateProjectSaleServices.Services
         private readonly IBookingServices _bookingServices;
         private readonly IContractPaymentDetailServices _contractDetailService;
         private readonly IPropertyServices _propertyServices;
+        private readonly ICustomerServices _customerServices;
 
 
 
 
 
         public DashboardService(IBookingServices bookingServices, IContractPaymentDetailServices contractDetailService,
-           IPropertyServices propertyServices)
+           IPropertyServices propertyServices, ICustomerServices customerServices)
         {
             _bookingServices = bookingServices;
             _contractDetailService = contractDetailService;
             _propertyServices = propertyServices;
+            _customerServices = customerServices;
         }
 
         public int CalculateProperty()
@@ -80,6 +82,19 @@ namespace RealEstateProjectSaleServices.Services
             return total;
         }
 
+        public int CalculateCustomer()
+        {
+            int total = 0;
+            var customers = _customerServices.GetAllCustomer();
+            foreach(var customer in customers) {
+                if(customer.Status == true)
+                {
+                    total += 1;
+                }
+            }
+            return total;
+        }
+
         public List<object> GetMonthlyTotalPrices()
         {
             int currentYear = DateTime.Now.Year;
@@ -115,6 +130,6 @@ namespace RealEstateProjectSaleServices.Services
 
         }
 
-    
+      
     }
 }

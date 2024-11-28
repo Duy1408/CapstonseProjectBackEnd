@@ -43,6 +43,15 @@ namespace RealEstateProjectSale.Controllers.DashboardController
             var sumproperty = _dashboardService.SumProperty();
             return Ok(property +"/"+ sumproperty);
         }
+
+        [HttpGet("countcustomer")]
+        [SwaggerOperation(Summary = "count customer")]
+        public ActionResult<object> CountCustomer()
+        {
+            var customer = _dashboardService.CalculateCustomer();
+           
+            return Ok(customer);
+        }
     }
 
 
