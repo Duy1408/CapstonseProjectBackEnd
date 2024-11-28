@@ -1,4 +1,5 @@
-﻿using RealEstateProjectSaleBusinessObject.Enums;
+﻿using RealEstateProjectSaleBusinessObject.BusinessObject;
+using RealEstateProjectSaleBusinessObject.Enums;
 using RealEstateProjectSaleServices.IServices;
 using System;
 using System.Collections.Generic;
@@ -76,12 +77,16 @@ namespace RealEstateProjectSaleServices.Services
                 if (contractpaymentdetail.Status == false)
                 {
                     pricecontractdetail += contractpaymentdetail.PaidValue.Value ;
+
+                    if (contractpaymentdetail.PaidValueLate.HasValue)
+                    {
+                        pricecontractdetail += contractpaymentdetail.PaidValueLate.Value;
+                    }
                 }
             }
 
-
-
-            return total = pricebooking + pricecontractdetail;
+             total = pricebooking + pricecontractdetail;
+            return total;
         }
 
 
