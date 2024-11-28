@@ -570,7 +570,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
         [SwaggerOperation(Summary = "Delete Booking by ID")]
         [SwaggerResponse(StatusCodes.Status200OK, "Xóa Booking thành công.")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Booking không tồn tại.")]
-        public async Task<IActionResult> DeleteContract(Guid id)
+        public async Task<IActionResult> DeleteBooking(Guid id)
         {
 
             var booking = _book.GetBookingById(id);
@@ -592,7 +592,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
         }
 
 
-        //public async Task<IActionResult> DeleteContract(Guid id)
+        //public async Task<IActionResult> DeleteBooking(Guid id)
         //{
 
         //    var booking = _book.GetBookingById(id);
