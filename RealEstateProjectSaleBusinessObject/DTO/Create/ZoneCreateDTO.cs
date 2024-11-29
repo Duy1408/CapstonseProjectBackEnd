@@ -10,9 +10,9 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
     public class ZoneCreateDTO
     {
         public Guid ZoneID { get; set; }
-        public string? ZoneName { get; set; }
+        public string ZoneName { get; set; }
         public IFormFile? ImageZone { get; set; }
-        public bool? Status { get; set; }
+        public bool Status { get; set; }
         public Guid ProjectID { get; set; }
 
     }
