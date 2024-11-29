@@ -122,21 +122,26 @@ namespace RealEstateProjectSale.Controllers.FloorController
         {
             try
             {
-
-                var imageUrls = _fileService.UploadMultipleImages(floor.ImageFloor.ToList(), "floorimage");
+                var floorExist = _floor.CheckExistFloorByNum(floor.NumFloor.Value, floor.BlockID);
+                if (floorExist != null)
+                {
+                    return BadRequest("Số tầng đã tồn tại trong block này.");
+                }
+                var imageUrls = floor.ImageFloor != null && floor.ImageFloor.Count > 0
+                      ? _fileService.UploadMultipleImages(floor.ImageFloor.ToList(), "floorimage")
+                         : new List<string>(); // Nếu không có hình ảnh, khởi tạo danh sách trống
 
                 var newFloor = new FloorCreateDTO
                 {
                     FloorID = Guid.NewGuid(),
                     NumFloor = floor.NumFloor!.Value,
-                    ImageFloor = floor.ImageFloor.Count > 0 ? floor.ImageFloor.First() : null, // Store first image for reference
+                    ImageFloor = floor.ImageFloor != null && floor.ImageFloor.Count > 0 ? floor.ImageFloor.First() : null, // Lưu hình ảnh đầu tiên nếu có
                     Status = true,
                     BlockID = floor.BlockID
                 };
 
                 var b = _mapper.Map<Floor>(newFloor);
-                //project.Image = blobUrl;
-                b.ImageFloor = string.Join(",", imageUrls); // Store all image URLs as a comma-separated string
+                b.ImageFloor = imageUrls.Count > 0 ? string.Join(",", imageUrls) : null; 
                 _floor.AddNew(b);
                 return Ok(new
                 {
@@ -156,7 +161,9 @@ namespace RealEstateProjectSale.Controllers.FloorController
         {
             try
             {
-                var imageUrls = floor.ImageFloor != null ? _fileService.UploadMultipleImages(floor.ImageFloor.ToList(), "floorimage") : new List<string>();
+                var imageUrls = floor.ImageFloor != null && floor.ImageFloor.Count > 0
+                    ? _fileService.UploadMultipleImages(floor.ImageFloor.ToList(), "floorimage")
+                       : new List<string>(); // Nếu không có hình ảnh, khởi tạo danh sách trống
 
                 var existingFloor = _floor.GetFloorById(id);
                 if (existingFloor != null)
@@ -164,6 +171,11 @@ namespace RealEstateProjectSale.Controllers.FloorController
 
                     if (floor.NumFloor.HasValue)
                     {
+                        var floorExist = _floor.CheckExistFloorByNum(floor.NumFloor.Value, existingFloor.BlockID);
+                        if (floorExist != null && floorExist.FloorID != existingFloor.FloorID)
+                        {
+                            return BadRequest("Số tầng đã tồn tại trong block này.");
+                        }
                         existingFloor.NumFloor = floor.NumFloor.Value;
                     }
                     if (imageUrls.Count > 0)

@@ -31,6 +31,7 @@ namespace RealEstateProjectSaleDAO.DAOs
             return _context.Floors.Include(c => c.Block).ToList();
         }
 
+
         public bool AddNew(Floor z)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
@@ -53,6 +54,12 @@ namespace RealEstateProjectSaleDAO.DAOs
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
             return _context.Floors.Include(c => c.Block).SingleOrDefault(a => a.FloorID == id);
+        }
+
+        public Floor CheckExistFloorByNum(int num, Guid blockid)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            return _context.Floors.Include(c => c.Block).SingleOrDefault(a => a.NumFloor == num && a.BlockID == blockid);
         }
 
         public List<Floor> GetFloorByBlockID(Guid id)
