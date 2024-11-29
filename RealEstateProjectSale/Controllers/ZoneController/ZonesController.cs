@@ -74,7 +74,9 @@ namespace RealEstateProjectSale.Controllers.ZoneController
         {
             try
             {
-                var imageUrls = zone.ImageZone != null ? _fileService.UploadMultipleImages(zone.ImageZone.ToList(), "zoneimage") : new List<string>();
+                var imageUrls = zone.ImageZone != null && zone.ImageZone.Count > 0
+                ? _fileService.UploadMultipleImages(zone.ImageZone.ToList(), "zoneimage")
+                 : new List<string>(); // Nếu không có hình ảnh, khởi tạo danh sách trống
 
                 var existingZone = _zone.GetZoneById(id);
                 if (existingZone != null)
@@ -125,21 +127,24 @@ namespace RealEstateProjectSale.Controllers.ZoneController
             try
             {
 
-                var imageUrls = _fileService.UploadMultipleImages(zone.ImageZone.ToList(), "zoneimage");
+                var imageUrls = zone.ImageZone != null && zone.ImageZone.Count > 0
+               ? _fileService.UploadMultipleImages(zone.ImageZone.ToList(), "zoneimage")
+                  : new List<string>(); // Nếu không có hình ảnh, khởi tạo danh sách trống
 
                 var newZone = new ZoneCreateDTO
                 {
                     ZoneID = Guid.NewGuid(),
                     ZoneName = zone.ZoneName,
-                    ImageZone = zone.ImageZone.Count > 0 ? zone.ImageZone.First() : null, // Store first image for reference
+                    ImageZone = zone.ImageZone != null && zone.ImageZone.Count > 0 ? zone.ImageZone.First() : null, // Lưu hình ảnh đầu tiên nếu có
                     Status = true,
                     ProjectID = zone.ProjectID
 
                 };
 
                 var z = _mapper.Map<RealEstateZone>(newZone);
-                //project.Image = blobUrl;
-                z.ImageZone = string.Join(",", imageUrls); // Store all image URLs as a comma-separated string
+
+                z.ImageZone = imageUrls.Count > 0 ? string.Join(",", imageUrls) : null;
+
                 _zone.AddNew(z);
 
                 return Ok(new

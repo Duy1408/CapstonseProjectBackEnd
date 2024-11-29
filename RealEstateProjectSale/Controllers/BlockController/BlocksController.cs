@@ -104,8 +104,10 @@ namespace RealEstateProjectSale.Controllers.BlockController
         {
             try
             {
-                var imageUrls = block.ImageBlock != null ? _fileService.UploadMultipleImages(block.ImageBlock.ToList(), "blockimage") : new List<string>();
-
+          
+                var imageUrls = block.ImageBlock != null && block.ImageBlock.Count > 0
+                  ? _fileService.UploadMultipleImages(block.ImageBlock.ToList(), "blockimage")
+                     : new List<string>(); // Nếu không có hình ảnh, khởi tạo danh sách trống
                 var existingBlock = _block.GetBlockById(id);
                 if (existingBlock != null)
                 {
@@ -155,20 +157,22 @@ namespace RealEstateProjectSale.Controllers.BlockController
         {
             try
             {
-                var imageUrls = _fileService.UploadMultipleImages(block.ImageBlock.ToList(), "blockimage");
+                var imageUrls = block.ImageBlock != null && block.ImageBlock.Count > 0
+                   ? _fileService.UploadMultipleImages(block.ImageBlock.ToList(), "blockimage")
+                      : new List<string>(); // Nếu không có hình ảnh, khởi tạo danh sách trống
 
                 var newBlock = new BlockCreateDTO
                 {
                     BlockID = Guid.NewGuid(),
                     BlockName = block.BlockName,
-                    ImageBlock = block.ImageBlock.Count > 0 ? block.ImageBlock.First() : null, // Store first image for reference
+                    ImageBlock = block.ImageBlock != null && block.ImageBlock.Count > 0 ? block.ImageBlock.First() : null, // Lưu hình ảnh đầu tiên nếu có
                     Status = true,
                     ZoneID = block.ZoneID
                 };
 
                 var b = _mapper.Map<Block>(newBlock);
                 //project.Image = blobUrl;
-                b.ImageBlock = string.Join(",", imageUrls); // Store all image URLs as a comma-separated string
+                b.ImageBlock = imageUrls.Count > 0 ? string.Join(",", imageUrls) : null;
                 _block.AddNew(b);
                 return Ok(new
                 {
