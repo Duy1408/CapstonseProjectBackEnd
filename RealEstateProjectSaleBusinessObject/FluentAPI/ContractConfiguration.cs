@@ -20,7 +20,7 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
             builder.Property(x => x.CreatedTime).IsRequired();
             builder.Property(x => x.UpdatedTime);
             builder.Property(x => x.ExpiredTime);
-            builder.Property(x => x.TotalPrice).IsRequired();
+            builder.Property(x => x.TotalPrice);
             builder.Property(x => x.Description);
             builder.Property(x => x.ContractDepositFile);
             builder.Property(x => x.ContractSaleFile);
