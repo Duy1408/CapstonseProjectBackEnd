@@ -20,11 +20,14 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessController
     public class PaymentProcessesController : ControllerBase
     {
         private readonly IPaymentProcessServices _pmtService;
+        private readonly IPaymentProcessDetailServices _detailService;
         private readonly IMapper _mapper;
 
-        public PaymentProcessesController(IPaymentProcessServices pmtService, IMapper mapper)
+        public PaymentProcessesController(IPaymentProcessServices pmtService, IPaymentProcessDetailServices detailService,
+            IMapper mapper)
         {
             _pmtService = pmtService;
+            _detailService = detailService;
             _mapper = mapper;
         }
 
@@ -102,12 +105,26 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessController
                 {
                     PaymentProcessID = Guid.NewGuid(),
                     PaymentProcessName = process.PaymentProcessName,
-                    Status = process.Status,
+                    Status = true,
                     SalesPolicyID = process.SalesPolicyID
                 };
 
                 var _process = _mapper.Map<PaymentProcess>(newProcess);
                 _pmtService.AddNew(_process);
+
+                var newDetail = new PaymentProcessDetailCreateDTO
+                {
+                    PaymentProcessDetailID = Guid.NewGuid(),
+                    PaymentStage = 1,
+                    Description = "Ký TTDC",
+                    DurationDate = null,
+                    Percentage = null,
+                    Amount = 100000000,
+                    PaymentProcessID = newProcess.PaymentProcessID
+                };
+
+                var _detail = _mapper.Map<PaymentProcessDetail>(newDetail);
+                _detailService.AddNew(_detail);
 
                 return Ok(new
                 {
