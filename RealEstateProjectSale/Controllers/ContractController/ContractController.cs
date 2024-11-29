@@ -1427,20 +1427,10 @@ namespace RealEstateProjectSale.Controllers.ContractController
         [SwaggerOperation(Summary = "Create a new Contract")]
         [SwaggerResponse(StatusCodes.Status200OK, "Hợp đồng đã được tạo thành công.")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Yêu cầu không hợp lệ hoặc xảy ra lỗi xử lý.")]
-        public IActionResult AddNewContract([FromForm] ContractRequestDTO contract)
+        public IActionResult AddNewContract(ContractCreateDTO contract)
         {
             try
             {
-                string? blobUrl = null;
-                var contractFile = contract.ContractDepositFile;
-                if (contractFile != null)
-                {
-                    using (var pdfStream = contractFile.OpenReadStream())
-                    {
-                        blobUrl = _fileService.UploadSingleFile(pdfStream, contractFile.FileName, "contractdepositfile");
-                    }
-                }
-
                 var booking = _bookServices.GetBookingById(contract.BookingID);
                 if (booking == null)
                 {
@@ -1471,7 +1461,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     ExpiredTime = DateTime.Now.AddDays(1),
                     TotalPrice = contract.TotalPrice,
                     Description = contract.Description,
-                    ContractDepositFile = contract.ContractDepositFile,
+                    ContractDepositFile = null,
                     ContractSaleFile = null,
                     PriceSheetFile = null,
                     ContractTransferFile = null,
@@ -1484,7 +1474,6 @@ namespace RealEstateProjectSale.Controllers.ContractController
                 };
 
                 var _contract = _mapper.Map<RealEstateProjectSaleBusinessObject.BusinessObject.Contract>(newContract);
-                _contract.ContractDepositFile = blobUrl;
                 _contractServices.AddNewContract(_contract);
 
                 return Ok(new
