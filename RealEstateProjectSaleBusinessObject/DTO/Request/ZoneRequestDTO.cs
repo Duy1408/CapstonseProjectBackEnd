@@ -9,7 +9,7 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Request
 {
     public class ZoneRequestDTO
     {
-        public string ZoneName { get; set; }
+        public string? ZoneName { get; set; }
         public IFormFileCollection? ImageZone { get; set; }
         public Guid ProjectID { get; set; }
     }
