@@ -566,11 +566,37 @@ namespace RealEstateProjectSale.Controllers.BookingController
             }
         }
 
+        [HttpPut("not-choose/{id}")]
+        [SwaggerOperation(Summary = "Customer Not Choose Property")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Cập nhật trạng thái booking thành công.")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Booking không tồn tại.")]
+        public async Task<IActionResult> CustomerNotChooseProperty(Guid id)
+        {
+
+            var booking = _book.GetBookingById(id);
+            if (booking == null)
+            {
+                return NotFound(new
+                {
+                    message = "Booking không tồn tại."
+                });
+            }
+
+            booking.Status = BookingStatus.KhongChonSanPham.GetEnumDescription();
+            _book.UpdateBooking(booking);
+
+            await _hubContext.Clients.All.SendAsync("ReceiveBookingStatus", booking.BookingID.ToString(), booking.Status);
+            return Ok(new
+            {
+                message = "Cập nhật trạng thái booking thành công."
+            });
+        }
+
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Delete Booking by ID")]
         [SwaggerResponse(StatusCodes.Status200OK, "Xóa Booking thành công.")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Booking không tồn tại.")]
-        public async Task<IActionResult> DeleteBooking(Guid id)
+        public IActionResult DeleteBooking(Guid id)
         {
 
             var booking = _book.GetBookingById(id);
@@ -584,33 +610,11 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
             _book.ChangeStatusBooking(booking);
 
-            await _hubContext.Clients.All.SendAsync("ReceiveBookingStatus", booking.BookingID.ToString(), booking.Status);
             return Ok(new
             {
                 message = "Xóa Booking thành công."
             });
         }
 
-
-        //public async Task<IActionResult> DeleteBooking(Guid id)
-        //{
-
-        //    var booking = _book.GetBookingById(id);
-        //    if (booking == null)
-        //    {
-        //        return NotFound(new
-        //        {
-        //            message = "Booking không tồn tại."
-        //        });
-        //    }
-
-        //    _book.ChangeStatusBooking(booking);
-        //    await _hubContext.Clients.All.SendAsync("ReceiveBookingStatus", booking.BookingID.ToString(), booking.Status);
-
-        //    return Ok(new
-        //    {
-        //        message = "Xóa Booking thành công"
-        //    });
-        //}
     }
 }
