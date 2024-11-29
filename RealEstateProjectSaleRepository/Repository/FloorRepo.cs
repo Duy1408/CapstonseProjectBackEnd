@@ -29,6 +29,11 @@ namespace RealEstateProjectSaleRepository.Repository
             return _dao.ChangeStatus(p);
         }
 
+        public Floor CheckExistFloorByNum(int num, Guid blockid)
+        {
+            return _dao.CheckExistFloorByNum(num, blockid);
+        }
+
         public List<Floor> GetFloorByBlockID(Guid id)
         {
             return _dao.GetFloorByBlockID(id);

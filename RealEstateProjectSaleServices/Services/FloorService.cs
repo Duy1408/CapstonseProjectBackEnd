@@ -26,6 +26,11 @@ namespace RealEstateProjectSaleServices.Services
             return _repo.ChangeStatus(p);
         }
 
+        public Floor CheckExistFloorByNum(int num, Guid blockid)
+        {
+            return _repo.CheckExistFloorByNum(num, blockid);
+        }
+
         public List<Floor> GetFloorByBlockID(Guid id)
         {
             return _repo.GetFloorByBlockID(id);

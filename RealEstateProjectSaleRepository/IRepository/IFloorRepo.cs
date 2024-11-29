@@ -15,5 +15,6 @@ namespace RealEstateProjectSaleRepository.IRepository
         Floor GetFloorById(Guid id);
         List<Floor> GetFloorByBlockID(Guid id);
         void UpdateFloor(Floor p);
+        Floor CheckExistFloorByNum(int num, Guid blockid);
     }
 }
