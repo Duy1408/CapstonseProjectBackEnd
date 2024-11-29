@@ -24,8 +24,11 @@ namespace RealEstateProjectSaleBusinessObject.Enums
         [EnumDescription("Đã ký thỏa thuận đặt cọc")]
         DaKyTTDC = 5,
 
+        [EnumDescription("Không chọn sản phẩm")]
+        KhongChonSanPham = 6,
+
         [EnumDescription("Đã hủy")]
-        DaHuy = 6
+        DaHuy = 7
 
     }
 
