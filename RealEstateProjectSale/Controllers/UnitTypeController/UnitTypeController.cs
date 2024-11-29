@@ -113,10 +113,10 @@ namespace RealEstateProjectSale.Controllers.UnitTypeController
                 var newCmt = new UnitTypeCreateDTO
                 {
                     UnitTypeID = Guid.NewGuid(),
-                    BathRoom = type.BathRoom,
-                    BedRoom = type.BedRoom,
-                    KitchenRoom = type.KitchenRoom,
-                    LivingRoom = type.LivingRoom,
+                    BathRoom = type.BathRoom!.Value,
+                    BedRoom = type.BedRoom!.Value,
+                    KitchenRoom = type.KitchenRoom!.Value,
+                    LivingRoom = type.LivingRoom!.Value,
                     NumberFloor = type.NumberFloor,
                     Basement = type.Basement,
                     NetFloorArea = type.NetFloorArea,
