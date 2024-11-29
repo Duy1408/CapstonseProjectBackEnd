@@ -108,7 +108,9 @@ namespace RealEstateProjectSale.Controllers.UnitTypeController
         {
             try
             {
-                var imageUrls = _fileService.UploadMultipleImages(type.Image.ToList(), "unittypeimage");
+                var imageUrls = type.Image != null && type.Image.Count > 0
+                    ? _fileService.UploadMultipleImages(type.Image.ToList(), "unittypeimage")
+                       : new List<string>(); // Nếu không có hình ảnh, khởi tạo danh sách trống
 
                 var newCmt = new UnitTypeCreateDTO
                 {
@@ -122,13 +124,14 @@ namespace RealEstateProjectSale.Controllers.UnitTypeController
                     NetFloorArea = type.NetFloorArea,
                     GrossFloorArea = type.GrossFloorArea,
                     Status = true,
-                    PropertyTypeID = type.PropertyTypeID,
-                    Image = type.Image.Count > 0 ? type.Image.First() : null
+                    PropertyTypeID = type.PropertyTypeID,                 
+                    Image = type.Image != null && type.Image.Count > 0 ? type.Image.First() : null, // Lưu hình ảnh đầu tiên nếu có
+                    
                 };
 
                 var unitType = _mapper.Map<UnitType>(newCmt);
+                unitType.Image = imageUrls.Count > 0 ? string.Join(",", imageUrls) : null;
 
-                unitType.Image = string.Join(",", imageUrls);
 
                 _typeService.AddNewUnitType(unitType);
 
@@ -149,7 +152,9 @@ namespace RealEstateProjectSale.Controllers.UnitTypeController
         {
             try
             {
-                var imageUrls = type.Image != null ? _fileService.UploadMultipleImages(type.Image.ToList(), "unittypeimage") : new List<string>();
+                var imageUrls = type.Image != null && type.Image.Count > 0
+          ? _fileService.UploadMultipleImages(type.Image.ToList(), "unittypeimage")
+             : new List<string>(); // Nếu không có hình ảnh, khởi tạo danh sách trống
 
                 var existingType = _typeService.GetUnitTypeByID(id);
                 if (existingType != null)
