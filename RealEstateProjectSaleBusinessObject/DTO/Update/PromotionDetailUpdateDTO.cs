@@ -13,7 +13,5 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Update
         public double? Amount { get; set; }
         public Guid? PromotionID { get; set; }
         public Guid? PropertyTypeID { get; set; }
-
-
     }
 }
