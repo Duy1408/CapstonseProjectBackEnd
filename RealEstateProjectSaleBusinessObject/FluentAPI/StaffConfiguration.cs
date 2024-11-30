@@ -19,15 +19,10 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
             builder.Property(x => x.PersonalEmail).IsRequired();
             builder.Property(x => x.DateOfBirth).IsRequired();
             builder.Property(x => x.Image);
-            builder.Property(x => x.IdentityCardNumber).IsRequired();
-            builder.Property(x => x.Sex).IsRequired();
+            builder.Property(x => x.IdentityCardNumber);
             builder.Property(x => x.Nationality).IsRequired();
-            builder.Property(x => x.Placeoforigin).IsRequired();
-            builder.Property(x => x.PlaceOfresidence).IsRequired();
-            builder.Property(x => x.DateOfIssue).IsRequired();
-            builder.Property(x => x.Taxcode);
-            builder.Property(x => x.BankName);
-            builder.Property(x => x.BankNumber);
+            builder.Property(x => x.Placeoforigin);
+            builder.Property(x => x.PlaceOfresidence);
             builder.Property(x => x.Status).IsRequired();
             builder.HasOne(x => x.Account);
             builder.HasMany(x => x.Bookings).WithOne(x => x.Staff).OnDelete(DeleteBehavior.NoAction);

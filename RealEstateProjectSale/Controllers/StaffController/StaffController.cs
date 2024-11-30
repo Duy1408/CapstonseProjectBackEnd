@@ -123,14 +123,9 @@ namespace RealEstateProjectSale.Controllers.StaffController
                     DateOfBirth = accountStaff.DateOfBirth,
                     Image = accountStaff.Image,
                     IdentityCardNumber = accountStaff.IdentityCardNumber,
-                    Sex = accountStaff.Sex,
                     Nationality = accountStaff.Nationality,
                     Placeoforigin = accountStaff.Placeoforigin,
                     PlaceOfresidence = accountStaff.PlaceOfresidence,
-                    DateOfIssue = accountStaff.DateOfIssue,
-                    Taxcode = accountStaff.Taxcode,
-                    BankName = accountStaff.BankName,
-                    BankNumber = accountStaff.BankNumber,
                     Status = true,
                     AccountID = account.AccountID
                 };
@@ -186,10 +181,6 @@ namespace RealEstateProjectSale.Controllers.StaffController
                     {
                         _staff.IdentityCardNumber = staff.IdentityCardNumber;
                     }
-                    if (!string.IsNullOrEmpty(staff.Sex))
-                    {
-                        _staff.Sex = staff.Sex;
-                    }
                     if (!string.IsNullOrEmpty(staff.Nationality))
                     {
                         _staff.Nationality = staff.Nationality;
@@ -201,22 +192,6 @@ namespace RealEstateProjectSale.Controllers.StaffController
                     if (!string.IsNullOrEmpty(staff.PlaceOfresidence))
                     {
                         _staff.PlaceOfresidence = staff.PlaceOfresidence;
-                    }
-                    if (staff.DateOfIssue.HasValue)
-                    {
-                        _staff.DateOfIssue = staff.DateOfIssue.Value;
-                    }
-                    if (!string.IsNullOrEmpty(staff.Taxcode))
-                    {
-                        _staff.Taxcode = staff.Taxcode;
-                    }
-                    if (!string.IsNullOrEmpty(staff.BankName))
-                    {
-                        _staff.BankName = staff.BankName;
-                    }
-                    if (!string.IsNullOrEmpty(staff.BankNumber))
-                    {
-                        _staff.BankNumber = staff.BankNumber;
                     }
                     if (staff.Status.HasValue)
                     {

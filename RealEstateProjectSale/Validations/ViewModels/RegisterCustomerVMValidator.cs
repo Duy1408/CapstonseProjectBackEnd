@@ -49,7 +49,8 @@ namespace RealEstateProjectSale.Validations.ViewModels
                 .When(x => !string.IsNullOrEmpty(x.PlaceOfResidence));
 
             RuleFor(x => x.Address)
-                .NotEmpty().WithMessage("Địa chỉ là bắt buộc.");
+                .NotEmpty().WithMessage("Địa chỉ là bắt buộc.")
+                .MaximumLength(500).WithMessage("Địa chỉ không được vượt quá 500 ký tự.");
 
             RuleFor(x => x.BankName)
                 .Matches(@"^[a-zA-Z\s]*$").WithMessage("Nơi cư trú chỉ được chứa chữ cái và khoảng trắng.")

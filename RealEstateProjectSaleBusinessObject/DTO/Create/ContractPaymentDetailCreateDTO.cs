@@ -12,7 +12,7 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
     {
         [JsonIgnore]
         public Guid ContractPaymentDetailID { get; set; }
-        public int PaymentRate { get; set; }//dot may
+        public int? PaymentRate { get; set; }//dot may
         public string? Description { get; set; }
         [Column(TypeName = "date")]
         public DateTime? Period { get; set; }//Thời hạn
