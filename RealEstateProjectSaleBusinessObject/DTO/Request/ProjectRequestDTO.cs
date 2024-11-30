@@ -9,8 +9,8 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Request
 {
     public class ProjectRequestDTO
     {
-        public string ProjectName { get; set; }
-        public string Location { get; set; }
+        public string? ProjectName { get; set; }
+        public string? Location { get; set; }
         public string? Investor { get; set; }
         public string? GeneralContractor { get; set; }
         public string? DesignUnit { get; set; }

@@ -25,6 +25,5 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Update
         public string? Status { get; set; }
         public Guid? PaymentPolicyID { get; set; }
 
-
     }
 }
