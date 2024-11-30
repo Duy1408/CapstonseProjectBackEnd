@@ -8,16 +8,17 @@ namespace RealEstateProjectSale.Validations.Create
         public ContractPaymentDetailCreateDTOValidator()
         {
             RuleFor(x => x.PaymentRate)
-                .GreaterThan(0).WithMessage("Tỷ lệ thanh toán phải lớn hơn 0.")
-                .LessThanOrEqualTo(100).WithMessage("Tỷ lệ thanh toán không được vượt quá 100.");
+                .NotNull().WithMessage("Giai đoạn thanh toán là bắt buộc.")
+                .GreaterThan(0).WithMessage("Giai đoạn thanh toán phải lớn hơn 0.")
+                .LessThanOrEqualTo(50).WithMessage("Giai đoạn thanh toán không được vượt quá 50.");
 
             RuleFor(x => x.Description)
                 .MaximumLength(1000).WithMessage("Mô tả không được vượt quá 1000 ký tự.")
                 .When(x => !string.IsNullOrEmpty(x.Description));
 
             RuleFor(x => x.Period)
-                .NotNull().WithMessage("Thời hạn là bắt buộc.")
-                .GreaterThanOrEqualTo(DateTime.UtcNow.Date).WithMessage("Thời hạn phải lớn hơn hoặc bằng ngày hiện tại.");
+                .GreaterThanOrEqualTo(DateTime.UtcNow.Date).WithMessage("Thời hạn phải lớn hơn hoặc bằng ngày hiện tại.")
+                .When(x => x.Period.HasValue);
 
             RuleFor(x => x.PaidValue)
                 .NotNull().WithMessage("Số tiền đã thanh toán là bắt buộc.")

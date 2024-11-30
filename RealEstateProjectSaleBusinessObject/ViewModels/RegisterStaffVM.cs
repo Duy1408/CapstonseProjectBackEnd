@@ -29,15 +29,9 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         [Column(TypeName = "date")]
         public DateTime DateOfBirth { get; set; }
         public IFormFile? Image { get; set; }
-        public string IdentityCardNumber { get; set; }
-        public string Sex { get; set; }
+        public string? IdentityCardNumber { get; set; }
         public string Nationality { get; set; }
-        public string Placeoforigin { get; set; }
-        public string PlaceOfresidence { get; set; }
-        [Column(TypeName = "date")]
-        public DateTime DateOfIssue { get; set; }
-        public string? Taxcode { get; set; }
-        public string? BankName { get; set; }
-        public string? BankNumber { get; set; }
+        public string? Placeoforigin { get; set; }
+        public string? PlaceOfresidence { get; set; }
     }
 }

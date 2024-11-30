@@ -9,7 +9,6 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
 {
     public class Promotion
     {
-
         public Guid PromotionID { get; set; }
         public string PromotionName { get; set; }
         public string? Description { get; set; }
