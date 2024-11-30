@@ -88,7 +88,6 @@ namespace RealEstateProjectSale.Controllers.PromotionController
                 var existingPro = _pro.GetPromotionById(id);
                 if (existingPro != null)
                 {
-
                     if (!string.IsNullOrEmpty(pro.PromotionName))
                     {
                         existingPro.PromotionName = pro.PromotionName;
@@ -97,7 +96,6 @@ namespace RealEstateProjectSale.Controllers.PromotionController
                     {
                         existingPro.Description = pro.Description;
                     }
-
                     if (pro.Status.HasValue)
                     {
                         existingPro.Status = pro.Status.Value;

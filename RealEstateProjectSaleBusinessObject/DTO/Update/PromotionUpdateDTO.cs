@@ -13,7 +13,5 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Update
         public string? Description { get; set; }
         public bool? Status { get; set; }
         public Guid? SalesPolicyID { get; set; }
-
-
     }
 }
