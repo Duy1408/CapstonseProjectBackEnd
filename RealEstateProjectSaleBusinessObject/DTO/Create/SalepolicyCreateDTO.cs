@@ -13,12 +13,12 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
     {
         [JsonIgnore]
         public Guid SalesPolicyID { get; set; }
-        public string SalesPolicyType { get; set; }
+        public string? SalesPolicyType { get; set; }
         [Column(TypeName = "date")]
-        public DateTime ExpressTime { get; set; }
+        public DateTime? ExpressTime { get; set; }
         public string? PeopleApplied { get; set; }
         [JsonIgnore]
-        public bool Status { get; set; }
+        public bool? Status { get; set; }
         public Guid ProjectID { get; set; }
 
     }
