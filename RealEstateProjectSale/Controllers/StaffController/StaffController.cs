@@ -95,7 +95,7 @@ namespace RealEstateProjectSale.Controllers.StaffController
                     });
                 }
 
-                var roleStaff = _roleServices.GetRoleByRoleName("Assistant Staff");
+                var roleStaff = _roleServices.GetRoleByRoleName("Staff");
 
                 var account = new AccountCreateDTO
                 {
