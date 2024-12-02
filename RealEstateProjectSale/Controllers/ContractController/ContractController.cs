@@ -107,7 +107,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
                 {
                     return NotFound(new
                     {
-                        message = "Hợp đồng không tồn tại."
+                        message = " Không có hợp đồng nào tồn tại."
                     });
                 }
                 var contracts = _contractServices.GetAllContract();
