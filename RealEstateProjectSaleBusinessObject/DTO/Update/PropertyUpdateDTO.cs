@@ -12,14 +12,12 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Update
         public string? PropertyCode { get; set; }
         public string? View { get; set; }
         public double? PriceSold { get; set; }
-
         public string? Status { get; set; }
         public Guid? UnitTypeID { get; set; }
         public Guid? FloorID { get; set; }
         public Guid? BlockID { get; set; }
         public Guid? ZoneID { get; set; }
         public Guid? ProjectCategoryDetailID { get; set; }
-
 
     }
 }

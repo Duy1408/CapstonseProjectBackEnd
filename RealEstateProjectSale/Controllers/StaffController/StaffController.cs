@@ -120,12 +120,12 @@ namespace RealEstateProjectSale.Controllers.StaffController
                     StaffID = Guid.NewGuid(),
                     Name = accountStaff.Name,
                     PersonalEmail = accountStaff.PersonalEmail,
-                    DateOfBirth = accountStaff.DateOfBirth,
+                    DateOfBirth = accountStaff.DateOfBirth!.Value,
                     Image = accountStaff.Image,
                     IdentityCardNumber = accountStaff.IdentityCardNumber,
                     Nationality = accountStaff.Nationality,
-                    Placeoforigin = accountStaff.Placeoforigin,
-                    PlaceOfresidence = accountStaff.PlaceOfresidence,
+                    PlaceOfOrigin = accountStaff.PlaceOfOrigin,
+                    PlaceOfResidence = accountStaff.PlaceOfResidence,
                     Status = true,
                     AccountID = account.AccountID
                 };
@@ -185,13 +185,13 @@ namespace RealEstateProjectSale.Controllers.StaffController
                     {
                         _staff.Nationality = staff.Nationality;
                     }
-                    if (!string.IsNullOrEmpty(staff.Placeoforigin))
+                    if (!string.IsNullOrEmpty(staff.PlaceOfOrigin))
                     {
-                        _staff.Placeoforigin = staff.Placeoforigin;
+                        _staff.PlaceOfOrigin = staff.PlaceOfOrigin;
                     }
-                    if (!string.IsNullOrEmpty(staff.PlaceOfresidence))
+                    if (!string.IsNullOrEmpty(staff.PlaceOfResidence))
                     {
-                        _staff.PlaceOfresidence = staff.PlaceOfresidence;
+                        _staff.PlaceOfResidence = staff.PlaceOfResidence;
                     }
                     if (staff.Status.HasValue)
                     {

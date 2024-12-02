@@ -20,8 +20,8 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public string? Image { get; set; }
         public string? IdentityCardNumber { get; set; }
         public string Nationality { get; set; }
-        public string? Placeoforigin { get; set; }
-        public string? PlaceOfresidence { get; set; }
+        public string? PlaceOfOrigin { get; set; }
+        public string? PlaceOfResidence { get; set; }
         public bool Status { get; set; }
         public Guid AccountID { get; set; }
         public string Email { get; set; }

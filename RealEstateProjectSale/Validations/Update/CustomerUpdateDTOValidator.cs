@@ -28,9 +28,9 @@ namespace RealEstateProjectSale.Validations.Update
                 .Matches(@"^[a-zA-Z\s]+$").WithMessage("Họ và tên chỉ được chứa chữ cái và khoảng trắng.")
                 .When(x => !string.IsNullOrEmpty(x.Nationality));
 
-            RuleFor(x => x.PlaceofOrigin)
+            RuleFor(x => x.PlaceOfOrigin)
                 .Matches(@"^[a-zA-Z\s]*$").WithMessage("Nơi sinh chỉ được chứa chữ cái và khoảng trắng.")
-                .When(x => !string.IsNullOrEmpty(x.PlaceofOrigin));
+                .When(x => !string.IsNullOrEmpty(x.PlaceOfOrigin));
 
             RuleFor(x => x.PlaceOfResidence)
                 .Matches(@"^[a-zA-Z\s]*$").WithMessage("Nơi cư trú chỉ được chứa chữ cái và khoảng trắng.")
