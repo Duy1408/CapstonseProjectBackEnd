@@ -12,7 +12,7 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
     {
         [JsonIgnore]
         public Guid PropertyID { get; set; }
-        public string PropertyCode { get; set; }
+        public string? PropertyCode { get; set; }
         public string? View { get; set; }
         public double? PriceSold { get; set; }
         [JsonIgnore]

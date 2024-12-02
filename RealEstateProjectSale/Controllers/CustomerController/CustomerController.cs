@@ -136,7 +136,7 @@ namespace RealEstateProjectSale.Controllers.CustomerController
                     PhoneNumber = accountCustomer.PhoneNumber,
                     IdentityCardNumber = accountCustomer.IdentityCardNumber,
                     Nationality = accountCustomer.Nationality,
-                    PlaceofOrigin = accountCustomer.PlaceofOrigin,
+                    PlaceOfOrigin = accountCustomer.PlaceOfOrigin,
                     PlaceOfResidence = accountCustomer.PlaceOfResidence,
                     DateOfExpiry = accountCustomer.DateOfExpiry,
                     Taxcode = accountCustomer.Taxcode,
@@ -194,9 +194,9 @@ namespace RealEstateProjectSale.Controllers.CustomerController
                     {
                         existingCustomer.Nationality = customer.Nationality;
                     }
-                    if (!string.IsNullOrEmpty(customer.PlaceofOrigin))
+                    if (!string.IsNullOrEmpty(customer.PlaceOfOrigin))
                     {
-                        existingCustomer.PlaceofOrigin = customer.PlaceofOrigin;
+                        existingCustomer.PlaceOfOrigin = customer.PlaceOfOrigin;
                     }
                     if (!string.IsNullOrEmpty(customer.PlaceOfResidence))
                     {
