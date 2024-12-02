@@ -13,9 +13,6 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public bool Status { get; set; }
         public List<PropertyType>? PropertyTypes { get; set; }
         public List<ProjectCategoryDetail>? ProjectCategoryDetails { get; set; }
-       
-    
-
 
     }
 }
