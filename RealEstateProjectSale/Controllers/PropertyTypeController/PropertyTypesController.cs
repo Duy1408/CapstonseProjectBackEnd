@@ -136,6 +136,12 @@ namespace RealEstateProjectSale.Controllers.PropertyTypeController
                         existingType.PropertyTypeName = type.PropertyTypeName;
                     }
 
+                    if (type.PropertyCategoryID.HasValue)
+                    {
+                        existingType.PropertyCategoryID = type.PropertyCategoryID.Value;
+                    }
+
+
                     _type.UpdatePropertyType(existingType);
 
                     return Ok(new

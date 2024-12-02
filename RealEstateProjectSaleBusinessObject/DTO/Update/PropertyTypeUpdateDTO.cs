@@ -9,5 +9,6 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Update
     public class PropertyTypeUpdateDTO
     {
         public string? PropertyTypeName { get; set; }
+        public Guid? PropertyCategoryID { get; set; }
     }
 }
