@@ -11,7 +11,7 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
     {
         [JsonIgnore]
         public Guid PropertyCategoryID { get; set; }
-        public string PropertyCategoryName { get; set; }
+        public string? PropertyCategoryName { get; set; }
         [JsonIgnore]
         public bool Status { get; set; }
     }
