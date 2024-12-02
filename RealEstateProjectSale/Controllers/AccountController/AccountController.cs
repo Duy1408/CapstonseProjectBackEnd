@@ -38,7 +38,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
                 {
                     return NotFound(new
                     {
-                        message = "Tài khoản không tồn tại."
+                        message = "Không có tài khoản nào tồn tại."
                     });
                 }
                 var accounts = _accountServices.GetAllAccount();
