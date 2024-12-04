@@ -22,12 +22,20 @@ namespace RealEstateProjectSaleDAO.DAOs
         {
             try
             {
-                return _context.Contracts!.Include(c => c.Booking)
+                var contracts = _context.Contracts!.Include(c => c.Booking)
                                           .Include(c => c.DocumentTemplate)
                                           .Include(c => c.PaymentProcess)
                                           .Include(c => c.PromotionDetail)
                                           .Include(c => c.Customer)
                                           .ToList();
+
+                var sortedContracts = contracts.OrderByDescending(c =>
+                {
+                    var contractNumber = c.ContractCode.Split('/')[0];  // Lấy phần số trước dấu "/"
+                    return int.TryParse(contractNumber, out int number) ? number : 0;
+                }).ToList();
+
+                return sortedContracts;
             }
             catch (Exception ex)
             {

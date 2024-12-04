@@ -103,14 +103,16 @@ namespace RealEstateProjectSale.Controllers.ContractController
         {
             try
             {
-                if (_contractServices.GetAllContract() == null)
+                var contracts = _contractServices.GetAllContract();
+
+                if (contracts == null || !contracts.Any())
                 {
                     return NotFound(new
                     {
                         message = " Không có hợp đồng nào tồn tại."
                     });
                 }
-                var contracts = _contractServices.GetAllContract();
+
                 var response = _mapper.Map<List<ContractVM>>(contracts);
 
                 return Ok(response);
