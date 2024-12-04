@@ -125,7 +125,10 @@ namespace RealEstateProjectSale.Controllers.FloorController
                 var floorExist = _floor.CheckExistFloorByNum(floor.NumFloor.Value, floor.BlockID);
                 if (floorExist != null)
                 {
-                    return BadRequest("Số tầng đã tồn tại trong block này.");
+                    return Ok(new
+                    {
+                        message = "Số tầng đã tồn tại trong block này."
+                    });
                 }
                 var imageUrls = floor.ImageFloor != null && floor.ImageFloor.Count > 0
                       ? _fileService.UploadMultipleImages(floor.ImageFloor.ToList(), "floorimage")

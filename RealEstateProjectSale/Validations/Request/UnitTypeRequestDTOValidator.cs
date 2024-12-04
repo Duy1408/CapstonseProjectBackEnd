@@ -44,7 +44,7 @@ namespace RealEstateProjectSale.Validations.Request
               .When(x => x.NumberFloor.HasValue);
 
             RuleFor(x => x.Basement)
-             .InclusiveBetween(1, 3).WithMessage("Số tầng hầm phải từ 1 đến 3.")
+             .InclusiveBetween(0, 3).WithMessage("Số tầng hầm phải từ 0 đến 3.")
              .When(x => x.Basement.HasValue);
         }
     }
