@@ -135,7 +135,7 @@ namespace RealEstateProjectSaleDAO.DAOs
         public bool GetExistOpenStatusByProjectCategoryDetailID(Guid id)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            return _context.OpeningForSales!.Any(o => o.ProjectCategoryDetailID == id);
+            return _context.OpeningForSales!.Any(o => o.ProjectCategoryDetailID == id && o.Status == true);
         }
 
         public IQueryable<OpeningForSale> SearchOpeningForSaleByName(string searchvalue)
