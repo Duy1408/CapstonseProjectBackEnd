@@ -128,7 +128,7 @@ namespace RealEstateProjectSaleDAO.DAOs
                                                 .ThenInclude(pc => pc.Project)
                                              .Include(o => o.ProjectCategoryDetail)
                                                 .ThenInclude(pc => pc.PropertyCategory)
-                                             .Where(c => c.ProjectCategoryDetailID == id);
+                                             .Where(c => c.ProjectCategoryDetailID == id && c.Status == true);
             return a;
         }
 
