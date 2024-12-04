@@ -22,6 +22,7 @@ namespace RealEstateProjectSaleDAO.DAOs
             {
                 return _context.ContractPaymentDetails!.Include(c => c.Contract)
                                                        .Include(a => a.PaymentPolicy)
+                                                       .OrderBy(c => c.PaymentRate)
                                                        .ToList();
             }
             catch (Exception ex)
