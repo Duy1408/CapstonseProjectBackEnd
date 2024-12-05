@@ -23,6 +23,8 @@ namespace RealEstateProjectSaleRepository.Repository
 
         public PromotionDetail GetPromotionDetailByID(Guid id) => dao.GetPromotionDetailByID(id);
 
+        public List<PromotionDetail> GetPromotionDetailByPromotionID(Guid id) => dao.GetPromotionDetailByPromotionID(id);
+
         public void UpdatePromotionDetail(PromotionDetail detail) => dao.UpdatePromotionDetail(detail);
 
     }

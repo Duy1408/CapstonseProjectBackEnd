@@ -69,6 +69,26 @@ namespace RealEstateProjectSale.Controllers.PromotionDetailController
 
         }
 
+        [HttpGet("promotion/{promotionId}")]
+        [SwaggerOperation(Summary = "Get PromotionDetail By PromotionID")]
+        public IActionResult GetPromotionDetailByPromotionID(Guid promotionId)
+        {
+            var details = _detailServices.GetPromotionDetailByPromotionID(promotionId);
+
+            if (details != null)
+            {
+                var responese = _mapper.Map<List<PromotionDetailVM>>(details);
+
+                return Ok(responese);
+            }
+
+            return NotFound(new
+            {
+                message = "Chi tiết gói khuyến mãi không tồn tại."
+            });
+
+        }
+
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new PromotionDetail")]
         public IActionResult AddNew(PromotionDetailCreateDTO pro)
