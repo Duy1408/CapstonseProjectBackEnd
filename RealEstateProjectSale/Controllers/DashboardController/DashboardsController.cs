@@ -41,7 +41,7 @@ namespace RealEstateProjectSale.Controllers.DashboardController
         {
             var property = _dashboardService.CalculateProperty();
             var sumproperty = _dashboardService.SumProperty();
-            return Ok(property +"/"+ sumproperty);
+            return Ok(property + "/" + sumproperty);
         }
 
         [HttpGet("countcustomer")]
@@ -49,17 +49,17 @@ namespace RealEstateProjectSale.Controllers.DashboardController
         public ActionResult<object> CountCustomer()
         {
             var customer = _dashboardService.CalculateCustomer();
-           
+
             return Ok(customer);
         }
 
-        [HttpGet("outstanding amount")]
+        [HttpGet("outstanding-amount")]
         [SwaggerOperation(Summary = "outstanding amount")]
         public ActionResult<object> OutstandingAmount()
         {
             var outstandingamount = _dashboardService.CalculateOutstandingAmount();
 
-            return Ok("-"+outstandingamount);
+            return Ok(outstandingamount);
         }
 
 
