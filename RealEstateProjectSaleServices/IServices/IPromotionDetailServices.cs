@@ -12,6 +12,7 @@ namespace RealEstateProjectSaleServices.IServices
         List<PromotionDetail> GetAllPromotionDetail();
         void AddNewPromotionDetail(PromotionDetail detail);
         PromotionDetail GetPromotionDetailByID(Guid id);
+        List<PromotionDetail> GetPromotionDetailByPromotionID(Guid id);
         void UpdatePromotionDetail(PromotionDetail detail);
         void DeletePromotionDetailByID(Guid id);
         PromotionDetail GetDetailByPromotionIDPropertyTypeID(Guid promotionID, Guid propertyTypeID);

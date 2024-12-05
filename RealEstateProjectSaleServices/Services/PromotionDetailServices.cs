@@ -27,6 +27,8 @@ namespace RealEstateProjectSaleServices.Services
 
         public PromotionDetail GetPromotionDetailByID(Guid id) => _detailRepo.GetPromotionDetailByID(id);
 
+        public List<PromotionDetail> GetPromotionDetailByPromotionID(Guid id) => _detailRepo.GetPromotionDetailByPromotionID(id);
+
         public void UpdatePromotionDetail(PromotionDetail detail) => _detailRepo.UpdatePromotionDetail(detail);
 
     }

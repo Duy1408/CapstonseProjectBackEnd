@@ -58,6 +58,15 @@ namespace RealEstateProjectSaleDAO.DAOs
             }
         }
 
+        public List<PromotionDetail> GetPromotionDetailByPromotionID(Guid id)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            return _context.PromotionDetails!.Include(c => c.Promotion)
+                                             .Include(c => c.PropertyType)
+                                             .Where(a => a.PromotionID == id)
+                                             .ToList();
+        }
+
         public PromotionDetail GetDetailByPromotionIDPropertyTypeID(Guid promotionID, Guid propertyTypeID)
         {
             try
