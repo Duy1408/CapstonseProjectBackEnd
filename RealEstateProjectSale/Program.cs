@@ -22,6 +22,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
+using RealEstateProjectSale.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSignalR(options =>
