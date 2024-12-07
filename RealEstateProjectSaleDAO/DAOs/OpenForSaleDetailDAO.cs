@@ -49,8 +49,8 @@ namespace RealEstateProjectSaleDAO.DAOs
             {
                 var details = _context.OpenForSaleDetails!.Include(c => c.OpeningForSale)
                                                           .Include(c => c.Property)
-                                                          .Where(c => c.PropertyID == propertyId && c.OpeningForSaleID == openId)
-                                                          .FirstOrDefault(); ;
+                                                          .FirstOrDefault(c => c.PropertyID == propertyId
+                                                             && c.OpeningForSaleID == openId);
                 return details;
             }
             catch (Exception ex)
@@ -58,6 +58,7 @@ namespace RealEstateProjectSaleDAO.DAOs
                 throw new Exception(ex.Message);
             }
         }
+
         public List<OpenForSaleDetail> GetOpenForSaleDetailByOpeningForSaleID(Guid id)
         {
             try
