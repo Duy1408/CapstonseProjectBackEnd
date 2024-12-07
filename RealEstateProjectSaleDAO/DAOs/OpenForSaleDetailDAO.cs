@@ -79,7 +79,7 @@ namespace RealEstateProjectSaleDAO.DAOs
         {
             try
             {
-                var a = _context.OpenForSaleDetails!.SingleOrDefault(c => c.OpeningForSaleID == detail.OpeningForSaleID);
+                var a = _context.OpenForSaleDetails!.FirstOrDefault(c => c.OpeningForSaleID == detail.OpeningForSaleID);
 
                 _context.Entry(a).CurrentValues.SetValues(detail);
                 _context.SaveChanges();
