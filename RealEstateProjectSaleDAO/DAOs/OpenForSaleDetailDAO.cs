@@ -51,8 +51,8 @@ namespace RealEstateProjectSaleDAO.DAOs
                                                           .Include(c => c.Property)
                                                           .Where(c => c.PropertyID == propertyId
                                                              && c.OpeningForSaleID == openId)
-                                                          .Distinct()
-                                                            .FirstOrDefault();
+                                                          .Take(1)  // Giới hạn chỉ lấy 1 bản ghi
+                                                          .FirstOrDefault();
                 return details;
             }
             catch (Exception ex)
