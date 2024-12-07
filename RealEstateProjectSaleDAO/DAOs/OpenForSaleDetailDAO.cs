@@ -49,10 +49,8 @@ namespace RealEstateProjectSaleDAO.DAOs
             {
                 var details = _context.OpenForSaleDetails!.Include(c => c.OpeningForSale)
                                                           .Include(c => c.Property)
-                                                          .Where(c => c.PropertyID == propertyId
-                                                             && c.OpeningForSaleID == openId)
-                                                          .Take(1)  // Giới hạn chỉ lấy 1 bản ghi
-                                                          .FirstOrDefault();
+                                                          .Where(c => c.PropertyID == propertyId && c.OpeningForSaleID == openId)
+                                                          .FirstOrDefault(); ;
                 return details;
             }
             catch (Exception ex)
