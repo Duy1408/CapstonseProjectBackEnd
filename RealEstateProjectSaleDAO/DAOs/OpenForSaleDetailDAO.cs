@@ -49,7 +49,7 @@ namespace RealEstateProjectSaleDAO.DAOs
             {
                 var details = _context.OpenForSaleDetails!.Include(c => c.OpeningForSale)
                                                           .Include(c => c.Property)
-                                                          .FirstOrDefault(c => c.PropertyID == propertyId
+                                                          .SingleOrDefault(c => c.PropertyID == propertyId
                                                              && c.OpeningForSaleID == openId);
                 return details;
             }
@@ -79,7 +79,8 @@ namespace RealEstateProjectSaleDAO.DAOs
         {
             try
             {
-                var a = _context.OpenForSaleDetails!.FirstOrDefault(c => c.OpeningForSaleID == detail.OpeningForSaleID);
+                var a = _context.OpenForSaleDetails!.SingleOrDefault(c => c.OpeningForSaleID == detail.OpeningForSaleID
+                                                        && c.PropertyID == detail.PropertyID);
 
                 _context.Entry(a).CurrentValues.SetValues(detail);
                 _context.SaveChanges();
