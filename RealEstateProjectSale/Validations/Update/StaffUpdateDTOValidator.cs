@@ -35,8 +35,7 @@ namespace RealEstateProjectSale.Validations.Update
                 .When(x => !string.IsNullOrEmpty(x.PlaceOfOrigin));
 
             RuleFor(x => x.PlaceOfResidence)
-                .Matches(@"^[a-zA-Z0-9\s,àáảãạâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵ\p{L}]*$")
-                .WithMessage("Nơi cư trú chỉ được chứa chữ cái, số, khoảng trắng và dấu phẩy.")
+                .MaximumLength(100).WithMessage("Nơi cư trú không được vượt quá 100 ký tự.")
                 .When(x => !string.IsNullOrEmpty(x.PlaceOfResidence));
 
             RuleFor(x => x.Status)
