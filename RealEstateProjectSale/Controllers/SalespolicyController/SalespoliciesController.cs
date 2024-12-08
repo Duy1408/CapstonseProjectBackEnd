@@ -180,7 +180,7 @@ namespace RealEstateProjectSale.Controllers.SalespolicyController
                     SalesPolicyID = Guid.NewGuid(),
                     SalesPolicyType = sale.SalesPolicyType,
                     ExpressTime = DateTime.Now.Date,
-                    PeopleApplied = null,
+                    PeopleApplied = sale.PeopleApplied,
                     Status = true,
                     ProjectID = sale.ProjectID,
                 };
