@@ -98,6 +98,25 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessDetailController
         {
             try
             {
+                var existingPaymentStage = _detailService.CheckPaymentStage(detail.PaymentProcessID, detail.PaymentStage);
+                if (existingPaymentStage != null)
+                {
+                    return BadRequest(new
+                    {
+                        message = "Đợt thanh toán này đã tồn tại trong Chi tiết đợt thanh toán."
+                    });
+                }
+
+                var totalPercentage = _detailService.GetTotalPercentageByPaymentProcessID(detail.PaymentProcessID)
+                                            + detail.Percentage;
+                if (totalPercentage > 1)
+                {
+                    return BadRequest(new
+                    {
+                        message = "Phần trăm đã lớn hơn 1."
+                    });
+                }
+
                 var newDetail = new PaymentProcessDetailCreateDTO
                 {
                     PaymentProcessDetailID = Guid.NewGuid(),

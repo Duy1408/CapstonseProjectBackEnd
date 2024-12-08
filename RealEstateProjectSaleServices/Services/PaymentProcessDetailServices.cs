@@ -22,6 +22,11 @@ namespace RealEstateProjectSaleServices.Services
             _repo.AddNew(p);
         }
 
+        public PaymentProcessDetail CheckPaymentStage(Guid paymentProcessId, int paymentStage)
+        {
+            return _repo.CheckPaymentStage(paymentProcessId, paymentStage);
+        }
+
         public void DeletePaymentProcessDetailByID(Guid id)
         {
             _repo.DeletePaymentProcessDetailByID(id);
@@ -40,6 +45,11 @@ namespace RealEstateProjectSaleServices.Services
         public List<PaymentProcessDetail> GetPaymentProcessDetailByPaymentProcessID(Guid pmtId)
         {
             return _repo.GetPaymentProcessDetailByPaymentProcessID(pmtId);
+        }
+
+        public float GetTotalPercentageByPaymentProcessID(Guid pmtId)
+        {
+            return _repo.GetTotalPercentageByPaymentProcessID(pmtId);
         }
 
         public void UpdatePaymentProcessDetail(PaymentProcessDetail p)

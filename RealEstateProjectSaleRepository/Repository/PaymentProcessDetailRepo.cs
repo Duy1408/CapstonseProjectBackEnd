@@ -21,6 +21,11 @@ namespace RealEstateProjectSaleRepository.Repository
             _dao.AddNew(p);
         }
 
+        public PaymentProcessDetail CheckPaymentStage(Guid paymentProcessId, int paymentStage)
+        {
+            return _dao.CheckPaymentStage(paymentProcessId, paymentStage);
+        }
+
         public void DeletePaymentProcessDetailByID(Guid id)
         {
             _dao.DeletePaymentProcessDetailByID(id);
@@ -39,6 +44,11 @@ namespace RealEstateProjectSaleRepository.Repository
         public List<PaymentProcessDetail> GetPaymentProcessDetailByPaymentProcessID(Guid pmtId)
         {
             return _dao.GetPaymentProcessDetailByPaymentProcessID(pmtId);
+        }
+
+        public float GetTotalPercentageByPaymentProcessID(Guid pmtId)
+        {
+            return _dao.GetTotalPercentageByPaymentProcessID(pmtId);
         }
 
         public void UpdatePaymentProcessDetail(PaymentProcessDetail p)

@@ -26,6 +26,16 @@ namespace RealEstateProjectSaleDAO.DAOs
 
         }
 
+        public PaymentProcessDetail CheckPaymentStage(Guid paymentProcessId, int paymentStage)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+
+            return _context.PaymentProcessDetails.Include(p => p.PaymentProcess)
+                                                 .FirstOrDefault(a => a.PaymentProcessID == paymentProcessId
+                                                        && a.PaymentStage == paymentStage);
+
+        }
+
         public List<PaymentProcessDetail> GetAllPaymentProcessDetail()
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
@@ -78,8 +88,6 @@ namespace RealEstateProjectSaleDAO.DAOs
             }
         }
 
-
-
         public PaymentProcessDetail GetPaymentProcessDetailByID(Guid id)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
@@ -92,6 +100,17 @@ namespace RealEstateProjectSaleDAO.DAOs
             return _context.PaymentProcessDetails.Include(c => c.PaymentProcess)
                                          .Where(a => a.PaymentProcessID == pmtId)
                                          .ToList();
+        }
+
+        public float GetTotalPercentageByPaymentProcessID(Guid pmtId)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+
+            var totalPercentage = _context.PaymentProcessDetails
+                                          .Where(a => a.PaymentProcessID == pmtId)
+                                          .Sum(a => a.Percentage) ?? 0;
+
+            return totalPercentage;
         }
 
     }
