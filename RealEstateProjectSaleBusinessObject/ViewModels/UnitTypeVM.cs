@@ -19,7 +19,7 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public int? NumberFloor { get; set; }
         public int? Basement { get; set; }
         public bool Status { get; set; }
-        public Guid? PropertyTypeID { get; set; }
+        public Guid PropertyTypeID { get; set; }
         public string PropertyTypeName { get; set; }
 
     }

@@ -13,7 +13,7 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public string? View { get; set; }
         public double? PriceSold { get; set; }
         public string Status { get; set; }
-        public Guid? UnitTypeID { get; set; }
+        public Guid UnitTypeID { get; set; }
         public int BathRoom { get; set; }
         public int BedRoom { get; set; }
         public int KitchenRoom { get; set; }
@@ -27,7 +27,7 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public int NumFloor { get; set; }
         public Guid? BlockID { get; set; }
         public string BlockName { get; set; }
-        public Guid? ZoneID { get; set; }
+        public Guid ZoneID { get; set; }
         public string ZoneName { get; set; }
         public Guid ProjectCategoryDetailID { get; set; }
         public string ProjectName { get; set; }

@@ -71,7 +71,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
                         message = "Booking không tồn tại."
                     });
                 }
-                var books = _book.GetBookings();
+                var books = _book.GetBookings().OrderByDescending(b => b.CreatedTime).ToList();
                 var response = _mapper.Map<List<BookingVM>>(books);
 
                 return Ok(response);

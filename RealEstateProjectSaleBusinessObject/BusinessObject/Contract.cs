@@ -15,13 +15,13 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public DateTime CreatedTime { get; set; }
         public DateTime? UpdatedTime { get; set; }
         [Column(TypeName = "date")]
-        public DateTime? ExpiredTime { get; set; }//ngay het han
+        public DateTime? ExpiredTime { get; set; }
         public double? TotalPrice { get; set; }
         public string? Description { get; set; }
-        public string? ContractDepositFile { get; set; }//file thoa thuan dat coc
-        public string? ContractSaleFile { get; set; }//hop dong mua ban
-        public string? PriceSheetFile { get; set; }//phieu tam tinh
-        public string? ContractTransferFile { get; set; }//phieu tam tinh
+        public string? ContractDepositFile { get; set; }
+        public string? ContractSaleFile { get; set; }
+        public string? PriceSheetFile { get; set; }
+        public string? ContractTransferFile { get; set; }
         public string Status { get; set; }
         public Guid DocumentTemplateID { get; set; }
         public DocumentTemplate? DocumentTemplate { get; set; }
