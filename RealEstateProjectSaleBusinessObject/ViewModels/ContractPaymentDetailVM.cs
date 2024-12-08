@@ -23,7 +23,7 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
         public bool Status { get; set; }
         public Guid ContractID { get; set; }
         public string ContractCode { get; set; }
-        public Guid? PaymentPolicyID { get; set; }
+        public Guid PaymentPolicyID { get; set; }
         public string PaymentPolicyName { get; set; }
     }
 }

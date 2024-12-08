@@ -35,12 +35,7 @@ namespace RealEstateProjectSaleServices.Services
         public double? CalculateLatePaymentInterest(Guid contractDetailId)
         {
             var contractDetail = _detail.GetContractPaymentDetailByID(contractDetailId);
-            var policyId = contractDetail.PaymentPolicyID.GetValueOrDefault(Guid.Empty);
-            if (policyId == Guid.Empty)
-            {
-                return null;
-            }
-            var paymentPolicy = _policyService.GetPaymentPolicyByID(policyId);
+            var paymentPolicy = _policyService.GetPaymentPolicyByID(contractDetail.PaymentPolicyID);
 
             if (DateTime.Now > contractDetail.Period && contractDetail.Status == false)
             {
@@ -52,7 +47,7 @@ namespace RealEstateProjectSaleServices.Services
                         * paymentPolicy.PercentLate
                         * actualLateDays;
 
-                    contractDetail.PaidValueLate = Math.Round(contractDetail.PaidValueLate.Value);
+                    contractDetail.PaidValueLate = Math.Round(contractDetail.PaidValueLate!.Value);
 
                     _detail.UpdateContractPaymentDetail(contractDetail);
 

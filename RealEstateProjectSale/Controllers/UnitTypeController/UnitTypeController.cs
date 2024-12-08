@@ -124,9 +124,8 @@ namespace RealEstateProjectSale.Controllers.UnitTypeController
                     NetFloorArea = type.NetFloorArea,
                     GrossFloorArea = type.GrossFloorArea,
                     Status = true,
-                    PropertyTypeID = type.PropertyTypeID,                 
+                    PropertyTypeID = type.PropertyTypeID,
                     Image = type.Image != null && type.Image.Count > 0 ? type.Image.First() : null, // Lưu hình ảnh đầu tiên nếu có
-                    
                 };
 
                 var unitType = _mapper.Map<UnitType>(newCmt);

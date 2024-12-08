@@ -17,11 +17,11 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
         public double? PriceSold { get; set; }
         [JsonIgnore]
         public string? Status { get; set; }
-        public Guid? UnitTypeID { get; set; }
+        public Guid UnitTypeID { get; set; }
         public Guid? FloorID { get; set; }
         public Guid? BlockID { get; set; }
-        public Guid? ZoneID { get; set; }
-        public Guid? ProjectCategoryDetailID { get; set; }
+        public Guid ZoneID { get; set; }
+        public Guid ProjectCategoryDetailID { get; set; }
 
 
     }

@@ -10,9 +10,9 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
     {
         public Guid PaymentPolicyID { get; set; }
         public string PaymentPolicyName { get; set; }
-        public int? LateDate { get; set; }
+        public int LateDate { get; set; }
+        public double PercentLate { get; set; }
         public bool Status { get; set; }
-        public double? PercentLate { get; set; }
         public List<ContractPaymentDetail>? ContractPaymentDetails { get; set; }
         public List<Project>? Projects { get; set; }
 

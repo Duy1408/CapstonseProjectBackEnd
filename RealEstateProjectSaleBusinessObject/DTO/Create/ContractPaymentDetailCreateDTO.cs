@@ -23,6 +23,6 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Create
         [JsonIgnore]
         public bool Status { get; set; }
         public Guid ContractID { get; set; }
-        public Guid? PaymentPolicyID { get; set; }
+        public Guid PaymentPolicyID { get; set; }
     }
 }

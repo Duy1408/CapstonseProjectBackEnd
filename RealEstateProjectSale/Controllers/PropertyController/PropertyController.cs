@@ -338,7 +338,6 @@ namespace RealEstateProjectSale.Controllers.PropertyController
         {
             try
             {
-
                 var newProperty = new PropertyCreateDTO
                 {
                     PropertyID = Guid.NewGuid(),
@@ -440,9 +439,6 @@ namespace RealEstateProjectSale.Controllers.PropertyController
             }
         }
 
-
-
-
         [HttpPut("select")]
         [SwaggerOperation(Summary = "Customer select Property after check in")]
         public async Task<IActionResult> UpdateStatusProperty(Guid propertyId, Guid customerID)
@@ -467,14 +463,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                     });
                 }
 
-                var categoryDetailId = existingProperty.ProjectCategoryDetailID.GetValueOrDefault(Guid.Empty);
-
-                if (categoryDetailId == Guid.Empty)
-                {
-                    throw new ArgumentException("Căn hộ không có Chi tiết dự án.");
-                }
-
-                var booking = _booking.GetBookingByCustomerSelect(customerID, categoryDetailId);
+                var booking = _booking.GetBookingByCustomerSelect(customerID, existingProperty.ProjectCategoryDetailID);
                 if (booking == null)
                 {
                     return NotFound(new
@@ -591,11 +580,5 @@ namespace RealEstateProjectSale.Controllers.PropertyController
             return nextContractCode;
         }
 
-
-
     }
-
-
-
-
 }

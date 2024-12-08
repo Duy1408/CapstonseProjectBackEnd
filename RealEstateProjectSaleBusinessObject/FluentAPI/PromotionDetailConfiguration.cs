@@ -16,7 +16,7 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
             builder.ToTable("PromotionDetail");
             builder.HasKey(x => x.PromotionDetailID);
             builder.Property(x => x.Description).IsRequired();
-            builder.Property(x => x.Amount);
+            builder.Property(x => x.Amount).IsRequired();
             builder.HasMany(x => x.Contracts).WithOne(x => x.PromotionDetail).OnDelete(DeleteBehavior.NoAction);
         }
     }

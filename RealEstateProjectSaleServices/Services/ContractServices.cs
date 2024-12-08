@@ -81,8 +81,8 @@ namespace RealEstateProjectSaleServices.Services
             var project = _projectService.GetProjectById(categoryDetail.ProjectID);
             var paymentPolicy = _paymentPolicyService.GetPaymentPolicyByID(project.PaymentPolicyID!.Value);
             var property = _propertyService.GetPropertyById(booking.PropertyID!.Value);
-            var unitType = _unitTypeService.GetUnitTypeByID(property.UnitTypeID!.Value);
-            var propertyType = _propertyTypeService.GetPropertyTypeByID(unitType.PropertyTypeID!.Value);
+            var unitType = _unitTypeService.GetUnitTypeByID(property.UnitTypeID);
+            var propertyType = _propertyTypeService.GetPropertyTypeByID(unitType.PropertyTypeID);
 
 
             var htmlContent = documentTemplate.DocumentFile;
@@ -121,8 +121,8 @@ namespace RealEstateProjectSaleServices.Services
             var categoryDetail = _detailService.GetProjectCategoryDetailByID(booking.ProjectCategoryDetailID);
             var project = _projectService.GetProjectById(categoryDetail.ProjectID);
             var property = _propertyService.GetPropertyById(booking.PropertyID!.Value);
-            var unitType = _unitTypeService.GetUnitTypeByID(property.UnitTypeID!.Value);
-            var propertyType = _propertyTypeService.GetPropertyTypeByID(unitType.PropertyTypeID!.Value);
+            var unitType = _unitTypeService.GetUnitTypeByID(property.UnitTypeID);
+            var propertyType = _propertyTypeService.GetPropertyTypeByID(unitType.PropertyTypeID);
 
             var htmlContent = documentTemplate.DocumentFile;
             htmlContent = htmlContent.Replace("{FullName}", customer.FullName)
@@ -153,8 +153,8 @@ namespace RealEstateProjectSaleServices.Services
             var categoryDetail = _detailService.GetProjectCategoryDetailByID(booking.ProjectCategoryDetailID);
             var project = _projectService.GetProjectById(categoryDetail.ProjectID);
             var property = _propertyService.GetPropertyById(booking.PropertyID!.Value);
-            var unitType = _unitTypeService.GetUnitTypeByID(property.UnitTypeID!.Value);
-            var propertyType = _propertyTypeService.GetPropertyTypeByID(unitType.PropertyTypeID!.Value);
+            var unitType = _unitTypeService.GetUnitTypeByID(property.UnitTypeID);
+            var propertyType = _propertyTypeService.GetPropertyTypeByID(unitType.PropertyTypeID);
 
             var htmlContent = documentTemplate.DocumentFile;
             htmlContent = htmlContent.Replace("{FullNameOne}", customerOne.FullName)
@@ -201,7 +201,7 @@ namespace RealEstateProjectSaleServices.Services
                 throw new ArgumentException("Booking không có căn hộ.");
             }
             var openDetail = _openDetailService.GetDetailByPropertyIdOpenId(propertyId, booking.OpeningForSaleID);
-            var unitType = _unitTypeService.GetUnitTypeByID(property.UnitTypeID!.Value);
+            var unitType = _unitTypeService.GetUnitTypeByID(property.UnitTypeID);
 
             //Tính tiền
             var pricePromotion = openDetail.Price - promotionDetail.Amount;
@@ -391,7 +391,7 @@ namespace RealEstateProjectSaleServices.Services
                     RemittanceOrder = null,
                     Status = false,
                     ContractID = contractId,
-                    PaymentPolicyID = project.PaymentPolicyID
+                    PaymentPolicyID = project.PaymentPolicyID!.Value
                 };
 
                 var _detail = _mapper.Map<ContractPaymentDetail>(contractDetail);

@@ -47,7 +47,7 @@ namespace RealEstateProjectSale.Controllers.NotificationController
                         message = "Thông báo không tồn tại."
                     });
                 }
-                var notis = _notiServices.GetAllNotification();
+                var notis = _notiServices.GetAllNotification().OrderByDescending(b => b.CreatedTime).ToList();
                 var response = _mapper.Map<List<NotificationVM>>(notis);
 
                 return Ok(response);

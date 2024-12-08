@@ -19,6 +19,15 @@ namespace RealEstateProjectSale.Validations.Create
                 .MaximumLength(500).WithMessage("Tiện ích cảnh quan không được vượt quá 500 ký tự.")
                 .When(x => !string.IsNullOrEmpty(x.View));
 
+            RuleFor(x => x.UnitTypeID)
+                .NotEmpty().WithMessage("UnitTypeID là bắt buộc.");
+
+            RuleFor(x => x.ZoneID)
+                .NotEmpty().WithMessage("ZoneID là bắt buộc.");
+
+            RuleFor(x => x.ProjectCategoryDetailID)
+                .NotEmpty().WithMessage("ProjectCategoryDetailID là bắt buộc.");
+
         }
     }
 }

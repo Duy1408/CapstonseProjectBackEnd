@@ -224,13 +224,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
                 });
             }
 
-            var projectdetailId = property.ProjectCategoryDetailID.GetValueOrDefault(Guid.Empty);
-
-            if (projectdetailId == Guid.Empty)
-            {
-                throw new ArgumentException("Căn hộ không tồn tại.");
-            }
-            var projectdetail = _projectCategoryDetailServices.GetProjectCategoryDetailByID(projectdetailId);
+            var projectdetail = _projectCategoryDetailServices.GetProjectCategoryDetailByID(property.ProjectCategoryDetailID);
             if (projectdetail == null)
             {
                 return NotFound(new
@@ -518,13 +512,8 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     message = "Căn hộ không tồn tại."
                 });
             }
-            var unittypeId = property.UnitTypeID.GetValueOrDefault(Guid.Empty);
-            if (unittypeId == Guid.Empty)
-            {
-                throw new ArgumentException("Property không có unittype");
-            }
 
-            var unittype = _unitTypeServices.GetUnitTypeByID(unittypeId);
+            var unittype = _unitTypeServices.GetUnitTypeByID(property.UnitTypeID);
             if (unittype == null)
             {
                 return NotFound(new
@@ -532,12 +521,8 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     message = "Unittype không tồn tại."
                 });
             }
-            var propertytypeId = unittype.PropertyTypeID.GetValueOrDefault(Guid.Empty);
-            if (propertytypeId == Guid.Empty)
-            {
-                throw new ArgumentException("unittype không có propertytype");
-            }
-            var propertytype = _propertyTypeServices.GetPropertyTypeByID(propertytypeId);
+
+            var propertytype = _propertyTypeServices.GetPropertyTypeByID(unittype.PropertyTypeID);
             if (propertytype == null)
             {
                 return NotFound(new
@@ -553,7 +538,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     message = "Khuyến mãi không tồn tại."
                 });
             }
-            var promotiondetail = _promotiondetail.GetDetailByPromotionIDPropertyTypeID(promotion.PromotionID, propertytypeId);
+            var promotiondetail = _promotiondetail.GetDetailByPromotionIDPropertyTypeID(promotion.PromotionID, unittype.PropertyTypeID);
             var promotiondetailresponese = _mapper.Map<PromotionDetailVM>(promotiondetail);
             return Ok(new
             {
