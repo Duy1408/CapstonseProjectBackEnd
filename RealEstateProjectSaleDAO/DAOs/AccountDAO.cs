@@ -21,15 +21,17 @@ namespace RealEstateProjectSaleDAO.DAOs
             return _context.Accounts.Include(a => a.Role)
                                     .Where(u => (u.Email!.Equals(email)
                                     || _context.Customers.Any(b => b.AccountID == u.AccountID && b.PhoneNumber == email))
-                                    && u.Password!.Equals(password))
+                                    && u.Password!.Equals(password)
+                                    && u.Status == true)
                                     .FirstOrDefault();
 
         }
 
         public Account CheckEmailOrPhone(string email)
         {
-            return _context.Accounts.FirstOrDefault(a => a.Email == email
-                                    || _context.Customers.Any(b => b.AccountID == a.AccountID && b.PhoneNumber == email));
+            return _context.Accounts.FirstOrDefault(a => (a.Email == email
+                                    || _context.Customers.Any(b => b.AccountID == a.AccountID && b.PhoneNumber == email))
+                                    && a.Status == true);
         }
 
         public List<Account> GetAllAccount()
