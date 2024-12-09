@@ -28,11 +28,12 @@ namespace RealEstateProjectSale.Controllers.DashboardController
         }
 
         [HttpGet("totalprice")]
-        [SwaggerOperation(Summary = "Calculate total price")]
+        [SwaggerOperation(Summary = "total price")]
         public ActionResult<object> CalculateTotalPrice()
         {
             var totalprices = _dashboardService.CalculateTotalPrice();
-            return Ok(totalprices);
+            var formattedAmount = totalprices.ToString("N0", new System.Globalization.CultureInfo("vi-VN")) + " VND";
+            return Ok(formattedAmount);
         }
 
         [HttpGet("countproperty")]
@@ -58,8 +59,8 @@ namespace RealEstateProjectSale.Controllers.DashboardController
         public ActionResult<object> OutstandingAmount()
         {
             var outstandingamount = _dashboardService.CalculateOutstandingAmount();
-
-            return Ok(outstandingamount);
+            var formattedAmount = outstandingamount.ToString("N0", new System.Globalization.CultureInfo("vi-VN")) + " VND";
+            return Ok(formattedAmount);
         }
 
 
