@@ -32,7 +32,7 @@ namespace RealEstateProjectSale.Controllers.DashboardController
         public ActionResult<object> CalculateTotalPrice()
         {
             var totalprices = _dashboardService.CalculateTotalPrice();
-            var formattedAmount = totalprices.ToString("N0", new System.Globalization.CultureInfo("vi-VN")) + " VND";
+            var formattedAmount = totalprices.ToString("N0", new System.Globalization.CultureInfo("vi-VN")) ;
             return Ok(formattedAmount);
         }
 
@@ -59,7 +59,7 @@ namespace RealEstateProjectSale.Controllers.DashboardController
         public ActionResult<object> OutstandingAmount()
         {
             var outstandingamount = _dashboardService.CalculateOutstandingAmount();
-            var formattedAmount = outstandingamount.ToString("N0", new System.Globalization.CultureInfo("vi-VN")) + " VND";
+            var formattedAmount = outstandingamount.ToString("N0", new System.Globalization.CultureInfo("vi-VN")) ;
             return Ok(formattedAmount);
         }
 
