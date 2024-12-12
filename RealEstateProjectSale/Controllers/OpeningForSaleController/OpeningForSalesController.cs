@@ -247,7 +247,7 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
 
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Update OpeningForSale by ID")]
-        public IActionResult UpdateComment([FromForm] OpeningForSaleUpdateDTO open, Guid id)
+        public IActionResult UpdateOpeningForSale([FromForm] OpeningForSaleUpdateDTO open, Guid id)
         {
             try
             {
