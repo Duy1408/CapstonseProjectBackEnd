@@ -87,7 +87,7 @@ namespace RealEstateProjectSaleDAO.DAOs
                                                    .Include(a => a.PaymentProcess)
                                                    .Include(c => c.PromotionDetail)
                                                    .Include(c => c.Customer)
-                                                   .Where(c => c.CustomerID == id)
+                                                   .Where(c => c.CustomerID == id && c.Status != ContractStatus.DaHuy.GetEnumDescription())
                                                    .ToList();
                 return contracts;
             }

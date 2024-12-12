@@ -50,7 +50,7 @@ namespace RealEstateProjectSaleDAO.DAOs
             var _context = new RealEstateProjectSaleSystemDBContext();
             return _context.Notifications.Include(a => a.Booking)
                                          .Include(a => a.Customer)
-                                         .Where(a => a.CustomerID == customerId)
+                                         .Where(a => a.CustomerID == customerId && a.Status == true)
                                          .ToList();
         }
 
