@@ -35,6 +35,8 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
             builder.HasMany(x => x.Comments).WithOne(x => x.Customer).OnDelete(DeleteBehavior.NoAction);
             builder.HasMany(x => x.Contracts).WithOne(x => x.Customer).OnDelete(DeleteBehavior.NoAction);
             builder.HasMany(x => x.Notifications).WithOne(x => x.Customer).OnDelete(DeleteBehavior.NoAction);
+            builder.HasMany(x => x.Transfers).WithOne(x => x.Customer).OnDelete(DeleteBehavior.NoAction);
+
 
         }
     }

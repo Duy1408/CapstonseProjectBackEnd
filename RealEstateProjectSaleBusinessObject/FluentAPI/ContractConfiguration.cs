@@ -29,6 +29,8 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
             builder.Property(x => x.Status).IsRequired();
             builder.HasOne(x => x.Booking);
             builder.HasMany(x => x.ContractPaymentDetails).WithOne(x => x.Contract);
+            builder.HasMany(x => x.Transfers).WithOne(x => x.Contract);
+
 
         }
     }
