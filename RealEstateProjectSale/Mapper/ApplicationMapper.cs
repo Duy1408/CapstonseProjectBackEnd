@@ -165,6 +165,10 @@ namespace RealEstateProjectSale.Mapper
             CreateMap<BlockUpdateDTO, Block>().ReverseMap();
             CreateMap<BlockVM, Block>().ReverseMap().ForMember(dest => dest.ZoneName,
                                  opt => opt.MapFrom(src => src.Zone!.ZoneName));
+            CreateMap<ContractHistoryVM, ContractHistory>().ReverseMap().ForMember(dest => dest.FullName,
+                                  opt => opt.MapFrom(src => src.Customer!.FullName))
+                                                                        .ForMember(dest => dest.ContractCode,
+                                  opt => opt.MapFrom(src => src.Contract!.ContractCode));
 
             CreateMap<PanoramaImageCreateDTO, PanoramaImage>().ReverseMap();
             CreateMap<PanadoraImageUpdateDTO, PanoramaImage>().ReverseMap();

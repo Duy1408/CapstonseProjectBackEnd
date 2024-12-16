@@ -85,21 +85,15 @@ namespace RealEstateProjectSaleDAO.DAOs
         }
 
 
-        public bool ChangeStatusContractHistory(ContractHistory p)
+        public void DeleteContractHistory(Guid id)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            var a = _context.ContractHistories.FirstOrDefault(c => c.ContractHistoryID.Equals(p.ContractHistoryID));
-
-
-            if (a == null)
+            var contracthistory = _context.ContractHistories
+                       .SingleOrDefault(lo => lo.ContractHistoryID == id);
+            if (contracthistory != null)
             {
-                return false;
-            }
-            else
-            {
-                _context.Entry(a).State = EntityState.Modified;
+                _context.Remove(contracthistory);
                 _context.SaveChanges();
-                return true;
             }
         }
     }
