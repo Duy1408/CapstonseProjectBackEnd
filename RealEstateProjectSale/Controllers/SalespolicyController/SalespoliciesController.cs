@@ -78,7 +78,6 @@ namespace RealEstateProjectSale.Controllers.SalespolicyController
 
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpGet("project/{projectId}")]
         [SwaggerOperation(Summary = "Get SalePolicy by project ID")]
         public IActionResult GetSalePolicyByProjectID(Guid projectId)
