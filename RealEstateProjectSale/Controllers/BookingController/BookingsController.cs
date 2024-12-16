@@ -418,7 +418,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
                     }
 
                     book.Status = BookingStatus.DaCheckIn.GetEnumDescription();
-
+                    book.DepositedTimed = DateTime.Now;
                     _book.UpdateBooking(book);
 
                     return Ok(new
@@ -601,7 +601,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
             booking.Status = BookingStatus.KhongChonSanPham.GetEnumDescription();
             _book.UpdateBooking(booking);
 
-            await _hubContext.Clients.All.SendAsync("ReceivePropertyStatus", booking.BookingID.ToString(), booking.Status);
+            await _hubContext.Clients.All.SendAsync("ReceiveBookingStatus", booking.BookingID.ToString(), booking.Status);
             return Ok(new
             {
                 message = "Cập nhật trạng thái booking thành công."
