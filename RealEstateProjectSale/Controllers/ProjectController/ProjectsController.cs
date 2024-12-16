@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -52,6 +53,7 @@ namespace RealEstateProjectSale.Controllers
             _categoryDetailService = categoryDetailService;
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet("all-project")]
         [SwaggerOperation(Summary = "Get All Project")]
         public IActionResult GetAllProject()
@@ -209,6 +211,7 @@ namespace RealEstateProjectSale.Controllers
 
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet("payment-policy/{paymentPolicyId}")]
         [SwaggerOperation(Summary = "Get Project By PaymentPolicyID")]
         public IActionResult GetProjectByPaymentPolicyID(Guid paymentPolicyId)
@@ -248,6 +251,7 @@ namespace RealEstateProjectSale.Controllers
 
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "UpdateProject")]
         public IActionResult UpdateProject([FromForm] ProjectUpdateDTO project, Guid id)
@@ -348,6 +352,7 @@ namespace RealEstateProjectSale.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpPost]
         [SwaggerOperation(Summary = "AddNewProject")]
         public IActionResult AddNew([FromForm] ProjectRequestDTO pro)
@@ -394,7 +399,7 @@ namespace RealEstateProjectSale.Controllers
             }
         }
 
-        // DELETE: api/Projects/5
+        [Authorize(Roles = "Admin,Staff")]
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "DeleteProject")]
         public IActionResult DeleteProject(Guid id)

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
@@ -23,6 +24,7 @@ namespace RealEstateProjectSale.Controllers.PaymentPolicyController
             _mapper = mapper;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         [SwaggerOperation(Summary = "Get All PaymentPolicy")]
         public IActionResult GetAllPaymentPolicy()
@@ -47,6 +49,7 @@ namespace RealEstateProjectSale.Controllers.PaymentPolicyController
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get PaymentPolicy By ID")]
         public IActionResult GetPaymentPolicyByID(Guid id)
@@ -67,6 +70,7 @@ namespace RealEstateProjectSale.Controllers.PaymentPolicyController
 
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new PaymentPolicy")]
         public IActionResult AddNewPaymentPolicy(PaymentPolicyCreateDTO policy)
@@ -96,6 +100,7 @@ namespace RealEstateProjectSale.Controllers.PaymentPolicyController
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Update PaymentPolicy")]
         public IActionResult UpdatePaymentPolicy([FromForm] PaymentPolicyUpdateDTO policy, Guid id)
@@ -144,6 +149,7 @@ namespace RealEstateProjectSale.Controllers.PaymentPolicyController
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Delete PaymentPolicy")]
         public IActionResult DeletePaymentPolicy(Guid id)

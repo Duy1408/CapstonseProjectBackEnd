@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +30,7 @@ namespace RealEstateProjectSale.Controllers.PropertyTypeController
             _mapper = mapper;
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet]
         [SwaggerOperation(Summary = "Get All PropertyType")]
         public IActionResult GetAllPropertyType()
@@ -53,6 +55,7 @@ namespace RealEstateProjectSale.Controllers.PropertyTypeController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get PropertyType by ID")]
         public IActionResult GetPropertyTypeByID(Guid id)
@@ -73,6 +76,7 @@ namespace RealEstateProjectSale.Controllers.PropertyTypeController
 
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet("property-category/{categoryId}")]
         [SwaggerOperation(Summary = "Get Property Type By PropertyCategoryID")]
         public IActionResult GetPropertyTypeByPropertyCategoryID(Guid categoryId)
@@ -93,6 +97,7 @@ namespace RealEstateProjectSale.Controllers.PropertyTypeController
 
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new PropertyType")]
         public IActionResult AddNew(PropertyTypeCreateDTO type)
@@ -121,6 +126,7 @@ namespace RealEstateProjectSale.Controllers.PropertyTypeController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Update PropertyType by ID")]
         public IActionResult UpdatePropertyType([FromForm] PropertyTypeUpdateDTO type, Guid id)
@@ -163,6 +169,7 @@ namespace RealEstateProjectSale.Controllers.PropertyTypeController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Delete PropertyType by ID")]
         public IActionResult DeletePropertyType(Guid id)

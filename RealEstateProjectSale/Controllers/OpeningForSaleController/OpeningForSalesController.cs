@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Build.Evaluation;
@@ -40,6 +41,7 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
             _detailService = detailService;
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet]
         [SwaggerOperation(Summary = "Get All OpeningForSale")]
         public IActionResult GetAllOpeningForSale()
@@ -64,6 +66,7 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet("check-in")]
         [SwaggerOperation(Summary = "Get All OpeningForSale")]
         public IActionResult GetAllOpeningForSaleCheckIn()
@@ -104,6 +107,7 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get OpeningForSale By ID")]
         public IActionResult GetOpeningForSaleByID(Guid id)
@@ -124,6 +128,7 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
 
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet("categoryDetail/{detailId}")]
         [SwaggerOperation(Summary = "Get OpeningForSale by ProjectCategoryDetailID")]
         public IActionResult GetOpeningForSaleByProjectCategoryDetailID(Guid detailId)
@@ -152,6 +157,7 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
 
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet("search")]
         [SwaggerOperation(Summary = "Search OpeningForSale by Decision Name")]
         public ActionResult<OpeningForSale> SearchOpeningForSaleByName(string decisionName)
@@ -178,6 +184,7 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
             return Ok(responese);
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new OpeningForSale")]
         public IActionResult AddNew(OpeningForSaleRequestDTO open)
@@ -245,6 +252,7 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Update OpeningForSale by ID")]
         public IActionResult UpdateOpeningForSale([FromForm] OpeningForSaleUpdateDTO open, Guid id)
@@ -323,6 +331,7 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Delete OpeningForSale by ID")]
         public IActionResult DeleteOpeningForSale(Guid id)

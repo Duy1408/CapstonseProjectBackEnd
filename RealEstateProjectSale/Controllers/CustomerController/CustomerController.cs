@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -33,6 +34,7 @@ namespace RealEstateProjectSale.Controllers.CustomerController
             _mapper = mapper;
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet]
         [SwaggerOperation(Summary = "GetAllCustomer")]
         public IActionResult GetAllCustomer()
@@ -300,7 +302,7 @@ namespace RealEstateProjectSale.Controllers.CustomerController
 
         }
 
-
+        [Authorize(Roles = "Admin,Staff")]
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "DeleteCustomer")]
         public IActionResult DeleteCustomer(Guid id)

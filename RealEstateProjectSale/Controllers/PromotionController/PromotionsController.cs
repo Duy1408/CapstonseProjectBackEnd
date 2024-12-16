@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -32,7 +33,7 @@ namespace RealEstateProjectSale.Controllers.PromotionController
             _salePolicyService = salePolicyService;
         }
 
-        // GET: api/Promotions
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         [SwaggerOperation(Summary = "Get All Promotion")]
         public IActionResult GetAllPromotion()
@@ -57,8 +58,7 @@ namespace RealEstateProjectSale.Controllers.PromotionController
             }
         }
 
-        // GET: api/Promotions/5
-
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get Promotion by ID")]
         public IActionResult GetPromotionByID(Guid id)
@@ -79,6 +79,7 @@ namespace RealEstateProjectSale.Controllers.PromotionController
 
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Update Promotion by ID")]
         public IActionResult UpdatePromotiont([FromForm] PromotionUpdateDTO pro, Guid id)
@@ -126,6 +127,7 @@ namespace RealEstateProjectSale.Controllers.PromotionController
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new Promotion")]
         public IActionResult AddNew(PromotionCreateDTO pro)
@@ -175,6 +177,7 @@ namespace RealEstateProjectSale.Controllers.PromotionController
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Delete Promotion by ID")]
         public async Task<IActionResult> DeletePromotion(Guid id)

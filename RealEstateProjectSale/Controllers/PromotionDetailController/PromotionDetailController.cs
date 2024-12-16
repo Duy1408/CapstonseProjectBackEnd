@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
@@ -24,6 +25,7 @@ namespace RealEstateProjectSale.Controllers.PromotionDetailController
             _mapper = mapper;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         [SwaggerOperation(Summary = "Get All PromotionDetail")]
         public IActionResult GetAllPromotionDetail()
@@ -49,6 +51,7 @@ namespace RealEstateProjectSale.Controllers.PromotionDetailController
 
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get PromotionDetail by ID")]
         public IActionResult GetPromotionDetailByID(Guid id)
@@ -69,6 +72,7 @@ namespace RealEstateProjectSale.Controllers.PromotionDetailController
 
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("promotion/{promotionId}")]
         [SwaggerOperation(Summary = "Get PromotionDetail By PromotionID")]
         public IActionResult GetPromotionDetailByPromotionID(Guid promotionId)
@@ -89,6 +93,7 @@ namespace RealEstateProjectSale.Controllers.PromotionDetailController
 
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new PromotionDetail")]
         public IActionResult AddNew(PromotionDetailCreateDTO pro)
@@ -128,6 +133,7 @@ namespace RealEstateProjectSale.Controllers.PromotionDetailController
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Update PromotionDetail by ID")]
         public IActionResult UpdatePromotionDetail([FromForm] PromotionDetailUpdateDTO detail, Guid id)
@@ -176,6 +182,7 @@ namespace RealEstateProjectSale.Controllers.PromotionDetailController
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Delete PromotionDetail by ID")]
         public IActionResult DeletePromotionDetail(Guid id)

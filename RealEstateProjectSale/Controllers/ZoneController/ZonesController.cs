@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Azure.Storage.Blobs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
@@ -29,7 +30,7 @@ namespace RealEstateProjectSale.Controllers.ZoneController
             _fileService = fileService;
         }
 
-
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet]
         [SwaggerOperation(Summary = "Get all Zone")]
 
@@ -52,8 +53,7 @@ namespace RealEstateProjectSale.Controllers.ZoneController
             }
         }
 
-
-
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet("GetZonebyID/{id}")]
         public IActionResult GetZoneByID(Guid id)
         {
@@ -67,7 +67,7 @@ namespace RealEstateProjectSale.Controllers.ZoneController
             return NotFound();
         }
 
-
+        [Authorize(Roles = "Admin,Staff")]
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "UpdateZone")]
         public IActionResult UpdateBlock([FromForm] ZoneUpdateDTO zone, Guid id)
@@ -119,7 +119,7 @@ namespace RealEstateProjectSale.Controllers.ZoneController
             }
         }
 
-
+        [Authorize(Roles = "Admin,Staff")]
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new Zone")]
         public IActionResult AddNewZone([FromForm] ZoneRequestDTO zone)
@@ -157,6 +157,7 @@ namespace RealEstateProjectSale.Controllers.ZoneController
 
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpDelete("DeleteZone/{id}")]
         public IActionResult DeleteZone(Guid id)
         {

@@ -19,6 +19,7 @@ using RealEstateProjectSaleBusinessObject.Enums;
 using RealEstateProjectSaleBusinessObject.Enums.EnumHelpers;
 using Google;
 using Stripe.BillingPortal;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RealEstateProjectSale.Controllers.PaymentController
 {
@@ -164,6 +165,7 @@ namespace RealEstateProjectSale.Controllers.PaymentController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet]
         [SwaggerOperation(Summary = "Get All Payment")]
         public IActionResult GetAllPayment()
@@ -188,6 +190,7 @@ namespace RealEstateProjectSale.Controllers.PaymentController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get Payment By ID")]
         public IActionResult GetPaymentByID(Guid id)
@@ -208,6 +211,7 @@ namespace RealEstateProjectSale.Controllers.PaymentController
 
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Update Payment By ID")]
         public IActionResult UpdatePayment([FromForm] PaymentUpdateDTO payment, Guid id)
@@ -260,6 +264,7 @@ namespace RealEstateProjectSale.Controllers.PaymentController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Delete Payment")]
         public IActionResult DeletePayment(Guid id)

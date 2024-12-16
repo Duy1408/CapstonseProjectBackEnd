@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Google.Api.Gax.ResourceNames;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
@@ -33,6 +34,7 @@ namespace RealEstateProjectSale.Controllers.ProjectCategoryDetailController
             _mapper = mapper;
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet]
         [SwaggerOperation(Summary = "Get All ProjectCategoryDetail")]
         public IActionResult GetAllProjectCategoryDetail()
@@ -68,29 +70,10 @@ namespace RealEstateProjectSale.Controllers.ProjectCategoryDetailController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get ProjectCategoryDetail By ID")]
         public IActionResult GetProjectCategoryDetailByID(Guid id)
-        {
-            var detail = _detailServices.GetProjectCategoryDetailByID(id);
-
-            if (detail != null)
-            {
-                var responese = _mapper.Map<ProjectCategoryDetailVM>(detail);
-
-                return Ok(responese);
-            }
-
-            return NotFound(new
-            {
-                message = "Loại hình dự án không tồn tại."
-            });
-
-        }
-
-        [HttpGet("property")]
-        [SwaggerOperation(Summary = "Get ProjectCategoryDetail By ZoneID And UnitTypeID")]
-        public IActionResult GetProjectCategoryDetailByZoneIDUnitTypeID(Guid id)
         {
             var detail = _detailServices.GetProjectCategoryDetailByID(id);
 
@@ -161,6 +144,7 @@ namespace RealEstateProjectSale.Controllers.ProjectCategoryDetailController
 
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new ProjectCategoryDetail")]
         public IActionResult AddNewProjectCategoryDetail(ProjectCategoryDetailCreateDTO detail)
@@ -197,6 +181,7 @@ namespace RealEstateProjectSale.Controllers.ProjectCategoryDetailController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Update ProjectCategoryDetail By ID")]
         public IActionResult UpdateProjectCategoryDetail([FromForm] ProjectCategoryDetailUpdateDTO detail, Guid id)
@@ -237,6 +222,7 @@ namespace RealEstateProjectSale.Controllers.ProjectCategoryDetailController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Delete ProjectCategoryDetail By ID")]
         public IActionResult DeleteProjectCategoryDetailByID(Guid id)

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
@@ -24,6 +25,7 @@ namespace RealEstateProjectSale.Controllers.PropertyCategoryController
             _mapper = mapper;
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet]
         [SwaggerOperation(Summary = "Get All PropertyCategory")]
         public IActionResult GetAllPropertyCategory()
@@ -48,6 +50,7 @@ namespace RealEstateProjectSale.Controllers.PropertyCategoryController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get PropertyCategory By ID")]
         public IActionResult GetPropertyCategoryByID(Guid id)
@@ -68,6 +71,7 @@ namespace RealEstateProjectSale.Controllers.PropertyCategoryController
 
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new PropertyCategory")]
         public IActionResult AddNewPropertyCategory(PropertyCategoryCreateDTO category)
@@ -96,6 +100,7 @@ namespace RealEstateProjectSale.Controllers.PropertyCategoryController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Update PropertyCategory By ID")]
         public IActionResult UpdatePropertyCategory([FromForm] PropertyCategoryUpdateDTO category, Guid id)
@@ -136,6 +141,7 @@ namespace RealEstateProjectSale.Controllers.PropertyCategoryController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Delete PropertyCategory By ID")]
         public IActionResult DeletePropertyCategory(Guid id)

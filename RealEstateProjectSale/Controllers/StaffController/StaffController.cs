@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Azure.Storage.Blobs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -33,6 +34,7 @@ namespace RealEstateProjectSale.Controllers.StaffController
             _fileService = fileService;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         [SwaggerOperation(Summary = "Get All Staff")]
         public IActionResult GetAllStaff()
@@ -57,6 +59,7 @@ namespace RealEstateProjectSale.Controllers.StaffController
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get Staff by ID")]
         public IActionResult GetStaffByID(Guid id)
@@ -77,6 +80,7 @@ namespace RealEstateProjectSale.Controllers.StaffController
 
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [SwaggerOperation(Summary = "Register Account Staff")]
         public async Task<IActionResult> AddNewStaff([FromForm] RegisterStaffVM accountStaff)
@@ -146,6 +150,7 @@ namespace RealEstateProjectSale.Controllers.StaffController
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Update Staff by ID")]
         public IActionResult UpdateStaff([FromForm] StaffUpdateDTO staff, Guid id)
@@ -223,6 +228,7 @@ namespace RealEstateProjectSale.Controllers.StaffController
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Delete Staff by ID")]
         public IActionResult DeleteStaff(Guid id)

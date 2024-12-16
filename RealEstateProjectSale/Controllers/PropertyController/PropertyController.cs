@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Azure;
 using Azure.Storage.Blobs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
@@ -63,6 +64,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
             _documentService = documentService;
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet]
         [SwaggerOperation(Summary = "Get All Property")]
         public IActionResult GetAllProperty([FromQuery] string? propertyCode, [FromQuery] Guid? zoneID, [FromQuery] Guid? blockID, [FromQuery] Guid? floorID, [FromQuery] Guid? projectcategorydetailID, [FromQuery] int page = 1)
@@ -288,6 +290,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
 
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet("property-not-sale/{categoryDetailID}")]
         [SwaggerOperation(Summary = "Get Property Not Sale By CategoryDetailID")]
         public IActionResult GetPropertyNotSaleByCategoryDetailID(Guid categoryDetailID)
@@ -332,6 +335,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
             return Ok(property);
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new Property")]
         public IActionResult AddNewProperty(PropertyCreateDTO property)
@@ -367,6 +371,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Update Property by ID")]
         public IActionResult UpdateProperty([FromForm] PropertyUpdateDTO property, Guid id)
@@ -536,6 +541,7 @@ namespace RealEstateProjectSale.Controllers.PropertyController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Delete Property by ID")]
         public IActionResult DeleteProperty(Guid id)

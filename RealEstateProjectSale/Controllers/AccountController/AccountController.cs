@@ -27,7 +27,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
             _mapper = mapper;
         }
 
-        [Authorize(Roles = "Staff")]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         [SwaggerOperation(Summary = "Get All Account")]
         [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách tài khoản.", typeof(List<AccountVM>))]
@@ -54,6 +54,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get Account By ID")]
         [SwaggerResponse(StatusCodes.Status200OK, "Trả về thông tin tài khoản.", typeof(AccountVM))]
@@ -76,6 +77,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
 
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new Account")]
         [SwaggerResponse(StatusCodes.Status200OK, "Tạo tài khoản thành công.")]
@@ -116,6 +118,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Update Account")]
         [SwaggerResponse(StatusCodes.Status200OK, "Cập nhật tài khoản thành công.")]
@@ -165,6 +168,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Delete Account")]
         [SwaggerResponse(StatusCodes.Status200OK, "Xóa tài khoản thành công.")]

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Azure.Storage.Blobs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -29,6 +30,7 @@ namespace RealEstateProjectSale.Controllers.UnitTypeController
             _mapper = mapper;
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet]
         [SwaggerOperation(Summary = "Get All UnitType")]
         public IActionResult GetAllUnitType()
@@ -67,6 +69,7 @@ namespace RealEstateProjectSale.Controllers.UnitTypeController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get UnitType By ID")]
         public IActionResult GetUnitTypeByID(Guid id)
@@ -102,6 +105,7 @@ namespace RealEstateProjectSale.Controllers.UnitTypeController
 
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new UnitType")]
         public IActionResult AddNewUnitType([FromForm] UnitTypeRequestDTO type)
@@ -145,6 +149,7 @@ namespace RealEstateProjectSale.Controllers.UnitTypeController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Update UnitType")]
         public IActionResult UpdateUnitType([FromForm] UnitTypeUpdateDTO type, Guid id)
@@ -225,6 +230,7 @@ namespace RealEstateProjectSale.Controllers.UnitTypeController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Delete UnitType by ID")]
         public IActionResult DeleteUnitType(Guid id)

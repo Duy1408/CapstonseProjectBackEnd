@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Azure.Storage.Blobs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
@@ -27,6 +28,7 @@ namespace RealEstateProjectSale.Controllers.FloorController
             _fileService = fileService;
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet]
         [SwaggerOperation(Summary = "Get all Floor")]
         public IActionResult GetAllFloor()
@@ -51,6 +53,7 @@ namespace RealEstateProjectSale.Controllers.FloorController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get Floor By ID")]
         public IActionResult GetFloorByID(Guid id)
@@ -69,6 +72,7 @@ namespace RealEstateProjectSale.Controllers.FloorController
             });
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet("block/{blockId}")]
         [SwaggerOperation(Summary = "Get Floor By BlockID")]
         [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách block.", typeof(List<FloorVM>))]
@@ -91,6 +95,7 @@ namespace RealEstateProjectSale.Controllers.FloorController
 
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Delete Floor")]
         public IActionResult DeleteFloor(Guid id)
@@ -116,6 +121,7 @@ namespace RealEstateProjectSale.Controllers.FloorController
             return Ok("Xóa tầng thành công");
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new Floor")]
         public IActionResult AddNewFloor([FromForm] FloorRequestDTO floor)
@@ -144,7 +150,7 @@ namespace RealEstateProjectSale.Controllers.FloorController
                 };
 
                 var b = _mapper.Map<Floor>(newFloor);
-                b.ImageFloor = imageUrls.Count > 0 ? string.Join(",", imageUrls) : null; 
+                b.ImageFloor = imageUrls.Count > 0 ? string.Join(",", imageUrls) : null;
                 _floor.AddNew(b);
                 return Ok(new
                 {
@@ -158,6 +164,7 @@ namespace RealEstateProjectSale.Controllers.FloorController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "UpdateFloor")]
         public IActionResult UpdateBlock([FromForm] FloorUpdateDTO floor, Guid id)

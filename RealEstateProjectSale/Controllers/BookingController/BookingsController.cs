@@ -7,6 +7,7 @@ using AutoMapper;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using iText.Kernel.Pdf;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -56,6 +57,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
             _hubContext = hubContext;
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet]
         [SwaggerOperation(Summary = "GetAllBooking")]
         [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách Booking.", typeof(List<BookingVM>))]
@@ -82,6 +84,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet("booked")]
         [SwaggerOperation(Summary = "Get bookings by status 'Booked'")]
         [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách Booking.", typeof(List<BookingVM>))]
@@ -108,6 +111,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet("checked-in/{openId}")]
         [SwaggerOperation(Summary = "Get bookings by status 'Checked In'")]
         [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách Booking.", typeof(List<BookingVM>))]
@@ -134,6 +138,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet("property/{propertyid}")]
         [SwaggerOperation(Summary = "Get bookings by propertyid")]
         [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách Booking.", typeof(BookingVM))]
@@ -160,6 +165,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get Booking By ID")]
         [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách Booking.", typeof(BookingVM))]
@@ -204,6 +210,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet("open-for-sale/{openId}")]
         [SwaggerOperation(Summary = "Get Booking By OpeningForSaleID")]
         [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách Booking.", typeof(List<BookingVM>))]
@@ -226,6 +233,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet("staff/{staffId}")]
         [SwaggerOperation(Summary = "Get Booking by staff ID")]
         [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách Booking.", typeof(List<BookingVM>))]
@@ -601,7 +609,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
             });
         }
 
-
+        [Authorize(Roles = "Admin,Staff")]
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Delete Booking by ID")]
         [SwaggerResponse(StatusCodes.Status200OK, "Xóa Booking thành công.")]
@@ -626,9 +634,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
             });
         }
 
-
-
-
+        [Authorize(Roles = "Admin,Staff")]
         [HttpPut("upload-payment-order/{id}")]
         [SwaggerOperation(Summary = "Staff upload PaymentOrder refund")]
         [SwaggerResponse(StatusCodes.Status200OK, "Cập nhật Booking thành công.")]
@@ -639,14 +645,14 @@ namespace RealEstateProjectSale.Controllers.BookingController
             {
 
                 var existingBook = _book.GetBookingById(id);
-                if (existingBook != null && existingBook.Status==BookingStatus.KhongChonSanPham.GetEnumDescription() && existingBook.RefundImage == null)
+                if (existingBook != null && existingBook.Status == BookingStatus.KhongChonSanPham.GetEnumDescription() && existingBook.RefundImage == null)
                 {
-                   
-                        string? blobUrl = null;
-                        if (book.RefundImage != null)
-                        {
-                            blobUrl = _fileService.UploadSingleImage(book.RefundImage, "refundimage");
-                        }
+
+                    string? blobUrl = null;
+                    if (book.RefundImage != null)
+                    {
+                        blobUrl = _fileService.UploadSingleImage(book.RefundImage, "refundimage");
+                    }
                     existingBook.Status = BookingStatus.Dahoantien.GetEnumDescription();
                     existingBook.UpdatedTime = DateTime.Now;
                     _book.UpdateBooking(existingBook);
