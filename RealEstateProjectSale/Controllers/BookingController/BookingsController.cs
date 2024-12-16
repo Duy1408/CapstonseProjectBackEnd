@@ -639,7 +639,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
         [SwaggerOperation(Summary = "Staff upload PaymentOrder refund")]
         [SwaggerResponse(StatusCodes.Status200OK, "Cập nhật Booking thành công.")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Booking không đủ điều kiện để thực hiện refund.")]
-        public IActionResult StaffUploadPaymentOrder([FromForm] BookingUpdateDTO book, Guid id)
+        public IActionResult StaffUploadPaymentOrder([FromForm] UploadRefundImageDTO book, Guid id)
         {
             try
             {

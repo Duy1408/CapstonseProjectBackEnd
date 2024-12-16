@@ -105,6 +105,8 @@ builder.Services.AddScoped<IPanoramaImageServices, PanoramaImageServices>();
 builder.Services.AddScoped<IPaymentPolicyRepo, PaymentPolicyRepo>();
 builder.Services.AddScoped<IPaymentPolicyService, PaymentPolicyService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
+builder.Services.AddScoped<IContractHistoryServices, ContractHistoryServices>();
+builder.Services.AddScoped<IContractHistoryRepo, ContractHistoryRepo>();
 
 
 //send email
