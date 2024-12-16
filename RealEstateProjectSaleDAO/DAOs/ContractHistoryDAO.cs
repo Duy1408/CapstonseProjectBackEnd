@@ -58,5 +58,50 @@ namespace RealEstateProjectSaleDAO.DAOs
                 .Include(c=> c.Customer).SingleOrDefault(a => a.ContractHistoryID == id);
 
         }
+
+        public List<ContractHistory> GetBlockByContractID(Guid id)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            return _context.ContractHistories.Include(c => c.Contract)
+                                         .Where(a => a.ContractID == id)
+                                         .ToList();
+        }
+
+        public bool UpdateBlock(ContractHistory c)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            var a = _context.ContractHistories.SingleOrDefault(c => c.ContractHistoryID == c.ContractHistoryID);
+
+            if (a == null)
+            {
+                return false;
+            }
+            else
+            {
+                _context.Entry(a).CurrentValues.SetValues(c);
+                _context.SaveChanges();
+                return true;
+            }
+        }
+
+
+        public bool ChangeStatus(Block p)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            var a = _context.Blocks.FirstOrDefault(c => c.BlockID.Equals(p.BlockID));
+
+
+            if (a == null)
+            {
+                return false;
+            }
+            else
+            {
+                _context.Entry(a).State = EntityState.Modified;
+                _context.SaveChanges();
+                return true;
+            }
+        }
     }
-}
+    }
+
