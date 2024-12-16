@@ -81,7 +81,6 @@ namespace RealEstateProjectSale.Controllers.NotificationController
 
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpGet("customer/{customerId}")]
         [SwaggerOperation(Summary = "Get Notification By CustomerID")]
         public IActionResult GetNotificationByCustomerID(Guid customerId)
