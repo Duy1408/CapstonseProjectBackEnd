@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace RealEstateProjectSaleBusinessObject.BusinessObject
 {
-    public class Transfer
+    public class ContractHistory
     {
-        public Guid TransferID { get; set; }
-        public string Notarizedcontractcode { get; set; }
+        public Guid ContractHistoryID { get; set; }
+        public string NotarizedContractCode { get; set; }
         public string Note { get; set; }
         public string AttachFile { get; set; }
         public Guid CustomerID { get; set; }

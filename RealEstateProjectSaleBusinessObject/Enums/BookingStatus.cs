@@ -28,7 +28,10 @@ namespace RealEstateProjectSaleBusinessObject.Enums
         KhongChonSanPham = 6,
 
         [EnumDescription("Đã hủy")]
-        DaHuy = 7
+        DaHuy = 7,
+
+        [EnumDescription("Đã hoàn tiền")]
+        Dahoantien = 8
 
     }
 
