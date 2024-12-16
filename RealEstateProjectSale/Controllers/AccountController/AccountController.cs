@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -26,6 +27,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
             _mapper = mapper;
         }
 
+        [Authorize(Roles = "Staff")]
         [HttpGet]
         [SwaggerOperation(Summary = "Get All Account")]
         [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách tài khoản.", typeof(List<AccountVM>))]

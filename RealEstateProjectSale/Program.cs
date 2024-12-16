@@ -199,7 +199,6 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("Customer", policy => policy.RequireRole("Customer"));
     options.AddPolicy("Staff", policy => policy.RequireRole("Staff"));
-    options.AddPolicy("Manager", policy => policy.RequireRole("Manager"));
     options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
 });
 
@@ -230,6 +229,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors(options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
+app.UseAuthentication();
+
+app.UseAuthorization();
+
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
@@ -253,11 +256,6 @@ app.UseSwaggerUI(c =>
 });
 
 app.UseHttpsRedirection();
-
-
-app.UseAuthentication();
-
-app.UseAuthorization();
 
 app.MapControllers();
 
