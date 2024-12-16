@@ -107,7 +107,6 @@ namespace RealEstateProjectSale.Controllers.OpeningForSaleController
             }
         }
 
-        [Authorize(Roles = "Admin,Staff")]
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get OpeningForSale By ID")]
         public IActionResult GetOpeningForSaleByID(Guid id)
