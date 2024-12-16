@@ -1,4 +1,5 @@
-﻿using RealEstateProjectSaleBusinessObject.BusinessObject;
+﻿using Microsoft.EntityFrameworkCore;
+using RealEstateProjectSaleBusinessObject.BusinessObject;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,10 +27,36 @@ namespace RealEstateProjectSaleDAO.DAOs
 
         }
 
-        //public List<ContractHistory> GetAllContractHistory()
-        //{
-        //    var _context = new RealEstateProjectSaleSystemDBContext();
-        //    return _context.Con.Include(c => c.Zone).ToList();
-        //}
+        public List<ContractHistory> GetAllContractHistory()
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            return _context.ContractHistories.Include(c => c.Contract).Include(c => c.Customer).ToList();
+        }
+
+        public bool AddNewContractHistory(ContractHistory c)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            var a = _context.ContractHistories.SingleOrDefault(c => c.ContractHistoryID == c.ContractHistoryID);
+
+            if (a != null)
+            {
+                return false;
+            }
+            else
+            {
+                _context.ContractHistories.Add(c);
+                _context.SaveChanges();
+                return true;
+
+            }
+        }
+
+        public ContractHistory GetContractHistoryByID(Guid id)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            return _context.ContractHistories.Include(c => c.Contract)
+                .Include(c=> c.Customer).SingleOrDefault(a => a.ContractHistoryID == id);
+
+        }
     }
 }
