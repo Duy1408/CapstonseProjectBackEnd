@@ -37,7 +37,7 @@ namespace RealEstateProjectSaleBusinessObject.BusinessObject
         public PromotionDetail? PromotionDetail { get; set; }
         public Guid CustomerID { get; set; }
         public Customer? Customer { get; set; }
-        public List<Transfer>? Transfers { get; set; }
+        public List<ContractHistory>? ContractHistories { get; set; }
 
 
 

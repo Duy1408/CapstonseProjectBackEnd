@@ -9,14 +9,14 @@ using System.Threading.Tasks;
 
 namespace RealEstateProjectSaleBusinessObject.FluentAPI
 {
-    public class TransferConfiguration : IEntityTypeConfiguration<Transfer>
+    public class ContractHistoryConfiguration : IEntityTypeConfiguration<ContractHistory>
 
     {
-        public void Configure(EntityTypeBuilder<Transfer> builder)
+        public void Configure(EntityTypeBuilder<ContractHistory> builder)
         {
-            builder.ToTable("Transfer");
-            builder.HasKey(x => x.TransferID);
-            builder.Property(x => x.Notarizedcontractcode).IsRequired();
+            builder.ToTable("ContractHistory");
+            builder.HasKey(x => x.ContractHistoryID);
+            builder.Property(x => x.NotarizedContractCode).IsRequired();
             builder.Property(x => x.AttachFile).IsRequired();
             builder.Property(x => x.Note);
 
