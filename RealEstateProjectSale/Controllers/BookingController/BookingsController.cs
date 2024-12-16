@@ -165,7 +165,6 @@ namespace RealEstateProjectSale.Controllers.BookingController
             }
         }
 
-        [Authorize(Roles = "Admin,Staff")]
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get Booking By ID")]
         [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách Booking.", typeof(BookingVM))]
