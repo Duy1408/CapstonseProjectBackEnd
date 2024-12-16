@@ -1,5 +1,6 @@
 ﻿using RealEstateProjectSaleBusinessObject.BusinessObject;
 using RealEstateProjectSaleBusinessObject.Enums;
+using RealEstateProjectSaleBusinessObject.Enums.EnumHelpers;
 using RealEstateProjectSaleServices.IServices;
 using System;
 using System.Collections.Generic;
@@ -39,7 +40,7 @@ namespace RealEstateProjectSaleServices.Services
 
             foreach ( var property in properties)
             {
-                if (property.Status== "Đã bán")
+                if (property.Status== PropertyStatus.DaBan.GetEnumDescription())
                 {
                     total++;
                 }
@@ -65,7 +66,7 @@ namespace RealEstateProjectSaleServices.Services
             var bookings = _bookingServices.GetBookings();
             foreach (var booking in bookings)
             {
-                if (booking.DepositedPrice.HasValue && booking.Status== "Chưa thanh toán tiền giữ chỗ")
+                if (booking.DepositedPrice.HasValue && booking.Status== BookingStatus.ChuaThanhToanTienGiuCho.GetEnumDescription())
                 {
                     pricebooking += booking.DepositedPrice.Value;
                 }
@@ -120,7 +121,7 @@ namespace RealEstateProjectSaleServices.Services
 
             foreach (var booking in bookings)
             {
-                if (booking.Status.Equals("Đã hủy"))
+                if (booking.Status == BookingStatus.Dahoantien.GetEnumDescription())
                 {
                     pricebookingcancel += booking.DepositedPrice.Value;
                 }

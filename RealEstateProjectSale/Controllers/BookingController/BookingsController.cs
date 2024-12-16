@@ -639,7 +639,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
             {
 
                 var existingBook = _book.GetBookingById(id);
-                if (existingBook != null && existingBook.Status.Equals("Đã hủy") && existingBook.RefundImage == null)
+                if (existingBook != null && existingBook.Status==BookingStatus.KhongChonSanPham.GetEnumDescription() && existingBook.RefundImage == null)
                 {
                    
                         string? blobUrl = null;
