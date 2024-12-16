@@ -43,6 +43,9 @@ namespace RealEstateProjectSaleBusinessObject.Enums
         ChoXacNhanTTCNTTDC = 11,
 
         [EnumDescription("Đã hủy")]
-        DaHuy = 12
+        DaHuy = 12,
+
+        [EnumDescription("Đã hết hạn")]
+        DaHetHan = 13
     }
 }
