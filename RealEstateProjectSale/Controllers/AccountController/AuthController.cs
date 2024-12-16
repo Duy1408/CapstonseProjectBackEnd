@@ -39,7 +39,8 @@ namespace RealEstateProjectSale.Controllers.AccountController
 
                     return Ok(new
                     {
-                        token = token
+                        token = token,
+                        role = "Admin"
                     });
                 }
 
@@ -60,7 +61,8 @@ namespace RealEstateProjectSale.Controllers.AccountController
 
                     return Ok(new
                     {
-                        token = token
+                        token = token,
+                        role = accountExists.Role!.RoleName
                     });
 
                 }
