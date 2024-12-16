@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FirebaseAdmin.Messaging;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
@@ -34,6 +35,7 @@ namespace RealEstateProjectSale.Controllers.NotificationController
             _mapper = mapper;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         [SwaggerOperation(Summary = "Get All Notification")]
         public IActionResult GetAllNotification()
@@ -58,6 +60,7 @@ namespace RealEstateProjectSale.Controllers.NotificationController
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get Notification By ID")]
         public IActionResult GetNotificationByID(Guid id)
@@ -78,6 +81,7 @@ namespace RealEstateProjectSale.Controllers.NotificationController
 
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("customer/{customerId}")]
         [SwaggerOperation(Summary = "Get Notification By CustomerID")]
         public IActionResult GetNotificationByCustomerID(Guid customerId)
@@ -98,6 +102,7 @@ namespace RealEstateProjectSale.Controllers.NotificationController
 
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new Notification")]
         public IActionResult AddNewNotification(NotificationCreateDTO noti)
@@ -139,6 +144,7 @@ namespace RealEstateProjectSale.Controllers.NotificationController
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost("send-ios/{bookingId}")]
         public async Task<IActionResult> SendNotification(Guid bookingId)
         {
@@ -215,6 +221,7 @@ namespace RealEstateProjectSale.Controllers.NotificationController
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Update Notification by ID")]
         public IActionResult UpdateNotification([FromForm] NotificationUpdateDTO noti, Guid id)
@@ -271,6 +278,7 @@ namespace RealEstateProjectSale.Controllers.NotificationController
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Delete Notification")]
         public IActionResult DeleteNotification(Guid id)

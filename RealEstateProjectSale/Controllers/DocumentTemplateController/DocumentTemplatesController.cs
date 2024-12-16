@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Azure;
 using Azure.Storage.Blobs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
@@ -28,9 +29,9 @@ namespace RealEstateProjectSale.Controllers.DocumentTemplateController
             _blobServiceClient = blobServiceClient;
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet]
         [SwaggerOperation(Summary = "Get all Document")]
-
         public IActionResult GetAllDocument()
         {
             try
@@ -53,7 +54,7 @@ namespace RealEstateProjectSale.Controllers.DocumentTemplateController
             }
         }
 
-
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get DocumentTemplate By ID")]
         public IActionResult GetDocumentTemplateByID(Guid id)
@@ -89,6 +90,7 @@ namespace RealEstateProjectSale.Controllers.DocumentTemplateController
             });
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Delete DocumentTemplate By ID")]
         public IActionResult DeleteDocumentTemplate(Guid id)
@@ -118,6 +120,7 @@ namespace RealEstateProjectSale.Controllers.DocumentTemplateController
             });
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new document")]
         public IActionResult AddNew(DocumentTemplateCreateDTO doc)
@@ -148,6 +151,7 @@ namespace RealEstateProjectSale.Controllers.DocumentTemplateController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Update Doc by ID")]
         public IActionResult UpdateComment([FromForm] DocumentTemplateUpdateDTO doc, Guid id)

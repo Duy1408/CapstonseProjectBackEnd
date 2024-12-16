@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -31,7 +32,7 @@ namespace RealEstateProjectSale.Controllers.SalespolicyController
             _mapper = mapper;
         }
 
-        // GET: api/Salespolicies
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         [SwaggerOperation(Summary = "Get All SalePolicy")]
         public IActionResult GetAllSalePolicy()
@@ -56,8 +57,7 @@ namespace RealEstateProjectSale.Controllers.SalespolicyController
             }
         }
 
-        // GET: api/Salespolicies/5
-
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get SalePolicy by ID")]
         public IActionResult GetSalePolicyByID(Guid id)
@@ -78,6 +78,7 @@ namespace RealEstateProjectSale.Controllers.SalespolicyController
 
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("project/{projectId}")]
         [SwaggerOperation(Summary = "Get SalePolicy by project ID")]
         public IActionResult GetSalePolicyByProjectID(Guid projectId)
@@ -98,6 +99,7 @@ namespace RealEstateProjectSale.Controllers.SalespolicyController
 
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Update SalePolicy by ID")]
         public IActionResult UpdateSalePolicy([FromForm] SalePolicyUpdateDTO sale, Guid id)
@@ -151,6 +153,7 @@ namespace RealEstateProjectSale.Controllers.SalespolicyController
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new SalePolicy")]
         public IActionResult AddNew(SalepolicyCreateDTO sale)
@@ -200,6 +203,7 @@ namespace RealEstateProjectSale.Controllers.SalespolicyController
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Delete SalePolicy by ID")]
         public IActionResult DeleteSalePolicy(Guid id)

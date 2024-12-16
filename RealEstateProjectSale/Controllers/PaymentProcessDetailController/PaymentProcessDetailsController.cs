@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +30,7 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessDetailController
             _mapper = mapper;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         [SwaggerOperation(Summary = "Get All PaymentProcessDetail")]
         public IActionResult GetAllPaymentProcessDetail()
@@ -53,6 +55,7 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessDetailController
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get PaymentProcessDetail By ID")]
         public IActionResult GetPaymentProcessDetailByID(Guid id)
@@ -73,6 +76,7 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessDetailController
 
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("paymentProcess/{pmtId}")]
         [SwaggerOperation(Summary = "Get PaymentProcessDetail By PaymentProcessID")]
         public IActionResult GetPaymentProcessDetailByPaymentProcessID(Guid pmtId)
@@ -92,6 +96,7 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessDetailController
             });
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new PaymentProcessDetail")]
         public IActionResult AddNew(PaymentProcessDetailCreateDTO detail)
@@ -143,6 +148,7 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessDetailController
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Update PaymentProcessDetail by ID")]
         public IActionResult UpdatePaymentProcessDetail([FromForm] PaymentProcessDetailUpdateDTO detail, Guid id)
@@ -199,6 +205,7 @@ namespace RealEstateProjectSale.Controllers.PaymentProcessDetailController
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Delete PaymentProcessDetail by ID")]
         public IActionResult DeletePaymentProcessDetailByID(Guid id)

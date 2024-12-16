@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Azure.Storage.Blobs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RealEstateProjectSale.SwaggerResponses;
@@ -29,6 +30,7 @@ namespace RealEstateProjectSale.Controllers.BlockController
 
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet]
         [SwaggerOperation(Summary = "Get all Block")]
         [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách Block.", typeof(List<BlockVM>))]
@@ -55,6 +57,7 @@ namespace RealEstateProjectSale.Controllers.BlockController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get Block By ID")]
         [SwaggerResponse(StatusCodes.Status200OK, "Trả về thông tin Block.", typeof(BlockVM))]
@@ -74,6 +77,7 @@ namespace RealEstateProjectSale.Controllers.BlockController
             });
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet("zone/{zoneId}")]
         [SwaggerOperation(Summary = "Get Block By ZoneID")]
         [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách block.", typeof(List<BlockVM>))]
@@ -96,6 +100,7 @@ namespace RealEstateProjectSale.Controllers.BlockController
 
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "UpdateBlock")]
         [SwaggerResponse(StatusCodes.Status200OK, "Cập nhật Block thành công.")]
@@ -104,7 +109,7 @@ namespace RealEstateProjectSale.Controllers.BlockController
         {
             try
             {
-          
+
                 var imageUrls = block.ImageBlock != null && block.ImageBlock.Count > 0
                   ? _fileService.UploadMultipleImages(block.ImageBlock.ToList(), "blockimage")
                      : new List<string>(); // Nếu không có hình ảnh, khởi tạo danh sách trống
@@ -149,6 +154,7 @@ namespace RealEstateProjectSale.Controllers.BlockController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new Block")]
         [SwaggerResponse(StatusCodes.Status200OK, "Tạo Block thành công.")]
@@ -186,6 +192,7 @@ namespace RealEstateProjectSale.Controllers.BlockController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Delete Block")]
         [SwaggerResponse(StatusCodes.Status200OK, "Xóa Block thành công.")]

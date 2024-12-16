@@ -2,6 +2,7 @@
 using Azure;
 using Azure.Storage.Blobs;
 using Google.Api.Gax.ResourceNames;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
@@ -95,6 +96,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet]
         [SwaggerOperation(Summary = "Get All Contract")]
         [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách hợp đồng.", typeof(List<ContractVM>))]
@@ -1410,6 +1412,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new Contract")]
         [SwaggerResponse(StatusCodes.Status200OK, "Hợp đồng đã được tạo thành công.")]
@@ -1474,6 +1477,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Update Contract by ID")]
         [SwaggerResponse(StatusCodes.Status200OK, "Cập nhật hợp đồng thành công.")]
@@ -1603,6 +1607,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Delete Contract by ID")]
         [SwaggerResponse(StatusCodes.Status200OK, "Xóa hợp đồng thành công.")]

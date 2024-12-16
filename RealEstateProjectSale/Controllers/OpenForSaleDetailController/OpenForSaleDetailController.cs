@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
@@ -32,6 +33,7 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
             _propertyService = propertyService;
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet]
         [SwaggerOperation(Summary = "Get All OpenForSaleDetail")]
         public IActionResult GetAllOpenForSaleDetail()
@@ -56,6 +58,7 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet("open-for-sale/{openId}")]
         [SwaggerOperation(Summary = "Get OpenForSaleDetail By OpeningForSaleID")]
         public IActionResult GetOpenForSaleDetailByOpeningForSaleID(Guid openId)
@@ -76,6 +79,7 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
 
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet("{propertyId}/{openId}")]
         [SwaggerOperation(Summary = "Get OpenForSaleDetail By PropertyID and OpeningForSaleID")]
         public IActionResult GetDetailByPropertyIdOpenId(Guid propertyId, Guid openId)
@@ -96,6 +100,7 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
 
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new OpenForSaleDetail")]
         public IActionResult AddNewOpenForSaleDetail(OpenForSaleDetailCreateDTO detail)
@@ -162,6 +167,7 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpPut("{propertyId}/{openId}")]
         [SwaggerOperation(Summary = "Update OpenForSaleDetail by ID")]
         public IActionResult UpdateOpenForSaleDetail([FromForm] OpenForSaleDetailUpdateDTO detail, Guid propertyId, Guid openId)
@@ -209,6 +215,7 @@ namespace RealEstateProjectSale.Controllers.OpenForSaleDetailController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpDelete("{propertyId}/{openId}")]
         [SwaggerOperation(Summary = "Delete OpenForSaleDetail by ID")]
         public IActionResult DeleteOpenForSaleDetail(Guid propertyId, Guid openId)

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Azure.Storage.Blobs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RealEstateProjectSaleBusinessObject.BusinessObject;
@@ -40,6 +41,7 @@ namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
             _mapper = mapper;
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet]
         [SwaggerOperation(Summary = "Get All ContractPaymentDetail")]
         [SwaggerResponse(StatusCodes.Status200OK, "Trả về danh sách Chi tiết hợp đồng.", typeof(List<ContractPaymentDetailVM>))]
@@ -66,6 +68,7 @@ namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get ContractPaymentDetail By ID")]
         [SwaggerResponse(StatusCodes.Status200OK, "Trả về thông tin Chi tiết hợp đồng.", typeof(ContractPaymentDetailVM))]
@@ -126,6 +129,7 @@ namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
 
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new ContractPaymentDetail")]
         [SwaggerResponse(StatusCodes.Status200OK, "Tạo chi tiết hợp đồng thành công.")]
@@ -163,6 +167,7 @@ namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Update ContractPaymentDetail by ID")]
         [SwaggerResponse(StatusCodes.Status200OK, "Cập nhật Chi tiết hợp đồng thành công.")]
@@ -239,6 +244,7 @@ namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpPut("confirm/{id}")]
         [SwaggerOperation(Summary = "Staff Confirm PaymentOrder By ContractPaymentDetailID")]
         [SwaggerResponse(StatusCodes.Status200OK, "Staff xác nhận Ủy nhiệm chi thành công.")]
@@ -438,6 +444,7 @@ namespace RealEstateProjectSale.Controllers.ContractPaymentDetailController
             }
         }
 
+        [Authorize(Roles = "Admin,Staff")]
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Delete ContractPaymentDetail by ID")]
         [SwaggerResponse(StatusCodes.Status200OK, "Xóa chi tiết hợp đồng thành công.")]
