@@ -97,6 +97,7 @@ namespace RealEstateProjectSaleDAO.DAOs
             }
             else
             {
+                a.Status = false;
                 _context.Entry(a).State = EntityState.Modified;
                 _context.SaveChanges();
                 return true;

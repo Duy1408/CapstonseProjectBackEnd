@@ -67,7 +67,7 @@ namespace RealEstateProjectSaleDAO.DAOs
                                          .ToList();
         }
 
-        public bool UpdateBlock(ContractHistory c)
+        public bool UpdateContractHistory(ContractHistory c)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
             var a = _context.ContractHistories.SingleOrDefault(c => c.ContractHistoryID == c.ContractHistoryID);
@@ -85,10 +85,10 @@ namespace RealEstateProjectSaleDAO.DAOs
         }
 
 
-        public bool ChangeStatus(Block p)
+        public bool ChangeStatusContractHistory(ContractHistory p)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            var a = _context.Blocks.FirstOrDefault(c => c.BlockID.Equals(p.BlockID));
+            var a = _context.ContractHistories.FirstOrDefault(c => c.ContractHistoryID.Equals(p.ContractHistoryID));
 
 
             if (a == null)
