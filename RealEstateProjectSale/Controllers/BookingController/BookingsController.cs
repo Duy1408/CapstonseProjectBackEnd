@@ -301,6 +301,11 @@ namespace RealEstateProjectSale.Controllers.BookingController
             try
             {
                 string? blobUrl = null;
+                if (book.RefundImage != null)
+                {
+                    blobUrl = _fileService.UploadSingleImage(book.RefundImage, "remittanceorderimage");
+                }
+
                 var bookingFile = book.BookingFile;
                 if (bookingFile != null)
                 {
@@ -329,6 +334,10 @@ namespace RealEstateProjectSale.Controllers.BookingController
                     if (blobUrl != null)
                     {
                         existingBook.BookingFile = blobUrl;
+                    }
+                    if (blobUrl != null)
+                    {
+                        existingBook.RefundImage = blobUrl;
                     }
                     if (book.StaffID.HasValue)
                     {
@@ -592,6 +601,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
             });
         }
 
+
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Delete Booking by ID")]
         [SwaggerResponse(StatusCodes.Status200OK, "Xóa Booking thành công.")]
@@ -614,6 +624,46 @@ namespace RealEstateProjectSale.Controllers.BookingController
             {
                 message = "Xóa Booking thành công."
             });
+        }
+
+
+
+
+        [HttpPut("upload-payment-order/{id}")]
+        [SwaggerOperation(Summary = "Staff upload PaymentOrder refund")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Cập nhật Booking thành công.")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Booking không đủ điều kiện để thực hiện refund.")]
+        public IActionResult StaffUploadPaymentOrder([FromForm] BookingUpdateDTO book, Guid id)
+        {
+            try
+            {
+
+                var existingBook = _book.GetBookingById(id);
+                if (existingBook != null && existingBook.Status.Equals("Đã hủy") && existingBook.RefundImage == null)
+                {
+                   
+                        string? blobUrl = null;
+                        if (book.RefundImage != null)
+                        {
+                            blobUrl = _fileService.UploadSingleImage(book.RefundImage, "remittanceorderimage");
+                        }
+                    existingBook.Status = BookingStatus.Dahoantien.GetEnumDescription();
+                    existingBook.UpdatedTime = DateTime.Now;
+                    _book.UpdateBooking(existingBook);
+                    return Ok(new
+                    {
+                        message = "Upload thành công ủy nhiệm chi"
+                    });
+                }
+                return NotFound(new
+                {
+                    message = "Không đủ điều kiện để thực hiện hoàn tiền."
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
     }

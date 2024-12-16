@@ -97,6 +97,8 @@ namespace RealEstateProjectSaleServices.Services
             double total = 0;
             double pricecontract = 0;
             double pricebooking = 0;
+            double pricebookingcancel = 0;
+
 
             var orderdetails = _contractDetailService.GetAllContractPaymentDetail();
             foreach (var orderdetail in orderdetails)
@@ -116,7 +118,17 @@ namespace RealEstateProjectSaleServices.Services
                 }
             }
 
-            total = pricebooking + pricecontract;
+            foreach (var booking in bookings)
+            {
+                if (booking.Status.Equals("Đã hủy"))
+                {
+                    pricebookingcancel += booking.DepositedPrice.Value;
+                }
+            }
+
+
+
+            total = pricebooking + pricecontract - pricebookingcancel;
             return total;
         }
 
