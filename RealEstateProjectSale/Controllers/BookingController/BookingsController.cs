@@ -303,7 +303,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
                 string? blobUrl = null;
                 if (book.RefundImage != null)
                 {
-                    blobUrl = _fileService.UploadSingleImage(book.RefundImage, "remittanceorderimage");
+                    blobUrl = _fileService.UploadSingleImage(book.RefundImage, "refundimage");
                 }
 
                 var bookingFile = book.BookingFile;
@@ -645,7 +645,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
                         string? blobUrl = null;
                         if (book.RefundImage != null)
                         {
-                            blobUrl = _fileService.UploadSingleImage(book.RefundImage, "remittanceorderimage");
+                            blobUrl = _fileService.UploadSingleImage(book.RefundImage, "refundimage");
                         }
                     existingBook.Status = BookingStatus.Dahoantien.GetEnumDescription();
                     existingBook.UpdatedTime = DateTime.Now;
