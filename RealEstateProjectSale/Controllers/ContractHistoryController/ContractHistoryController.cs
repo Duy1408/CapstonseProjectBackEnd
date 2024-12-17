@@ -11,6 +11,7 @@ using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 using Stripe;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Diagnostics.Contracts;
 
 
 namespace RealEstateProjectSale.Controllers.ContractHistoryController
@@ -55,7 +56,7 @@ namespace RealEstateProjectSale.Controllers.ContractHistoryController
             }
         }
 
-        [HttpGet("{contract-history-id}")]
+        [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get ContractHistory By ID")]
         [SwaggerResponse(StatusCodes.Status200OK, "Trả về thông tin ContractHistory.", typeof(ContractHistoryVM))]
         [SwaggerResponse(StatusCodes.Status404NotFound, "ContractHistory không tồn tại.")]
@@ -74,13 +75,13 @@ namespace RealEstateProjectSale.Controllers.ContractHistoryController
             });
         }
 
-        [HttpGet("{contract-id}")]
+        [HttpGet("contract/{contractId}")]
         [SwaggerOperation(Summary = "Get ContractHistory By contractID")]
         [SwaggerResponse(StatusCodes.Status200OK, "Trả về thông tin ContractHistory.", typeof(ContractHistoryVM))]
         [SwaggerResponse(StatusCodes.Status404NotFound, "ContractHistory không tồn tại.")]
-        public IActionResult GetContractHistoryByContracyID(Guid id)
+        public IActionResult GetContractHistoryByContracyID(Guid contractId)
         {
-            var contracthistory = _contracthistory.GetContractHistoryByContractID(id);
+            var contracthistory = _contracthistory.GetContractHistoryByContractID(contractId);
 
             if (contracthistory != null)
             {
@@ -93,7 +94,7 @@ namespace RealEstateProjectSale.Controllers.ContractHistoryController
             });
         }
 
-        [HttpDelete("{delete-contract-history}")]
+        [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Delete contract history")]
         [SwaggerResponse(StatusCodes.Status200OK, "Xóa contract history thành công.")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "contract history không tồn tại.")]
@@ -129,12 +130,12 @@ namespace RealEstateProjectSale.Controllers.ContractHistoryController
 
                 var newContractHistory = new ContractHistoryCreateDTO
                 {
-                   ContractHistoryID = Guid.NewGuid(),
+                    ContractHistoryID = Guid.NewGuid(),
                     NotarizedContractCode = history.NotarizedContractCode,
                     Note = history.Note,
-                    CustomerID=history.CustomerID,
-                    ContractID= history.ContractID,
-                    AttachFile= history.AttachFile,
+                    CustomerID = history.CustomerID,
+                    ContractID = history.ContractID,
+                    AttachFile = history.AttachFile,
                 };
 
                 var contracthistory = _mapper.Map<ContractHistory>(newContractHistory);
@@ -153,7 +154,7 @@ namespace RealEstateProjectSale.Controllers.ContractHistoryController
         }
 
 
-        [HttpPut("{update-contract-history }")]
+        [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Update contracthistory by ID")]
         [SwaggerResponse(StatusCodes.Status200OK, "Cập nhật contracthistory thành công.")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Contracthistory không tồn tại.")]
@@ -174,16 +175,16 @@ namespace RealEstateProjectSale.Controllers.ContractHistoryController
                     {
                         existingHistory.NotarizedContractCode = history.NotarizedContractCode;
                     }
-                     if (!string.IsNullOrEmpty(history.Note))
+                    if (!string.IsNullOrEmpty(history.Note))
                     {
                         existingHistory.Note = history.Note;
                     }
- 
+
                     if (blobUrl != null)
                     {
                         existingHistory.AttachFile = blobUrl;
                     }
-            
+
                     if (history.CustomerID.HasValue)
                     {
                         existingHistory.CustomerID = history.CustomerID.Value;

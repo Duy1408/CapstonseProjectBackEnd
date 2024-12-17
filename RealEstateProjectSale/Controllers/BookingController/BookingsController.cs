@@ -418,7 +418,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
                     }
 
                     book.Status = BookingStatus.DaCheckIn.GetEnumDescription();
-                    book.DepositedTimed = DateTime.Now;
+                    book.CheckInTime = DateTime.Now;
                     _book.UpdateBooking(book);
 
                     return Ok(new

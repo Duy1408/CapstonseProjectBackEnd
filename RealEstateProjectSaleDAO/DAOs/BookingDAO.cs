@@ -95,7 +95,7 @@ namespace RealEstateProjectSaleDAO.DAOs
                                      .Where(b => b.DepositedTimed != null
                                      && b.Status == BookingStatus.DaCheckIn.GetEnumDescription()
                                      && b.ProjectCategoryDetailID == id)
-                                     .OrderBy(b => b.DepositedTimed)
+                                     .OrderBy(b => b.CheckInTime)
                                      .ThenBy(b => b.BookingID)
                                      .FirstOrDefault();
         }
@@ -290,7 +290,10 @@ namespace RealEstateProjectSaleDAO.DAOs
             var _context = new RealEstateProjectSaleSystemDBContext();
             return _context.Bookings.FirstOrDefault(b => b.OpeningForSaleID == openForSaleID
                                   && b.ProjectCategoryDetailID == categoryDetailID
-                                  && b.CustomerID == customerID);
+                                  && b.CustomerID == customerID
+                                  && b.Status != BookingStatus.KhongChonSanPham.GetEnumDescription()
+                                  && b.Status != BookingStatus.Dahoantien.GetEnumDescription()
+                                  && b.Status != BookingStatus.DaHuy.GetEnumDescription());
         }
 
         public List<Booking> CheckCustomerBooking(Guid openForSaleID, Guid categoryDetailID, Guid customerID)

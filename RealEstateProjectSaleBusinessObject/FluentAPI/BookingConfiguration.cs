@@ -19,6 +19,7 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
             builder.Property(x => x.DepositedPrice);
             builder.Property(x => x.CreatedTime).IsRequired();
             builder.Property(x => x.UpdatedTime);
+            builder.Property(x => x.CheckInTime);
             builder.Property(x => x.BookingFile);
             builder.Property(x => x.Note);
             builder.Property(x => x.RefundImage);

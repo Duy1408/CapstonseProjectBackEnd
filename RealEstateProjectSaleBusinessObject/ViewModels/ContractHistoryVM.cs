@@ -11,7 +11,7 @@ namespace RealEstateProjectSaleBusinessObject.ViewModels
     {
         public Guid ContractHistoryID { get; set; }
         public string NotarizedContractCode { get; set; }
-        public string Note { get; set; }
+        public string? Note { get; set; }
         public string AttachFile { get; set; }
         public Guid CustomerID { get; set; }
         public string FullName { get; set; }
