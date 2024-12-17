@@ -21,6 +21,11 @@ namespace RealEstateProjectSaleServices.Services
             _repo.AddNewContractHistory(p);
         }
 
+        public ContractHistory CheckNotarizedContractCode(string notarizedCode)
+        {
+            return _repo.CheckNotarizedContractCode(notarizedCode);
+        }
+
         public void DeleteContractHistory(Guid id)
         {
             _repo.DeleteContractHistory(id);

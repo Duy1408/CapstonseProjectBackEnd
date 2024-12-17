@@ -9,13 +9,10 @@ namespace RealEstateProjectSaleRepository.IRepository
 {
     public interface IContractHistoryRepo
     {
+        ContractHistory CheckNotarizedContractCode(string notarizedCode);
         void DeleteContractHistory(Guid id);
-
-
         List<ContractHistory> GetContractHistorys();
         void AddNewContractHistory(ContractHistory p);
-
-
         ContractHistory GetContractHistoryById(Guid id);
         List<ContractHistory> GetContractHistoryByContractID(Guid id);
         void UpdateContractHistory(ContractHistory p);

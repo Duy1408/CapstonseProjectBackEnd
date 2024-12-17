@@ -9,6 +9,7 @@ namespace RealEstateProjectSaleServices.IServices
 {
     public interface IContractHistoryServices
     {
+        ContractHistory CheckNotarizedContractCode(string notarizedCode);
         void DeleteContractHistory(Guid id);
         List<ContractHistory> GetContractHistorys();
         void AddNewContractHistory(ContractHistory p);

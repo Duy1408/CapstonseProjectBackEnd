@@ -19,6 +19,8 @@ namespace RealEstateProjectSaleBusinessObject.FluentAPI
             builder.Property(x => x.NotarizedContractCode).IsRequired();
             builder.Property(x => x.AttachFile).IsRequired();
             builder.Property(x => x.Note);
+            builder.Property(x => x.CreatedTime).IsRequired();
+
 
 
         }

@@ -307,10 +307,11 @@ namespace RealEstateProjectSale.Controllers.BookingController
         {
             try
             {
-                string? blobUrl = null;
+                string? refundUrl = null;
+                string? bookingbUrl = null;
                 if (book.RefundImage != null)
                 {
-                    blobUrl = _fileService.UploadSingleImage(book.RefundImage, "refundimage");
+                    refundUrl = _fileService.UploadSingleImage(book.RefundImage, "refundimage");
                 }
 
                 var bookingFile = book.BookingFile;
@@ -318,7 +319,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
                 {
                     using (var pdfStream = bookingFile.OpenReadStream())
                     {
-                        blobUrl = _fileService.UploadSingleFile(pdfStream, bookingFile.FileName, "bookingfile");
+                        bookingbUrl = _fileService.UploadSingleFile(pdfStream, bookingFile.FileName, "bookingfile");
                     }
                 }
 
@@ -338,13 +339,13 @@ namespace RealEstateProjectSale.Controllers.BookingController
                             existingBook.Status = statusDescription;
                         }
                     }
-                    if (blobUrl != null)
+                    if (bookingbUrl != null)
                     {
-                        existingBook.BookingFile = blobUrl;
+                        existingBook.BookingFile = bookingbUrl;
                     }
-                    if (blobUrl != null)
+                    if (refundUrl != null)
                     {
-                        existingBook.RefundImage = blobUrl;
+                        existingBook.RefundImage = refundUrl;
                     }
                     if (book.StaffID.HasValue)
                     {

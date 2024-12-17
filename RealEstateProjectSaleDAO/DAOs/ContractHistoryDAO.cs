@@ -27,6 +27,12 @@ namespace RealEstateProjectSaleDAO.DAOs
 
         }
 
+        public ContractHistory CheckNotarizedContractCode(string notarizedCode)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            return _context.ContractHistories.FirstOrDefault(a => a.NotarizedContractCode == notarizedCode);
+        }
+
         public List<ContractHistory> GetAllContractHistory()
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
@@ -55,7 +61,7 @@ namespace RealEstateProjectSaleDAO.DAOs
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
             return _context.ContractHistories.Include(c => c.Contract)
-                .Include(c=> c.Customer).SingleOrDefault(a => a.ContractHistoryID == id);
+                .Include(c => c.Customer).SingleOrDefault(a => a.ContractHistoryID == id);
 
         }
 
@@ -97,5 +103,5 @@ namespace RealEstateProjectSaleDAO.DAOs
             }
         }
     }
-    }
+}
 

@@ -7,9 +7,11 @@ using RealEstateProjectSaleBusinessObject.DTO.Create;
 using RealEstateProjectSaleBusinessObject.DTO.Request;
 using RealEstateProjectSaleBusinessObject.DTO.Update;
 using RealEstateProjectSaleBusinessObject.Enums;
+using RealEstateProjectSaleBusinessObject.Enums.EnumHelpers;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 using Stripe;
+using Stripe.FinancialConnections;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Diagnostics.Contracts;
 
@@ -20,14 +22,19 @@ namespace RealEstateProjectSale.Controllers.ContractHistoryController
     [ApiController]
     public class ContractHistoryController : ControllerBase
     {
-        private readonly IContractHistoryServices _contracthistory;
+        private readonly IContractHistoryServices _contractHistoryService;
+        private readonly IContractServices _contractService;
+        private readonly ICustomerServices _customerService;
         private readonly IMapper _mapper;
         private readonly IFileUploadToBlobService _file;
-        public ContractHistoryController(IContractHistoryServices contracthistory, IMapper mapper, IFileUploadToBlobService file)
+        public ContractHistoryController(IContractHistoryServices contractHistoryService, IMapper mapper, IFileUploadToBlobService file,
+            IContractServices contractService, ICustomerServices customerService)
         {
-            _contracthistory = contracthistory;
+            _contractHistoryService = contractHistoryService;
+            _contractService = contractService;
             _mapper = mapper;
             _file = file;
+            _customerService = customerService;
         }
 
         [HttpGet]
@@ -38,14 +45,14 @@ namespace RealEstateProjectSale.Controllers.ContractHistoryController
         {
             try
             {
-                if (_contracthistory.GetContractHistorys() == null)
+                if (_contractHistoryService.GetContractHistorys() == null)
                 {
                     return NotFound(new
                     {
                         message = "Lịch sử chuyển nhượng không tồn tại."
                     });
                 }
-                var contracthistorys = _contracthistory.GetContractHistorys();
+                var contracthistorys = _contractHistoryService.GetContractHistorys();
                 var response = _mapper.Map<List<ContractHistoryVM>>(contracthistorys);
 
                 return Ok(response);
@@ -62,7 +69,7 @@ namespace RealEstateProjectSale.Controllers.ContractHistoryController
         [SwaggerResponse(StatusCodes.Status404NotFound, "ContractHistory không tồn tại.")]
         public IActionResult GetContractHistoryByID(Guid id)
         {
-            var contracthistory = _contracthistory.GetContractHistoryById(id);
+            var contracthistory = _contractHistoryService.GetContractHistoryById(id);
 
             if (contracthistory != null)
             {
@@ -81,11 +88,11 @@ namespace RealEstateProjectSale.Controllers.ContractHistoryController
         [SwaggerResponse(StatusCodes.Status404NotFound, "ContractHistory không tồn tại.")]
         public IActionResult GetContractHistoryByContracyID(Guid contractId)
         {
-            var contracthistory = _contracthistory.GetContractHistoryByContractID(contractId);
+            var contracthistory = _contractHistoryService.GetContractHistoryByContractID(contractId);
 
             if (contracthistory != null)
             {
-                var responese = _mapper.Map<ContractHistoryVM>(contracthistory);
+                var responese = _mapper.Map<List<ContractHistoryVM>>(contracthistory);
                 return Ok(responese);
             }
             return NotFound(new
@@ -101,7 +108,7 @@ namespace RealEstateProjectSale.Controllers.ContractHistoryController
         public IActionResult DeleteContractHistory(Guid id)
         {
 
-            var contracthistory = _contracthistory.GetContractHistoryById(id);
+            var contracthistory = _contractHistoryService.GetContractHistoryById(id);
             if (contracthistory == null)
             {
                 return NotFound(new
@@ -110,7 +117,7 @@ namespace RealEstateProjectSale.Controllers.ContractHistoryController
                 });
             }
 
-            _contracthistory.DeleteContractHistory(id);
+            _contractHistoryService.DeleteContractHistory(id);
 
             return Ok(new
             {
@@ -118,33 +125,87 @@ namespace RealEstateProjectSale.Controllers.ContractHistoryController
             });
         }
 
-
-
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new Contract History")]
         public IActionResult AddNewContractHistory([FromForm] ContractHistoryRequestDTO history)
         {
             try
             {
-                var imageUrls = _file.UploadSingleImage(history.AttachFile, "attachfile");
+                var existCode = _contractHistoryService.CheckNotarizedContractCode(history.NotarizedContractCode);
+                if (existCode != null)
+                {
+                    return BadRequest(new
+                    {
+                        message = "Mã hợp đồng công chứng đã tồn tại."
+                    });
+                }
+
+                var contract = _contractService.GetContractByID(history.ContractID);
+                if (contract == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Hợp đồng không tồn tại."
+                    });
+                }
+
+                if (contract.Status != ContractStatus.DaXacNhanHDMB.GetEnumDescription())
+                {
+                    return BadRequest(new
+                    {
+                        message = "Khách hàng chưa xác nhận hợp đồng mua bán."
+                    });
+                }
+
+                if (contract.CustomerID == history.CustomerID)
+                {
+                    return BadRequest(new
+                    {
+                        message = "Khách hàng này không được nhận chuyển nhượng."
+                    });
+                }
+
+                var existingIdentification = _customerService.CheckCustomerByIdentification(history.CustomerID);
+                if (existingIdentification != null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Khách hàng nhận chuyển nhượng chưa cập nhật giấy tờ tùy thân."
+                    });
+                }
+
+                string? blobUrl = null;
+                var attachFile = history.AttachFile;
+                if (attachFile != null)
+                {
+                    using (var pdfStream = attachFile.OpenReadStream())
+                    {
+                        blobUrl = _file.UploadSingleFile(pdfStream, attachFile.FileName, "attachfile");
+                    }
+                }
 
                 var newContractHistory = new ContractHistoryCreateDTO
                 {
                     ContractHistoryID = Guid.NewGuid(),
                     NotarizedContractCode = history.NotarizedContractCode,
                     Note = history.Note,
-                    CustomerID = history.CustomerID,
-                    ContractID = history.ContractID,
                     AttachFile = history.AttachFile,
+                    CreatedTime = DateTime.Now,
+                    CustomerID = contract.CustomerID,
+                    ContractID = history.ContractID
                 };
 
                 var contracthistory = _mapper.Map<ContractHistory>(newContractHistory);
-                contracthistory.AttachFile = imageUrls;
-                _contracthistory.AddNewContractHistory(contracthistory);
+                contracthistory.AttachFile = blobUrl;
+                _contractHistoryService.AddNewContractHistory(contracthistory);
+
+                contract.CustomerID = history.CustomerID;
+                contract.UpdatedTime = DateTime.Now;
+                _contractService.UpdateContract(contract);
 
                 return Ok(new
                 {
-                    message = "Tạo lịch sử chuyển nhượng thành công."
+                    message = "Chuyển nhượng hợp đồng thành công."
                 });
             }
             catch (Exception ex)
@@ -163,12 +224,16 @@ namespace RealEstateProjectSale.Controllers.ContractHistoryController
             try
             {
                 string? blobUrl = null;
-                if (history.AttachFile != null)
+                var attachFile = history.AttachFile;
+                if (attachFile != null)
                 {
-                    blobUrl = _file.UploadSingleImage(history.AttachFile, "attachfile");
+                    using (var pdfStream = attachFile.OpenReadStream())
+                    {
+                        blobUrl = _file.UploadSingleFile(pdfStream, attachFile.FileName, "attachfile");
+                    }
                 }
 
-                var existingHistory = _contracthistory.GetContractHistoryById(id);
+                var existingHistory = _contractHistoryService.GetContractHistoryById(id);
                 if (existingHistory != null)
                 {
                     if (!string.IsNullOrEmpty(history.NotarizedContractCode))
@@ -179,12 +244,14 @@ namespace RealEstateProjectSale.Controllers.ContractHistoryController
                     {
                         existingHistory.Note = history.Note;
                     }
-
                     if (blobUrl != null)
                     {
                         existingHistory.AttachFile = blobUrl;
                     }
-
+                    if (history.CustomerID.HasValue)
+                    {
+                        existingHistory.CustomerID = history.CustomerID.Value;
+                    }
                     if (history.CustomerID.HasValue)
                     {
                         existingHistory.CustomerID = history.CustomerID.Value;
@@ -193,7 +260,7 @@ namespace RealEstateProjectSale.Controllers.ContractHistoryController
                     {
                         existingHistory.ContractID = history.ContractID.Value;
                     }
-                    _contracthistory.UpdateContractHistory(existingHistory);
+                    _contractHistoryService.UpdateContractHistory(existingHistory);
 
                     return Ok(new
                     {

@@ -1139,6 +1139,15 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     });
                 }
 
+                var existingIdentification = _customerServices.CheckCustomerByIdentification(customerTransfereeId);
+                if (existingIdentification != null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Khách hàng nhận chuyển nhượng chưa cập nhật giấy tờ tùy thân."
+                    });
+                }
+
                 var documentReservation = _documentTemplateService.GetDocumentByDocumentName("Thỏa thuận chuyển nhượng");
                 if (documentReservation == null)
                 {
