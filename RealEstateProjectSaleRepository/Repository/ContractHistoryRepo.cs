@@ -14,10 +14,16 @@ namespace RealEstateProjectSaleRepository.Repository
         private ContractHistoryDAO _dao;
         public ContractHistoryRepo()
         {
-            _dao = new ContractHistoryDAO();        }
+            _dao = new ContractHistoryDAO();
+        }
         public void AddNewContractHistory(ContractHistory p)
         {
             _dao.AddNewContractHistory(p);
+        }
+
+        public ContractHistory CheckNotarizedContractCode(string notarizedCode)
+        {
+            return _dao.CheckNotarizedContractCode(notarizedCode);
         }
 
         public void DeleteContractHistory(Guid id)
