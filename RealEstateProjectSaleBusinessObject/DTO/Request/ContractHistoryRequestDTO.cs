@@ -11,7 +11,7 @@ namespace RealEstateProjectSaleBusinessObject.DTO.Request
     public class ContractHistoryRequestDTO
     {
         public string NotarizedContractCode { get; set; }
-        public string Note { get; set; }
+        public string? Note { get; set; }
         public IFormFile AttachFile { get; set; }
         public Guid CustomerID { get; set; }
         public Guid ContractID { get; set; }
