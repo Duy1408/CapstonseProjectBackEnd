@@ -599,10 +599,20 @@ namespace RealEstateProjectSale.Controllers.BookingController
                 });
             }
 
-            booking.Status = BookingStatus.KhongChonSanPham.GetEnumDescription();
-            _book.UpdateBooking(booking);
+            if (booking.Status != BookingStatus.KhongChonSanPham.GetEnumDescription())
+            {
 
-            await _hubContext.Clients.All.SendAsync("ReceiveBookingStatus", booking.BookingID.ToString(), booking.Status);
+                booking.Status = BookingStatus.KhongChonSanPham.GetEnumDescription();
+                _book.UpdateBooking(booking);
+
+                await _hubContext.Clients.All.SendAsync("ReceiveBookingStatus", booking.BookingID.ToString(), booking.Status);
+
+                return Ok(new
+                {
+                    message = "Cập nhật trạng thái booking thành công."
+                });
+            }
+
             return Ok(new
             {
                 message = "Cập nhật trạng thái booking thành công."
