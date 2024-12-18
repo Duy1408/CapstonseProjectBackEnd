@@ -531,7 +531,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
                         UpdatedTime = null,
                         BookingFile = null,
                         Note = "Mua trực tiếp",
-                        Status = BookingStatus.DaDatCho.GetEnumDescription(),
+                        Status = BookingStatus.DaCheckIn.GetEnumDescription(),
                         CustomerID = customerID,
                         StaffID = null,
                         ProjectCategoryDetailID = categoryDetailID,
