@@ -494,41 +494,49 @@ namespace RealEstateProjectSale.Controllers.PropertyController
                     });
                 }
 
-                booking.PropertyID = propertyId;
-                booking.Status = BookingStatus.DaChonSanPham.GetEnumDescription();
-                _booking.UpdateBooking(booking);
-
-                string nextContractCode = GenerateNextContractCode();
-                var newContract = new ContractCreateDTO
+                if (existingProperty.Status != PropertyStatus.GiuCho.GetEnumDescription())
                 {
-                    ContractID = Guid.NewGuid(),
-                    ContractCode = nextContractCode,
-                    ContractType = ContractType.DatCoc.GetEnumDescription(),
-                    CreatedTime = DateTime.Now,
-                    UpdatedTime = null,
-                    ExpiredTime = DateTime.Now.AddDays(1),
-                    TotalPrice = openDetail.Price,
-                    Description = null,
-                    ContractDepositFile = null,
-                    ContractSaleFile = null,
-                    PriceSheetFile = null,
-                    ContractTransferFile = null,
-                    Status = ContractStatus.ChoXacNhanTTGD.GetEnumDescription(),
-                    DocumentTemplateID = documentReservation.DocumentTemplateID,
-                    BookingID = booking.BookingID,
-                    CustomerID = customerID,
-                    PaymentProcessID = null,
-                    PromotionDetailID = null
-                };
+                    booking.PropertyID = propertyId;
+                    booking.Status = BookingStatus.DaChonSanPham.GetEnumDescription();
+                    _booking.UpdateBooking(booking);
 
-                var _contract = _mapper.Map<Contract>(newContract);
-                _contractServices.AddNewContract(_contract);
+                    string nextContractCode = GenerateNextContractCode();
+                    var newContract = new ContractCreateDTO
+                    {
+                        ContractID = Guid.NewGuid(),
+                        ContractCode = nextContractCode,
+                        ContractType = ContractType.DatCoc.GetEnumDescription(),
+                        CreatedTime = DateTime.Now,
+                        UpdatedTime = null,
+                        ExpiredTime = DateTime.Now.AddDays(1),
+                        TotalPrice = openDetail.Price,
+                        Description = null,
+                        ContractDepositFile = null,
+                        ContractSaleFile = null,
+                        PriceSheetFile = null,
+                        ContractTransferFile = null,
+                        Status = ContractStatus.ChoXacNhanTTGD.GetEnumDescription(),
+                        DocumentTemplateID = documentReservation.DocumentTemplateID,
+                        BookingID = booking.BookingID,
+                        CustomerID = customerID,
+                        PaymentProcessID = null,
+                        PromotionDetailID = null
+                    };
 
-                existingProperty.Status = PropertyStatus.GiuCho.GetEnumDescription();
-                existingProperty.PriceSold = openDetail.Price;
-                _pro.UpdateProperty(existingProperty);
+                    var _contract = _mapper.Map<Contract>(newContract);
+                    _contractServices.AddNewContract(_contract);
 
-                await _hubContext.Clients.All.SendAsync("ReceivePropertyStatus", propertyId.ToString(), existingProperty.Status);
+                    existingProperty.Status = PropertyStatus.GiuCho.GetEnumDescription();
+                    existingProperty.PriceSold = openDetail.Price;
+                    _pro.UpdateProperty(existingProperty);
+
+                    await _hubContext.Clients.All.SendAsync("ReceivePropertyStatus", propertyId.ToString(), existingProperty.Status);
+                    return Ok(new
+                    {
+                        message = "Cập nhật căn thành công."
+                    });
+                }
+
                 return Ok(new
                 {
                     message = "Cập nhật căn thành công."
