@@ -62,7 +62,7 @@ namespace RealEstateProjectSale.Controllers
             {
                 var projects = _project.GetProjects();
 
-                if (projects == null || !projects.Any())
+                if (projects == null)
                 {
                     return NotFound(new
                     {
