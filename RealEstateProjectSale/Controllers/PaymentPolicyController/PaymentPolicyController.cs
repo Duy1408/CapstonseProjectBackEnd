@@ -24,7 +24,7 @@ namespace RealEstateProjectSale.Controllers.PaymentPolicyController
             _mapper = mapper;
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet]
         [SwaggerOperation(Summary = "Get All PaymentPolicy")]
         public IActionResult GetAllPaymentPolicy()
