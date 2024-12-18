@@ -26,7 +26,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSignalR(options =>
 {
     options.ClientTimeoutInterval = TimeSpan.FromSeconds(120); // Server chờ tín hiệu từ client trong 60 giây
-    options.KeepAliveInterval = TimeSpan.FromSeconds(5); // Server gửi ping mỗi 15 giây
+    options.KeepAliveInterval = TimeSpan.FromSeconds(10); // Server gửi ping mỗi 15 giây
     options.HandshakeTimeout = TimeSpan.FromSeconds(120); // Thời gian cho phép để hoàn thành bắt tay
 });
 
