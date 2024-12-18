@@ -653,6 +653,8 @@ namespace RealEstateProjectSale.Controllers.BookingController
                     {
                         blobUrl = _fileService.UploadSingleImage(book.RefundImage, "refundimage");
                     }
+
+                    existingBook.RefundImage = blobUrl;
                     existingBook.Status = BookingStatus.Dahoantien.GetEnumDescription();
                     existingBook.UpdatedTime = DateTime.Now;
                     _book.UpdateBooking(existingBook);
