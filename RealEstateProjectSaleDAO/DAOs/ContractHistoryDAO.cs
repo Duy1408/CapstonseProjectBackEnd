@@ -39,10 +39,10 @@ namespace RealEstateProjectSaleDAO.DAOs
             return _context.ContractHistories.Include(c => c.Contract).Include(c => c.Customer).ToList();
         }
 
-        public bool AddNewContractHistory(ContractHistory c)
+        public bool AddNewContractHistory(ContractHistory co)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            var a = _context.ContractHistories.SingleOrDefault(c => c.ContractHistoryID == c.ContractHistoryID);
+            var a = _context.ContractHistories.SingleOrDefault(c => c.ContractHistoryID == co.ContractHistoryID);
 
             if (a != null)
             {
@@ -50,7 +50,7 @@ namespace RealEstateProjectSaleDAO.DAOs
             }
             else
             {
-                _context.ContractHistories.Add(c);
+                _context.ContractHistories.Add(co);
                 _context.SaveChanges();
                 return true;
 
