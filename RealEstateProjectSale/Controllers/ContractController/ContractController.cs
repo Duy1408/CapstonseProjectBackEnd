@@ -1086,10 +1086,11 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     });
                 }
 
-                var bookings = _bookServices.CheckCustomerBooking(booking.OpeningForSaleID, booking.ProjectCategoryDetailID, contract.CustomerID);
-                var excludedCustomerIds = bookings.Select(b => b.CustomerID).ToHashSet();
 
-                var filteredCustomers = customers.Where(c => !excludedCustomerIds.Contains(c.CustomerID))
+                //var bookings = _bookServices.CheckCustomerBooking(booking.OpeningForSaleID, booking.ProjectCategoryDetailID, contract.CustomerID);
+                //var excludedCustomerIds = bookings.Select(b => b.CustomerID).ToHashSet();
+
+                var filteredCustomers = customers//.Where(c => !excludedCustomerIds.Contains(c.CustomerID))
                                                  .Where(c => c.CustomerID != contract.CustomerID)
                                                  .Where(c => c.IdentityCardNumber != null)
                                                  .ToList();
