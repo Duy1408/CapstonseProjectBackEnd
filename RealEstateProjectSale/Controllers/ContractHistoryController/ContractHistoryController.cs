@@ -149,7 +149,7 @@ namespace RealEstateProjectSale.Controllers.ContractHistoryController
                     });
                 }
 
-                if (contract.Status != ContractStatus.DaXacNhanHDMB.GetEnumDescription())
+                if (contract.Status != ContractStatus.DaXacNhanHDMB.GetEnumDescription() && contract.Status != ContractStatus.DaBanGiaoQSHD.GetEnumDescription())
                 {
                     return BadRequest(new
                     {
