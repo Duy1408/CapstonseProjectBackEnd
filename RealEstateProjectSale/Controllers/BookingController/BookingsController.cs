@@ -545,7 +545,9 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
                     return Ok(new
                     {
-                        message = "Tạo Booking thành công."
+                        message = "Tạo Booking thành công." ,
+                        Bookingid = newBookDirect.BookingID
+
                     });
 
                 }
