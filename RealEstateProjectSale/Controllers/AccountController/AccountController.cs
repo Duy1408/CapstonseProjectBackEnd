@@ -20,12 +20,13 @@ namespace RealEstateProjectSale.Controllers.AccountController
 
         private readonly IAccountServices _accountServices;
         private readonly IMapper _mapper;
+        private readonly IStaffServices _staffServices;
 
-        public AccountController(IAccountServices accountServices, IMapper mapper)
+        public AccountController(IAccountServices accountServices, IMapper mapper, IStaffServices staffServices)
         {
             _accountServices = accountServices;
             _mapper = mapper;
-
+            _staffServices = staffServices;
         }
 
         [Authorize(Roles = "Admin")]
@@ -78,6 +79,29 @@ namespace RealEstateProjectSale.Controllers.AccountController
 
         }
 
+        //[Authorize(Roles = "Staff")]
+        [HttpGet("staff/{accountid}")]
+        [SwaggerOperation(Summary = "Get Staff BY Account ID")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Trả về thông tin tài nhân viên.", typeof(StaffVM))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Tài khoản không tồn tại.")]
+        public IActionResult GetStaffByAccountID(Guid accountid)
+        {
+          
+            var staff = _staffServices.GetStaffProfileByAccountID(accountid);
+
+            if (staff != null)
+            {
+                var responese = _mapper.Map<StaffVM>(staff);
+
+                return Ok(responese);
+            }
+
+            return NotFound(new
+            {
+                message = "Tài khoản không tồn tại."
+            });
+
+        }
 
         [Authorize(Roles = "Admin")]
         [HttpPost]

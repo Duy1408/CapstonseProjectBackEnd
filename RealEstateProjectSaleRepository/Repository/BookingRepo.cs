@@ -36,6 +36,11 @@ namespace RealEstateProjectSaleRepository.Repository
             return dao.CheckExistingBooking(openForSaleID, categoryDetailID, customerID);
         }
 
+        public void DeleteBookingByID(Guid id)
+        {
+            dao.DeleteBookingByID(id);
+        }
+
         public List<Booking> GetBookingByBooked()
         {
             return dao.GetBookingByBooked();

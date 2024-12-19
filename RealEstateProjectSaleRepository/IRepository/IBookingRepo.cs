@@ -36,5 +36,7 @@ namespace RealEstateProjectSaleRepository.IRepository
 
         bool ChangeStatusBooking(Booking booking);
 
+        public void DeleteBookingByID(Guid id);
+
     }
 }

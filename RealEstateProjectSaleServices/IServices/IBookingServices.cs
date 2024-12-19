@@ -35,5 +35,7 @@ namespace RealEstateProjectSaleServices.IServices
         string GenerateDocumentContent(Guid bookingId);
 
         bool ChangeStatusBooking(Booking booking);
+        public void DeleteBookingByID(Guid id);
+
     }
 }

@@ -684,5 +684,33 @@ namespace RealEstateProjectSale.Controllers.BookingController
             }
         }
 
+
+        [HttpDelete("book/{id}")]
+        [SwaggerOperation(Summary = "Delete Booking by ID")]
+        public IActionResult DeleteBookingByID(Guid id)
+        {
+            try
+            {
+                var book = _book.GetBookingById(id);
+                if (book != null)
+                {
+                    _book.DeleteBookingByID(id);
+                    return Ok(new
+                    {
+                        message = "Xóa booking thành công."
+                    });
+                }
+
+                return NotFound(new
+                {
+                    message = "Booking không tồn tại."
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }

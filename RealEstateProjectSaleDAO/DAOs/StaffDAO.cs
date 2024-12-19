@@ -36,9 +36,9 @@ namespace RealEstateProjectSaleDAO.DAOs
         {
             try
             {
-                var account = _context.Staffs.Include(a => a.Account)
+                var staff = _context.Staffs.Include(a => a.Account)
                                                .SingleOrDefault(c => c.AccountID == id);
-                return account;
+                return staff;
             }
             catch (Exception ex)
             {
