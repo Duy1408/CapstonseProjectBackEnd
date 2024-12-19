@@ -80,13 +80,13 @@ namespace RealEstateProjectSale.Controllers.AccountController
         }
 
         [Authorize(Roles = "Staff")]
-        [HttpGet("{account-id}")]
+        [HttpGet("{accountid}")]
         [SwaggerOperation(Summary = "Get Staff BY Account ID")]
         [SwaggerResponse(StatusCodes.Status200OK, "Trả về thông tin tài nhân viên.", typeof(AccountVM))]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Tài khoản không tồn tại.")]
-        public IActionResult GetStaffByAccountID(Guid id)
+        public IActionResult GetStaffByAccountID(Guid accountid)
         {
-            var account = _accountServices.GetAccountByID(id);
+            var account = _accountServices.GetAccountByID(accountid);
             var staff = _staffServices.GetStaffProfileByAccountID(account.AccountID);
 
             if (staff != null)
