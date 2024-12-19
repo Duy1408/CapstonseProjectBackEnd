@@ -82,7 +82,7 @@ namespace RealEstateProjectSale.Controllers.AccountController
         [Authorize(Roles = "Staff")]
         [HttpGet("{accountid}")]
         [SwaggerOperation(Summary = "Get Staff BY Account ID")]
-        [SwaggerResponse(StatusCodes.Status200OK, "Trả về thông tin tài nhân viên.", typeof(AccountVM))]
+        [SwaggerResponse(StatusCodes.Status200OK, "Trả về thông tin tài nhân viên.", typeof(StaffVM))]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Tài khoản không tồn tại.")]
         public IActionResult GetStaffByAccountID(Guid accountid)
         {
