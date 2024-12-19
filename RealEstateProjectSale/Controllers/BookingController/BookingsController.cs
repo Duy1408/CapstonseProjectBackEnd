@@ -687,7 +687,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
         [HttpDelete("book/{id}")]
         [SwaggerOperation(Summary = "Delete Booking by ID")]
-        public IActionResult DeleteBookingByID(Guid id)
+        public IActionResult Delete(Guid id)
         {
             try
             {
@@ -695,6 +695,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
                 if (book != null)
                 {
                     _book.DeleteBookingByID(id);
+                    
                     return Ok(new
                     {
                         message = "Xóa booking thành công."
