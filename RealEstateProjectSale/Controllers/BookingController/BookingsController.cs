@@ -687,7 +687,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
         [HttpDelete("book/{id}")]
         [SwaggerOperation(Summary = "Delete Booking by ID")]
-        public IActionResult Delete(Guid id)
+        public IActionResult DeleteBookingBuyDirectly(Guid id)
         {
             try
             {
