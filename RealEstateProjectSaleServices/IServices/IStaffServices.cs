@@ -14,5 +14,7 @@ namespace RealEstateProjectSaleServices.IServices
         Staff GetStaffByID(Guid id);
         void UpdateStaff(Staff staff);
         bool ChangeStatusStaff(Staff staff);
+
+        Staff GetStaffProfileByAccountID(Guid id);
     }
 }

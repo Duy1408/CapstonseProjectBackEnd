@@ -14,5 +14,6 @@ namespace RealEstateProjectSaleRepository.IRepository
         Staff GetStaffByID(Guid id);
         void UpdateStaff(Staff staff);
         bool ChangeStatusStaff(Staff staff);
+        Staff GetStaffProfileByAccountID(Guid id);
     }
 }

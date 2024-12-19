@@ -31,6 +31,21 @@ namespace RealEstateProjectSaleDAO.DAOs
             }
         }
 
+
+        public Staff GetStaffProfileByAccountID(Guid id)
+        {
+            try
+            {
+                var account = _context.Staffs.Include(a => a.Account)
+                                               .SingleOrDefault(c => c.AccountID == id);
+                return account;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public void AddNewStaff(Staff staff)
         {
             try

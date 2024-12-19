@@ -21,6 +21,11 @@ namespace RealEstateProjectSaleRepository.Repository
 
         public Staff GetStaffByID(Guid id) => dao.GetStaffByID(id);
 
+        public Staff GetStaffProfileByAccountID(Guid id)
+        {
+            return dao.GetStaffProfileByAccountID(id);
+        }
+
         public void UpdateStaff(Staff staff) => dao.UpdateStaff(staff);
 
     }

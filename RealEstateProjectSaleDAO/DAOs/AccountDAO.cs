@@ -74,6 +74,7 @@ namespace RealEstateProjectSaleDAO.DAOs
             }
         }
 
+
         public void UpdateAccount(Account account)
         {
             try
