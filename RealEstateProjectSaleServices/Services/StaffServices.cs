@@ -25,5 +25,9 @@ namespace RealEstateProjectSaleServices.Services
 
         public bool ChangeStatusStaff(Staff staff) => _staffRepo.ChangeStatusStaff(staff);
 
+        public Staff GetStaffProfileByAccountID(Guid id)
+        {
+         return   _staffRepo.GetStaffProfileByAccountID(id);
+        }
     }
 }
