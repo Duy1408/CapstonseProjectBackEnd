@@ -158,5 +158,10 @@ namespace RealEstateProjectSaleServices.Services
         {
             return _book.CheckCustomerBooking(openForSaleID, categoryDetailID, customerID);
         }
+
+        public void DeleteBookingByID(Guid id)
+        {
+            _book.DeleteBookingByID(id);
+        }
     }
 }

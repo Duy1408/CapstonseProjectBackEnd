@@ -324,5 +324,17 @@ namespace RealEstateProjectSaleDAO.DAOs
             }
         }
 
+
+        public void DeleteBookingByID(Guid id)
+        {
+            var _context = new RealEstateProjectSaleSystemDBContext();
+            var book = _context.Bookings!.SingleOrDefault(b => b.BookingID == id);
+            if (book != null)
+            {
+                _context.Remove(book);
+                _context.SaveChanges();
+            }
+        }
+
     }
 }
