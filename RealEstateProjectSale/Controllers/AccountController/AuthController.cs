@@ -62,7 +62,8 @@ namespace RealEstateProjectSale.Controllers.AccountController
                     return Ok(new
                     {
                         token = token,
-                        role = accountExists.Role!.RoleName
+                        role = accountExists.Role!.RoleName,
+                        accountid = accountExists.AccountID,
                     });
 
                 }
