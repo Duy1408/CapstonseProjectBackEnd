@@ -33,7 +33,7 @@ namespace RealEstateProjectSaleRepository.Repository
 
         public List<ContractHistory> GetContractHistoryByContractID(Guid id)
         {
-            return _dao.GetBlockByContractID(id);
+            return _dao.GetContractHistoryByContractID(id);
         }
 
         public ContractHistory GetContractHistoryById(Guid id)

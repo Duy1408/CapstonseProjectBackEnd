@@ -65,7 +65,7 @@ namespace RealEstateProjectSaleDAO.DAOs
 
         }
 
-        public List<ContractHistory> GetBlockByContractID(Guid id)
+        public List<ContractHistory> GetContractHistoryByContractID(Guid id)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
             return _context.ContractHistories.Include(c => c.Contract)
