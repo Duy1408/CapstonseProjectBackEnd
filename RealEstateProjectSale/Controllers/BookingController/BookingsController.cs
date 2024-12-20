@@ -17,10 +17,12 @@ using RealEstateProjectSaleBusinessObject.DTO.Create;
 using RealEstateProjectSaleBusinessObject.DTO.Update;
 using RealEstateProjectSaleBusinessObject.Enums;
 using RealEstateProjectSaleBusinessObject.Enums.EnumHelpers;
+using RealEstateProjectSaleBusinessObject.Model;
 using RealEstateProjectSaleBusinessObject.ViewModels;
 using RealEstateProjectSaleServices.IServices;
 using RealEstateProjectSaleServices.Services;
 using Stripe;
+using Stripe.FinancialConnections;
 using Swashbuckle.AspNetCore.Annotations;
 using static System.Reflection.Metadata.BlobBuilder;
 
@@ -39,12 +41,15 @@ namespace RealEstateProjectSale.Controllers.BookingController
         private readonly IProjectCategoryDetailServices _detailServices;
         private readonly IMapper _mapper;
         private readonly IHubContext<PropertyHub> _hubContext;
+        private readonly IEmailService _emailService;
+        private readonly IAccountServices _accountService;
+
 
 
         public BookingsController(IBookingServices book, IFileUploadToBlobService fileService,
                     IMapper mapper, IDocumentTemplateService documentService, IOpeningForSaleServices openService,
                     ICustomerServices customerServices, IProjectServices projectService, IProjectCategoryDetailServices detailServices,
-                    IHubContext<PropertyHub> hubContext)
+                    IHubContext<PropertyHub> hubContext, IEmailService emailService, IAccountServices accountService)
         {
             _book = book;
             _fileService = fileService;
@@ -55,6 +60,8 @@ namespace RealEstateProjectSale.Controllers.BookingController
             _projectService = projectService;
             _detailServices = detailServices;
             _hubContext = hubContext;
+            _emailService = emailService;
+            _accountService = accountService;
         }
 
         [Authorize(Roles = "Admin,Staff")]
@@ -670,6 +677,30 @@ namespace RealEstateProjectSale.Controllers.BookingController
                     existingBook.Status = BookingStatus.Dahoantien.GetEnumDescription();
                     existingBook.UpdatedTime = DateTime.Now;
                     _book.UpdateBooking(existingBook);
+                    var existcustomer = _customerServices.GetCustomerByID(existingBook.CustomerID);
+                    if (existcustomer == null)
+                    {
+                        return NotFound(new
+                        {
+                            message = "Khách hàng không tồn tại."
+                        });
+                    }
+                    var existaccount = _accountService.GetAccountByID(existcustomer.AccountID);
+
+                    Mailrequest mailrequest = new Mailrequest();
+                    mailrequest.ToEmail = existaccount.Email;
+                    mailrequest.Subject = "Xác nhận hoàn tiền";
+                    mailrequest.Body =
+                        $"<h5>THÔNG BÁO ĐÃ HOÀN TIỀN GIỮ CHỖ</h5>" +
+                        $"<div>Kính gửi quý khách {existingBook.Customer.FullName}</div>" +
+                        $"<div>Số tiền đặt giữ chỗ đã được hoàn về tài khoản đăng ký của quý khách.</div>" +
+                        $"<div>Đường link xem ủy nhiệm chi.</div>" +
+                        $"<a href='{existingBook.RefundImage}'>{existingBook.RefundImage}</a>" +
+                        $"<div>Nếu quý khách hàng chưa nhận được vui lòng reply email này. </div>"+
+                        $"<div>Xin cảm ơn. </div>";
+
+                    _emailService.SendEmailAsync(mailrequest);
+
                     return Ok(new
                     {
                         message = "Upload thành công ủy nhiệm chi"
