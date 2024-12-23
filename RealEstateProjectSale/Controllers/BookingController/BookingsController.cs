@@ -552,9 +552,8 @@ namespace RealEstateProjectSale.Controllers.BookingController
 
                     return Ok(new
                     {
-                        message = "Tạo Booking thành công." ,
+                        message = "Tạo Booking thành công.",
                         bookingID = newBookDirect.BookingID
-
                     });
 
                 }
@@ -697,7 +696,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
                         $"<div>Số tiền đặt giữ chỗ đã được hoàn về tài khoản đăng ký của quý khách.</div>" +
                         $"<div>Đường link xem ủy nhiệm chi.</div>" +
                         $"<a href='{existingBook.RefundImage}'>{existingBook.RefundImage}</a>" +
-                        $"<div>Nếu quý khách hàng chưa nhận được vui lòng reply email này. </div>"+
+                        $"<div>Nếu quý khách hàng chưa nhận được vui lòng reply email này. </div>" +
                         $"<div>Xin cảm ơn. </div>";
 
                     _emailService.SendEmailAsync(mailrequest);
@@ -729,7 +728,7 @@ namespace RealEstateProjectSale.Controllers.BookingController
                 if (book != null)
                 {
                     _book.DeleteBookingByID(id);
-                    
+
                     return Ok(new
                     {
                         message = "Xóa booking thành công."
@@ -745,6 +744,45 @@ namespace RealEstateProjectSale.Controllers.BookingController
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        [HttpGet("numerical/{id}")]
+        [SwaggerOperation(Summary = "Get Booking By ID with Check-In Order")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Trả về thông tin Booking và số thứ tự theo CheckInTime.", typeof(int))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Booking không tồn tại.")]
+        public IActionResult GetBookingByNumericalOrder(Guid id)
+        {
+            var booking = _book.GetBookingById(id);
+
+            if (booking == null)
+            {
+                return NotFound(new
+                {
+                    message = "Booking không tồn tại."
+                });
+            }
+
+            if (booking.CheckInTime == null || booking.Status != BookingStatus.DaCheckIn.GetEnumDescription())
+            {
+                return BadRequest(new
+                {
+                    message = "Booking không hợp lệ để tính số thứ tự (phải có CheckInTime và Status = 'Đã check in')."
+                });
+            }
+
+            var allCheckInBookings = _book.GetBookings()
+                .Where(b => b.Status == BookingStatus.DaCheckIn.GetEnumDescription()
+                        && b.CheckInTime != null
+                        && b.OpeningForSaleID == booking.OpeningForSaleID)
+                .OrderBy(b => b.CheckInTime)
+                .ToList();
+
+            var index = allCheckInBookings.FindIndex(b => b.BookingID == id);
+
+            return Ok(new
+            {
+                orderIndex = index
+            });
         }
 
     }
