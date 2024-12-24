@@ -76,7 +76,7 @@ namespace RealEstateProjectSaleDAO.DAOs
         public bool UpdateContractHistory(ContractHistory c)
         {
             var _context = new RealEstateProjectSaleSystemDBContext();
-            var a = _context.ContractHistories.SingleOrDefault(c => c.ContractHistoryID == c.ContractHistoryID);
+            var a = _context.ContractHistories.SingleOrDefault(d => d.ContractHistoryID == c.ContractHistoryID);
 
             if (a == null)
             {
