@@ -202,6 +202,7 @@ namespace RealEstateProjectSaleServices.Services
             }
             var openDetail = _openDetailService.GetDetailByPropertyIdOpenId(propertyId, booking.OpeningForSaleID);
             var unitType = _unitTypeService.GetUnitTypeByID(property.UnitTypeID);
+            var propertyType = _propertyTypeService.GetPropertyTypeByID(unitType.PropertyTypeID);
 
             //Tính tiền
             var pricePromotion = openDetail.Price - promotionDetail.Amount;
@@ -224,17 +225,101 @@ namespace RealEstateProjectSaleServices.Services
                                      .Replace("{UpdatedTimeContract}", updatedTime)
                                      .Replace("{NetFloorArea}", unitType.NetFloorArea.ToString())
                                      .Replace("{GrossFloorArea}", unitType.GrossFloorArea.ToString())
-                                     .Replace("{PriceOpen}", openDetail.Price.ToString())
-                                     .Replace("{AmountPromotion}", promotionDetail.Amount.ToString())
-                                     .Replace("{VAT}", vat.ToString())
-                                     .Replace("{PriceIncludingVAT}", priceIncludingVAT.ToString())
-                                     .Replace("{MaintenanceCost}", maintenanceCost.ToString())
-                                     .Replace("{TotalPrice}", totalPrice.ToString())
+                                     .Replace("{PriceOpen}", openDetail.Price.ToString("N0", new CultureInfo("vi-VN")))
+                                     .Replace("{PropertyTypeName}", propertyType.PropertyTypeName.ToString())
+                                     .Replace("{AmountPromotion}", promotionDetail.Amount.ToString("N0", new CultureInfo("vi-VN")))
+                                     .Replace("{PricePromotion}", pricePromotion.ToString("N0", new CultureInfo("vi-VN")))
+                                     .Replace("{VAT}", vat.ToString("N0", new CultureInfo("vi-VN")))
+                                     .Replace("{PriceIncludingVAT}", priceIncludingVAT.ToString("N0", new CultureInfo("vi-VN")))
+                                     .Replace("{MaintenanceCost}", maintenanceCost.ToString("N0", new CultureInfo("vi-VN")))
+                                     .Replace("{TotalPrice}", totalPrice.ToString("N0", new CultureInfo("vi-VN")))
                                      .Replace("{PaymentProcessTable}", paymentProcessTableHtml);
 
             return htmlContent;
 
         }
+
+        //public string GeneratePaymentProcessTable(Guid contractId, Guid? paymentprocessId, double? totalPrice)
+        //{
+        //    var contract = _contractRepo.GetContractByID(contractId);
+        //    var booking = _bookingService.GetBookingById(contract.BookingID);
+
+        //    var pmtId = paymentprocessId.GetValueOrDefault(Guid.Empty);
+        //    if (pmtId == Guid.Empty)
+        //    {
+        //        throw new ArgumentException("Booking không có căn hộ.");
+        //    }
+        //    var paymentDetails = _pmtDetailService.GetPaymentProcessDetailByPaymentProcessID(pmtId)
+        //                                  .OrderBy(detail => detail.PaymentStage)
+        //                                  .ToList();
+
+        //    double? totalAmount = totalPrice;
+        //    double? firstAmount = paymentDetails.FirstOrDefault()?.Amount;
+        //    var tableHtml = new StringBuilder();
+
+        //    //Ngày đợt 1
+        //    DateTime periodFirst = DateTime.Now;
+
+        //    for (int i = 0; i < paymentDetails.Count; i++)
+        //    {
+        //        var detail = paymentDetails[i];
+        //        string paymentStage = detail.PaymentStage > 0 ? $"Đợt {detail.PaymentStage}" : "Đợt 1: Ký TTĐC";
+
+        //        //Tính Period ở ContractPaymentDetail
+        //        string period;
+        //        if (detail.PaymentStage == 1)
+        //        {
+        //            period = periodFirst.ToString("dd-MM-yyyy");
+        //        }
+        //        else if (detail.DurationDate.HasValue)
+        //        {
+        //            // Cộng ngày từ đợt 1
+        //            DateTime calculatedDate = periodFirst.AddDays(detail.DurationDate.Value);
+        //            period = calculatedDate.ToString("dd-MM-yyyy");
+        //        }
+        //        else
+        //        {
+        //            period = "";
+        //        }
+
+        //        string percentage = detail.Percentage.HasValue ? $"{(detail.Percentage.Value * 100):N0}%" : "0%";
+
+        //        double? amountValue;
+
+        //        // Kiểm tra nếu là dòng cuối cùng
+        //        if (i == paymentDetails.Count - 1)
+        //        {
+        //            // Nếu là dòng cuối cùng, tính amount theo công thức trừ tiền đợt 1 và giữ chỗ booking
+        //            amountValue = (totalAmount * (detail.Percentage ?? 0)) - (firstAmount ?? 0) - (booking.DepositedPrice ?? 0);
+        //        }
+        //        else
+        //        {
+        //            var amountStage = (detail.Amount == 0) ? null : detail.Amount;
+
+        //            // Tính amount bình thường nếu không phải là dòng cuối
+        //            amountValue = amountStage ?? (totalAmount * (detail.Percentage ?? 0));
+        //        }
+
+        //        string amount = $"{amountValue:N0} VND";
+
+        //        tableHtml.Append($@"
+        //        <tr>
+        //            <td>{paymentStage}: {detail.Description}</td>
+        //            <td>{period}</td>
+        //            <td style='text-align:center'>{percentage}</td>
+        //            <td style='text-align:right'>{amount}</td>
+        //        </tr>");
+        //    }
+
+        //    tableHtml.Append($@"
+        //    <tr>
+        //        <td colspan='3' style='text-align:right'><strong>Tổng cộng</strong></td>
+        //        <td style='background-color:#d4a014; text-align:right'><strong>{totalAmount:N0} VND</strong></td>
+        //    </tr>");
+
+        //    return tableHtml.ToString();
+
+        //}
 
         public string GeneratePaymentProcessTable(Guid contractId, Guid? paymentprocessId, double? totalPrice)
         {
@@ -250,8 +335,12 @@ namespace RealEstateProjectSaleServices.Services
                                           .OrderBy(detail => detail.PaymentStage)
                                           .ToList();
 
-            double? totalAmount = totalPrice;
-            double? firstAmount = paymentDetails.FirstOrDefault()?.Amount;
+            decimal? totalAmount = (decimal)totalPrice.GetValueOrDefault(0);
+            decimal? firstAmount = (decimal?)paymentDetails.FirstOrDefault()?.Amount;
+            decimal? depositedPrice = booking.DepositedPrice.HasValue
+                                ? (decimal?)booking.DepositedPrice.Value
+                                : null;
+
             var tableHtml = new StringBuilder();
 
             //Ngày đợt 1
@@ -280,43 +369,142 @@ namespace RealEstateProjectSaleServices.Services
                 }
 
                 string percentage = detail.Percentage.HasValue ? $"{(detail.Percentage.Value * 100):N0}%" : "0%";
+                decimal percentageDecimal = (decimal)(detail.Percentage ?? 0);
 
-                double? amountValue;
+                decimal? amountValue;
 
                 // Kiểm tra nếu là dòng cuối cùng
                 if (i == paymentDetails.Count - 1)
                 {
                     // Nếu là dòng cuối cùng, tính amount theo công thức trừ tiền đợt 1 và giữ chỗ booking
-                    amountValue = (totalAmount * (detail.Percentage ?? 0)) - (firstAmount ?? 0) - (booking.DepositedPrice ?? 0);
+                    amountValue = (totalAmount * percentageDecimal) - (firstAmount ?? 0) - (depositedPrice ?? 0);
                 }
                 else
                 {
                     var amountStage = (detail.Amount == 0) ? null : detail.Amount;
-
+                    decimal? amountStageDecimal = amountStage.HasValue ? (decimal?)amountStage.Value : null;
                     // Tính amount bình thường nếu không phải là dòng cuối
-                    amountValue = amountStage ?? (totalAmount * (detail.Percentage ?? 0));
+                    amountValue = amountStageDecimal ?? (totalAmount * percentageDecimal);
                 }
 
                 string amount = $"{amountValue:N0} VND";
+
+                string? method;
+                if (detail.PaymentStage == 1)
+                {
+                    method = "Theo TTĐC đảm bảo ký kết HĐMB";
+                }
+                else if (i == paymentDetails.Count - 1)
+                {
+                    method = $"(Tổng giá bán) x {detail.Percentage.Value} - (Giá tiền đặt cọc đợt 1) - (Tiền giữ chỗ)";
+                }
+                else
+                {
+                    method = $"(Tổng giá bán) x {detail.Percentage.Value}";
+                }
 
                 tableHtml.Append($@"
                 <tr>
                     <td>{paymentStage}: {detail.Description}</td>
                     <td>{period}</td>
                     <td style='text-align:center'>{percentage}</td>
+                    <td>{method}</td>
                     <td style='text-align:right'>{amount}</td>
                 </tr>");
             }
 
             tableHtml.Append($@"
             <tr>
-                <td colspan='3' style='text-align:right'><strong>Tổng cộng</strong></td>
+                <td colspan='4' style='text-align:right'><strong>Tổng cộng</strong></td>
                 <td style='background-color:#d4a014; text-align:right'><strong>{totalAmount:N0} VND</strong></td>
             </tr>");
 
             return tableHtml.ToString();
 
         }
+
+        //public void CreateContractPaymentDetail(Guid contractId)
+        //{
+        //    var contract = _contractRepo.GetContractByID(contractId);
+        //    var pmtId = contract.PaymentProcessID.GetValueOrDefault(Guid.Empty);
+        //    if (pmtId == Guid.Empty)
+        //    {
+        //        throw new ArgumentException("Booking không có căn hộ.");
+        //    }
+        //    var paymentDetails = _pmtDetailService.GetPaymentProcessDetailByPaymentProcessID(pmtId)
+        //                          .OrderBy(detail => detail.PaymentStage)
+        //                          .ToList();
+        //    var booking = _bookingService.GetBookingById(contract.BookingID);
+        //    var propertyId = booking.PropertyID.GetValueOrDefault(Guid.Empty);
+        //    if (pmtId == Guid.Empty)
+        //    {
+        //        throw new ArgumentException("Booking không có căn hộ.");
+        //    }
+        //    var property = _propertyService.GetPropertyById(propertyId);
+
+        //    var categoryDetail = _detailService.GetProjectCategoryDetailByID(booking.ProjectCategoryDetailID);
+        //    var project = _projectService.GetProjectById(categoryDetail.ProjectID);
+
+        //    double? totalAmount = property.PriceSold;
+        //    double? firstAmount = paymentDetails.FirstOrDefault()?.Amount;
+
+        //    //Ngày đợt 1
+        //    DateTime periodFirst = DateTime.Now;
+
+        //    for (int i = 0; i < paymentDetails.Count; i++)
+        //    {
+        //        var detail = paymentDetails[i];
+        //        double? amountValue;
+
+        //        // Kiểm tra nếu là dòng cuối cùng
+        //        if (i == paymentDetails.Count - 1)
+        //        {
+        //            // Nếu là dòng cuối cùng, tính amount theo công thức trừ tiền đợt 1 và giữ chỗ booking
+        //            amountValue = (totalAmount * (detail.Percentage ?? 0)) - (firstAmount ?? 0) - (booking.DepositedPrice ?? 0);
+        //        }
+        //        else
+        //        {
+        //            var amountStage = (detail.Amount == 0) ? null : detail.Amount;
+
+        //            // Tính amount bình thường nếu không phải là dòng cuối
+        //            amountValue = amountStage ?? (totalAmount * (detail.Percentage ?? 0));
+        //        }
+
+        //        amountValue = amountValue.HasValue ? Math.Round(amountValue.Value) : (double?)null;
+
+        //        // Tính toán Period
+        //        DateTime? period = null;
+        //        if (detail.PaymentStage == 1)
+        //        {
+        //            period = periodFirst; // Ngày hiện tại cho đợt 1
+        //        }
+        //        else if (detail.DurationDate.HasValue)
+        //        {
+        //            // Cộng ngày từ đợt 1
+        //            period = periodFirst.AddDays(detail.DurationDate.Value);
+        //        }
+
+        //        // Tạo đối tượng chi tiết thanh toán và lưu vào cơ sở dữ liệu
+        //        var contractDetail = new ContractPaymentDetailCreateDTO
+        //        {
+        //            ContractPaymentDetailID = Guid.NewGuid(),
+        //            PaymentRate = detail.PaymentStage,
+        //            Description = detail.Description,
+        //            Period = period.HasValue ? period.Value : throw new InvalidOperationException("Không tính được Period"),
+        //            PaidValue = amountValue,
+        //            PaidValueLate = null,
+        //            RemittanceOrder = null,
+        //            Status = false,
+        //            ContractID = contractId,
+        //            PaymentPolicyID = project.PaymentPolicyID!.Value
+        //        };
+
+        //        var _detail = _mapper.Map<ContractPaymentDetail>(contractDetail);
+
+        //        _contractDetailService.AddNewContractPaymentDetail(_detail);
+        //    }
+
+        //}
 
         public void CreateContractPaymentDetail(Guid contractId)
         {
@@ -340,8 +528,11 @@ namespace RealEstateProjectSaleServices.Services
             var categoryDetail = _detailService.GetProjectCategoryDetailByID(booking.ProjectCategoryDetailID);
             var project = _projectService.GetProjectById(categoryDetail.ProjectID);
 
-            double? totalAmount = property.PriceSold;
-            double? firstAmount = paymentDetails.FirstOrDefault()?.Amount;
+            decimal? totalAmount = (decimal)property.PriceSold.GetValueOrDefault(0);
+            decimal? firstAmount = (decimal?)paymentDetails.FirstOrDefault()?.Amount;
+            decimal? depositedPrice = booking.DepositedPrice.HasValue
+                                ? (decimal?)booking.DepositedPrice.Value
+                                : null;
 
             //Ngày đợt 1
             DateTime periodFirst = DateTime.Now;
@@ -349,23 +540,24 @@ namespace RealEstateProjectSaleServices.Services
             for (int i = 0; i < paymentDetails.Count; i++)
             {
                 var detail = paymentDetails[i];
-                double? amountValue;
-
+                decimal? amountValue;
+                decimal percentageDecimal = (decimal)(detail.Percentage ?? 0);
                 // Kiểm tra nếu là dòng cuối cùng
                 if (i == paymentDetails.Count - 1)
                 {
                     // Nếu là dòng cuối cùng, tính amount theo công thức trừ tiền đợt 1 và giữ chỗ booking
-                    amountValue = (totalAmount * (detail.Percentage ?? 0)) - (firstAmount ?? 0) - (booking.DepositedPrice ?? 0);
+                    amountValue = (totalAmount * percentageDecimal) - (firstAmount ?? 0) - (depositedPrice ?? 0);
                 }
                 else
                 {
                     var amountStage = (detail.Amount == 0) ? null : detail.Amount;
+                    decimal? amountStageDecimal = amountStage.HasValue ? (decimal?)amountStage.Value : null;
 
                     // Tính amount bình thường nếu không phải là dòng cuối
-                    amountValue = amountStage ?? (totalAmount * (detail.Percentage ?? 0));
+                    amountValue = amountStageDecimal ?? (totalAmount * percentageDecimal);
                 }
 
-                amountValue = amountValue.HasValue ? Math.Round(amountValue.Value) : (double?)null;
+                amountValue = amountValue.HasValue ? Math.Round(amountValue.Value) : (decimal?)null;
 
                 // Tính toán Period
                 DateTime? period = null;
@@ -386,7 +578,7 @@ namespace RealEstateProjectSaleServices.Services
                     PaymentRate = detail.PaymentStage,
                     Description = detail.Description,
                     Period = period.HasValue ? period.Value : throw new InvalidOperationException("Không tính được Period"),
-                    PaidValue = amountValue,
+                    PaidValue = (double?)amountValue,
                     PaidValueLate = null,
                     RemittanceOrder = null,
                     Status = false,

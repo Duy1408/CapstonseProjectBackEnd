@@ -162,7 +162,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
                     ContractID = contract.ContractID,
                     ProjectName = contract.Booking!.ProjectCategoryDetail!.Project!.ProjectName,
                     PropertyCode = contract!.Booking!.Property!.PropertyCode,
-                    PriceSold = contract.Booking.Property.PriceSold,
+                    PriceSold = contract.TotalPrice,
                     ExpiredTime = contract.ExpiredTime,
                     Status = contract.Status
                 }).OrderBy(contract => contract.ExpiredTime)
