@@ -209,7 +209,7 @@ namespace RealEstateProjectSaleServices.Services
             var vat = pricePromotion * 0.1;
             var priceIncludingVAT = pricePromotion + vat;
             var maintenanceCost = pricePromotion * 0.02;
-            var totalPrice = priceIncludingVAT + maintenanceCost;
+            var totalPrice = priceIncludingVAT + maintenanceCost - (booking.DepositedPrice ?? 0);
             string updatedTime = contract.UpdatedTime.HasValue
                                         ? contract.UpdatedTime.Value.ToString("yyyy/MM/dd HH:mm")
                                         : "";
@@ -225,6 +225,8 @@ namespace RealEstateProjectSaleServices.Services
                                      .Replace("{UpdatedTimeContract}", updatedTime)
                                      .Replace("{NetFloorArea}", unitType.NetFloorArea.ToString())
                                      .Replace("{GrossFloorArea}", unitType.GrossFloorArea.ToString())
+                                     .Replace("{PriceDeposited}", (booking.DepositedPrice ?? 0).ToString())
+                                     .Replace("{DepositedPrice}", (booking.DepositedPrice ?? 0).ToString("N0", new CultureInfo("vi-VN")))
                                      .Replace("{PriceOpen}", openDetail.Price.ToString("N0", new CultureInfo("vi-VN")))
                                      .Replace("{PropertyTypeName}", propertyType.PropertyTypeName.ToString())
                                      .Replace("{AmountPromotion}", promotionDetail.Amount.ToString("N0", new CultureInfo("vi-VN")))
@@ -377,7 +379,7 @@ namespace RealEstateProjectSaleServices.Services
                 if (i == paymentDetails.Count - 1)
                 {
                     // Nếu là dòng cuối cùng, tính amount theo công thức trừ tiền đợt 1 và giữ chỗ booking
-                    amountValue = (totalAmount * percentageDecimal) - (firstAmount ?? 0) - (depositedPrice ?? 0);
+                    amountValue = (totalAmount * percentageDecimal) - (firstAmount ?? 0); //- (depositedPrice ?? 0);
                 }
                 else
                 {
@@ -396,7 +398,7 @@ namespace RealEstateProjectSaleServices.Services
                 }
                 else if (i == paymentDetails.Count - 1)
                 {
-                    method = $"(Tổng giá bán) x {detail.Percentage.Value} - (Giá tiền đặt cọc đợt 1) - (Tiền giữ chỗ)";
+                    method = $"(Tổng giá bán) x {detail.Percentage.Value} - (Giá tiền đặt cọc đợt 1)";
                 }
                 else
                 {
@@ -546,7 +548,7 @@ namespace RealEstateProjectSaleServices.Services
                 if (i == paymentDetails.Count - 1)
                 {
                     // Nếu là dòng cuối cùng, tính amount theo công thức trừ tiền đợt 1 và giữ chỗ booking
-                    amountValue = (totalAmount * percentageDecimal) - (firstAmount ?? 0) - (depositedPrice ?? 0);
+                    amountValue = (totalAmount * percentageDecimal) - (firstAmount ?? 0); //- (depositedPrice ?? 0);
                 }
                 else
                 {

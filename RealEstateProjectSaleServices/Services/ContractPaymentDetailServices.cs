@@ -39,7 +39,7 @@ namespace RealEstateProjectSaleServices.Services
 
             if (DateTime.Now > contractDetail.Period && contractDetail.Status == false)
             {
-                var actualLateDays = (DateTime.Now - contractDetail.Period.Value).TotalDays;
+                var actualLateDays = Math.Floor((DateTime.Now - contractDetail.Period.Value).TotalDays);
 
                 if (actualLateDays >= paymentPolicy.LateDate)
                 {
