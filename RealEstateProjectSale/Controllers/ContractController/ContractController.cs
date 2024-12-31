@@ -1168,7 +1168,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
                 string? blobUrl = null;
                 using (MemoryStream pdfStream = new MemoryStream(pdfBytes))
                 {
-                    blobUrl = _fileService.UploadSingleFile(pdfStream, customerTransfereeId.ToString(), "contractdepositfile");
+                    blobUrl = _fileService.UploadSingleFile(pdfStream, $"{customerTransfereeId.ToString()}_{contractId.ToString()}", "contracttransferfile");
                 }
 
                 contract.ContractTransferFile = blobUrl;
@@ -1270,7 +1270,7 @@ namespace RealEstateProjectSale.Controllers.ContractController
 
                         var extraction = new CustomerIdExtraction();
 
-                        string customerTransfereeStringId = extraction.ExtractCustomerIdFromUrl(contract.ContractTransferFile);
+                        string customerTransfereeStringId = extraction.ExtractCustomerTransfereeIdFromUrl(contract.ContractTransferFile);
                         Guid customerTransfereeId = Guid.Parse(customerTransfereeStringId);
 
                         var customerTwo = _customerServices.GetCustomerByID(customerTransfereeId);
@@ -1418,6 +1418,90 @@ namespace RealEstateProjectSale.Controllers.ContractController
             return Ok(new
             {
                 message = "Xác nhận thỏa thuận chuyển nhượng thành công."
+            });
+
+        }
+
+        [HttpPut("reject-transfer")]
+        [SwaggerOperation(Summary = "Khách hàng từ chối chuyển nhượng (Không xác nhận TTCNTTDC)")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Từ chối thỏa thuận chuyển nhượng thành công.")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, "Hợp đồng không tồn tại.")]
+        public IActionResult CustomerRejectContractTransfer(Guid contractid)
+        {
+            var contract = _contractServices.GetContractByID(contractid);
+            if (contract == null)
+            {
+                return NotFound(new
+                {
+                    message = "Hợp đồng không tồn tại."
+                });
+            }
+
+            var customer = _customerServices.GetCustomerByID(contract.CustomerID);
+            if (customer == null)
+            {
+                return NotFound(new
+                {
+                    message = "Khách hàng nhận chuyển nhượng không tồn tại."
+                });
+            }
+
+            var extraction = new CustomerIdExtraction();
+
+            string contractTransferStringId = extraction.ExtractContractIdFromUrl(contract.ContractDepositFile);
+            Guid contractTransferId = Guid.Parse(contractTransferStringId);
+
+            var contractTransfer = _contractServices.GetContractByID(contractTransferId);
+            if (contractTransfer == null)
+            {
+                return NotFound(new
+                {
+                    message = "Hợp đồng chuyển nhượng không tồn tại."
+                });
+            }
+
+            var customerTransfer = _customerServices.GetCustomerByID(contractTransfer.CustomerID);
+            if (customer == null)
+            {
+                return NotFound(new
+                {
+                    message = "Khách hàng chuyển nhượng không tồn tại."
+                });
+            }
+
+            var account = _accountService.GetAccountByID(customerTransfer.AccountID);
+            if (account == null || string.IsNullOrEmpty(account.Email) || !IsValidEmail(account.Email))
+            {
+                return BadRequest(new { message = "Địa chỉ Email không hợp lệ." });
+            }
+
+            //Hợp đồng nhận chuyển nhượng
+            contract.Status = ContractStatus.DaHuy.GetEnumDescription();
+            contract.UpdatedTime = DateTime.Now;
+            _contractServices.UpdateContract(contract);
+
+            //Hợp đồng chuyển nhượng
+            contractTransfer.Status = ContractStatus.DaXacNhanTTDC.GetEnumDescription();
+            contractTransfer.UpdatedTime = DateTime.Now;
+            contractTransfer.ContractType = ContractType.DatCoc.GetEnumDescription();
+            contractTransfer.ContractTransferFile = null;
+            contractTransfer.ExpiredTime = DateTime.Now.AddDays(1);
+            _contractServices.UpdateContract(contractTransfer);
+
+            //Gửi mail thư thông báo cho khách hàng chuyển nhượng
+            Mailrequest mailrequest = new Mailrequest();
+            mailrequest.ToEmail = account.Email;
+            mailrequest.Subject = "Khách hàng không xác nhận Thỏa thuận chuyển nhượng";
+            mailrequest.Body =
+                $"<h5>THÔNG BÁO KHÁCH HÀNG NHẬN CHUYỂN NHƯỢNG KHÔNG XÁC NHẬN</h5>" +
+                $"<div>Kính gửi quý khách {contractTransfer.Customer.FullName}</div>" +
+                $"<div>Thảo thuận chuyển nhượng của Quý khách không được xác nhận. Quý khách vui lòng thực hiện lại các thủ tục hợp đồng.</div>";
+
+            _emailService.SendEmailAsync(mailrequest);
+
+            return Ok(new
+            {
+                message = "Từ chối thỏa thuận chuyển nhượng thành công."
             });
 
         }
